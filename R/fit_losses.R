@@ -6,9 +6,11 @@ fit_sq_loss_lasso <- function(x, y, wts, family, ...)
 
     pred.func <- function(x)
     {
-        drop(predict(model, newx = x, type = "response", s = "lambda.min"))
+        drop(predict(model, newx = cbind(1, x), type = "response", s = "lambda.min"))
     }
 
     list(predict = pred.func,
          model   = model)
 }
+
+
