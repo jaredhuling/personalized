@@ -91,6 +91,13 @@ validate.subgrp <- function(model,
 {
     method <- match.arg(method)
 
+
+    if (class(model)[2] != "subgroup_fit")
+    {
+        stop("model should be a fitted object returned by the 'fit.subgrp' function")
+    }
+
+
     B <- as.integer(B[1])
     if (B <= 1) stop("B must be a strictly positive integer")
 

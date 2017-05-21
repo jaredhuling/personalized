@@ -122,6 +122,7 @@ fit.subgrp <- function(x,
     if (length(unique.trts) != 2) stop("trt must have 2 distinct levels")
     if (any(unique.trts != c(0, 1))) stop("trt should be coded as 0 and 1")
 
+    # check to make sure arguments of propensity.func are correct
     propfunc.names <- sort(names(formals(propensity.func)))
     if (length(propfunc.names) == 2)
     {
@@ -163,6 +164,8 @@ fit.subgrp <- function(x,
 
 
     fitted.model$subgroup.trt.effects <- subgrp.benefit(fitted.model$benefit.scores, y, trt, cutpoint)
+
+    class("fitted.model") <- class(fitted.model, "subgroup_fit")
 
     fitted.model
 }
