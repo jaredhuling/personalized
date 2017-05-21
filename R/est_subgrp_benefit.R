@@ -7,9 +7,12 @@
 #' @param y The response vector
 #' @param trt treatment vector with each element equal to a 0 or a 1, with 1 indicating
 #'            treatment status is active.
-#' @param cutpoint numeric value for patients with benefit scores above which will be recommended
-#' to be in the treatment group
-subgrp.benefit <- function(benefit.scores, y, trt, cutpoint = 0)
+#' @param cutpoint numeric value for patients with benefit scores above which
+#' (or below which if \code{larger.outcome.better = FALSE})
+#' will be recommended to be in the treatment group
+#' @param larger.outcome.better boolean value of whether a larger outcome is better. Set to \code{TRUE}
+#' if a larger outcome is better and set to \code{FALSE} if a smaller outcome is better. Defaults to \code{TRUE}.
+subgrp.benefit <- function(benefit.scores, y, trt, cutpoint = 0, larger.outcome.better = TRUE)
 {
 
     benefit.scores <- drop(benefit.scores)
@@ -20,7 +23,15 @@ subgrp.benefit <- function(benefit.scores, y, trt, cutpoint = 0)
     if (length(benefit.scores) != length(trt)) stop("length of benefit.scores and trt do not match")
 
     cutpoint <- as.numeric(cutpoint[1])
-    recommended.trt <- 1 * (benefit.scores > cutpoint)
+
+    if (larger.outcome.better)
+    {
+        recommended.trt <- 1 * (benefit.scores > cutpoint)
+    } else
+    {
+        recommended.trt <- 1 * (benefit.scores < cutpoint)
+    }
+
     idx.11  <- (recommended.trt == 1) & (trt == 1)
     mean.11 <- mean(y[idx.11])
 

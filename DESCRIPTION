@@ -1,7 +1,7 @@
 Package: personalized
 Type: Package
 Title: What the Package Does (Title Case)
-Version: 0.1.0
+Version: 0.0.1
 Author: Who wrote it
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: More about what it does (maybe more than one line)
@@ -11,5 +11,5 @@ Encoding: UTF-8
 LazyData: true
 Depends:
     glmnet,
-    ncvreg
+    ggplot2
 RoxygenNote: 5.0.1

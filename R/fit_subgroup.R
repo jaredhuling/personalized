@@ -16,7 +16,14 @@
 #' the logistic loss: M(y, v) = y * log(1 + exp{-v}), and all options starting with \code{cox_loss} use the negative partial likelihood loss for the Cox PH model.
 #' All options ending with \code{lasso} have a lasso penalty added to the loss for variable selection
 #' @param method subgroup ID model type. Either the weighting or A-learning method
-#' @param cutpoint default cutpoint for benefit subgroups. Defaults to 0
+#' @param cutpoint numeric value for patients with benefit scores above which
+#' (or below which if \code{larger.outcome.better = FALSE})
+#' will be recommended to be in the treatment group
+#' @param larger.outcome.better boolean value of whether a larger outcome is better. Set to \code{TRUE}
+#' if a larger outcome is better and set to \code{FALSE} if a smaller outcome is better. Defaults to \code{TRUE}.
+#' @param retcall boolean value. if \code{TRUE} then the passed arguments will be saved. Do not set to \code{FALSE}
+#' if the \code{validate.subgrp()} function will later be used for your fitted subgroup model. Only set to \code{FALSE}
+#' if memory is limited as setting to code{TRUE} saves the design matrix to the fitted object
 #' @param ... options to be passed to underlying fitting function. For all \code{loss} options with \code{lasso},
 #' this will be passed to \code{cv.glmnet} and for all \code{loss} options with \code{mcp} this will be passed
 #' to \code{cv.ncvreg}.
@@ -96,6 +103,7 @@ fit.subgrp <- function(x,
                                       "cox_loss_lasso"),
                        method     = c("weighting", "a_learning"),
                        cutpoint   = 0,
+                       larger.outcome.better = TRUE,
                        retcall    = TRUE,
                        ...)
 {
@@ -104,6 +112,9 @@ fit.subgrp <- function(x,
     loss   <- match.arg(loss)
     method <- match.arg(method)
 
+
+    larger.outcome.better <- as.logical(larger.outcome.better[1])
+    retcall <- as.logical(retcall[1])
 
     if (retcall)
     {
@@ -163,9 +174,11 @@ fit.subgrp <- function(x,
     fitted.model$benefit.scores <- fitted.model$predict(x)
 
 
-    fitted.model$subgroup.trt.effects <- subgrp.benefit(fitted.model$benefit.scores, y, trt, cutpoint)
+    fitted.model$subgroup.trt.effects <- subgrp.benefit(fitted.model$benefit.scores,
+                                                        y, trt, cutpoint,
+                                                        larger.outcome.better)
 
-    class(fitted.model) <- c(class(fitted.model), "subgroup_fit")
+    class(fitted.model) <- c("subgroup_fitted", class(fitted.model))
 
     fitted.model
 }

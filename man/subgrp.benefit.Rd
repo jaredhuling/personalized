@@ -4,7 +4,8 @@
 \alias{subgrp.benefit}
 \title{Computes means within various subgroups}
 \usage{
-subgrp.benefit(benefit.scores, y, trt, cutpoint = 0)
+subgrp.benefit(benefit.scores, y, trt, cutpoint = 0,
+  larger.outcome.better = TRUE)
 }
 \arguments{
 \item{benefit.scores}{vector of estimated benefit scores}
@@ -14,8 +15,12 @@ subgrp.benefit(benefit.scores, y, trt, cutpoint = 0)
 \item{trt}{treatment vector with each element equal to a 0 or a 1, with 1 indicating
 treatment status is active.}
 
-\item{cutpoint}{numeric value for patients with benefit scores above which will be recommended
-to be in the treatment group}
+\item{cutpoint}{numeric value for patients with benefit scores above which
+(or below which if \code{larger.outcome.better = FALSE})
+will be recommended to be in the treatment group}
+
+\item{larger.outcome.better}{boolean value of whether a larger outcome is better. Set to \code{TRUE}
+if a larger outcome is better and set to \code{FALSE} if a smaller outcome is better. Defaults to \code{TRUE}.}
 }
 \description{
 Computes means within various subgroups to estimate subgroup treatment effect

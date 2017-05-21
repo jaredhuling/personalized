@@ -1,6 +1,7 @@
 #' Validating fitted subgroup identification models
 #'
-#' @description Fits subgroup identification model class of Chen, et al (2017)
+#' @description Validates subgroup treatment effects for fitted
+#'  subgroup identification model class of Chen, et al (2017)
 #'
 #' @param model fitted model object returned by \code{fit.subgrp()} function
 #' @param method validation method
@@ -91,7 +92,7 @@ validate.subgrp <- function(model,
     method <- match.arg(method)
 
 
-    if (class(model)[2] != "subgroup_fit")
+    if (class(model)[1] != "subgroup_fitted")
     {
         stop("model should be a fitted object returned by the 'fit.subgrp' function")
     }
@@ -121,6 +122,9 @@ validate.subgrp <- function(model,
     boot.list <- vector(mode = "list", length = length(model$subgroup.trt.effects))
     boot.list[[1]] <- array(NA, dim = c(B, length(model$subgroup.trt.effects[[1]])))
     boot.list[[2]] <- boot.list[[3]] <- array(NA, dim = c(B, dim(model$subgroup.trt.effects[[2]])))
+
+    dimnames(boot.list[[2]]) <- dimnames(boot.list[[2]]) <-
+        c(list(NULL), dimnames(model$subgroup.trt.effects$avg.outcomes))
 
     for (b in 1:B)
     {
@@ -162,10 +166,13 @@ validate.subgrp <- function(model,
                                                   y, trt,
                                                   model$call$cutpoint)
 
-            ## estimated bias for current bootstrap iteration
-            boot.list[[1]][b,]  <- mod.b$subgroup.trt.effects[[1]] - sbgrp.trt.eff.orig[[1]]
-            boot.list[[2]][b,,] <- mod.b$subgroup.trt.effects[[2]] - sbgrp.trt.eff.orig[[2]]
-            boot.list[[3]][b,,] <- mod.b$subgroup.trt.effects[[3]] - sbgrp.trt.eff.orig[[3]]
+            ## subtract estimated bias for current bootstrap iteration
+            boot.list[[1]][b,]  <- model$subgroup.trt.effects[[1]] -
+                (mod.b$subgroup.trt.effects[[1]] - sbgrp.trt.eff.orig[[1]]) # bias portion
+            boot.list[[2]][b,,] <- model$subgroup.trt.effects[[2]] -
+                (mod.b$subgroup.trt.effects[[2]] - sbgrp.trt.eff.orig[[2]]) # bias portion
+            boot.list[[3]][b,,] <- model$subgroup.trt.effects[[3]] -
+                (mod.b$subgroup.trt.effects[[3]] - sbgrp.trt.eff.orig[[3]]) # bias portion
         } else
         {   # bootstrap
             samp.idx <- sample.int(n.obs, n.obs, replace = TRUE)
@@ -185,17 +192,9 @@ validate.subgrp <- function(model,
         boot.list[[l]][is.nan(boot.list[[l]])] <- 0
     }
 
-    if (method == "boot_bias_correction")
-    {
-        summary.stats <- list(model$subgroup.trt.effects[[1]] - colMeans(boot.list[[1]]),
-                              model$subgroup.trt.effects[[2]] - apply(boot.list[[2]], c(2, 3), mean),
-                              model$subgroup.trt.effects[[3]] - apply(boot.list[[3]], c(2, 3), mean))
-    } else
-    {
-        summary.stats <- list(colMeans(boot.list[[1]]),
-                              apply(boot.list[[2]], c(2, 3), mean),
-                              apply(boot.list[[3]], c(2, 3), mean))
-    }
+    summary.stats <- list(colMeans(boot.list[[1]]),
+                          apply(boot.list[[2]], c(2, 3), mean),
+                          apply(boot.list[[3]], c(2, 3), mean))
 
     summary.stats.se <- list(apply(boot.list[[1]], 2, sd),
                              apply(boot.list[[2]], c(2, 3), sd),
@@ -203,7 +202,9 @@ validate.subgrp <- function(model,
 
     names(summary.stats) <- names(boot.list) <- names(model$subgroup.trt.effects)
 
-    list(avg.results  = summary.stats,
-         se.results   = summary.stats.se,
-         boot.results = boot.list)
+    ret <- list(avg.results  = summary.stats,
+                se.results   = summary.stats.se,
+                boot.results = boot.list)
+    class(ret) <- c("subgroup_validated", class(ret))
+    ret
 }

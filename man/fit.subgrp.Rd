@@ -6,8 +6,8 @@
 \usage{
 fit.subgrp(x, y, trt, propensity.func, family = c("gaussian", "binomial",
   "cox"), loss = c("sq_loss_lasso", "logistic_loss_lasso", "cox_loss_lasso"),
-  method = c("weighting", "a_learning"), cutpoint = 0, retcall = TRUE,
-  ...)
+  method = c("weighting", "a_learning"), cutpoint = 0,
+  larger.outcome.better = TRUE, retcall = TRUE, ...)
 }
 \arguments{
 \item{x}{The design matrix (not including intercept term)}
@@ -30,7 +30,16 @@ All options ending with \code{lasso} have a lasso penalty added to the loss for 
 
 \item{method}{subgroup ID model type. Either the weighting or A-learning method}
 
-\item{cutpoint}{default cutpoint for benefit subgroups. Defaults to 0}
+\item{cutpoint}{numeric value for patients with benefit scores above which
+(or below which if \code{larger.outcome.better = FALSE})
+will be recommended to be in the treatment group}
+
+\item{larger.outcome.better}{boolean value of whether a larger outcome is better. Set to \code{TRUE}
+if a larger outcome is better and set to \code{FALSE} if a smaller outcome is better. Defaults to \code{TRUE}.}
+
+\item{retcall}{boolean value. if \code{TRUE} then the passed arguments will be saved. Do not set to \code{FALSE}
+if the \code{validate.subgrp()} function will later be used for your fitted subgroup model. Only set to \code{FALSE}
+if memory is limited as setting to code{TRUE} saves the design matrix to the fitted object}
 
 \item{...}{options to be passed to underlying fitting function. For all \code{loss} options with \code{lasso},
 this will be passed to \code{cv.glmnet} and for all \code{loss} options with \code{mcp} this will be passed
