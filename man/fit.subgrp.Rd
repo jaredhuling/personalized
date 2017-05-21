@@ -6,7 +6,8 @@
 \usage{
 fit.subgrp(x, y, trt, pi.x, family = c("gaussian", "binomial", "cox"),
   loss = c("sq_loss_lasso", "logistic_loss_lasso", "cox_loss_lasso"),
-  method = c("weighting", "a_learning"), cutpoint = 0, ...)
+  method = c("weighting", "a_learning"), cutpoint = 0, retcall = TRUE,
+  ...)
 }
 \arguments{
 \item{x}{The design matrix (not including intercept term)}

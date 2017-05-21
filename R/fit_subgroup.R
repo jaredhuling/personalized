@@ -87,6 +87,7 @@ fit.subgrp <- function(x,
                                       "cox_loss_lasso"),
                        method     = c("weighting", "a_learning"),
                        cutpoint   = 0,
+                       retcall    = TRUE,
                        ...)
 {
 
@@ -94,7 +95,17 @@ fit.subgrp <- function(x,
     loss   <- match.arg(loss)
     method <- match.arg(method)
 
-    this.call <- match.call()
+
+    if (retcall)
+    {
+        this.call <- mget(names(formals()), sys.frame(sys.nframe()))
+
+        this.call$... <- NULL
+        this.call <- c(this.call, list(...))
+    } else
+    {
+        this.call <- NULL
+    }
 
     trt         <- as.integer(trt)
     unique.trts <- sort(unique(trt))
@@ -121,6 +132,7 @@ fit.subgrp <- function(x,
     fit_fun      <- paste0("fit_", loss)
     fitted.model <- do.call(fit_fun, list(x = x.tilde, y = y, wts = wts, family = family, ...))
 
+    fitted.model$call   <- this.call
     fitted.model$loss   <- loss
     fitted.model$method <- method
     fitted.model$benefit.scores <- fitted.model$predict(x)
