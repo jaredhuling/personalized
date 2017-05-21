@@ -23,7 +23,7 @@ will be recommended to be in the treatment group}
 if a larger outcome is better and set to \code{FALSE} if a smaller outcome is better. Defaults to \code{TRUE}.}
 }
 \description{
-Computes means within various subgroups to estimate subgroup treatment effect
+Computes means within various subgroups to estimate subgroup treatment effects
 }
 \seealso{
 \code{\link[personalized]{fit.subgrp}} for function which fits subgroup identification models which generate

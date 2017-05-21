@@ -1,7 +1,7 @@
 
 #' Computes means within various subgroups
 #'
-#' @description Computes means within various subgroups to estimate subgroup treatment effect
+#' @description Computes means within various subgroups to estimate subgroup treatment effects
 #'
 #' @param benefit.scores vector of estimated benefit scores
 #' @param y The response vector
