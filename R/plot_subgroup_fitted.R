@@ -49,6 +49,10 @@
 #' subgrp.model$subgroup.trt.effects
 #'
 #' plot(subgrp.model)
+#'
+#' plot(subgrp.model, type = "boxplot")
+#'
+#' plot(subgrp.model, type = "interaction")
 #' @export
 plot.subgroup_fitted <- function(x,
                                  type = c("density", "boxplot", "interaction"),
