@@ -4,8 +4,8 @@
 \alias{fit.subgrp}
 \title{Fitting subgroup identification models}
 \usage{
-fit.subgrp(x, y, trt, pi.x, family = c("gaussian", "binomial", "cox"),
-  loss = c("sq_loss_lasso", "logistic_loss_lasso", "cox_loss_lasso"),
+fit.subgrp(x, y, trt, propensity.func, family = c("gaussian", "binomial",
+  "cox"), loss = c("sq_loss_lasso", "logistic_loss_lasso", "cox_loss_lasso"),
   method = c("weighting", "a_learning"), cutpoint = 0, retcall = TRUE,
   ...)
 }
@@ -16,10 +16,6 @@ fit.subgrp(x, y, trt, pi.x, family = c("gaussian", "binomial", "cox"),
 
 \item{trt}{treatment vector with each element equal to a 0 or a 1, with 1 indicating
 treatment status is active.}
-
-\item{pi.x}{vector of treatment status probabilities (ie Pr(trt = 1 | X = x)). If data is from a
-randomized controlled trial, these probabilities are constants. In an observational study \code{pi.x}
-is the propensity score.}
 
 \item{family}{family for the response. \code{gaussian} for continuous outcomes, \code{binomial} for binomial outcomes,
 and \code{cox} for time-to-event outcomes}
@@ -36,6 +32,10 @@ All options ending with \code{lasso} have a lasso penalty added to the loss for 
 \item{...}{options to be passed to underlying fitting function. For all \code{loss} options with \code{lasso},
 this will be passed to \code{cv.glmnet} and for all \code{loss} options with \code{mcp} this will be passed
 to \code{cv.ncvreg}.}
+
+\item{pi.x}{vector of treatment status probabilities (ie Pr(trt = 1 | X = x)). If data is from a
+randomized controlled trial, these probabilities are constants. In an observational study \code{pi.x}
+is the propensity score.}
 }
 \description{
 Fits subgroup identification model class of Chen, et al (2017)
@@ -45,7 +45,7 @@ library(personalized)
 
 set.seed(123)
 n.obs  <- 500
-n.vars <- 100
+n.vars <- 50
 x <- matrix(rnorm(n.obs * n.vars, sd = 3), n.obs, n.vars)
 
 
@@ -73,26 +73,36 @@ cens.time <- exp(rnorm(n.obs, sd = 3))
 y.time.to.event  <- pmin(surv.time, cens.time)
 status           <- 1 * (surv.time <= cens.time)
 
-# fit propensity score model
-propens.model <- cv.glmnet(y = (1+trt)/2,
-                           x = x, family = "binomial")
-pi.x <- predict(propens.model, s = "lambda.min",
-                newx = x, type = "response")[,1]
+# create function for fitting propensity score model
+prop.func <- function(x, trt)
+{
+    # fit propensity score model
+    propens.model <- cv.glmnet(y = trt,
+                               x = x, family = "binomial")
+    pi.x <- predict(propens.model, s = "lambda.min",
+                    newx = x, type = "response")[,1]
+    pi.x
+}
 
-subgrp.model <- fit.subgrp(x = x, y = y, trt = trt01, pi.x = pi.x,
+subgrp.model <- fit.subgrp(x = x, y = y,
+                           trt = trt01,
+                           propensity.func = prop.func,
                            family = "gaussian",
                            loss   = "sq_loss_lasso",
                            nfolds = 5)              # option for cv.glmnet
 
 subgrp.model$subgroup.trt.effects
 
-subgrp.model.bin <- fit.subgrp(x = x, y = y.binary, trt = trt01, pi.x = pi.x,
+subgrp.model.bin <- fit.subgrp(x = x, y = y.binary,
+                           trt = trt01,
+                           propensity.func = prop.func,
                            family = "binomial",
                            loss   = "logistic_loss_lasso",
                            type.measure = "auc",    # option for cv.glmnet
                            nfolds = 5)              # option for cv.glmnet
 
 subgrp.model.bin$subgroup.trt.effects
+
 
 }
 

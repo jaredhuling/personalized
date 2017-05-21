@@ -27,7 +27,7 @@
 #'
 #' set.seed(123)
 #' n.obs  <- 500
-#' n.vars <- 100
+#' n.vars <- 50
 #' x <- matrix(rnorm(n.obs * n.vars, sd = 3), n.obs, n.vars)
 #'
 #'
@@ -55,20 +55,29 @@
 #' y.time.to.event  <- pmin(surv.time, cens.time)
 #' status           <- 1 * (surv.time <= cens.time)
 #'
-#' # fit propensity score model
-#' propens.model <- cv.glmnet(y = (1+trt)/2,
-#'                            x = x, family = "binomial")
-#' pi.x <- predict(propens.model, s = "lambda.min",
-#'                 newx = x, type = "response")[,1]
+#' # create function for fitting propensity score model
+#' prop.func <- function(x, trt)
+#' {
+#'     # fit propensity score model
+#'     propens.model <- cv.glmnet(y = trt,
+#'                                x = x, family = "binomial")
+#'     pi.x <- predict(propens.model, s = "lambda.min",
+#'                     newx = x, type = "response")[,1]
+#'     pi.x
+#' }
 #'
-#' subgrp.model <- fit.subgrp(x = x, y = y, trt = trt01, pi.x = pi.x,
+#' subgrp.model <- fit.subgrp(x = x, y = y,
+#'                            trt = trt01,
+#'                            propensity.func = prop.func,
 #'                            family = "gaussian",
 #'                            loss   = "sq_loss_lasso",
 #'                            nfolds = 5)              # option for cv.glmnet
 #'
 #' subgrp.model$subgroup.trt.effects
 #'
-#' subgrp.model.bin <- fit.subgrp(x = x, y = y.binary, trt = trt01, pi.x = pi.x,
+#' subgrp.model.bin <- fit.subgrp(x = x, y = y.binary,
+#'                            trt = trt01,
+#'                            propensity.func = prop.func,
 #'                            family = "binomial",
 #'                            loss   = "logistic_loss_lasso",
 #'                            type.measure = "auc",    # option for cv.glmnet
@@ -76,11 +85,12 @@
 #'
 #' subgrp.model.bin$subgroup.trt.effects
 #'
+#'
 #' @export
 fit.subgrp <- function(x,
                        y,
                        trt,
-                       pi.x,
+                       propensity.func,
                        family     = c("gaussian", "binomial", "cox"),
                        loss       = c("sq_loss_lasso",
                                       "logistic_loss_lasso",
@@ -113,9 +123,12 @@ fit.subgrp <- function(x,
     if (length(unique.trts) != 2) stop("trt must have 2 distinct levels")
     if (any(unique.trts != c(0, 1))) stop("trt should be coded as 0 and 1")
 
+
+    pi.x <- propensity.func(x, trt)
+
     rng.pi <- range(pi.x)
 
-    if (rng.pi[1] <= 0 | rng.pi[2] >= 1) stop("pi.x should be between 0 and 1")
+    if (rng.pi[1] <= 0 | rng.pi[2] >= 1) stop("propensity.func should return values between 0 and 1")
 
     trt2 <- 2 * trt - 1
 
