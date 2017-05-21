@@ -109,6 +109,7 @@ evaluating assumptions and adequacy, and measuring and reducing errors. Statisti
 doi:10.1002/(SICI)1097-0258(19960229)15:4<361::AID-SIM168>3.0.CO;2-4
 }
 \seealso{
-\code{\link[personalized]{fit.subgrp}} for function which fits subgroup identification models.
+\code{\link[personalized]{fit.subgrp}} for function which fits subgroup identification models and
+\code{\link[personalized]{plot.subgroup_validated}} for plotting of validation results.
 }
 

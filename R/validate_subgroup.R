@@ -11,7 +11,8 @@
 #' @param B number of bootstrap replications or refitting replications.
 #' @param train.fraction fraction (between 0 and 1) of samples to be used for training in
 #' training/test replication. Only used for \code{method = "training_test_replication"}
-#' @seealso \code{\link[personalized]{fit.subgrp}} for function which fits subgroup identification models.
+#' @seealso \code{\link[personalized]{fit.subgrp}} for function which fits subgroup identification models and
+#' \code{\link[personalized]{plot.subgroup_validated}} for plotting of validation results.
 #' @references Chen, S., Tian, L., Cai, T. and Yu, M. (2017), A general statistical framework for subgroup identification
 #' and comparative treatment scoring. Biometrics. doi:10.1111/biom.12676
 #'
@@ -218,6 +219,6 @@ validate.subgrp <- function(model,
     ret <- list(avg.results  = summary.stats,
                 se.results   = summary.stats.se,
                 boot.results = boot.list)
-    class(ret) <- c("subgroup_validated", class(ret))
+    class(ret) <- "subgroup_validated"
     ret
 }
