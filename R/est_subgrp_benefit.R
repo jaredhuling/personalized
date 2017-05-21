@@ -12,6 +12,9 @@
 #' will be recommended to be in the treatment group
 #' @param larger.outcome.better boolean value of whether a larger outcome is better. Set to \code{TRUE}
 #' if a larger outcome is better and set to \code{FALSE} if a smaller outcome is better. Defaults to \code{TRUE}.
+#' @seealso \code{\link[personalized]{fit.subgrp}} for function which fits subgroup identification models which generate
+#' benefit scores.
+#' @export
 subgrp.benefit <- function(benefit.scores, y, trt, cutpoint = 0, larger.outcome.better = TRUE)
 {
 

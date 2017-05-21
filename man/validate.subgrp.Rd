@@ -108,4 +108,7 @@ Harrell, F. E., Lee, K. L., and Mark, D. B. (1996). Tutorial in biostatistics mu
 evaluating assumptions and adequacy, and measuring and reducing errors. Statistics in medicine, 15, 361-387.
 doi:10.1002/(SICI)1097-0258(19960229)15:4<361::AID-SIM168>3.0.CO;2-4
 }
+\seealso{
+\code{\link[personalized]{fit.subgrp}} for function which fits subgroup identification models.
+}
 

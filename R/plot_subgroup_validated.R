@@ -9,6 +9,8 @@
 #' @param avg.line boolean value of whether or not to plot a line for the average
 #' value in addition to the density (only valid for \code{type = "density"})
 #' @param ... not used
+#' @seealso \code{\link[personalized]{validate.subgrp}} for function which creates validation results
+#' and \code{\link[personalized]{fit.subgrp}} for function which fits subgroup identification models.
 #' @rdname plot
 #' @import ggplot2
 #'

@@ -90,4 +90,8 @@ valmod$avg.results
 
 plot(valmod)
 }
+\seealso{
+\code{\link[personalized]{validate.subgrp}} for function which creates validation results
+and \code{\link[personalized]{fit.subgrp}} for function which fits subgroup identification models.
+}
 

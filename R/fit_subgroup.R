@@ -27,6 +27,8 @@
 #' @param ... options to be passed to underlying fitting function. For all \code{loss} options with \code{lasso},
 #' this will be passed to \code{cv.glmnet} and for all \code{loss} options with \code{mcp} this will be passed
 #' to \code{cv.ncvreg}.
+#' @seealso \code{\link[personalized]{validate.subgrp}} for function which creates validation results for subgroup
+#' identification models
 #' @references Chen, S., Tian, L., Cai, T. and Yu, M. (2017), A general statistical framework for subgroup identification
 #' and comparative treatment scoring. Biom. doi:10.1111/biom.12676 \url{http://onlinelibrary.wiley.com/doi/10.1111/biom.12676/abstract}
 #'

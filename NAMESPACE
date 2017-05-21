@@ -2,6 +2,7 @@
 
 S3method(plot,subgroup_validated)
 export(fit.subgrp)
+export(subgrp.benefit)
 export(validate.subgrp)
 import(ggplot2)
 import(glmnet)
