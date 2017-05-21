@@ -6,7 +6,7 @@
 \usage{
 fit.subgrp(x, y, trt, pi.x, family = c("gaussian", "binomial", "cox"),
   loss = c("sq_loss_lasso", "logistic_loss_lasso", "cox_loss_lasso"),
-  method = c("weighting", "a_learning"), ...)
+  method = c("weighting", "a_learning"), cutpoint = 0, ...)
 }
 \arguments{
 \item{x}{The design matrix (not including intercept term)}
@@ -29,6 +29,8 @@ the logistic loss: M(y, v) = y * log(1 + exp{-v}), and all options starting with
 All options ending with \code{lasso} have a lasso penalty added to the loss for variable selection}
 
 \item{method}{subgroup ID model type. Either the weighting or A-learning method}
+
+\item{cutpoint}{default cutpoint for benefit subgroups. Defaults to 0}
 
 \item{...}{options to be passed to underlying fitting function. For all \code{loss} options with \code{lasso},
 this will be passed to \code{cv.glmnet} and for all \code{loss} options with \code{mcp} this will be passed
@@ -54,7 +56,7 @@ trt01    <- rbinom(n.obs, 1, prob = trt.prob)
 trt      <- 2 * trt01 - 1
 
 # simulate response
-delta <- 2 * (0.25 + x[,2] - x[,3] - x[,11] + x[,1] * x[,12])
+delta <- 2 * (0.5 + x[,2] - x[,3] - x[,11] + x[,1] * x[,12])
 xbeta <- x[,1] + x[,11] - 2 * x[,12]^2 + x[,13]
 xbeta <- xbeta + delta * trt
 
@@ -79,8 +81,17 @@ pi.x <- predict(propens.model, s = "lambda.min",
 subgrp.model <- fit.subgrp(x = x, y = y, trt = trt01, pi.x = pi.x,
                            family = "gaussian",
                            loss   = "sq_loss_lasso",
-                           gamma  = 2,              # option for cv.ncvreg
-                           nfolds = 5)              # option for cv.ncvreg
+                           nfolds = 5)              # option for cv.glmnet
+
+subgrp.model$subgroup.trt.effects
+
+subgrp.model.bin <- fit.subgrp(x = x, y = y.binary, trt = trt01, pi.x = pi.x,
+                           family = "binomial",
+                           loss   = "logistic_loss_lasso",
+                           type.measure = "auc",    # option for cv.glmnet
+                           nfolds = 5)              # option for cv.glmnet
+
+subgrp.model.bin$subgroup.trt.effects
 
 }
 
