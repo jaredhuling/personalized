@@ -4,11 +4,20 @@
 #'  subgroup identification model class of Chen, et al (2017)
 #'
 #' @param model fitted model object returned by \code{fit.subgrp()} function
-#' @param method validation method
-#' @param B number of bootstrap replications or refitting replications
+#' @param method validation method. \code{"boot_bias_correction"} for the bootstrap
+#' bias correction method of Harrell, et al (1996) or \code{"training_test_replication"}
+#' for repeated training and test splitting of the data (\code{train.fraction} should be specified
+#' for this option)
+#' @param B number of bootstrap replications or refitting replications.
 #' @param train.fraction fraction (between 0 and 1) of samples to be used for training in
 #' training/test replication. Only used for \code{method = "training_test_replication"}
+#' @references Chen, S., Tian, L., Cai, T. and Yu, M. (2017), A general statistical framework for subgroup identification
+#' and comparative treatment scoring. Biometrics. doi:10.1111/biom.12676
 #'
+#' Harrell, F. E., Lee, K. L., and Mark, D. B. (1996). Tutorial in biostatistics multivariable prognostic models: issues in developing models,
+#' evaluating assumptions and adequacy, and measuring and reducing errors. Statistics in medicine, 15, 361-387.
+#' doi:10.1002/(SICI)1097-0258(19960229)15:4<361::AID-SIM168>3.0.CO;2-4
+
 #' @examples
 #' library(personalized)
 #'

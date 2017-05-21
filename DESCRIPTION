@@ -1,12 +1,11 @@
 Package: personalized
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Estimation and validation methods for subgroup idenfication
 Version: 0.0.1
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Authors@R: c(person("Jared", "Huling", role = c("aut", "cre"),
+    email = "jaredhuling@gmail.com"))
+Description: Provides functions for fitting and validation for subgroup identification under the general subgroup identification framework of Chen et al (2017) <doi:10.1111/biom.12676>.
+License: GPL-2
 Encoding: UTF-8
 LazyData: true
 Depends:

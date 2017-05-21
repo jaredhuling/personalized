@@ -113,4 +113,8 @@ subgrp.model.bin$subgroup.trt.effects
 
 
 }
+\references{
+Chen, S., Tian, L., Cai, T. and Yu, M. (2017), A general statistical framework for subgroup identification
+and comparative treatment scoring. Biom. doi:10.1111/biom.12676 \url{http://onlinelibrary.wiley.com/doi/10.1111/biom.12676/abstract}
+}
 

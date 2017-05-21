@@ -10,9 +10,12 @@ validate.subgrp(model, B = 50L, method = c("training_test_replication",
 \arguments{
 \item{model}{fitted model object returned by \code{fit.subgrp()} function}
 
-\item{B}{number of bootstrap replications or refitting replications}
+\item{B}{number of bootstrap replications or refitting replications.}
 
-\item{method}{validation method}
+\item{method}{validation method. \code{"boot_bias_correction"} for the bootstrap
+bias correction method of Harrell, et al (1996) or \code{"training_test_replication"}
+for repeated training and test splitting of the data (\code{train.fraction} should be specified
+for this option)}
 
 \item{train.fraction}{fraction (between 0 and 1) of samples to be used for training in
 training/test replication. Only used for \code{method = "training_test_replication"}}
@@ -94,5 +97,13 @@ mean(y.test[bene.score.test <= 0 & trt01.test == 0]) - mean(y.test[bene.score.te
 
 quantile(valmod$boot.results[[1]][,1], c(0.025, 0.975))
 quantile(valmod$boot.results[[1]][,2], c(0.025, 0.975))
+}
+\references{
+Chen, S., Tian, L., Cai, T. and Yu, M. (2017), A general statistical framework for subgroup identification
+and comparative treatment scoring. Biometrics. doi:10.1111/biom.12676
+
+Harrell, F. E., Lee, K. L., and Mark, D. B. (1996). Tutorial in biostatistics multivariable prognostic models: issues in developing models,
+evaluating assumptions and adequacy, and measuring and reducing errors. Statistics in medicine, 15, 361-387.
+doi:10.1002/(SICI)1097-0258(19960229)15:4<361::AID-SIM168>3.0.CO;2-4
 }
 
