@@ -8,6 +8,7 @@
 #' case the test results will be plotted.
 #' @param avg.line boolean value of whether or not to plot a line for the average
 #' value in addition to the density (only valid for \code{type = "density"})
+#' @param ... not used
 #' @rdname plot
 #' @import ggplot2
 #'
@@ -81,7 +82,8 @@
 #' @export
 plot.subgroup_validated <- function(x,
                                     type = c("density", "boxplot", "interaction"),
-                                    avg.line = TRUE)
+                                    avg.line = TRUE,
+                                    ...)
 {
     type <- match.arg(type)
 

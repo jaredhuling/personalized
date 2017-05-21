@@ -5,7 +5,7 @@
 \title{Plotting validation results for fitted subgroup identification models}
 \usage{
 \method{plot}{subgroup_validated}(x, type = c("density", "boxplot",
-  "interaction"), avg.line = TRUE)
+  "interaction"), avg.line = TRUE, ...)
 }
 \arguments{
 \item{x}{fitted object returned by \code{validate.subgrp()} function}
@@ -16,6 +16,8 @@ case the test results will be plotted.}
 
 \item{avg.line}{boolean value of whether or not to plot a line for the average
 value in addition to the density (only valid for \code{type = "density"})}
+
+\item{...}{not used}
 }
 \description{
 Plots validation results for estimated subgroup treatment effects

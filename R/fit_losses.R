@@ -18,3 +18,5 @@ fit_sq_loss_lasso <- function(x, y, wts, family, ...)
 
 
 fit_logistic_loss_lasso <- fit_sq_loss_lasso
+fit_cox_loss_lasso      <- fit_sq_loss_lasso
+
