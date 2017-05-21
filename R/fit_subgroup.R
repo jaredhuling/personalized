@@ -165,7 +165,7 @@ fit.subgrp <- function(x,
 
     fitted.model$subgroup.trt.effects <- subgrp.benefit(fitted.model$benefit.scores, y, trt, cutpoint)
 
-    class("fitted.model") <- class(fitted.model, "subgroup_fit")
+    class("fitted.model") <- c(class(fitted.model), "subgroup_fit")
 
     fitted.model
 }
