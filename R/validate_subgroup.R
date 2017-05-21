@@ -69,17 +69,21 @@
 #'
 #' y.test <- drop(xbeta.test) + rnorm(10 * n.obs, sd = 2)
 #'
-#' valmod <- validate.subgrp(subgrp.model, B = 10, method = "bootstrap")
+#' valmod <- validate.subgrp(subgrp.model, B = 10,
+#'                           method = "training_test",
+#'                           train.fraction = 0.75)
 #' valmod$avg.results
 #'
-#' mean(y.test[delta.test > 0 & trt01.test == 1]) - mean(y.test[delta.test > 0 & trt01.test == 0])
-#' mean(y.test[delta.test <= 0 & trt01.test == 0]) - mean(y.test[delta.test <= 0 & trt01.test == 1])
+#' bene.score.test <- subgrp.model$predict(x.test)
+#'
+#' mean(y.test[bene.score.test > 0 & trt01.test == 1]) - mean(y.test[bene.score.test > 0 & trt01.test == 0])
+#' mean(y.test[bene.score.test <= 0 & trt01.test == 0]) - mean(y.test[bene.score.test <= 0 & trt01.test == 1])
 #'
 #' quantile(valmod$boot.results[[1]][,1], c(0.025, 0.975))
 #' quantile(valmod$boot.results[[1]][,2], c(0.025, 0.975))
 #' @export
 validate.subgrp <- function(model,
-                            B              = 100L,
+                            B              = 50L,
                             method         = c("training_test_replication",
                                                "boot_bias_correction",
                                                "bootstrap"),
