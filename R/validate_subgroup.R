@@ -17,6 +17,7 @@
 #' Harrell, F. E., Lee, K. L., and Mark, D. B. (1996). Tutorial in biostatistics multivariable prognostic models: issues in developing models,
 #' evaluating assumptions and adequacy, and measuring and reducing errors. Statistics in medicine, 15, 361-387.
 #' doi:10.1002/(SICI)1097-0258(19960229)15:4<361::AID-SIM168>3.0.CO;2-4
+#' @importFrom stats predict sd
 
 #' @examples
 #' library(personalized)
@@ -86,8 +87,10 @@
 #'
 #' bene.score.test <- subgrp.model$predict(x.test)
 #'
-#' mean(y.test[bene.score.test > 0 & trt01.test == 1]) - mean(y.test[bene.score.test > 0 & trt01.test == 0])
-#' mean(y.test[bene.score.test <= 0 & trt01.test == 0]) - mean(y.test[bene.score.test <= 0 & trt01.test == 1])
+#' mean(y.test[bene.score.test > 0 & trt01.test == 1]) -
+#'        mean(y.test[bene.score.test > 0 & trt01.test == 0])
+#' mean(y.test[bene.score.test <= 0 & trt01.test == 0]) -
+#'        mean(y.test[bene.score.test <= 0 & trt01.test == 1])
 #'
 #' quantile(valmod$boot.results[[1]][,1], c(0.025, 0.975))
 #' quantile(valmod$boot.results[[1]][,2], c(0.025, 0.975))

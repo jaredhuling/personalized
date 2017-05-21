@@ -92,8 +92,10 @@ valmod$avg.results
 
 bene.score.test <- subgrp.model$predict(x.test)
 
-mean(y.test[bene.score.test > 0 & trt01.test == 1]) - mean(y.test[bene.score.test > 0 & trt01.test == 0])
-mean(y.test[bene.score.test <= 0 & trt01.test == 0]) - mean(y.test[bene.score.test <= 0 & trt01.test == 1])
+mean(y.test[bene.score.test > 0 & trt01.test == 1]) -
+       mean(y.test[bene.score.test > 0 & trt01.test == 0])
+mean(y.test[bene.score.test <= 0 & trt01.test == 0]) -
+       mean(y.test[bene.score.test <= 0 & trt01.test == 1])
 
 quantile(valmod$boot.results[[1]][,1], c(0.025, 0.975))
 quantile(valmod$boot.results[[1]][,2], c(0.025, 0.975))
