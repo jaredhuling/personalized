@@ -122,6 +122,18 @@ fit.subgrp <- function(x,
     if (length(unique.trts) != 2) stop("trt must have 2 distinct levels")
     if (any(unique.trts != c(0, 1))) stop("trt should be coded as 0 and 1")
 
+    propfunc.names <- sort(names(formals(propensity.func)))
+    if (length(propfunc.names) == 2)
+    {
+        if (any(propfunc.names != c("trt", "x")))
+        {
+            stop("arguments of propensity.func() should be 'x' and 'trt'")
+        }
+    } else
+    {
+        stop("propensity.func() should only have two arguments: 'trt' and 'x'")
+    }
+
 
     pi.x <- propensity.func(x = x, trt = trt)
 
