@@ -1,5 +1,5 @@
 
-
+#' @import glmnet
 fit_sq_loss_lasso <- function(x, y, wts, family, ...)
 {
     model <- cv.glmnet(x = x,  y = y,

@@ -8,6 +8,7 @@
 #' case the test results will be plotted.
 #' @param avg.line boolean value of whether or not to plot a line for the average
 #' value in addition to the density (only valid for \code{type = "density"})
+#' @import ggplot2
 #'
 #' @examples
 #' library(personalized)
