@@ -8,7 +8,10 @@
 #' @param trt treatment vector with each element equal to a 0 or a 1, with 1 indicating
 #'            treatment status is active.
 #' @param propensity.func function that inputs the design matrix x and the treatment vector trt and outputs
-#' the propensity score, ie Pr(trt = 1 | X = x). Function should take two arguments 1) x and 2) trt. See example below
+#' the propensity score, ie Pr(trt = 1 | X = x). Function should take two arguments 1) x and 2) trt. See example below.
+#' For a randomized controlled trial this can simply be a function that returns a constant equal to the proportion
+#' of patients assigned to the treatment group, i.e.:
+#' \code{propensity.func = function(x, trt) 0.5}.
 #' @param family family for the response. \code{gaussian} for continuous outcomes, \code{binomial} for binomial outcomes,
 #' and \code{cox} for time-to-event outcomes
 #' @param loss choice of both the M function from Chen, et al (2017) and potentially the penalty used for variable selection.

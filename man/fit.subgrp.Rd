@@ -18,7 +18,10 @@ fit.subgrp(x, y, trt, propensity.func, family = c("gaussian", "binomial",
 treatment status is active.}
 
 \item{propensity.func}{function that inputs the design matrix x and the treatment vector trt and outputs
-the propensity score, ie Pr(trt = 1 | X = x). Function should take two arguments 1) x and 2) trt. See example below}
+the propensity score, ie Pr(trt = 1 | X = x). Function should take two arguments 1) x and 2) trt. See example below.
+For a randomized controlled trial this can simply be a function that returns a constant equal to the proportion
+of patients assigned to the treatment group, i.e.:
+\code{propensity.func = function(x, trt) 0.5}.}
 
 \item{family}{family for the response. \code{gaussian} for continuous outcomes, \code{binomial} for binomial outcomes,
 and \code{cox} for time-to-event outcomes}
