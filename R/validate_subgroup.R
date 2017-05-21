@@ -85,8 +85,7 @@
 validate.subgrp <- function(model,
                             B              = 50L,
                             method         = c("training_test_replication",
-                                               "boot_bias_correction",
-                                               "bootstrap"),
+                                               "boot_bias_correction"),
                             train.fraction = 0.5)
 {
     method <- match.arg(method)

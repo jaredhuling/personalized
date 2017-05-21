@@ -5,7 +5,7 @@
 \title{Validating fitted subgroup identification models}
 \usage{
 validate.subgrp(model, B = 50L, method = c("training_test_replication",
-  "boot_bias_correction", "bootstrap"), train.fraction = 0.5)
+  "boot_bias_correction"), train.fraction = 0.5)
 }
 \arguments{
 \item{model}{fitted model object returned by \code{fit.subgrp()} function}
