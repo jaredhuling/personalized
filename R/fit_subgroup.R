@@ -64,7 +64,7 @@
 #' y.binary <- 1 * (xbeta + rnorm(n.obs, sd = 2) > 0 )
 #'
 #' # time-to-event outcomes
-#' surv.time <- exp(-xbeta + rnorm(n.obs, sd = 1))
+#' surv.time <- exp(-20 - xbeta + rnorm(n.obs, sd = 1))
 #' cens.time <- exp(rnorm(n.obs, sd = 3))
 #' y.time.to.event  <- pmin(surv.time, cens.time)
 #' status           <- 1 * (surv.time <= cens.time)
