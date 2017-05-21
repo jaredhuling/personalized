@@ -7,9 +7,8 @@
 #' @param y The response vector
 #' @param trt treatment vector with each element equal to a 0 or a 1, with 1 indicating
 #'            treatment status is active.
-#' @param pi.x vector of treatment status probabilities (ie Pr(trt = 1 | X = x)). If data is from a
-#' randomized controlled trial, these probabilities are constants. In an observational study \code{pi.x}
-#' is the propensity score.
+#' @param propensity.func function that inputs the design matrix x and the treatment vector trt and outputs
+#' the propensity score, ie Pr(trt = 1 | X = x). Function should take two arguments 1) x and 2) trt. See example below
 #' @param family family for the response. \code{gaussian} for continuous outcomes, \code{binomial} for binomial outcomes,
 #' and \code{cox} for time-to-event outcomes
 #' @param loss choice of both the M function from Chen, et al (2017) and potentially the penalty used for variable selection.
@@ -124,7 +123,7 @@ fit.subgrp <- function(x,
     if (any(unique.trts != c(0, 1))) stop("trt should be coded as 0 and 1")
 
 
-    pi.x <- propensity.func(x, trt)
+    pi.x <- propensity.func(x = x, trt = trt)
 
     rng.pi <- range(pi.x)
 

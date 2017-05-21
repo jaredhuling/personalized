@@ -17,6 +17,9 @@ fit.subgrp(x, y, trt, propensity.func, family = c("gaussian", "binomial",
 \item{trt}{treatment vector with each element equal to a 0 or a 1, with 1 indicating
 treatment status is active.}
 
+\item{propensity.func}{function that inputs the design matrix x and the treatment vector trt and outputs
+the propensity score, ie Pr(trt = 1 | X = x). Function should take two arguments 1) x and 2) trt. See example below}
+
 \item{family}{family for the response. \code{gaussian} for continuous outcomes, \code{binomial} for binomial outcomes,
 and \code{cox} for time-to-event outcomes}
 
@@ -32,10 +35,6 @@ All options ending with \code{lasso} have a lasso penalty added to the loss for 
 \item{...}{options to be passed to underlying fitting function. For all \code{loss} options with \code{lasso},
 this will be passed to \code{cv.glmnet} and for all \code{loss} options with \code{mcp} this will be passed
 to \code{cv.ncvreg}.}
-
-\item{pi.x}{vector of treatment status probabilities (ie Pr(trt = 1 | X = x)). If data is from a
-randomized controlled trial, these probabilities are constants. In an observational study \code{pi.x}
-is the propensity score.}
 }
 \description{
 Fits subgroup identification model class of Chen, et al (2017)
