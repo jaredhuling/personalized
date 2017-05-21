@@ -1,2 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^.*\.Rhistory$
+^cran-comments.md$
+README.Rmd
+README.html
