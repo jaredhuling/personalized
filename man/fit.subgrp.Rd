@@ -114,6 +114,16 @@ subgrp.model.bin <- fit.subgrp(x = x, y = y.binary,
 
 subgrp.model.bin$subgroup.trt.effects
 
+library(survival)
+subgrp.model.cox <- fit.subgrp(x = x, y = Surv(y.time.to.event, status),
+                           trt = trt01,
+                           propensity.func = prop.func,
+                           family = "cox",
+                           loss   = "cox_loss_lasso",
+                           nfolds = 5)              # option for cv.glmnet
+
+subgrp.model.cox$subgroup.trt.effects
+
 
 }
 \references{

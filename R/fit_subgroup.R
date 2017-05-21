@@ -99,6 +99,16 @@
 #'
 #' subgrp.model.bin$subgroup.trt.effects
 #'
+#' library(survival)
+#' subgrp.model.cox <- fit.subgrp(x = x, y = Surv(y.time.to.event, status),
+#'                            trt = trt01,
+#'                            propensity.func = prop.func,
+#'                            family = "cox",
+#'                            loss   = "cox_loss_lasso",
+#'                            nfolds = 5)              # option for cv.glmnet
+#'
+#' subgrp.model.cox$subgroup.trt.effects
+#'
 #'
 #' @export
 fit.subgrp <- function(x,
@@ -120,6 +130,16 @@ fit.subgrp <- function(x,
     loss   <- match.arg(loss)
     method <- match.arg(method)
 
+    y <- drop(y)
+
+    if (class(y) == "Surv")
+    {
+        if (length(grep("cox", loss))   == 0 |
+            length(grep("cox", family)) == 0 )
+        {
+            stop("loss and family must correspond to a cox model for time-to-event outcomes")
+        }
+    }
 
     larger.outcome.better <- as.logical(larger.outcome.better[1])
     retcall <- as.logical(retcall[1])
@@ -181,10 +201,17 @@ fit.subgrp <- function(x,
     fitted.model$method <- method
     fitted.model$benefit.scores <- fitted.model$predict(x)
 
-
-    fitted.model$subgroup.trt.effects <- subgrp.benefit(fitted.model$benefit.scores,
-                                                        y, trt, cutpoint,
-                                                        larger.outcome.better)
+    if (family == "cox")
+    {
+        fitted.model$subgroup.trt.effects <- subgrp.benefit(fitted.model$benefit.scores,
+                                                            y[,1], trt, cutpoint,
+                                                            larger.outcome.better)
+    } else
+    {
+        fitted.model$subgroup.trt.effects <- subgrp.benefit(fitted.model$benefit.scores,
+                                                            y, trt, cutpoint,
+                                                            larger.outcome.better)
+    }
 
     class(fitted.model) <- "subgroup_fitted"
 

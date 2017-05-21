@@ -147,20 +147,35 @@ validate.subgrp <- function(model,
             train.samp.size <- floor(n.obs * train.fraction)
             samp.idx        <- sample.int(n.obs, train.samp.size, replace = FALSE)
             model$call$x    <- x[samp.idx,]
-            model$call$y    <- y[samp.idx]
             model$call$trt  <- trt[samp.idx]
 
             x.test   <- x[-samp.idx,]
-            y.test   <- y[-samp.idx]
+            if (is.matrix(y))
+            {
+                model$call$y    <- y[samp.idx,]
+                y.test   <- y[-samp.idx,]
+            } else
+            {
+                model$call$y    <- y[samp.idx]
+                y.test   <- y[-samp.idx]
+            }
             trt.test <- trt[-samp.idx]
 
             mod.b    <- do.call(fit.subgrp, model$call)
 
             benefit.scores.test <- mod.b$predict(x.test)
 
-            sbgrp.trt.eff.test  <- subgrp.benefit(benefit.scores.test,
-                                                  y.test, trt.test,
-                                                  model$call$cutpoint)
+            if (model$call$family == "cox")
+            {
+                sbgrp.trt.eff.test  <- subgrp.benefit(benefit.scores.test,
+                                                      y.test[,1], trt.test,
+                                                      model$call$cutpoint)
+            } else
+            {
+                sbgrp.trt.eff.test  <- subgrp.benefit(benefit.scores.test,
+                                                      y.test, trt.test,
+                                                      model$call$cutpoint)
+            }
 
             boot.list[[1]][b,]  <- sbgrp.trt.eff.test[[1]]
             boot.list[[2]][b,,] <- sbgrp.trt.eff.test[[2]]
@@ -169,16 +184,30 @@ validate.subgrp <- function(model,
         {   # bootstrap bias correction
             samp.idx <- sample.int(n.obs, n.obs, replace = TRUE)
             model$call$x   <- x[samp.idx,]
-            model$call$y   <- y[samp.idx]
+            if (is.matrix(y))
+            {
+                model$call$y   <- y[samp.idx,]
+            } else
+            {
+                model$call$y   <- y[samp.idx]
+            }
             model$call$trt <- trt[samp.idx]
 
             mod.b    <- do.call(fit.subgrp, model$call)
 
             benefit.scores.orig <- mod.b$predict(x)
 
-            sbgrp.trt.eff.orig  <- subgrp.benefit(benefit.scores.orig,
-                                                  y, trt,
-                                                  model$call$cutpoint)
+            if (model$call$family == "cox")
+            {
+                sbgrp.trt.eff.orig  <- subgrp.benefit(benefit.scores.orig,
+                                                      y[,1], trt,
+                                                      model$call$cutpoint)
+            } else
+            {
+                sbgrp.trt.eff.orig  <- subgrp.benefit(benefit.scores.orig,
+                                                      y, trt,
+                                                      model$call$cutpoint)
+            }
 
             ## subtract estimated bias for current bootstrap iteration
             boot.list[[1]][b,]  <- model$subgroup.trt.effects[[1]] -
