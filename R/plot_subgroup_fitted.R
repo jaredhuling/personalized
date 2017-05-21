@@ -1,14 +1,6 @@
 #' Plotting results for fitted subgroup identification models
 #'
 #' @description Plots results for estimated subgroup treatment effects
-#'
-#' @param x fitted object returned by \code{fit.subgrp()} function
-#' @param type type of plot. \code{"density"} results in a density plot for the results
-#' across all patients. \code{"boxplot"} results in boxplots across observations. \code{"interaction"} creates an
-#' interaction plot for the different subgroups (crossing lines here means a meaningful subgroup)
-#' @param avg.line boolean value of whether or not to plot a line for the average
-#' value in addition to the density (only valid for \code{type = "density"})
-#' @param ... not used
 #' @seealso \code{\link[personalized]{fit.subgrp}} for function which fits subgroup identification models.
 #' @rdname plot
 #'

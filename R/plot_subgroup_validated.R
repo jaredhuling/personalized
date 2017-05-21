@@ -2,10 +2,11 @@
 #'
 #' @description Plots validation results for estimated subgroup treatment effects
 #'
-#' @param x fitted object returned by \code{validate.subgrp()} function
+#' @param x fitted object returned by \code{validate.subgrp()} or \code{fit.subgrp()} function
 #' @param type type of plot. \code{"density"} results in a density plot for the results
-#' across all iterations of either the bootstrap or training/test re-fitting. For the latter
-#' case the test results will be plotted. \code{"boxplot"} results in boxplots across all iterations of either
+#' across all observations (if \code{x} is from \code{fit.subgrp()}) or if \code{x} is from \code{validate.subgrp()}
+#' across iterations of either the bootstrap or training/test re-fitting. For the latter
+#' case the test results will be plotted. \code{"boxplot"} results in boxplots across all observations/iterations of either
 #' the bootstrap or training/test re-fitting. For the latter
 #' case the test results will be plotted. \code{"interaction"} creates an
 #' interaction plot for the different subgroups (crossing lines here means a meaningful subgroup)
