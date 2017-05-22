@@ -122,11 +122,11 @@ fit_sq_loss_lasso_gam <- function(x, y, wts, family, ...)
 
     if (family == "cox")
     {
-        rhs.formula <- paste("-1 +", paste(c(binary.formula, contin.formula), collapse = "+"))
+        rhs.formula <- paste(c(binary.formula, contin.formula), collapse = "+")
         family.func <- cox.ph()
     } else
     {
-        rhs.formula <- paste(c(binary.formula, contin.formula), collapse = "+")
+        rhs.formula <- paste("-1 +", paste(c(binary.formula, contin.formula), collapse = "+"))
         if (family == "binomial")
         {
             family.func <- binomial()
