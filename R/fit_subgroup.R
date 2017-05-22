@@ -134,6 +134,8 @@ fit.subgrp <- function(x,
 
     y <- drop(y)
 
+    # make sure outcome is consistent with
+    # other options selected
     if (class(y) == "Surv")
     {
         if (length(grep("cox", loss))   == 0 |
@@ -146,6 +148,8 @@ fit.subgrp <- function(x,
     larger.outcome.better <- as.logical(larger.outcome.better[1])
     retcall <- as.logical(retcall[1])
 
+    # save the passed arguments for later use in validate.subgrp()
+    # and plot.subgroup_fitted() functions
     if (retcall)
     {
         this.call <- mget(names(formals()), sys.frame(sys.nframe()))
@@ -160,7 +164,7 @@ fit.subgrp <- function(x,
     trt         <- as.integer(trt)
     unique.trts <- sort(unique(trt))
 
-    if (length(unique.trts) != 2) stop("trt must have 2 distinct levels")
+    if (length(unique.trts) != 2)    stop("trt must have 2 distinct levels")
     if (any(unique.trts != c(0, 1))) stop("trt should be coded as 0 and 1")
 
     # check to make sure arguments of propensity.func are correct
@@ -176,33 +180,44 @@ fit.subgrp <- function(x,
         stop("propensity.func() should only have two arguments: 'trt' and 'x'")
     }
 
-
+    # compute propensity scores
     pi.x <- propensity.func(x = x, trt = trt)
 
+    # make sure the resulting propensity scores are in the
+    # acceptable range (ie 0-1)
     rng.pi <- range(pi.x)
 
     if (rng.pi[1] <= 0 | rng.pi[2] >= 1) stop("propensity.func should return values between 0 and 1")
 
     trt2 <- 2 * trt - 1
 
+    # construct modified design matrices
+    # and weights
+    # depending on what method is used
     if (method == "weighting")
     {
         x.tilde <- trt2 * cbind(1, x)
         wts     <- 1 / (pi.x * (trt == 1) + (1 - pi.x) * (trt == 0))
     } else
-    {
+    {   # A-learning method
         x.tilde <- (trt - pi.x) * cbind(1, x)
         wts     <- rep(1, nrow(x))
     }
 
+    # identify correct fitting function and call it
     fit_fun      <- paste0("fit_", loss)
     fitted.model <- do.call(fit_fun, list(x = x.tilde, y = y, wts = wts, family = family, ...))
 
+    # save extra results
     fitted.model$call   <- this.call
+    fitted.model$family <- family
     fitted.model$loss   <- loss
     fitted.model$method <- method
     fitted.model$benefit.scores <- fitted.model$predict(x)
 
+    # calculate sizes of subgroups and the
+    # subgroup treatment effects based on the
+    # benefit scores and specified benefit score cutpoint
     if (family == "cox")
     {
         fitted.model$subgroup.trt.effects <- subgrp.benefit(fitted.model$benefit.scores,

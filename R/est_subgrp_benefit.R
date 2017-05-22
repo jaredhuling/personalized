@@ -22,11 +22,14 @@ subgrp.benefit <- function(benefit.scores, y, trt, cutpoint = 0, larger.outcome.
     y <- drop(y)
     trt <- drop(trt)
 
-    if (length(benefit.scores) != length(y)) stop("length of benefit.scores and y do not match")
+    if (length(benefit.scores) != length(y))   stop("length of benefit.scores and y do not match")
     if (length(benefit.scores) != length(trt)) stop("length of benefit.scores and trt do not match")
 
     cutpoint <- as.numeric(cutpoint[1])
 
+    # meaning of larger vs smaller benefit score
+    # is different depending on whether larger means
+    # better or not for the outcome
     if (larger.outcome.better)
     {
         recommended.trt <- 1 * (benefit.scores > cutpoint)
@@ -35,15 +38,27 @@ subgrp.benefit <- function(benefit.scores, y, trt, cutpoint = 0, larger.outcome.
         recommended.trt <- 1 * (benefit.scores < cutpoint)
     }
 
+    # compute mean of outcome within
+    # group of patients who both
+    # received and were recommended the treatment group
     idx.11  <- (recommended.trt == 1) & (trt == 1)
     mean.11 <- mean(y[idx.11])
 
+    # compute mean of outcome within
+    # group of patients who
+    # received control and were recommended the treatment group
     idx.10  <- (recommended.trt == 1) & (trt == 0)
     mean.10 <- mean(y[idx.10])
 
+    # compute mean of outcome within
+    # group of patients who
+    # received treatment and were recommended the control group
     idx.01  <- (recommended.trt == 0) & (trt == 1)
     mean.01 <- mean(y[idx.01])
 
+    # compute mean of outcome within
+    # group of patients who both
+    # received and were recommended the control group
     idx.00  <- (recommended.trt == 0) & (trt == 0)
     mean.00 <- mean(y[idx.00])
 

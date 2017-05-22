@@ -127,12 +127,15 @@ validate.subgrp <- function(model,
 
     model$call$retcall <- FALSE
 
+    # save data objects because they
+    # will be written over by resampled versions later
     x   <- model$call$x
     trt <- model$call$trt
     y   <- model$call$y
 
     n.obs <- NROW(x)
 
+    # create objects to store results
     boot.list <- vector(mode = "list", length = length(model$subgroup.trt.effects))
     boot.list[[1]] <- array(NA, dim = c(B, length(model$subgroup.trt.effects[[1]])))
     boot.list[[2]] <- boot.list[[3]] <- array(NA, dim = c(B, dim(model$subgroup.trt.effects[[2]])))
@@ -144,12 +147,15 @@ validate.subgrp <- function(model,
     {
         if (method == "training_test_replication")
         {
+            # randomly split/partition data into training and testing sets
             train.samp.size <- floor(n.obs * train.fraction)
             samp.idx        <- sample.int(n.obs, train.samp.size, replace = FALSE)
             model$call$x    <- x[samp.idx,]
             model$call$trt  <- trt[samp.idx]
 
             x.test   <- x[-samp.idx,]
+
+            # need to handle differently if outcome is a matrix
             if (is.matrix(y))
             {
                 model$call$y    <- y[samp.idx,]
@@ -161,10 +167,13 @@ validate.subgrp <- function(model,
             }
             trt.test <- trt[-samp.idx]
 
+            # fit subgroup model on training data
             mod.b    <- do.call(fit.subgrp, model$call)
 
+            # compute benefit scores on testing data
             benefit.scores.test <- mod.b$predict(x.test)
 
+            # estimate subgroup treatment effects on test data
             if (model$call$family == "cox")
             {
                 sbgrp.trt.eff.test  <- subgrp.benefit(benefit.scores.test,
@@ -177,13 +186,17 @@ validate.subgrp <- function(model,
                                                       model$call$cutpoint)
             }
 
+            # save results
             boot.list[[1]][b,]  <- sbgrp.trt.eff.test[[1]]
             boot.list[[2]][b,,] <- sbgrp.trt.eff.test[[2]]
             boot.list[[3]][b,,] <- sbgrp.trt.eff.test[[3]]
         } else if (method == "boot_bias_correction")
         {   # bootstrap bias correction
+
+            # take a bootstrap sample with replacement
             samp.idx <- sample.int(n.obs, n.obs, replace = TRUE)
             model$call$x   <- x[samp.idx,]
+
             if (is.matrix(y))
             {
                 model$call$y   <- y[samp.idx,]
@@ -193,8 +206,11 @@ validate.subgrp <- function(model,
             }
             model$call$trt <- trt[samp.idx]
 
+            # fit subgroup model on resampled data
             mod.b    <- do.call(fit.subgrp, model$call)
 
+            # calculate benefit scores and resulting
+            # subgroup treatment effects on the original data
             benefit.scores.orig <- mod.b$predict(x)
 
             if (model$call$family == "cox")
@@ -209,15 +225,18 @@ validate.subgrp <- function(model,
                                                       model$call$cutpoint)
             }
 
-            ## subtract estimated bias for current bootstrap iteration
+            # subtract estimated bias for current bootstrap iteration
             boot.list[[1]][b,]  <- model$subgroup.trt.effects[[1]] -
-                (mod.b$subgroup.trt.effects[[1]] - sbgrp.trt.eff.orig[[1]]) # bias portion
+                (mod.b$subgroup.trt.effects[[1]] - sbgrp.trt.eff.orig[[1]]) # bias estimate portion
             boot.list[[2]][b,,] <- model$subgroup.trt.effects[[2]] -
-                (mod.b$subgroup.trt.effects[[2]] - sbgrp.trt.eff.orig[[2]]) # bias portion
+                (mod.b$subgroup.trt.effects[[2]] - sbgrp.trt.eff.orig[[2]]) # bias estimate portion
             boot.list[[3]][b,,] <- model$subgroup.trt.effects[[3]] -
-                (mod.b$subgroup.trt.effects[[3]] - sbgrp.trt.eff.orig[[3]]) # bias portion
+                (mod.b$subgroup.trt.effects[[3]] - sbgrp.trt.eff.orig[[3]]) # bias estimate portion
         } else
         {   # bootstrap
+
+            # bootstrap is not available because it
+            # results in overly optimistic results
             samp.idx <- sample.int(n.obs, n.obs, replace = TRUE)
             model$call$x   <- x[samp.idx,]
             model$call$y   <- y[samp.idx]
@@ -230,11 +249,15 @@ validate.subgrp <- function(model,
         }
     }
 
+    # ugly way to handle cases where
+    # some subgroups have no members
     for (l in 1:length(boot.list))
     {
         boot.list[[l]][is.nan(boot.list[[l]])] <- 0
     }
 
+    # compute averages and standard
+    # deviations across iterations
     summary.stats <- list(colMeans(boot.list[[1]]),
                           apply(boot.list[[2]], c(2, 3), mean),
                           apply(boot.list[[3]], c(2, 3), mean))
