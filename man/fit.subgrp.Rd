@@ -30,7 +30,9 @@ and \code{cox} for time-to-event outcomes}
 \item{loss}{choice of both the M function from Chen, et al (2017) and potentially the penalty used for variable selection.
 All \code{loss} options starting with \code{sq_loss} use M(y, v) = (v - y) ^ 2, all options starting with \code{logistic_loss} use
 the logistic loss: M(y, v) = y * log(1 + exp{-v}), and all options starting with \code{cox_loss} use the negative partial likelihood loss for the Cox PH model.
-All options ending with \code{lasso} have a lasso penalty added to the loss for variable selection}
+All options ending with \code{lasso} have a lasso penalty added to the loss for variable selection. \code{sq_loss_lasso_gam}
+and \code{logistic_loss_lasso_gam} first use the lasso to select variables and then fit a generalized additive model
+with nonparametric additive terms for each selected variable.}
 
 \item{method}{subgroup ID model type. Either the weighting or A-learning method of Chen et al, (2017)}
 
