@@ -31,14 +31,14 @@ All \code{loss} options starting with \code{sq_loss} use M(y, v) = (v - y) ^ 2, 
 the logistic loss: M(y, v) = y * log(1 + exp{-v}), and all options starting with \code{cox_loss} use the negative partial likelihood loss for the Cox PH model.
 All options ending with \code{lasso} have a lasso penalty added to the loss for variable selection}
 
-\item{method}{subgroup ID model type. Either the weighting or A-learning method}
+\item{method}{subgroup ID model type. Either the weighting or A-learning method of Chen et al, (2017)}
 
 \item{cutpoint}{numeric value for patients with benefit scores above which
 (or below which if \code{larger.outcome.better = FALSE})
 will be recommended to be in the treatment group}
 
-\item{larger.outcome.better}{boolean value of whether a larger outcome is better. Set to \code{TRUE}
-if a larger outcome is better and set to \code{FALSE} if a smaller outcome is better. Defaults to \code{TRUE}.}
+\item{larger.outcome.better}{boolean value of whether a larger outcome is better/preferable. Set to \code{TRUE}
+if a larger outcome is better/preferable and set to \code{FALSE} if a smaller outcome is better/preferable. Defaults to \code{TRUE}.}
 
 \item{retcall}{boolean value. if \code{TRUE} then the passed arguments will be saved. Do not set to \code{FALSE}
 if the \code{validate.subgrp()} function will later be used for your fitted subgroup model. Only set to \code{FALSE}

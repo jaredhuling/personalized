@@ -19,7 +19,7 @@ subgrp.benefit <- function(benefit.scores, y, trt, cutpoint = 0, larger.outcome.
 {
 
     benefit.scores <- drop(benefit.scores)
-    y <- drop(y)
+    y   <- drop(y)
     trt <- drop(trt)
 
     if (length(benefit.scores) != length(y))   stop("length of benefit.scores and y do not match")
