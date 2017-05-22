@@ -12,7 +12,8 @@ fit_sq_loss_lasso <- function(x, y, wts, family, ...)
     ##                 begin with "fit_" and end with
     ##                 the text string to associated with
     ##                 this function in the options for the
-    ##                 'loss' argument of the fit.subgrp() function
+    ##                 'loss' argument of the fit.subgrp()
+    ##                 function
     ##
     ###################################################################
 
