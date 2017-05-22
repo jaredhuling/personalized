@@ -49,7 +49,9 @@ if memory is limited as setting to code{TRUE} saves the design matrix to the fit
 
 \item{...}{options to be passed to underlying fitting function. For all \code{loss} options with \code{lasso},
 this will be passed to \code{cv.glmnet} and for all \code{loss} options with \code{mcp} this will be passed
-to \code{cv.ncvreg}.}
+to \code{cv.ncvreg}. Note that for all \code{loss} options that use \code{gam()} from the \code{mgcv} package,
+the user cannot supply the \code{gam} argument \code{method} because it is also an argument of \code{fit.subgrp}, so
+instead, to change the \code{gam method} argument, instead supply \code{method.gam}, ie \code{method.gam = "REML"}.}
 }
 \description{
 Fits subgroup identification model class of Chen, et al (2017)

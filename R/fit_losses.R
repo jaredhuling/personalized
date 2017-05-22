@@ -75,12 +75,41 @@ fit_sq_loss_lasso_gam <- function(x, y, wts, family, ...)
     ##
     ###################################################################
 
+    list.dots <- list(...)
+    glmnet.argnames <- union(names(formals(cv.glmnet)), names(formals(glmnet)))
+    gam.argnames    <- names(formals(gam))
+
+    dot.names <- names(list.dots)
+
+    # since 'method' is an argument of 'fit.subgrp',
+    # let the user change the gam 'method' arg by supplying
+    # 'method.gam' arg instead of 'method'
+    dot.names[dot.names == "method.gam"] <- "method"
+    names(list.dots)[names(list.dots) == "method.gam"] <- "method"
+
+    dots.idx.glmnet <- match(glmnet.argnames, dot.names)
+    dots.idx.gam    <- match(gam.argnames, dot.names)
+
+    dots.idx.glmnet <- dots.idx.glmnet[!is.na(dots.idx.glmnet)]
+    dots.idx.gam    <- dots.idx.gam[!is.na(dots.idx.gam)]
+
     # fit a model with a lasso
     # penalty and desired loss
-    sel.model <- cv.glmnet(x = x,  y = y,
-                           weights   = wts,
-                           family    = family,
-                           intercept = FALSE, ...)
+    #sel.model <- cv.glmnet(x = x,  y = y,
+    #                       weights   = wts,
+    #                       family    = family,
+    #                       intercept = FALSE, ...)
+
+    # only add in dots calls if they exist
+    if (length(dots.idx.glmnet) > 0)
+    {
+        sel.model <- do.call(cv.glmnet, c(list(x = x, y = y, weights = wts, family = family,
+                                               intercept = FALSE), list.dots[dots.idx.glmnet]))
+    } else
+    {
+        sel.model <- do.call(cv.glmnet, list(x = x, y = y, weights = wts, family = family,
+                                             intercept = FALSE))
+    }
 
     vnames <- colnames(x)
 
@@ -140,8 +169,17 @@ fit_sq_loss_lasso_gam <- function(x, y, wts, family, ...)
     colnames(df) <- c("y", sel.vnames)
 
     # fit gam model:
-
-    model <- gam(gam.formula, data = df, family = family.func, weights = wts)
+    # only add in dots calls if they exist
+    if (length(dots.idx.glmnet) > 0)
+    {
+        model <- do.call(gam, c(list(formula = gam.formula, data = df,
+                                     weights = wts, family = family.func),
+                                     list.dots[dots.idx.gam]))
+    } else
+    {
+        model <- do.call(gam, list(formula = gam.formula, data = df,
+                                   weights = wts, family = family.func))
+    }
 
     # define a function which inputs a design matrix
     # and outputs estimated benefit scores: one score
