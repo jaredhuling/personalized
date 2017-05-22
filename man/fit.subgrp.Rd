@@ -5,9 +5,10 @@
 \title{Fitting subgroup identification models}
 \usage{
 fit.subgrp(x, y, trt, propensity.func, family = c("gaussian", "binomial",
-  "cox"), loss = c("sq_loss_lasso", "logistic_loss_lasso", "cox_loss_lasso"),
-  method = c("weighting", "a_learning"), cutpoint = 0,
-  larger.outcome.better = TRUE, retcall = TRUE, ...)
+  "cox"), loss = c("sq_loss_lasso", "logistic_loss_lasso", "cox_loss_lasso",
+  "sq_loss_lasso_gam", "logistic_loss_lasso_gam"), method = c("weighting",
+  "a_learning"), cutpoint = 0, larger.outcome.better = TRUE,
+  retcall = TRUE, ...)
 }
 \arguments{
 \item{x}{The design matrix (not including intercept term)}
@@ -55,7 +56,7 @@ Fits subgroup identification model class of Chen, et al (2017)
 library(personalized)
 
 set.seed(123)
-n.obs  <- 500
+n.obs  <- 1000
 n.vars <- 50
 x <- matrix(rnorm(n.obs * n.vars, sd = 3), n.obs, n.vars)
 
@@ -68,8 +69,8 @@ trt01    <- rbinom(n.obs, 1, prob = trt.prob)
 trt      <- 2 * trt01 - 1
 
 # simulate response
-delta <- 2 * (0.5 + x[,2] - x[,3] - x[,11] + x[,1] * x[,12])
-xbeta <- x[,1] + x[,11] - 2 * x[,12]^2 + x[,13]
+delta <- 2 * (0.5 + x[,2] - x[,3] - x[,11] + x[,1] * x[,12] )
+xbeta <- x[,1] + x[,11] - 2 * x[,12]^2 + x[,13] + 0.5 * x[,15] ^ 2
 xbeta <- xbeta + delta * trt
 
 # continuous outcomes

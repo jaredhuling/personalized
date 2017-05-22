@@ -8,7 +8,7 @@
 #' bias correction method of Harrell, et al (1996) or \code{"training_test_replication"}
 #' for repeated training and test splitting of the data (\code{train.fraction} should be specified
 #' for this option)
-#' @param B number of bootstrap replications or refitting replications.
+#' @param B integer. number of bootstrap replications or refitting replications.
 #' @param train.fraction fraction (between 0 and 1) of samples to be used for training in
 #' training/test replication. Only used for \code{method = "training_test_replication"}
 #' @seealso \code{\link[personalized]{fit.subgrp}} for function which fits subgroup identification models and
@@ -125,6 +125,7 @@ validate.subgrp <- function(model,
     if (is.null(model$call)) stop("retcall argument must be set to TRUE for fitted model")
 
 
+    # no need to store passed arguments for the bootstrap or training/testing replications
     model$call$retcall <- FALSE
 
     # save data objects because they

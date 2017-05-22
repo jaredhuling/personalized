@@ -10,7 +10,7 @@ validate.subgrp(model, B = 50L, method = c("training_test_replication",
 \arguments{
 \item{model}{fitted model object returned by \code{fit.subgrp()} function}
 
-\item{B}{number of bootstrap replications or refitting replications.}
+\item{B}{integer. number of bootstrap replications or refitting replications.}
 
 \item{method}{validation method. \code{"boot_bias_correction"} for the bootstrap
 bias correction method of Harrell, et al (1996) or \code{"training_test_replication"}

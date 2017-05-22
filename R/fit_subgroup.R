@@ -42,7 +42,7 @@
 #' library(personalized)
 #'
 #' set.seed(123)
-#' n.obs  <- 500
+#' n.obs  <- 1000
 #' n.vars <- 50
 #' x <- matrix(rnorm(n.obs * n.vars, sd = 3), n.obs, n.vars)
 #'
@@ -55,8 +55,8 @@
 #' trt      <- 2 * trt01 - 1
 #'
 #' # simulate response
-#' delta <- 2 * (0.5 + x[,2] - x[,3] - x[,11] + x[,1] * x[,12])
-#' xbeta <- x[,1] + x[,11] - 2 * x[,12]^2 + x[,13]
+#' delta <- 2 * (0.5 + x[,2] - x[,3] - x[,11] + x[,1] * x[,12] )
+#' xbeta <- x[,1] + x[,11] - 2 * x[,12]^2 + x[,13] + 0.5 * x[,15] ^ 2
 #' xbeta <- xbeta + delta * trt
 #'
 #' # continuous outcomes
@@ -120,7 +120,9 @@ fit.subgrp <- function(x,
                        family     = c("gaussian", "binomial", "cox"),
                        loss       = c("sq_loss_lasso",
                                       "logistic_loss_lasso",
-                                      "cox_loss_lasso"),
+                                      "cox_loss_lasso",
+                                      "sq_loss_lasso_gam",
+                                      "logistic_loss_lasso_gam"),
                        method     = c("weighting", "a_learning"),
                        cutpoint   = 0,
                        larger.outcome.better = TRUE,
@@ -132,7 +134,12 @@ fit.subgrp <- function(x,
     loss   <- match.arg(loss)
     method <- match.arg(method)
 
-    y <- drop(y)
+    dims <- dim(x)
+    if (is.null(dims)) stop("x must be a matrix object.")
+
+    y    <- drop(y)
+    vnames <- colnames(x)
+    if (is.null(vnames)) vnames <- paste0("V", 1:dims[2])
 
     # make sure outcome is consistent with
     # other options selected
@@ -203,6 +210,8 @@ fit.subgrp <- function(x,
         x.tilde <- (trt - pi.x) * cbind(1, x)
         wts     <- rep(1, nrow(x))
     }
+
+    colnames(x.tilde) <- c("Trt", vnames)
 
     # identify correct fitting function and call it
     fit_fun      <- paste0("fit_", loss)

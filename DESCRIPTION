@@ -11,5 +11,6 @@ LazyData: true
 Suggests: survival
 Depends:
     glmnet,
+    mgcv,
     ggplot2
 RoxygenNote: 5.0.1
