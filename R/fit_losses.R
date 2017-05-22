@@ -75,6 +75,9 @@ fit_sq_loss_lasso_gam <- function(x, y, wts, family, ...)
     ##
     ###################################################################
 
+    # need to inspect the dots to extract
+    # the arguments supplied to cv.glmnet
+    # and those supplied to gam
     list.dots <- list(...)
     glmnet.argnames <- union(names(formals(cv.glmnet)), names(formals(glmnet)))
     gam.argnames    <- names(formals(gam))
@@ -87,6 +90,8 @@ fit_sq_loss_lasso_gam <- function(x, y, wts, family, ...)
     dot.names[dot.names == "method.gam"] <- "method"
     names(list.dots)[names(list.dots) == "method.gam"] <- "method"
 
+    # find the arguments relevent for each
+    # possible ...-supplied function
     dots.idx.glmnet <- match(glmnet.argnames, dot.names)
     dots.idx.gam    <- match(gam.argnames, dot.names)
 
@@ -94,12 +99,7 @@ fit_sq_loss_lasso_gam <- function(x, y, wts, family, ...)
     dots.idx.gam    <- dots.idx.gam[!is.na(dots.idx.gam)]
 
     # fit a model with a lasso
-    # penalty and desired loss
-    #sel.model <- cv.glmnet(x = x,  y = y,
-    #                       weights   = wts,
-    #                       family    = family,
-    #                       intercept = FALSE, ...)
-
+    # penalty and desired loss:
     # only add in dots calls if they exist
     if (length(dots.idx.glmnet) > 0)
     {
