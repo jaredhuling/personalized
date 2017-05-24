@@ -178,7 +178,7 @@ fit.subgroup <- function(x,
         }
     }
 
-    if (family == "gaussian" & length(grep("logistic", loss)) == 0)
+    if (family == "gaussian" & length(grep("logistic", loss)) != 0)
     {
         stop("logistic loss for continuous outcomes not available.")
     }
