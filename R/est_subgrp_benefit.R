@@ -12,7 +12,7 @@
 #' will be recommended to be in the treatment group
 #' @param larger.outcome.better boolean value of whether a larger outcome is better. Set to \code{TRUE}
 #' if a larger outcome is better and set to \code{FALSE} if a smaller outcome is better. Defaults to \code{TRUE}.
-#' @seealso \code{\link[personalized]{fit.subgrp}} for function which fits subgroup identification models which generate
+#' @seealso \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models which generate
 #' benefit scores.
 #' @export
 subgrp.benefit <- function(benefit.scores, y, trt, cutpoint = 0, larger.outcome.better = TRUE)
@@ -78,12 +78,11 @@ subgrp.benefit <- function(benefit.scores, y, trt, cutpoint = 0, larger.outcome.
     sample.size.mat[2,1] <- sum(idx.10)
     sample.size.mat[2,2] <- sum(idx.00)
 
-    subgroup.effects <- numeric(2)
-    names(subgroup.effects) <- c("Trt  Effect Among Recommended Trt",
-                                 "Ctrl Effect Among Recommended Ctrl")
-
     subgroup.effects <- c(mean.11 - mean.10,
                           mean.00 - mean.01)
+
+    names(subgroup.effects) <- c("Trt  Effect Among Recommended Trt",
+                                 "Ctrl Effect Among Recommended Ctrl")
 
     list(subgroup.effects = subgroup.effects,
          avg.outcomes     = res.mat,

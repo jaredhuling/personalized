@@ -74,4 +74,3 @@ rec.trt.grp <- predict(subgrp.model, newx = x, type = "trt.group")
 \seealso{
 \code{\link[personalized]{fit.subgrp}} for function which fits subgroup identification models.
 }
-

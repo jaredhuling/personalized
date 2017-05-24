@@ -1,7 +1,7 @@
 #' Plotting results for fitted subgroup identification models
 #'
 #' @description Plots results for estimated subgroup treatment effects
-#' @seealso \code{\link[personalized]{fit.subgrp}} for function which fits subgroup identification models.
+#' @seealso \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models.
 #' @rdname plot
 #'
 #' @examples
@@ -39,7 +39,7 @@
 #'     pi.x
 #' }
 #'
-#' subgrp.model <- fit.subgrp(x = x, y = y,
+#' subgrp.model <- fit.subgroup(x = x, y = y,
 #'                            trt = trt01,
 #'                            propensity.func = prop.func,
 #'                            family = "gaussian",
@@ -55,7 +55,7 @@
 #' plot(subgrp.model, type = "interaction")
 #' @export
 plot.subgroup_fitted <- function(x,
-                                 type = c("density", "boxplot", "interaction"),
+                                 type = c("boxplot", "density", "interaction"),
                                  avg.line = TRUE,
                                  ...)
 {
@@ -106,7 +106,9 @@ plot.subgroup_fitted <- function(x,
             geom_rug(aes(colour = Received), alpha = 0.85) +
             coord_flip() +
             facet_grid( ~ Recommended) +
-            theme(legend.position = "bottom")
+            theme(legend.position = "bottom") +
+            xlab("Outcome") +
+            ggtitle("Individual Observations Among Subgroups")
         if (avg.line)
         {
             pl.obj <- pl.obj + geom_vline(data = avg.res.2.plot,
@@ -122,14 +124,18 @@ plot.subgroup_fitted <- function(x,
             geom_boxplot(aes(fill = Received)) +
             geom_rug(aes(colour = Received), alpha = 0.85) +
             facet_grid( ~ Recommended) +
-            theme(legend.position = "bottom")
+            theme(legend.position = "bottom") +
+            ylab("Outcome") +
+            ggtitle("Individual Observations Among Subgroups")
     } else
     {
         pl.obj <- ggplot(avg.res.2.plot,
                          aes(x = Recommended, y = Value, group = Received)) +
             geom_line(aes(colour = Received), size = 1.25) +
             theme(legend.position = "bottom") +
-            scale_x_discrete(expand = c(0.25, 0.25))
+            scale_x_discrete(expand = c(0.25, 0.25)) +
+            Ylab("Average Outcome") +
+            ggtitle("Average Outcomes Among Subgroups")
     }
     pl.obj
 }

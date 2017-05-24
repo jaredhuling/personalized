@@ -26,7 +26,6 @@ if a larger outcome is better and set to \code{FALSE} if a smaller outcome is be
 Computes means within various subgroups to estimate subgroup treatment effects
 }
 \seealso{
-\code{\link[personalized]{fit.subgrp}} for function which fits subgroup identification models which generate
+\code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models which generate
 benefit scores.
 }
-

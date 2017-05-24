@@ -32,8 +32,8 @@ library(personalized)
 
 
 ```r
-?fit.subgrp
-?validate.subgrp
+?fit.subgroup
+?validate.subgroup
 ```
 
 

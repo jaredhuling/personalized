@@ -173,12 +173,14 @@ fit_sq_loss_lasso_gam <- function(x, y, wts, family, ...)
     if (length(dots.idx.glmnet) > 0)
     {
         model <- do.call(gam, c(list(formula = gam.formula, data = df,
-                                     weights = wts, family = family.func),
+                                     weights = wts, family = family.func,
+                                     drop.intercept = TRUE),
                                      list.dots[dots.idx.gam]))
     } else
     {
         model <- do.call(gam, list(formula = gam.formula, data = df,
-                                   weights = wts, family = family.func))
+                                   weights = wts, family = family.func,
+                                   drop.intercept = TRUE))
     }
 
     # define a function which inputs a design matrix

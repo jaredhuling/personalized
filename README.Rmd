@@ -38,8 +38,8 @@ library(personalized)
 ```
 
 ```{r, eval = FALSE}
-?fit.subgrp
-?validate.subgrp
+?fit.subgroup
+?validate.subgroup
 ```
 
 

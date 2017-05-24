@@ -27,18 +27,18 @@
 #' @param larger.outcome.better boolean value of whether a larger outcome is better/preferable. Set to \code{TRUE}
 #' if a larger outcome is better/preferable and set to \code{FALSE} if a smaller outcome is better/preferable. Defaults to \code{TRUE}.
 #' @param retcall boolean value. if \code{TRUE} then the passed arguments will be saved. Do not set to \code{FALSE}
-#' if the \code{validate.subgrp()} function will later be used for your fitted subgroup model. Only set to \code{FALSE}
+#' if the \code{validate.subgroupu()} function will later be used for your fitted subgroup model. Only set to \code{FALSE}
 #' if memory is limited as setting to code{TRUE} saves the design matrix to the fitted object
 #' @param ... options to be passed to underlying fitting function. For all \code{loss} options with \code{lasso},
 #' this will be passed to \code{cv.glmnet} and for all \code{loss} options with \code{mcp} this will be passed
 #' to \code{cv.ncvreg}. Note that for all \code{loss} options that use \code{gam()} from the \code{mgcv} package,
-#' the user cannot supply the \code{gam} argument \code{method} because it is also an argument of \code{fit.subgrp}, so
+#' the user cannot supply the \code{gam} argument \code{method} because it is also an argument of \code{fit.subgroup}, so
 #' instead, to change the \code{gam method} argument, instead supply \code{method.gam}, ie \code{method.gam = "REML"}.
-#' @seealso \code{\link[personalized]{validate.subgrp}} for function which creates validation results for subgroup
+#' @seealso \code{\link[personalized]{validate.subgroupu}} for function which creates validation results for subgroup
 #' identification models, \code{\link[personalized]{predict.subgroup_fitted}} for a prediction function for fitted models
-#' from \code{fit.subgrp}, and \code{\link[personalized]{plot.subgroup_fitted}} for a function which plots
+#' from \code{fit.subgroup}, and \code{\link[personalized]{plot.subgroup_fitted}} for a function which plots
 #' results from fitted models
-#' from \code{fit.subgrp}.
+#' from \code{fit.subgroup}.
 #' @references Chen, S., Tian, L., Cai, T. and Yu, M. (2017), A general statistical framework for subgroup identification
 #' and comparative treatment scoring. Biometrics. doi:10.1111/biom.12676 \url{http://onlinelibrary.wiley.com/doi/10.1111/biom.12676/abstract}
 #'
@@ -86,7 +86,7 @@
 #'     pi.x
 #' }
 #'
-#' subgrp.model <- fit.subgrp(x = x, y = y,
+#' subgrp.model <- fit.subgroup(x = x, y = y,
 #'                            trt = trt01,
 #'                            propensity.func = prop.func,
 #'                            family = "gaussian",
@@ -95,7 +95,19 @@
 #'
 #' subgrp.model$subgroup.trt.effects
 #'
-#' subgrp.model.bin <- fit.subgrp(x = x, y = y.binary,
+#' # fit lasso + gam model with REML option for gam
+#'
+#' subgrp.modelg <- fit.subgroup(x = x, y = y,
+#'                             trt = trt01,
+#'                             propensity.func = prop.func,
+#'                             family = "gaussian",
+#'                             loss   = "sq_loss_lasso",
+#'                             method.gam = "REML",     # option for gam
+#'                             nfolds = 5)              # option for cv.glmnet
+#'
+#' subgrp.modelg$subgroup.trt.effects
+#'
+#' subgrp.model.bin <- fit.subgroup(x = x, y = y.binary,
 #'                            trt = trt01,
 #'                            propensity.func = prop.func,
 #'                            family = "binomial",
@@ -106,7 +118,7 @@
 #' subgrp.model.bin$subgroup.trt.effects
 #'
 #' library(survival)
-#' subgrp.model.cox <- fit.subgrp(x = x, y = Surv(y.time.to.event, status),
+#' subgrp.model.cox <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
 #'                            trt = trt01,
 #'                            propensity.func = prop.func,
 #'                            family = "cox",
@@ -117,7 +129,7 @@
 #'
 #'
 #' @export
-fit.subgrp <- function(x,
+fit.subgroup <- function(x,
                        y,
                        trt,
                        propensity.func,
@@ -159,7 +171,7 @@ fit.subgrp <- function(x,
     larger.outcome.better <- as.logical(larger.outcome.better[1])
     retcall <- as.logical(retcall[1])
 
-    # save the passed arguments for later use in validate.subgrp()
+    # save the passed arguments for later use in validate.subgroupu()
     # and plot.subgroup_fitted() functions
     if (retcall)
     {
@@ -198,7 +210,7 @@ fit.subgrp <- function(x,
     # acceptable range (ie 0-1)
     rng.pi <- range(pi.x)
 
-    if (rng.pi[1] <= 0 | rng.pi[2] >= 1) stop("propensity.func should return values between 0 and 1")
+    if (rng.pi[1] <= 0 | rng.pi[2] >= 1) stop("propensity.func() should return values between 0 and 1")
 
     trt2 <- 2 * trt - 1
 

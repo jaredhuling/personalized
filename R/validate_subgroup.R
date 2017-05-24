@@ -56,12 +56,12 @@
 #'     pi.x
 #' }
 #'
-#' subgrp.model <- fit.subgrp(x = x, y = y,
-#'                            trt = trt01,
-#'                            propensity.func = prop.func,
-#'                            family = "gaussian",
-#'                            loss   = "sq_loss_lasso",
-#'                            nfolds = 5)              # option for cv.glmnet
+#' subgrp.model <- fit.subgroup(x = x, y = y,
+#'                              trt = trt01,
+#'                              propensity.func = prop.func,
+#'                              family = "gaussian",
+#'                              loss   = "sq_loss_lasso",
+#'                              nfolds = 5)    # option for cv.glmnet
 #'
 #' subgrp.model$subgroup.trt.effects
 #'
@@ -82,9 +82,9 @@
 #'
 #' y.test <- drop(xbeta.test) + rnorm(10 * n.obs, sd = 2)
 #'
-#' valmod <- validate.subgrp(subgrp.model, B = 10,
-#'                           method = "training_test",
-#'                           train.fraction = 0.75)
+#' valmod <- validate.subgroup(subgrp.model, B = 10,
+#'                             method = "training_test",
+#'                             train.fraction = 0.75)
 #' valmod$avg.results
 #'
 #' bene.score.test <- subgrp.model$predict(x.test)
@@ -97,11 +97,11 @@
 #' quantile(valmod$boot.results[[1]][,1], c(0.025, 0.975))
 #' quantile(valmod$boot.results[[1]][,2], c(0.025, 0.975))
 #' @export
-validate.subgrp <- function(model,
-                            B              = 50L,
-                            method         = c("training_test_replication",
-                                               "boot_bias_correction"),
-                            train.fraction = 0.5)
+validate.subgroup <- function(model,
+                              B              = 50L,
+                              method         = c("training_test_replication",
+                                                 "boot_bias_correction"),
+                              train.fraction = 0.5)
 {
     method <- match.arg(method)
 
@@ -269,9 +269,19 @@ validate.subgrp <- function(model,
 
     names(summary.stats) <- names(boot.list) <- names(model$subgroup.trt.effects)
 
+    names(summary.stats$subgroup.effects) <- names(model$subgroup.trt.effects$subgroup.effects)
+    dimnames(summary.stats$sample.sizes)  <- dimnames(model$subgroup.trt.effects$sample.sizes)
+
+    names(summary.stats.se[[1]])    <- names(model$subgroup.trt.effects$subgroup.effects)
+    dimnames(summary.stats.se[[3]]) <- dimnames(model$subgroup.trt.effects$sample.sizes)
+
+    names(summary.stats.se) <- paste("SE", names(summary.stats), sep = ".")
+
+
     ret <- list(avg.results  = summary.stats,
                 se.results   = summary.stats.se,
-                boot.results = boot.list)
+                boot.results = boot.list,
+                val.method   = method)
     class(ret) <- "subgroup_validated"
     ret
 }
