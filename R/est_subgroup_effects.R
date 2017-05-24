@@ -66,10 +66,20 @@ subgroup.effects <- function(benefit.scores, y, trt, cutpoint = 0, larger.outcom
     idx.00  <- (recommended.trt == 0) & (trt == 0)
 
 
-    mean.11 <- mean.10 <- mean.01 <- mean.00 <- NULL
+    mean.11 <- mean.10 <- mean.01 <- mean.00 <- numeric(1L)
     if (family == "cox")
     {
+        survf.11 <- survfit(y[idx.11] ~ 1)
+        mean.11  <- summary(survf.11)$table[,5]
 
+        survf.10 <- survfit(y[idx.10] ~ 1)
+        mean.10  <- summary(survf.10)$table[,5]
+
+        survf.01 <- survfit(y[idx.01] ~ 1)
+        mean.01  <- summary(survf.01)$table[,5]
+
+        survf.00 <- survfit(y[idx.00] ~ 1)
+        mean.00  <- summary(survf.00)$table[,5]
     } else
     {
         mean.11 <- mean(y[idx.11])
