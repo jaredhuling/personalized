@@ -183,6 +183,7 @@ validate.subgroup <- function(model,
             boot.list[[1]][b,]  <- sbgrp.trt.eff.test[[1]]
             boot.list[[2]][b,,] <- sbgrp.trt.eff.test[[2]]
             boot.list[[3]][b,,] <- sbgrp.trt.eff.test[[3]]
+
         } else if (method == "boot_bias_correction")
         {   # bootstrap bias correction
 
@@ -217,6 +218,7 @@ validate.subgroup <- function(model,
                 (mod.b$subgroup.trt.effects[[2]] - sbgrp.trt.eff.orig[[2]]) # bias estimate portion
             boot.list[[3]][b,,] <- model$subgroup.trt.effects[[3]] -
                 (mod.b$subgroup.trt.effects[[3]] - sbgrp.trt.eff.orig[[3]]) # bias estimate portion
+
         } else
         {   # bootstrap
 
@@ -231,6 +233,7 @@ validate.subgroup <- function(model,
             boot.list[[1]][b,]  <- mod.b$subgroup.trt.effects[[1]]
             boot.list[[2]][b,,] <- mod.b$subgroup.trt.effects[[2]]
             boot.list[[3]][b,,] <- mod.b$subgroup.trt.effects[[3]]
+
         }
     }
 

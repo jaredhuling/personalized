@@ -48,7 +48,7 @@ fit_cox_loss_lasso <- function(x, y, wts, family, ...)
 
     pred.func <- function(x)
     {
-        drop(predict(model, newx = cbind(1, x), type = "link", s = "lambda.min"))
+        -drop(predict(model, newx = cbind(1, x), type = "link", s = "lambda.min"))
     }
 
     list(predict = pred.func,
