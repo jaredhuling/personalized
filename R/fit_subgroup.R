@@ -130,30 +130,30 @@
 #'
 #' @export
 fit.subgroup <- function(x,
-                       y,
-                       trt,
-                       propensity.func,
-                       family     = c("gaussian", "binomial", "cox"),
-                       loss       = c("sq_loss_lasso",
-                                      "logistic_loss_lasso",
-                                      "cox_loss_lasso",
-                                      "sq_loss_lasso_gam",
-                                      "logistic_loss_lasso_gam"),
-                       method     = c("weighting", "a_learning"),
-                       cutpoint   = 0,
-                       larger.outcome.better = TRUE,
-                       retcall    = TRUE,
-                       ...)
+                         y,
+                         trt,
+                         propensity.func,
+                         family     = c("gaussian", "binomial", "cox"),
+                         loss       = c("sq_loss_lasso",
+                                        "logistic_loss_lasso",
+                                        "cox_loss_lasso",
+                                        "sq_loss_lasso_gam",
+                                        "logistic_loss_lasso_gam"),
+                         method     = c("weighting", "a_learning"),
+                         cutpoint   = 0,
+                         larger.outcome.better = TRUE,
+                         retcall    = TRUE,
+                         ...)
 {
 
     family <- match.arg(family)
     loss   <- match.arg(loss)
     method <- match.arg(method)
 
-    dims <- dim(x)
+    dims   <- dim(x)
     if (is.null(dims)) stop("x must be a matrix object.")
 
-    y    <- drop(y)
+    y      <- drop(y)
     vnames <- colnames(x)
     if (is.null(vnames)) vnames <- paste0("V", 1:dims[2])
 
@@ -164,9 +164,25 @@ fit.subgroup <- function(x,
         if (length(grep("cox", loss))   == 0 |
             length(grep("cox", family)) == 0 )
         {
-            stop("loss and family must correspond to a cox model for time-to-event outcomes")
+            stop("Loss and family must correspond to a Cox model for time-to-event outcomes.")
         }
     }
+
+    if (length(grep("cox", loss))   == 0 |
+        length(grep("cox", family)) == 0 )
+    {
+        if (class(y) == "Surv")
+        {
+            stop("Must provide 'Surv' object if loss/family corresponds to a Cox model. See
+                 '?Surv' for more information about 'Surv' objects.")
+        }
+    }
+
+    if (family == "gaussian" & length(grep("logistic", loss)) == 0)
+    {
+        stop("logistic loss for continuous outcomes not available.")
+    }
+
 
     larger.outcome.better <- as.logical(larger.outcome.better[1])
     retcall <- as.logical(retcall[1])
