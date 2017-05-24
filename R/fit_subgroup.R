@@ -168,10 +168,10 @@ fit.subgroup <- function(x,
         }
     }
 
-    if (length(grep("cox", loss))   == 0 |
-        length(grep("cox", family)) == 0 )
+    if (length(grep("cox", loss))   != 0 |
+        length(grep("cox", family)) != 0 )
     {
-        if (class(y) == "Surv")
+        if (class(y) != "Surv")
         {
             stop("Must provide 'Surv' object if loss/family corresponds to a Cox model. See
                  '?Surv' for more information about 'Surv' objects.")
