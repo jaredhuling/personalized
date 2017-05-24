@@ -3,7 +3,7 @@
 #' @description Validates subgroup treatment effects for fitted
 #'  subgroup identification model class of Chen, et al (2017)
 #'
-#' @param model fitted model object returned by \code{fit.subgrp()} function
+#' @param model fitted model object returned by \code{fit.subgroup()} function
 #' @param method validation method. \code{"boot_bias_correction"} for the bootstrap
 #' bias correction method of Harrell, et al (1996) or \code{"training_test_replication"}
 #' for repeated training and test splitting of the data (\code{train.fraction} should be specified
@@ -108,7 +108,7 @@ validate.subgroup <- function(model,
 
     if (class(model)[1] != "subgroup_fitted")
     {
-        stop("model should be a fitted object returned by the 'fit.subgrp' function")
+        stop("model should be a fitted object returned by the 'fit.subgroup' function")
     }
 
 
@@ -229,7 +229,7 @@ validate.subgroup <- function(model,
             model$call$y   <- y[samp.idx]
             model$call$trt <- trt[samp.idx]
 
-            mod.b    <- do.call(fit.subgrp, model$call)
+            mod.b    <- do.call(fit.subgroup, model$call)
             boot.list[[1]][b,]  <- mod.b$subgroup.trt.effects[[1]]
             boot.list[[2]][b,,] <- mod.b$subgroup.trt.effects[[2]]
             boot.list[[3]][b,,] <- mod.b$subgroup.trt.effects[[3]]
@@ -268,6 +268,7 @@ validate.subgroup <- function(model,
     ret <- list(avg.results  = summary.stats,
                 se.results   = summary.stats.se,
                 boot.results = boot.list,
+                family       = model$family,
                 val.method   = method)
     class(ret) <- "subgroup_validated"
     ret

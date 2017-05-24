@@ -39,6 +39,8 @@ plot.subgroup_validated <- function(x,
 {
     type <- match.arg(type)
 
+    family   <- x$family
+
     avg.line <- as.logical(avg.line[1])
 
     boot.res <- x$boot.results$avg.outcomes
@@ -77,6 +79,13 @@ plot.subgroup_validated <- function(x,
         title.text <- "Average Bias-Corrected Outcome Across Replications Among Subgroups"
     }
 
+    ylab.text <- "Average Outcome"
+
+    if (family == "cox")
+    {
+        ylab.text <- "Average Restricted Mean"
+    }
+
     if (type == "density")
     {
         pl.obj <- ggplot(res.2.plot,
@@ -86,7 +95,7 @@ plot.subgroup_validated <- function(x,
                       coord_flip() +
                       facet_grid( ~ Recommended) +
                       theme(legend.position = "bottom") +
-            xlab("Average Outcome") +
+            xlab(ylab.text) +
             ggtitle(title.text)
         if (avg.line)
         {
@@ -104,7 +113,7 @@ plot.subgroup_validated <- function(x,
             geom_rug(aes(colour = Received), alpha = 0.85) +
             facet_grid( ~ Recommended) +
             theme(legend.position = "bottom") +
-            ylab("Average Outcome") +
+            ylab(ylab.text) +
             ggtitle(title.text)
     } else
     {
@@ -113,7 +122,7 @@ plot.subgroup_validated <- function(x,
             geom_line(aes(colour = Received), size = 1.25) +
             theme(legend.position = "bottom") +
             scale_x_discrete(expand = c(0.25, 0.25)) +
-            ylab("Average Outcome") +
+            ylab(ylab.text) +
             ggtitle(title.text)
     }
     pl.obj
