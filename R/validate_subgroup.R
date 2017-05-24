@@ -175,17 +175,9 @@ validate.subgroup <- function(model,
             benefit.scores.test <- mod.b$predict(x.test)
 
             # estimate subgroup treatment effects on test data
-            if (model$call$family == "cox")
-            {
-                sbgrp.trt.eff.test  <- subgrp.benefit(benefit.scores.test,
-                                                      y.test[,1], trt.test,
-                                                      model$call$cutpoint)
-            } else
-            {
-                sbgrp.trt.eff.test  <- subgrp.benefit(benefit.scores.test,
-                                                      y.test, trt.test,
-                                                      model$call$cutpoint)
-            }
+            sbgrp.trt.eff.test  <- subgroup.effects(benefit.scores.test,
+                                                    y.test, trt.test,
+                                                    model$call$cutpoint)
 
             # save results
             boot.list[[1]][b,]  <- sbgrp.trt.eff.test[[1]]
@@ -208,23 +200,15 @@ validate.subgroup <- function(model,
             model$call$trt <- trt[samp.idx]
 
             # fit subgroup model on resampled data
-            mod.b    <- do.call(fit.subgrp, model$call)
+            mod.b    <- do.call(fit.subgroup, model$call)
 
             # calculate benefit scores and resulting
             # subgroup treatment effects on the original data
             benefit.scores.orig <- mod.b$predict(x)
 
-            if (model$call$family == "cox")
-            {
-                sbgrp.trt.eff.orig  <- subgrp.benefit(benefit.scores.orig,
-                                                      y[,1], trt,
-                                                      model$call$cutpoint)
-            } else
-            {
-                sbgrp.trt.eff.orig  <- subgrp.benefit(benefit.scores.orig,
-                                                      y, trt,
-                                                      model$call$cutpoint)
-            }
+            sbgrp.trt.eff.orig  <- subgroup.effects(benefit.scores.orig,
+                                                    y, trt,
+                                                    model$call$cutpoint)
 
             # subtract estimated bias for current bootstrap iteration
             boot.list[[1]][b,]  <- model$subgroup.trt.effects[[1]] -

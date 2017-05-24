@@ -58,7 +58,7 @@ fit_cox_loss_lasso <- function(x, y, wts, family, ...)
 
 
 #' @import mgcv
-#' @importFrom stats as.formula family
+#' @importFrom stats as.formula binomial gaussian
 fit_sq_loss_lasso_gam <- function(x, y, wts, family, ...)
 {
     # this function must return a fitted model

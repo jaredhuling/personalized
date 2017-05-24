@@ -243,17 +243,9 @@ fit.subgroup <- function(x,
     # calculate sizes of subgroups and the
     # subgroup treatment effects based on the
     # benefit scores and specified benefit score cutpoint
-    if (family == "cox")
-    {
-        fitted.model$subgroup.trt.effects <- subgrp.benefit(fitted.model$benefit.scores,
-                                                            y[,1], trt, cutpoint,
-                                                            larger.outcome.better)
-    } else
-    {
-        fitted.model$subgroup.trt.effects <- subgrp.benefit(fitted.model$benefit.scores,
-                                                            y, trt, cutpoint,
-                                                            larger.outcome.better)
-    }
+    fitted.model$subgroup.trt.effects <- subgroup.effects(fitted.model$benefit.scores,
+                                                          y, trt, cutpoint,
+                                                          larger.outcome.better)
 
     class(fitted.model) <- "subgroup_fitted"
 

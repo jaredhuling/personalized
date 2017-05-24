@@ -1,7 +1,7 @@
 
-#' Computes means within various subgroups
+#' Computes treatment effects within various subgroups
 #'
-#' @description Computes means within various subgroups to estimate subgroup treatment effects
+#' @description Computes treatment effects within various subgroups to estimate subgroup treatment effects
 #'
 #' @param benefit.scores vector of estimated benefit scores
 #' @param y The response vector
@@ -15,14 +15,21 @@
 #' @seealso \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models which generate
 #' benefit scores.
 #' @export
-subgrp.benefit <- function(benefit.scores, y, trt, cutpoint = 0, larger.outcome.better = TRUE)
+subgroup.effects <- function(benefit.scores, y, trt, cutpoint = 0, larger.outcome.better = TRUE)
 {
 
     benefit.scores <- drop(benefit.scores)
     y   <- drop(y)
+
+    family <- "standard"
+    if (class(y) == "Surv")
+    {
+        family <- "cox"
+    }
+
     trt <- drop(trt)
 
-    if (length(benefit.scores) != length(y))   stop("length of benefit.scores and y do not match")
+    if (length(benefit.scores) != NROW(y))     stop("length of benefit.scores and y do not match")
     if (length(benefit.scores) != length(trt)) stop("length of benefit.scores and trt do not match")
 
     cutpoint <- as.numeric(cutpoint[1])
@@ -42,25 +49,34 @@ subgrp.benefit <- function(benefit.scores, y, trt, cutpoint = 0, larger.outcome.
     # group of patients who both
     # received and were recommended the treatment group
     idx.11  <- (recommended.trt == 1) & (trt == 1)
-    mean.11 <- mean(y[idx.11])
 
     # compute mean of outcome within
     # group of patients who
     # received control and were recommended the treatment group
     idx.10  <- (recommended.trt == 1) & (trt == 0)
-    mean.10 <- mean(y[idx.10])
 
     # compute mean of outcome within
     # group of patients who
     # received treatment and were recommended the control group
     idx.01  <- (recommended.trt == 0) & (trt == 1)
-    mean.01 <- mean(y[idx.01])
 
     # compute mean of outcome within
     # group of patients who both
     # received and were recommended the control group
     idx.00  <- (recommended.trt == 0) & (trt == 0)
-    mean.00 <- mean(y[idx.00])
+
+
+    mean.11 <- mean.10 <- mean.01 <- mean.00 <- NULL
+    if (family == "cox")
+    {
+
+    } else
+    {
+        mean.11 <- mean(y[idx.11])
+        mean.10 <- mean(y[idx.10])
+        mean.01 <- mean(y[idx.01])
+        mean.00 <- mean(y[idx.00])
+    }
 
     res.mat <- matrix(0, ncol = 2, nrow = 2)
     colnames(res.mat) <- c("Recommended Trt", "Recommended Ctrl")
