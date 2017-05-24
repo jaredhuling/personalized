@@ -39,6 +39,7 @@ fit_sq_loss_lasso <- function(x, y, wts, family, ...)
 
 fit_logistic_loss_lasso <- fit_sq_loss_lasso
 
+#' @import survival
 fit_cox_loss_lasso <- function(x, y, wts, family, ...)
 {
     model <- cv.glmnet(x = x,  y = y,
