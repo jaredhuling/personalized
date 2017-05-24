@@ -8,9 +8,12 @@ Description: Provides functions for fitting and validation for subgroup identifi
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
-Suggests: survival
+Suggests: survival,
+    knitr,
+    rmarkdown
 Depends:
     glmnet,
     mgcv,
     ggplot2
 RoxygenNote: 6.0.1
+VignetteBuilder: knitr

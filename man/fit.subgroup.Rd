@@ -115,7 +115,7 @@ subgrp.modelg <- fit.subgroup(x = x, y = y,
                             trt = trt01,
                             propensity.func = prop.func,
                             family = "gaussian",
-                            loss   = "sq_loss_lasso",
+                            loss   = "sq_loss_lasso_gam",
                             method.gam = "REML",     # option for gam
                             nfolds = 5)              # option for cv.glmnet
 
@@ -148,7 +148,7 @@ Chen, S., Tian, L., Cai, T. and Yu, M. (2017), A general statistical framework f
 and comparative treatment scoring. Biometrics. doi:10.1111/biom.12676 \url{http://onlinelibrary.wiley.com/doi/10.1111/biom.12676/abstract}
 }
 \seealso{
-\code{\link[personalized]{validate.subgroupu}} for function which creates validation results for subgroup
+\code{\link[personalized]{validate.subgroup}} for function which creates validation results for subgroup
 identification models, \code{\link[personalized]{predict.subgroup_fitted}} for a prediction function for fitted models
 from \code{fit.subgroup}, and \code{\link[personalized]{plot.subgroup_fitted}} for a function which plots
 results from fitted models

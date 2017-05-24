@@ -59,12 +59,12 @@ prop.func <- function(x, trt)
     pi.x
 }
 
-subgrp.model <- fit.subgrp(x = x, y = y,
-                           trt = trt01,
-                           propensity.func = prop.func,
-                           family = "gaussian",
-                           loss   = "sq_loss_lasso",
-                           nfolds = 5)              # option for cv.glmnet
+subgrp.model <- fit.subgroup(x = x, y = y,
+                            trt = trt01,
+                            propensity.func = prop.func,
+                            family = "gaussian",
+                            loss   = "sq_loss_lasso",
+                            nfolds = 5)              # option for cv.glmnet
 
 subgrp.model$subgroup.trt.effects
 benefit.scores <- predict(subgrp.model, newx = x, type = "benefit.score")
@@ -72,5 +72,5 @@ benefit.scores <- predict(subgrp.model, newx = x, type = "benefit.score")
 rec.trt.grp <- predict(subgrp.model, newx = x, type = "trt.group")
 }
 \seealso{
-\code{\link[personalized]{fit.subgrp}} for function which fits subgroup identification models.
+\code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models.
 }

@@ -134,7 +134,7 @@ plot.subgroup_fitted <- function(x,
             geom_line(aes(colour = Received), size = 1.25) +
             theme(legend.position = "bottom") +
             scale_x_discrete(expand = c(0.25, 0.25)) +
-            Ylab("Average Outcome") +
+            ylab("Average Outcome") +
             ggtitle("Average Outcomes Among Subgroups")
     }
     pl.obj
