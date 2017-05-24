@@ -8,9 +8,10 @@ Description: Provides functions for fitting and validation for subgroup identifi
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
-Suggests: survival,
-    knitr,
+Suggests: knitr,
     rmarkdown
+Imports:
+    survival
 Depends:
     glmnet,
     mgcv,
