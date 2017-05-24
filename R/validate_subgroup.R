@@ -169,7 +169,7 @@ validate.subgroup <- function(model,
             trt.test <- trt[-samp.idx]
 
             # fit subgroup model on training data
-            mod.b    <- do.call(fit.subgrp, model$call)
+            mod.b    <- do.call(fit.subgroup, model$call)
 
             # compute benefit scores on testing data
             benefit.scores.test <- mod.b$predict(x.test)

@@ -84,7 +84,14 @@ plot.subgroup_fitted <- function(x,
 
         res.2.plot[, 1] <- ifelse(trt.rec == 1, "Recommended Trt", "Recommended Ctrl")
         res.2.plot[, 2] <- ifelse(x$call$trt == 1, "Received Trt", "Received Ctrl")
-        res.2.plot[, 3] <- x$call$y
+
+        if (class(x$call$y) == "Surv")
+        {
+            res.2.plot[, 3] <- log(x$call$y[,1])
+        } else
+        {
+            res.2.plot[, 3] <- x$call$y
+        }
     }
 
 
