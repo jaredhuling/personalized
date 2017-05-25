@@ -21,10 +21,11 @@ vignette: >
 The `personalized` package aims to provide an entire analysis pipeline that encompasses a broad class of statistical methods for subgroup identification / personalized medicine. 
 
 The general analysis pipeline is as follows:
+
 1. Construct propensity score function and check propensity diagnostics
-2. Choose and fit a subgroup identification model
-3. Estimate the treatment effects among estimated subgroups
-4. Visualize and examine model and subgroup treatment effects  
+1. Choose and fit a subgroup identification model
+1. Estimate the treatment effects among estimated subgroups
+1. Visualize and examine model and subgroup treatment effects  
 
 The available subgroup identification models are models under the purview of the general subgroup identification framework proposed by Chen, et al. (2017). 
 
@@ -133,7 +134,7 @@ validation <- validate.subgroup(subgrp.model,
                                 method = "training_test_replication",
                                 train.fraction = 0.75)
 
-validation$avg.effects
+validation$avg.results
 ```
 
 We can then plot the average outcomes averaged over all replications of the training and testing partition procedure:
