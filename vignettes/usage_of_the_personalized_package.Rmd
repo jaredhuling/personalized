@@ -1,0 +1,161 @@
+---
+title: "Usage of the Personalized Package"
+author: "Jared Huling"
+date: "`r Sys.Date()`"
+output: 
+    rmarkdown::html_vignette:
+        fig_width: 7
+        fig_height: 5
+        toc: true
+        toc_depth: 3
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+
+# Introduction to `personalized`
+
+The `personalized` package aims to provide an entire analysis pipeline that encompasses a broad class of statistical methods for subgroup identification / personalized medicine. 
+
+The general analysis pipeline is as follows:
+1. Construct propensity score function and check propensity diagnostics
+2. Choose and fit a subgroup identification model
+3. Estimate the treatment effects among estimated subgroups
+4. Visualize and examine model and subgroup treatment effects  
+
+The available subgroup identification models are models under the purview of the general subgroup identification framework proposed by Chen, et al. (2017). 
+
+$T \in \{-1,1\}$ where $T = 1$ represents an indicator of the treatment, and $T = -1$ indicates the control.
+$$E(Y|X, T) = g(X) + T\Delta(X).$$ Here, $\Delta(X)$ represents the interaction between treatment and covariates. For a patient with $X = x$, if $\Delta(x) > 0$, the treatment is beneficial in terms of the expected outcome, and if $\Delta(X) \leq 0$, the control is better than the treatment. Hence to identify which subgroup of patients benefits from a treatment, we seek to estimate $\Delta(X)$.
+
+In the framework of Chen, et al. (2017), there are two main methods for estimating subgroups. The first is called the weighting method. The weighting method estimates $\Delta(X)$ by minimizing the following objective function with respect to $f(X)$:
+$$L_W(f) = \frac{1}{n}\sum_i\frac{(Y_i -  T_i\times f(x_i)) ^ 2}{ \color{ghilight}{T_i\pi(x_i)+(1-T_i)/2} },$$
+where $\pi(x) = Pr(T = 1|X = x)$ is the propensity score function. Hence $\hat{f} = \mbox{argmin}_f L_W(f)$ is our estimate of $\Delta(X)$. If we want a simple functional form for the estimate $\hat{f}$, we can restrict $f$ such that it is a linear combination of the covariates, i.e. $f(X) = X^T\beta$. Hence $\hat{f}(X) = X^T\hat{\beta}$.
+
+The A-learning estimator is the minimizer of 
+$$L_A(f) =\frac{1}{n}\sum_i (Y_i - \color{ghilight}{\{(T_i+1)/2 -\pi(x_i)\} } {\times f(x_i))^2}.$$
+
+# User Guide
+
+The user guide for the `personalized` package will begin with a quick usage reference so users can quickly get started with a subgroup identification analysis. Following the quick usage reference, the user guide will expand on all the options available in the main functions and the implications of the various options.
+
+## Quick Usage Reference
+
+First simulate some data where we know the truth. In this simulation, the treatment assignment depends on covariates and hence we must model the propensity score $\pi(x) = Pr(T = 1 | X = x)$. In this simulation we will assume that larger values of the outcome are better. 
+
+```{r sim_data_1, message = FALSE, warning = FALSE}
+library(personalized)
+
+set.seed(123)
+n.obs  <- 1000
+n.vars <- 50
+x <- matrix(rnorm(n.obs * n.vars, sd = 3), n.obs, n.vars)
+
+# simulate non-randomized treatment
+xbetat   <- 0.5 + 0.25 * x[,21] - 0.25 * x[,41]
+trt.prob <- exp(xbetat) / (1 + exp(xbetat))
+trt      <- rbinom(n.obs, 1, prob = trt.prob)
+
+# simulate delta
+delta <- (0.5 + x[,2] - 0.5 * x[,3] - 0.5 * x[,11] + 0.25 * x[,1] * x[,12] )
+
+# simulate main effects g(X)
+xbeta <- x[,1] + x[,11] - 2 * x[,12]^2 + x[,13] + 0.5 * x[,15] ^ 2
+xbeta <- xbeta + delta * (2 * trt - 1)
+
+# simulate continuous outcomes
+y <- drop(xbeta) + rnorm(n.obs)
+```
+
+### Creating and Checking Propensity Score Model
+The first step in our analysis is to construct a model for the propensity score. In the `personalized` package, we need to wrap this model in a function which inputs covariate values and the treatment statuses and outputs a propensity score between 0 and 1. Since there are many covariates, we use the lasso to select variables in our propensity score model:
+
+```{r create_propensity}
+# create function for fitting propensity score model
+prop.func <- function(x, trt)
+{
+ # fit propensity score model
+ propens.model <- cv.glmnet(y = trt,
+                            x = x, 
+                            family = "binomial")
+ pi.x <- predict(propens.model, s = "lambda.min",
+                 newx = x, type = "response")[,1]
+ pi.x
+}
+```
+
+We then need to make sure the propensity scores have sufficient overlap between treatment groups. We can do this with the `check.overlap()` function, which plots densities or histograms of the propensity scores for each of the treatment groups:
+
+```{r plot_overlap}
+check.overlap(x, trt, prop.func)
+```
+
+We can see that our propensity scores have common support. 
+
+### Fitting Subgroup Identification Model
+
+The next step is to choose and fit a subgroup identification model. In this example, the outcome is continuous, so we choose the squared error loss function. We also choose the model type (either the weighting or the A-learning method). The main funciton for fitting subgroup identification models is `fit.subgroup`. 
+Since there are many covariates, we choose a loss function with a lasso penalty to select variables. The underlying fitting function here is `cv.glmnet()`. We can pass to `fit.subgroup()` arguments of the `cv.glmnet()` function, such as `nfolds` for the number of cross validation folds.
+
+```{r fit_model}
+subgrp.model <- fit.subgroup(x = x, y = y,
+                             trt = trt,
+                             propensity.func = prop.func,
+                             family = "gaussian",
+                             loss   = "sq_loss_lasso",
+                             nfolds = 5)              # option for cv.glmnet
+
+subgrp.model$subgroup.trt.effects
+```
+
+We can then plot the outcomes of patients in the different subgroups:
+```{r plot_model}
+plot(subgrp.model)
+```
+
+Alternatively, we can create an interaction plot. This plot represents the average outcome within each subgroup broken down by treatment status. If the lines in the interaction plots cross, that indicates there is a subgroup treatment effect. 
+```{r plot_model_2}
+plot(subgrp.model, type = "interaction")
+```
+
+### Evaluating Effect of Subgroup Identification Model
+
+
+Unfortunately, if we simply look at the average outcome within each subgroup, this will give us a biased estimate of the treatment effects within each subgroup as we have already used the data to estimate the subgroups. Instead, to get a valid estimate of the subgroup treatment effects we can use a bootstrap approach to correcting for this bias. We can alternatively repeatedly partition our data into training and testing samples. In this procedure for each replication we fit a subgroup model using the training data and then evaluate the subgroup treatment effects on the testing data. The argument `B` specifies the number of replications and the argument `train.fraction` specifies what proportion of samples are for training in the training and testing partitioning method.
+
+Both of these approaches can be carried out using the `validate.subgroup()` function. 
+```{r validate_model}
+validation <- validate.subgroup(subgrp.model, 
+                                B = 25L,  # specify the number of replications
+                                method = "training_test_replication",
+                                train.fraction = 0.75)
+
+validation$avg.effects
+```
+
+We can then plot the average outcomes averaged over all replications of the training and testing partition procedure:
+```{r plot_validation}
+plot(validation)
+```
+From the above plot we can evaluate what the impact of the subgroups is. Among patients for whom the model recommends the control is more effective than the treatment, we can see that those who instead take the treatment are worse off than patients who take the control. Similarly, among patients who are recommended the treatment, patients who take the treatment are better off on average than patients who do not take the treatment.
+
+Similarly, we can create an interaction plot of either the bootstrap bias-corrected means within the different subgroups or the average test set means within subgroups. Here, lines crossing is an indicator of differential treatment effect between the subgroups. 
+```{r plot_validation_2}
+plot(validation, type = "interaction")
+```
+
+
+# Reference Manual
+
+## `check.overlap()`
+
+## `fit.subgroup()`
+
+## `validate.subgroup()`
+
+## `plot.subgroup_fitted()` and `plot.subgroup_validated()`
+
+## `predict.subgroup_fitted()`
