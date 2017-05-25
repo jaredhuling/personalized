@@ -3,6 +3,7 @@
 S3method(plot,subgroup_fitted)
 S3method(plot,subgroup_validated)
 S3method(predict,subgroup_fitted)
+export(check.overlap)
 export(fit.subgroup)
 export(subgroup.effects)
 export(validate.subgroup)
