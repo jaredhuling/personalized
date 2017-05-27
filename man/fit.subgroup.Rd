@@ -6,9 +6,9 @@
 \usage{
 fit.subgroup(x, y, trt, propensity.func, family = c("gaussian", "binomial",
   "cox"), loss = c("sq_loss_lasso", "logistic_loss_lasso", "cox_loss_lasso",
-  "sq_loss_lasso_gam", "logistic_loss_lasso_gam"), method = c("weighting",
-  "a_learning"), cutpoint = 0, larger.outcome.better = TRUE,
-  retcall = TRUE, ...)
+  "sq_loss_lasso_gam", "logistic_loss_lasso_gam", "sq_loss_gam",
+  "logistic_loss_gam", "sq_loss_gbm"), method = c("weighting", "a_learning"),
+  cutpoint = 0, larger.outcome.better = TRUE, retcall = TRUE, ...)
 }
 \arguments{
 \item{x}{The design matrix (not including intercept term)}
@@ -32,7 +32,10 @@ All \code{loss} options starting with \code{sq_loss} use M(y, v) = (v - y) ^ 2, 
 the logistic loss: M(y, v) = y * log(1 + exp{-v}), and all options starting with \code{cox_loss} use the negative partial likelihood loss for the Cox PH model.
 All options ending with \code{lasso} have a lasso penalty added to the loss for variable selection. \code{sq_loss_lasso_gam}
 and \code{logistic_loss_lasso_gam} first use the lasso to select variables and then fit a generalized additive model
-with nonparametric additive terms for each selected variable.}
+with nonparametric additive terms for each selected variable. \code{sq_loss_gam} involves a squared error loss with a generalized additive model and no variable selection.
+\code{sq_loss_gbm} involves a squared error loss with a gradient-boosted decision trees model for the benefit score; this
+allows for flexible estimation using machine learning and can be useful when the underlying treatment-covariate interaction
+is complex.}
 
 \item{method}{subgroup ID model type. Either the weighting or A-learning method of Chen et al, (2017)}
 

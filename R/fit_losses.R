@@ -202,3 +202,185 @@ fit_sq_loss_lasso_gam <- function(x, y, wts, family, ...)
 fit_logistic_loss_lasso_gam <- fit_sq_loss_lasso_gam
 fit_cox_loss_lasso_gam      <- fit_sq_loss_lasso_gam
 
+
+
+
+fit_sq_loss_gam <- function(x, y, wts, family, ...)
+{
+    # this function must return a fitted model
+    # in addition to a function which takes in
+    # a design matrix and outputs estimated benefit scores
+
+    ###################################################################
+    ##
+    ## IMPORTANT NOTE: the name of this function *must*
+    ##                 begin with "fit_" and end with
+    ##                 the text string to associated with
+    ##                 this function in the options for the
+    ##                 'loss' argument of the fit.subgrp()
+    ##                 function
+    ##
+    ###################################################################
+
+
+    list.dots <- list(...)
+
+    # since 'method' is an argument of 'fit.subgrp',
+    # let the user change the gam 'method' arg by supplying
+    # 'method.gam' arg instead of 'method'
+    names(list.dots)[names(list.dots) == "method.gam"] <- "method"
+
+    vnames  <- colnames(x)
+    sel.idx <- seq_len(ncol(x))
+
+    # names of selected variables
+    sel.vnames <- vnames[sel.idx]
+
+    # find which variables are binary
+    var.levels <- numeric(length(sel.idx))
+    for (v in 1:length(sel.idx))
+    {
+        var.levels[v] <- length(unique(x[,sel.idx[v]]))
+    }
+
+    contin.vars <- sel.vnames[var.levels > 2]
+    binary.vars <- sel.vnames[var.levels == 2]
+
+    # create formula for gam
+    contin.formula <- binary.formula <- NULL
+
+    # don't create smoother for binary vars
+    if (length(binary.vars) > 0)
+    {
+        binary.formula <- paste(binary.vars, collapse = "+")
+    }
+
+    # create smoother for each continuous var
+    if (length(contin.vars) > 0)
+    {
+        form.cur <- paste0("s(", contin.vars, ")")
+        contin.formula <- paste(form.cur, collapse = "+")
+    }
+
+    family.func <- gaussian()
+
+    if (family == "cox")
+    {
+        rhs.formula <- paste(c(binary.formula, contin.formula), collapse = "+")
+        family.func <- cox.ph()
+    } else
+    {
+        rhs.formula <- paste("-1 +", paste(c(binary.formula, contin.formula), collapse = "+"))
+        if (family == "binomial")
+        {
+            family.func <- binomial()
+            y <- as.integer(y)
+        }
+    }
+    gam.formula <- as.formula(paste("y ~", rhs.formula))
+
+    # create data frame
+    df <- data.frame(y = y, x = x[,sel.idx])
+    colnames(df) <- c("y", sel.vnames)
+
+    # fit gam model:
+    # only add in dots calls if they exist
+    if (length(list.dots) > 0)
+    {
+        model <- do.call(gam, c(list(formula = gam.formula, data = df,
+                                     weights = wts, family = family.func,
+                                     drop.intercept = TRUE),
+                                list.dots))
+    } else
+    {
+        model <- do.call(gam, list(formula = gam.formula, data = df,
+                                   weights = wts, family = family.func,
+                                   drop.intercept = TRUE))
+    }
+
+
+    # define a function which inputs a design matrix
+    # and outputs estimated benefit scores: one score
+    # for each row in the design matrix
+    pred.func <- function(x)
+    {
+        df.pred <- data.frame(cbind(1, x[,sel.idx[-1] - 1]))
+        colnames(df.pred) <- colnames(df)[-1] # take out 'y' column name
+        drop(predict(model, newdata = df.pred, type = "link"))
+    }
+
+    list(predict = pred.func,
+         model   = model)
+}
+
+fit_logistic_loss_gam <- fit_sq_loss_gam
+fit_cox_loss_gam      <- fit_sq_loss_gam
+
+
+
+#' @import gbm
+fit_sq_loss_gbm <- function(x, y, wts, family, ...)
+{
+    # this function must return a fitted model
+    # in addition to a function which takes in
+    # a design matrix and outputs estimated benefit scores
+
+    ###################################################################
+    ##
+    ## IMPORTANT NOTE: the name of this function *must*
+    ##                 begin with "fit_" and end with
+    ##                 the text string to associated with
+    ##                 this function in the options for the
+    ##                 'loss' argument of the fit.subgrp()
+    ##                 function
+    ##
+    ###################################################################
+
+    list.dots <- list(...)
+
+    dot.names <- names(list.dots)
+    if ("cv.folds" %in% dot.names)
+    {
+        cv.folds <- list.dots["cv.folds"]
+        if (cv.folds < 2)
+        {
+            cv.folds <- 2L
+            list.dots$cv.folds <- cv.folds
+            warning("cv.folds must be at least 2")
+        }
+
+    } else
+    {
+        list.dots$cv.folds <- 5L
+    }
+
+
+    df <- data.frame(y = y, x)
+
+    formula.gbm <- as.formula("y ~ . - 1")
+
+    # fit a model with a lasso
+    # penalty and desired loss
+    model <- do.call(gbm, c(list(formula.gbm, data = df,
+                                 weights = wts,
+                                 distribution = "gaussian"),
+                                 list.dots))
+
+    best.iter <- gbm.perf(model, method = "cv")
+
+    vnames <- colnames(x)
+
+    # define a function which inputs a design matrix
+    # and outputs estimated benefit scores: one score
+    # for each row in the design matrix
+    pred.func <- function(x)
+    {
+        df.x <- data.frame(cbind(1, x))
+        colnames(df.x) <- vnames
+
+        drop(predict(model, newdata = df.x, n.trees = best.iter, type = "link"))
+    }
+
+    list(predict = pred.func,
+         model   = model)
+}
