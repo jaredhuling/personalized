@@ -119,9 +119,9 @@ subgrp.model <- fit.subgroup(x = x, y = y,
                              propensity.func = prop.func,
                              family = "gaussian",
                              loss   = "sq_loss_lasso",
-                             nfolds = 5)              # option for cv.glmnet
+                             nfolds = 10)              # option for cv.glmnet
 
-subgrp.model$subgroup.trt.effects
+summary(subgrp.model)
 ```
 
 We can then plot the outcomes of patients in the different subgroups:
@@ -146,7 +146,7 @@ validation <- validate.subgroup(subgrp.model,
                                 method = "training_test_replication",
                                 train.fraction = 0.75)
 
-validation$avg.results
+validation
 ```
 
 We can then plot the average outcomes averaged over all replications of the training and testing partition procedure:
@@ -158,6 +158,11 @@ From the above plot we can evaluate what the impact of the subgroups is. Among p
 Similarly, we can create an interaction plot of either the bootstrap bias-corrected means within the different subgroups or the average test set means within subgroups. Here, lines crossing is an indicator of differential treatment effect between the subgroups. 
 ```{r plot_validation_2}
 plot(validation, type = "interaction")
+```
+
+We can also compare the validation results with the results on the observed data:
+```{r plot_validation_compare}
+plotCompare(subgrp.model, validation, type = "interaction")
 ```
 
 
@@ -175,10 +180,10 @@ The primary function of `fit.subgroup()` is to estimate the parameters in a subg
 
 The function of `validate.subgroup()` is to evaluate the impact of an estimated subgroup. In particular, `validate.subgroup()` provides methods to determine if treatment effects are truly different between the different estimated subgroups.
 
-## `plot.subgroup_fitted()` and `plot.subgroup_validated()`
+## `plot.subgroup_fitted()`, `plot.subgroup_validated()`, and `plotCompare()`
 
-These functions plot the outcomes or average outcomes within both subgroups and treatment groups. This can give users a sense of the impact of the estimated subgroups. 
+These functions plot the outcomes or average outcomes within both subgroups and treatment groups. This can give users a sense of the impact of the estimated subgroups. The `plotCompare()` function allows users to make plots which compare multiple subgroup identification models or validation results.
 
 ## `predict.subgroup_fitted()`
 
-The function `predict.subgroup_fitted()` allows users to estimate the benefit score ($f(X)$) for new patients. The benefit score is used to assign patients to treatment groups based on a particular subgroup identification model, i.e. if $f(x) > 0$, then a patient with $X = x$ should be assigned to the treatment group to maximize their expected outcome.
+The function `predict.subgroup_fitted()` allows users to estimate the benefit score ($\hat{f}(X)$) for new patients. The benefit score is used to assign patients to treatment groups based on a particular subgroup identification model, i.e. if $f(x) > 0$, then a patient with $X = x$ should be assigned to the treatment group to maximize their expected outcome.

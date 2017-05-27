@@ -63,8 +63,7 @@
 #'                            trt = trt01,
 #'                            propensity.func = prop.func,
 #'                            family = "gaussian",
-#'                            loss   = "sq_loss_gbm",
-#'                            cv.folds = 5)              # option for gbm
+#'                            loss   = "sq_loss_lasso_gam")
 #'
 #' plotCompare(subgrp.model, subgrp.modelg)
 #'

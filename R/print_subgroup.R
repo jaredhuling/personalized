@@ -8,6 +8,7 @@
 #' @seealso \code{\link[personalized]{validate.subgroup}} for function which creates validation results
 #' and \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models.
 #' @rdname print
+#' @importFrom stats quantile
 #' @export
 print.subgroup_fitted <- function(x, digits = max(getOption('digits')-3, 3), ...)
 {

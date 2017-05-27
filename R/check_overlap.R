@@ -65,6 +65,7 @@ check.overlap <- function(x,
 
     prop.scores <- data.frame(Treatment = as.factor(trt), prop.score = pi.x)
 
+    Treatment <- prop.score <- NULL
 
     if (type == "density")
     {
