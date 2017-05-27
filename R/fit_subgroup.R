@@ -96,7 +96,7 @@
 #'                            loss   = "sq_loss_lasso",
 #'                            nfolds = 5)              # option for cv.glmnet
 #'
-#' subgrp.model
+#' summary(subgrp.model)
 #'
 #' # fit lasso + gam model with REML option for gam
 #'
