@@ -120,6 +120,7 @@ plot.subgroup_validated <- function(x,
         pl.obj <- ggplot(avg.res.2.plot,
                          aes(x = Recommended, y = Value, group = Received)) +
             geom_line(aes(colour = Received), size = 1.25) +
+            geom_point(aes(colour = Received), size = 2) +
             theme(legend.position = "bottom") +
             scale_x_discrete(expand = c(0.25, 0.25)) +
             ylab(ylab.text) +

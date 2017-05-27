@@ -22,22 +22,34 @@ The `personalized` package aims to provide an entire analysis pipeline that enco
 
 The general analysis pipeline is as follows:
 
-1. Construct propensity score function and check propensity diagnostics
+1. Construct propensity score function and check propensity score diagnostics
 1. Choose and fit a subgroup identification model
-1. Estimate the treatment effects among estimated subgroups
+1. Estimate the resulting treatment effects among estimated subgroups
 1. Visualize and examine model and subgroup treatment effects  
 
-The available subgroup identification models are models under the purview of the general subgroup identification framework proposed by Chen, et al. (2017). 
+The available subgroup identification models are those under the purview of the general subgroup identification framework proposed by Chen, et al. (2017). In this section we will give a brief summary of this framework and what elements of it are available in the `personalized` package.
 
-$T \in \{-1,1\}$ where $T = 1$ represents an indicator of the treatment, and $T = -1$ indicates the control.
-$$E(Y|X, T) = g(X) + T\Delta(X).$$ Here, $\Delta(X)$ represents the interaction between treatment and covariates. For a patient with $X = x$, if $\Delta(x) > 0$, the treatment is beneficial in terms of the expected outcome, and if $\Delta(X) \leq 0$, the control is better than the treatment. Hence to identify which subgroup of patients benefits from a treatment, we seek to estimate $\Delta(X)$.
+In general we are interested in understanding the impact of a treatment on an outcome and in particular determining if and how different patients respond differently to a treatment in terms of their expected outcome. Assume the outcome we observe $Y$ is such that larger values are preferable. In addition to the outcome, we also observe patient covariate information $X \in \mathbb{R}^p$ and the treatment status $T \in \{-1,1\}$, where $T = 1$ indicates that a patient received the treatment, and $T = -1$ indicates as patient observed the control. For the purposes of this package, we assume that the expected outcome conditional on the covariate and treatment status information can be represented by 
+$$E(Y|X, T) = g(X) + T\Delta(X).$$ Here, $\Delta(X)$ represents the interaction between treatment and covariates and $g(X)$ represents the main effects of the patient covariate information on the outcome. 
+
+We call the term $\Delta(X)$ a benefit score, as it reflects how much a patient is expected to benefit from a treatment in terms of their outcome. For a patient with $X = x$, if $\Delta(x) > 0$ (assuming larger outcomes are better), the treatment is beneficial in terms of the expected outcome, and if $\Delta(X) \leq 0$, the control is better than the treatment. Hence to identify which subgroup of patients benefits from a treatment, we seek to estimate $\Delta(X)$.
 
 In the framework of Chen, et al. (2017), there are two main methods for estimating subgroups. The first is called the weighting method. The weighting method estimates $\Delta(X)$ by minimizing the following objective function with respect to $f(X)$:
-$$L_W(f) = \frac{1}{n}\sum_i\frac{(Y_i -  T_i\times f(x_i)) ^ 2}{ \color{ghilight}{T_i\pi(x_i)+(1-T_i)/2} },$$
-where $\pi(x) = Pr(T = 1|X = x)$ is the propensity score function. Hence $\hat{f} = \mbox{argmin}_f L_W(f)$ is our estimate of $\Delta(X)$. If we want a simple functional form for the estimate $\hat{f}$, we can restrict $f$ such that it is a linear combination of the covariates, i.e. $f(X) = X^T\beta$. Hence $\hat{f}(X) = X^T\hat{\beta}$.
+$$L_W(f) = \frac{1}{n}\sum_{i = 1}^n\frac{(Y_i -  T_i\times f(x_i)) ^ 2}{ \color{ghilight}{T_i\pi(x_i)+(1-T_i)/2} },$$
+where $\pi(x) = Pr(T = 1|X = x)$ is the propensity score function. Here, $\hat{f}$ is our estimated benefit score. Hence $\hat{f} = \mbox{argmin}_f L_W(f)$ is our estimate of $\Delta(X)$. If we want a simple functional form for the estimate $\hat{f}$, we can restrict $f$ such that it is a linear combination of the covariates, i.e. $f(X) = X^T\beta$. Hence $\hat{f}(X) = X^T\hat{\beta}$.
 
 The A-learning estimator is the minimizer of 
-$$L_A(f) =\frac{1}{n}\sum_i (Y_i - \color{ghilight}{\{(T_i+1)/2 -\pi(x_i)\} } {\times f(x_i))^2}.$$
+$$L_A(f) = \frac{1}{n}\sum_{i = 1}^n (Y_i - \color{ghilight}{\{(T_i+1)/2 -\pi(x_i)\} } {\times f(x_i))^2}.$$
+
+### Choice of $M$ function
+The `personalized` package offers a flexible range of choices both for the form of $f(X)$ and also for the loss function $M(y, v)$. Every choice of $f$ and $M$ can be used for either the weighting method or for the A-learning method. In this package, we limit the use of $M$ to natural choices corresponding to the type of outcome. For example, the squared error loss $M(y, v) = (v - y) ^ 2$ corresponds to continuous responses; the logistic loss $M(y, v) = y \cdot log(1 + \exp\{-v\})$ corresponds to binary outcomes, and the loss associated with the negative partial likelihood of the Cox proportional hazards model corresponds to time-to-event outcomes.
+
+### Choice of $f$ 
+The choices of $f$ offered in the `personalized` package are varied. A familiar, interpretable choice of $f(X)$ is $X^T\beta$. Also offered is an additive model, i.e. $f(X) = \sum_{j = 1}^pf_j(X_j)$; this option is accessed through use of the `mgcv` package, which provides estimation procedures for generalized additive models (GAMs). Another flexible, but less interpretable choice offered here is related to gradient boosted decision trees, which model $f$ as $f(X) = \sum_{k = 1}^Kf_K(X)$, where each $f_K$ is a decision tree model.
+
+### Variable Selection
+For subgroup identification models with $f(X) = X^T\beta$, the `personalized` package also allows for variable selection. Instead of minimizing $L_W(f)$ or $L_A(f)$, we instead minimize a penalized version: $L_W(f) + \lambda||\beta||_1$ or $L_A(f) + \lambda||\beta||_1$.
+
 
 # User Guide
 
@@ -153,10 +165,20 @@ plot(validation, type = "interaction")
 
 ## `check.overlap()`
 
+The primary function of `check.overlap()` is to visualize the estimated propensity scores to evaluate whether there is sufficient overlap of the propensity scores between treatment groups. Overlap is required for the validity of propensity score based methods.
+
 ## `fit.subgroup()`
+
+The primary function of `fit.subgroup()` is to estimate the parameters in a subgroup identification model.
 
 ## `validate.subgroup()`
 
+The function of `validate.subgroup()` is to evaluate the impact of an estimated subgroup. In particular, `validate.subgroup()` provides methods to determine if treatment effects are truly different between the different estimated subgroups.
+
 ## `plot.subgroup_fitted()` and `plot.subgroup_validated()`
 
+These functions plot the outcomes or average outcomes within both subgroups and treatment groups. This can give users a sense of the impact of the estimated subgroups. 
+
 ## `predict.subgroup_fitted()`
+
+The function `predict.subgroup_fitted()` allows users to estimate the benefit score ($f(X)$) for new patients. The benefit score is used to assign patients to treatment groups based on a particular subgroup identification model, i.e. if $f(x) > 0$, then a patient with $X = x$ should be assigned to the treatment group to maximize their expected outcome.
