@@ -88,7 +88,7 @@ y.test <- drop(xbeta.test) + rnorm(10 * n.obs, sd = 2)
 valmod <- validate.subgroup(subgrp.model, B = 10,
                             method = "training_test",
                             train.fraction = 0.75)
-valmod$avg.results
+valmod
 
 bene.score.test <- subgrp.model$predict(x.test)
 

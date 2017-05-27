@@ -85,7 +85,7 @@
 #' valmod <- validate.subgroup(subgrp.model, B = 10,
 #'                             method = "training_test",
 #'                             train.fraction = 0.75)
-#' valmod$avg.results
+#' valmod
 #'
 #' bene.score.test <- subgrp.model$predict(x.test)
 #'

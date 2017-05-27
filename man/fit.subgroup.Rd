@@ -110,7 +110,7 @@ subgrp.model <- fit.subgroup(x = x, y = y,
                            loss   = "sq_loss_lasso",
                            nfolds = 5)              # option for cv.glmnet
 
-subgrp.model$subgroup.trt.effects
+subgrp.model
 
 # fit lasso + gam model with REML option for gam
 
@@ -122,7 +122,7 @@ subgrp.modelg <- fit.subgroup(x = x, y = y,
                             method.gam = "REML",     # option for gam
                             nfolds = 5)              # option for cv.glmnet
 
-subgrp.modelg$subgroup.trt.effects
+subgrp.modelg
 
 subgrp.model.bin <- fit.subgroup(x = x, y = y.binary,
                            trt = trt01,
@@ -132,7 +132,7 @@ subgrp.model.bin <- fit.subgroup(x = x, y = y.binary,
                            type.measure = "auc",    # option for cv.glmnet
                            nfolds = 5)              # option for cv.glmnet
 
-subgrp.model.bin$subgroup.trt.effects
+subgrp.model.bin
 
 library(survival)
 subgrp.model.cox <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
@@ -142,7 +142,7 @@ subgrp.model.cox <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
                            loss   = "cox_loss_lasso",
                            nfolds = 5)              # option for cv.glmnet
 
-subgrp.model.cox$subgroup.trt.effects
+subgrp.model.cox
 
 
 }

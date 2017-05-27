@@ -67,5 +67,4 @@ print.subgroup_validated <- function(x, digits = max(getOption('digits')-3, 3), 
     names(Cf2) <- names(x$avg.results$subgroup.effects)
     print.default(Cf2, quote = FALSE, right = TRUE, na.print = "NA",
                   ...)
-
 }
