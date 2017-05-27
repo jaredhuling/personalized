@@ -7,8 +7,9 @@
 fit.subgroup(x, y, trt, propensity.func, family = c("gaussian", "binomial",
   "cox"), loss = c("sq_loss_lasso", "logistic_loss_lasso", "cox_loss_lasso",
   "sq_loss_lasso_gam", "logistic_loss_lasso_gam", "sq_loss_gam",
-  "logistic_loss_gam", "sq_loss_gbm"), method = c("weighting", "a_learning"),
-  cutpoint = 0, larger.outcome.better = TRUE, retcall = TRUE, ...)
+  "logistic_loss_gam", "sq_loss_gbm", "abs_loss_gbm", "huberized_loss_gbm",
+  "logistic_loss_gbm"), method = c("weighting", "a_learning"), cutpoint = 0,
+  larger.outcome.better = TRUE, retcall = TRUE, ...)
 }
 \arguments{
 \item{x}{The design matrix (not including intercept term)}
