@@ -269,6 +269,8 @@ validate.subgroup <- function(model,
                 se.results   = summary.stats.se,
                 boot.results = boot.list,
                 family       = model$family,
+                loss         = model$loss,
+                method       = model$method,
                 val.method   = method)
     class(ret) <- "subgroup_validated"
     ret
