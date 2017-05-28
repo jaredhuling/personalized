@@ -9,7 +9,7 @@ output:
         toc: true
         toc_depth: 3
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{personalized}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -178,8 +178,8 @@ Note that the estimated treatment effects within subgroups are attenuated for th
 subgrp.gbm <- fit.subgroup(x = x, y = y,
                            trt = trt,
                            propensity.func = prop.func,
-                           family = "binomial",
-                           loss = "logistic_loss_gbm",
+                           family = "gaussian",
+                           loss = "sq_loss_gbm",
                            shrinkage = 0.025,  # options for gbm
                            n.trees = 1500, 
                            interaction.depth = 3,
