@@ -35,7 +35,7 @@ $$E(Y|X, T) = g(X) + T\Delta(X).$$ Here, $\Delta(X)$ represents the interaction 
 We call the term $\Delta(X)$ a benefit score, as it reflects how much a patient is expected to benefit from a treatment in terms of their outcome. For a patient with $X = x$, if $\Delta(x) > 0$ (assuming larger outcomes are better), the treatment is beneficial in terms of the expected outcome, and if $\Delta(X) \leq 0$, the control is better than the treatment. Hence to identify which subgroup of patients benefits from a treatment, we seek to estimate $\Delta(X)$.
 
 In the framework of Chen, et al. (2017), there are two main methods for estimating subgroups. The first is called the weighting method. The weighting method estimates $\Delta(X)$ by minimizing the following objective function with respect to $f(X)$:
-$$L_W(f) = \frac{1}{n}\sum_{i = 1}^n\frac{(Y_i -  T_i\times f(x_i)) ^ 2}{ {T_i\pi(x_i)+(1-T_i)/2} },$$
+\deqn{L_W(f) = \frac{1}{n}\sum_{i = 1}^n\frac{(Y_i -  T_i\times f(x_i)) ^ 2}{ {T_i\pi(x_i)+(1-T_i)/2} },}
 where $\pi(x) = Pr(T = 1|X = x)$ is the propensity score function. Here, $\hat{f}$ is our estimated benefit score. Hence $\hat{f} = \mbox{argmin}_f L_W(f)$ is our estimate of $\Delta(X)$. If we want a simple functional form for the estimate $\hat{f}$, we can restrict $f$ such that it is a linear combination of the covariates, i.e. $f(X) = X^T\beta$. Hence $\hat{f}(X) = X^T\hat{\beta}$.
 
 The A-learning estimator is the minimizer of 
@@ -174,18 +174,6 @@ Note that the estimated treatment effects within subgroups are attenuated for th
 ### Continuous Outcomes
 
 
-```{r contin_example}
-subgrp.gbm <- fit.subgroup(x = x, y = y,
-                           trt = trt,
-                           propensity.func = prop.func,
-                           family = "gaussian",
-                           loss = "sq_loss_gbm",
-                           shrinkage = 0.025,  # options for gbm
-                           n.trees = 1500, 
-                           interaction.depth = 3,
-                           cv.folds = 5)    
-
-```
 
 ### Binary Outcomes
 
@@ -207,7 +195,7 @@ subgrp.bin <- fit.subgroup(x = x, y = y.binary,
 
 
 When gradient-boosted decision trees are used for $f(X)$ by the package `gbm`, care must be taken to choose the hyperparameters effectively. Specifically, `shrinkage` (similar to the step-size in gradient descent), `n.trees` (the number of trees to fit), and `interaction.depth` (the maximum depth of each tree) should be tuned according to the data at hand. By default for gradient-boosting models, `fit.subgroup` plots the cross validation error versus the number of trees to give the user a sense of if their choice of tuning parameters is effective.
-```{r fit_binary_2}
+```{r fit_binary_2, eval = FALSE}
 subgrp.bin2 <- fit.subgroup(x = x, y = y.binary,
                             trt = trt,
                             propensity.func = prop.func,
@@ -222,7 +210,6 @@ subgrp.bin2 <- fit.subgroup(x = x, y = y.binary,
 We can see that at least on the training data, the performance of the gradient-boosting model is better.
 ```{r plotcompare_bin}
 subgrp.bin
-subgrp.bin2
 ```
 
 ### Time-to-event Outcomes
@@ -260,19 +247,6 @@ summary(subgrp.cox)
 
 ### Plotting 
 
-```{r plot_1}
-plot(subgrp.gbm)
-```
-
-
-```{r plot_2}
-plot(subgrp.gbm, type = "density")
-```
-
-Compare the lasso model with the gradient-boosted decision trees model:
-```{r plot_4}
-plotCompare(subgrp.model, subgrp.gbm)
-```
 
 ## Validating Subgroup Identification Models
 
