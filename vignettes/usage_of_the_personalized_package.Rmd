@@ -175,7 +175,7 @@ Note that the estimated treatment effects within subgroups are attenuated for th
 
 
 ```{r contin_example}
-subgrp.gbm <- fit.subgroup(x = x, y = y.binary,
+subgrp.gbm <- fit.subgroup(x = x, y = y,
                            trt = trt,
                            propensity.func = prop.func,
                            family = "binomial",
