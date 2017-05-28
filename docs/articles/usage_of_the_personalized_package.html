@@ -51,10 +51,10 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/usage_of_the_personalized_package.html">Intro</a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
       
@@ -242,6 +242,16 @@ validation</code></pre></div>
 </div>
 <div id="continuous-outcomes" class="section level3">
 <h3>Continuous Outcomes</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">subgrp.gbm &lt;-<span class="st"> </span><span class="kw">fit.subgroup</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y,
+                           <span class="dt">trt =</span> trt,
+                           <span class="dt">propensity.func =</span> prop.func,
+                           <span class="dt">family =</span> <span class="st">&quot;gaussian&quot;</span>,
+                           <span class="dt">loss =</span> <span class="st">&quot;sq_loss_gbm&quot;</span>,
+                           <span class="dt">shrinkage =</span> <span class="fl">0.025</span>,  <span class="co"># options for gbm</span>
+                           <span class="dt">n.trees =</span> <span class="dv">1500</span>, 
+                           <span class="dt">interaction.depth =</span> <span class="dv">3</span>,
+                           <span class="dt">cv.folds =</span> <span class="dv">5</span>)    </code></pre></div>
+<p><img src="usage_of_the_personalized_package_files/figure-html/contin_example-1.png" width="672" /></p>
 </div>
 <div id="binary-outcomes" class="section level3">
 <h3>Binary Outcomes</h3>
@@ -272,15 +282,15 @@ y.binary &lt;-<span class="st"> </span><span class="dv">1</span> *<span class="s
 ## 
 ## Average Outcomes:
 ##                Recommended Trt Recommended Ctrl
-## Received Trt  0.4505 (n = 333) 0.2179 (n = 257)
-## Received Ctrl 0.1858 (n = 226) 0.4565 (n = 184)
+## Received Trt  0.4662 (n = 311) 0.2079 (n = 279)
+## Received Ctrl 0.1727 (n = 220) 0.4579 (n = 190)
 ## 
 ##  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-##                   0.2646 (n = 559)                   0.2386 (n = 441) 
+##                   0.2935 (n = 531)                     0.25 (n = 469) 
 ## 
 ## Benefit score quantiles: 
 ##       0%      25%      50%      75%     100% 
-## -1.71039 -0.31334  0.07145  0.44287  1.55721</code></pre>
+## -1.70555 -0.34095  0.05583  0.43790  1.65791</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">subgrp.bin2</code></pre></div>
 <pre><code>## family:  binomial 
 ## loss:    logistic_loss_gbm 
@@ -288,15 +298,15 @@ y.binary &lt;-<span class="st"> </span><span class="dv">1</span> *<span class="s
 ## 
 ## Average Outcomes:
 ##                Recommended Trt Recommended Ctrl
-## Received Trt  0.9902 (n = 204) 0.0104 (n = 386)
-## Received Ctrl    0.5 (n = 114) 0.2331 (n = 296)
+## Received Trt  0.9314 (n = 175) 0.0964 (n = 415)
+## Received Ctrl 0.4444 (n = 117) 0.2491 (n = 293)
 ## 
 ##  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-##                   0.4902 (n = 318)                   0.2227 (n = 682) 
+##                    0.487 (n = 292)                   0.1528 (n = 708) 
 ## 
 ## Benefit score quantiles: 
 ##      0%     25%     50%     75%    100% 
-## -5.8487 -3.0579 -1.5847  0.6122  4.8357</code></pre>
+## -4.0159 -2.4191 -1.2596  0.3205  3.3901</code></pre>
 </div>
 <div id="time-to-event-outcomes" class="section level3">
 <h3>Time-to-event Outcomes</h3>
@@ -324,33 +334,42 @@ subgrp.cox &lt;-<span class="st"> </span><span class="kw">fit.subgroup</span>(<s
 ## 
 ## Average Outcomes:
 ##                  Recommended Trt   Recommended Ctrl
-## Received Trt  450.0395 (n = 291) 544.4105 (n = 299)
-## Received Ctrl 856.3652 (n = 202) 357.6865 (n = 208)
+## Received Trt  140.6078 (n = 279) 105.3219 (n = 311)
+## Received Ctrl 296.8005 (n = 206) 113.6357 (n = 204)
 ## 
 ##  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-##                -406.3257 (n = 493)                -186.7239 (n = 507) 
+##                -156.1927 (n = 485)                   8.3138 (n = 515) 
 ## 
 ## Benefit score quantiles: 
-##        0%       25%       50%       75%      100% 
-## -0.464795 -0.126504 -0.007506  0.119531  0.732182 
+##       0%      25%      50%      75%     100% 
+## -0.50597 -0.13781 -0.00853  0.12736  0.69997 
 ## 
 ## 7 variables selected by the lasso (cross validation criterion).
 ## 
-##         Estimate
-## V1   0.002572413
-## V2   0.047467290
-## V3  -0.009058425
-## V11 -0.027768974
-## V13  0.003981027
-## V47 -0.001620790
-## V50  0.015431938</code></pre>
+##          Estimate
+## V1   0.0066167829
+## V2   0.0508638244
+## V3  -0.0139605031
+## V11 -0.0296723660
+## V13  0.0001376352
+## V47 -0.0019639925
+## V50  0.0115445008</code></pre>
 </div>
 <div id="plotting" class="section level3">
 <h3>Plotting</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(subgrp.gbm)</code></pre></div>
+<p><img src="usage_of_the_personalized_package_files/figure-html/plot_1-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(subgrp.gbm, <span class="dt">type =</span> <span class="st">&quot;density&quot;</span>)</code></pre></div>
+<p><img src="usage_of_the_personalized_package_files/figure-html/plot_2-1.png" width="672" /></p>
+<p>Compare the lasso model with the gradient-boosted decision trees model:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotCompare</span>(subgrp.model, subgrp.gbm)</code></pre></div>
+<p><img src="usage_of_the_personalized_package_files/figure-html/plot_4-1.png" width="672" /></p>
 </div>
 </div>
 <div id="validating-subgroup-identification-models" class="section level2">
 <h2>Validating Subgroup Identification Models</h2>
+<p>An important aspect of estimating the impact of estimated subgroups is obtaining estimates of the treatment effect within the estimated subgroups. Ideally, the treatment should have a positive impact within the subgroup of patients who are recommended to the treatment and the control should have a positive impact within the subgroup of patients who were not recommended the treatment.</p>
+<p>Since our estimated subgroups are conditional on observing the outcomes of the patients, taking the average outcomes by treatment status within each subgroup to estimate the treatment effects within subgroups will yield biased and typically overly-optimistic estimates. Instead, we need to use resampling-based procedures to estimate these effects reliably.</p>
 <div id="repeated-trainingtest-splitting" class="section level3">
 <h3>Repeated Training/Test Splitting</h3>
 </div>
