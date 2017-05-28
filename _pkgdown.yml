@@ -1,0 +1,6 @@
+navbar:
+  left:
+  - text: Intro
+    href: articles/usage_of_the_personalized_package.html
+  - text: Reference
+    href: reference/index.html

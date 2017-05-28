@@ -7,3 +7,4 @@ README.html
 ^\.travis\.yml$
 ^/\.gitattributes$
 ^.*\docs$
+^\_pkgdown\.yml$
