@@ -248,8 +248,24 @@ summary(subgrp.cox)
 
 ### Plotting 
 
+```{r plot_1}
+plot(subgrp.bin)
+```
+
+
+```{r plot_2}
+plot(subgrp.bin, type = "density")
+```
+
+```{r plot_4}
+plotCompare(subgrp.bin, subgrp.bin2)
+```
+
 ## Validating Subgroup Identification Models
 
+An important aspect of estimating the impact of estimated subgroups is obtaining estimates of the treatment effect within the estimated subgroups. Ideally, the treatment should have a positive impact within the subgroup of patients who are recommended to the treatment and the control should have a positive impact within the subgroup of patients who were not recommended the treatment.
+
+Since our estimated subgroups are conditional on observing the outcomes of the patients, taking the average outcomes by treatment status within each subgroup to estimate the treatment effects within subgroups will yield biased and typically overly-optimistic estimates. Instead, we need to use resampling-based procedures to estimate these effects reliably.
 
 ### Repeated Training/Test Splitting
 
