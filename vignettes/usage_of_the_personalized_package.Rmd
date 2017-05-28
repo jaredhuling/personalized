@@ -35,7 +35,7 @@ $$E(Y|X, T) = g(X) + T\Delta(X).$$ Here, $\Delta(X)$ represents the interaction 
 We call the term $\Delta(X)$ a benefit score, as it reflects how much a patient is expected to benefit from a treatment in terms of their outcome. For a patient with $X = x$, if $\Delta(x) > 0$ (assuming larger outcomes are better), the treatment is beneficial in terms of the expected outcome, and if $\Delta(X) \leq 0$, the control is better than the treatment. Hence to identify which subgroup of patients benefits from a treatment, we seek to estimate $\Delta(X)$.
 
 In the framework of Chen, et al. (2017), there are two main methods for estimating subgroups. The first is called the weighting method. The weighting method estimates $\Delta(X)$ by minimizing the following objective function with respect to $f(X)$:
-\deqn{L_W(f) = \frac{1}{n}\sum_{i = 1}^n\frac{(Y_i -  T_i\times f(x_i)) ^ 2}{ {T_i\pi(x_i)+(1-T_i)/2} },}
+$$L_W(f) = \frac{1}{n}\sum_{i = 1}^n\frac{(Y_i -  T_i\times f(x_i)) ^ 2}{ {T_i\pi(x_i)+(1-T_i)/2} },$$
 where $\pi(x) = Pr(T = 1|X = x)$ is the propensity score function. Here, $\hat{f}$ is our estimated benefit score. Hence $\hat{f} = \mbox{argmin}_f L_W(f)$ is our estimate of $\Delta(X)$. If we want a simple functional form for the estimate $\hat{f}$, we can restrict $f$ such that it is a linear combination of the covariates, i.e. $f(X) = X^T\beta$. Hence $\hat{f}(X) = X^T\hat{\beta}$.
 
 The A-learning estimator is the minimizer of 
