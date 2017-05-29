@@ -124,7 +124,19 @@ and <code>logistic_loss_lasso_gam</code> first use the lasso to select variables
 with nonparametric additive terms for each selected variable. <code>sq_loss_gam</code> involves a squared error loss with a generalized additive model and no variable selection.
 <code>sq_loss_gbm</code> involves a squared error loss with a gradient-boosted decision trees model for the benefit score; this
 allows for flexible estimation using machine learning and can be useful when the underlying treatment-covariate interaction
-is complex.</p></td>
+is complex.</p><ul>
+<li><p><code>"sq_loss_lasso"</code> - M(y, v) = (v - y) ^ 2 with linear model and lasso penalty</p></li>
+<li><p><code>"logistic_loss_lasso"</code> - M(y, v) = y * log(1 + exp-v) with with linear model and lasso penalty</p></li>
+<li><p><code>"cox_loss_lasso"</code> - M corresponds to the negative partial likelihood of the cox model with linear model and additionally a lasso penalty</p></li>
+<li><p><code>"sq_loss_lasso_gam"</code> - M(y, v) = (v - y) ^ 2 with variables selected by lasso penalty and generalized additive model fit on the selected variables</p></li>
+<li><p><code>"logistic_loss_lasso_gam"</code> - M(y, v) = y * log(1 + exp-v) with variables selected by lasso penalty and generalized additive model fit on the selected variables</p></li>
+<li><p><code>"sq_loss_gam"</code> - M(y, v) = (v - y) ^ 2 with generalized additive model fit on all variables</p></li>
+<li><p><code>"logistic_loss_gam"</code> - M(y, v) = y * log(1 + exp-v) with generalized additive model fit on all variables</p></li>
+<li><p><code>"sq_loss_gbm"</code> - M(y, v) = (v - y) ^ 2 with gradient-boosted decision trees model</p></li>
+<li><p><code>"abs_loss_gbm"</code> - M(y, v) = |v - y| with gradient-boosted decision trees model</p></li>
+<li><p><code>"huberized_loss_gbm"</code> - M corresponds to Huberized hinge loss (for binary outcomes) with gradient-boosted decision trees model</p></li>
+<li><p><code>"logistic_loss_gbm"</code> - M(y, v) = y * log(1 + exp-v) with gradient-boosted decision trees model</p></li>
+</ul></td>
     </tr>
     <tr>
       <th>method</th>
