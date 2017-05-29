@@ -8,10 +8,10 @@ output:
         fig_height: 5
         toc: true
         toc_depth: 3
+        number_sections: true
 vignette: >
-  %\VignetteIndexEntry{personalized}
+  %\VignetteIndexEntry{Usage of the Personalized Package}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
 ---
 
 
