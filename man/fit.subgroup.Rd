@@ -36,7 +36,20 @@ and \code{logistic_loss_lasso_gam} first use the lasso to select variables and t
 with nonparametric additive terms for each selected variable. \code{sq_loss_gam} involves a squared error loss with a generalized additive model and no variable selection.
 \code{sq_loss_gbm} involves a squared error loss with a gradient-boosted decision trees model for the benefit score; this
 allows for flexible estimation using machine learning and can be useful when the underlying treatment-covariate interaction
-is complex.}
+is complex.
+\itemize{
+    \item{\code{"sq_loss_lasso"}}{ - M(y, v) = (v - y) ^ 2 with linear model and lasso penalty}
+    \item{\code{"logistic_loss_lasso"}}{ - M(y, v) = y * log(1 + exp{-v}) with with linear model and lasso penalty}
+    \item{\code{"cox_loss_lasso"}}{ - M corresponds to the negative partial likelihood of the cox model with linear model and additionally a lasso penalty}
+    \item{\code{"sq_loss_lasso_gam"}}{ - M(y, v) = (v - y) ^ 2 with variables selected by lasso penalty and generalized additive model fit on the selected variables}
+    \item{\code{"logistic_loss_lasso_gam"}}{ - M(y, v) = y * log(1 + exp{-v}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
+    \item{\code{"sq_loss_gam"}}{ - M(y, v) = (v - y) ^ 2 with generalized additive model fit on all variables}
+    \item{\code{"logistic_loss_gam"}}{ - M(y, v) = y * log(1 + exp{-v}) with generalized additive model fit on all variables}
+    \item{\code{"sq_loss_gbm"}}{ - M(y, v) = (v - y) ^ 2 with gradient-boosted decision trees model}
+    \item{\code{"abs_loss_gbm"}}{ - M(y, v) = |v - y| with gradient-boosted decision trees model}
+    \item{\code{"huberized_loss_gbm"}}{ - M corresponds to Huberized hinge loss (for binary outcomes) with gradient-boosted decision trees model}
+    \item{\code{"logistic_loss_gbm"}}{ - M(y, v) = y * log(1 + exp{-v}) with gradient-boosted decision trees model}
+}}
 
 \item{method}{subgroup ID model type. Either the weighting or A-learning method of Chen et al, (2017)}
 
