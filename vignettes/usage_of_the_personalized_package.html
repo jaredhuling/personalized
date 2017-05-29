@@ -12,7 +12,7 @@
 
 <meta name="author" content="Jared Huling" />
 
-<meta name="date" content="2017-05-27" />
+<meta name="date" content="2017-05-29" />
 
 <title>Usage of the Personalized Package</title>
 
@@ -70,46 +70,46 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Usage of the Personalized Package</h1>
 <h4 class="author"><em>Jared Huling</em></h4>
-<h4 class="date"><em>2017-05-27</em></h4>
+<h4 class="date"><em>2017-05-29</em></h4>
 
 
 <div id="TOC">
 <ul>
-<li><a href="#introduction-to-personalized">Introduction to <code>personalized</code></a><ul>
-<li><a href="#choice-of-m-function">Choice of <span class="math inline">\(M\)</span> function</a></li>
-<li><a href="#choice-of-f">Choice of <span class="math inline">\(f\)</span></a></li>
-<li><a href="#variable-selection">Variable Selection</a></li>
+<li><a href="#introduction-to-personalized"><span class="toc-section-number">1</span> Introduction to <code>personalized</code></a><ul>
+<li><a href="#choice-of-m-function"><span class="toc-section-number">1.0.1</span> Choice of <span class="math inline">\(M\)</span> function</a></li>
+<li><a href="#choice-of-f"><span class="toc-section-number">1.0.2</span> Choice of <span class="math inline">\(f\)</span></a></li>
+<li><a href="#variable-selection"><span class="toc-section-number">1.0.3</span> Variable Selection</a></li>
 </ul></li>
-<li><a href="#user-guide">User Guide</a><ul>
-<li><a href="#quick-usage-reference">Quick Usage Reference</a><ul>
-<li><a href="#creating-and-checking-propensity-score-model">Creating and Checking Propensity Score Model</a></li>
-<li><a href="#fitting-subgroup-identification-model">Fitting Subgroup Identification Model</a></li>
-<li><a href="#evaluating-effect-of-subgroup-identification-model">Evaluating Effect of Subgroup Identification Model</a></li>
+<li><a href="#user-guide"><span class="toc-section-number">2</span> User Guide</a><ul>
+<li><a href="#quick-usage-reference"><span class="toc-section-number">2.1</span> Quick Usage Reference</a><ul>
+<li><a href="#creating-and-checking-propensity-score-model"><span class="toc-section-number">2.1.1</span> Creating and Checking Propensity Score Model</a></li>
+<li><a href="#fitting-subgroup-identification-model"><span class="toc-section-number">2.1.2</span> Fitting Subgroup Identification Model</a></li>
+<li><a href="#evaluating-effect-of-subgroup-identification-model"><span class="toc-section-number">2.1.3</span> Evaluating Effect of Subgroup Identification Model</a></li>
 </ul></li>
-<li><a href="#fitting-subgroup-identification-models">Fitting Subgroup Identification Models</a><ul>
-<li><a href="#section"></a></li>
-<li><a href="#continuous-outcomes">Continuous Outcomes</a></li>
-<li><a href="#binary-outcomes">Binary Outcomes</a></li>
-<li><a href="#time-to-event-outcomes">Time-to-event Outcomes</a></li>
-<li><a href="#plotting">Plotting</a></li>
+<li><a href="#fitting-subgroup-identification-models"><span class="toc-section-number">2.2</span> Fitting Subgroup Identification Models</a><ul>
+<li><a href="#section"><span class="toc-section-number">2.2.1</span> </a></li>
+<li><a href="#continuous-outcomes"><span class="toc-section-number">2.2.2</span> Continuous Outcomes</a></li>
+<li><a href="#binary-outcomes"><span class="toc-section-number">2.2.3</span> Binary Outcomes</a></li>
+<li><a href="#time-to-event-outcomes"><span class="toc-section-number">2.2.4</span> Time-to-event Outcomes</a></li>
+<li><a href="#plotting"><span class="toc-section-number">2.2.5</span> Plotting</a></li>
 </ul></li>
-<li><a href="#validating-subgroup-identification-models">Validating Subgroup Identification Models</a><ul>
-<li><a href="#repeated-trainingtest-splitting">Repeated Training/Test Splitting</a></li>
-<li><a href="#bootstrap-bias-correction">Bootstrap Bias Correction</a></li>
+<li><a href="#validating-subgroup-identification-models"><span class="toc-section-number">2.3</span> Validating Subgroup Identification Models</a><ul>
+<li><a href="#repeated-trainingtest-splitting"><span class="toc-section-number">2.3.1</span> Repeated Training/Test Splitting</a></li>
+<li><a href="#bootstrap-bias-correction"><span class="toc-section-number">2.3.2</span> Bootstrap Bias Correction</a></li>
 </ul></li>
 </ul></li>
-<li><a href="#reference-manual">Reference Manual</a><ul>
-<li><a href="#check.overlap"><code>check.overlap()</code></a></li>
-<li><a href="#fit.subgroup"><code>fit.subgroup()</code></a></li>
-<li><a href="#validate.subgroup"><code>validate.subgroup()</code></a></li>
-<li><a href="#plot.subgroup_fitted-plot.subgroup_validated-and-plotcompare"><code>plot.subgroup_fitted()</code>, <code>plot.subgroup_validated()</code>, and <code>plotCompare()</code></a></li>
-<li><a href="#predict.subgroup_fitted"><code>predict.subgroup_fitted()</code></a></li>
+<li><a href="#reference-manual"><span class="toc-section-number">3</span> Reference Manual</a><ul>
+<li><a href="#check.overlap"><span class="toc-section-number">3.1</span> <code>check.overlap()</code></a></li>
+<li><a href="#fit.subgroup"><span class="toc-section-number">3.2</span> <code>fit.subgroup()</code></a></li>
+<li><a href="#validate.subgroup"><span class="toc-section-number">3.3</span> <code>validate.subgroup()</code></a></li>
+<li><a href="#plot.subgroup_fitted-plot.subgroup_validated-and-plotcompare"><span class="toc-section-number">3.4</span> <code>plot.subgroup_fitted()</code>, <code>plot.subgroup_validated()</code>, and <code>plotCompare()</code></a></li>
+<li><a href="#predict.subgroup_fitted"><span class="toc-section-number">3.5</span> <code>predict.subgroup_fitted()</code></a></li>
 </ul></li>
 </ul>
 </div>
 
 <div id="introduction-to-personalized" class="section level1">
-<h1>Introduction to <code>personalized</code></h1>
+<h1><span class="header-section-number">1</span> Introduction to <code>personalized</code></h1>
 <p>The <code>personalized</code> package aims to provide an entire analysis pipeline that encompasses a broad class of statistical methods for subgroup identification / personalized medicine.</p>
 <p>The general analysis pipeline is as follows:</p>
 <ol style="list-style-type: decimal">
@@ -124,23 +124,23 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>In the framework of Chen, et al. (2017), there are two main methods for estimating subgroups. The first is called the weighting method. The weighting method estimates <span class="math inline">\(\Delta(X)\)</span> by minimizing the following objective function with respect to <span class="math inline">\(f(X)\)</span>: <span class="math display">\[L_W(f) = \frac{1}{n}\sum_{i = 1}^n\frac{(Y_i -  T_i\times f(x_i)) ^ 2}{ {T_i\pi(x_i)+(1-T_i)/2} },\]</span> where <span class="math inline">\(\pi(x) = Pr(T = 1|X = x)\)</span> is the propensity score function. Here, <span class="math inline">\(\hat{f}\)</span> is our estimated benefit score. Hence <span class="math inline">\(\hat{f} = \mbox{argmin}_f L_W(f)\)</span> is our estimate of <span class="math inline">\(\Delta(X)\)</span>. If we want a simple functional form for the estimate <span class="math inline">\(\hat{f}\)</span>, we can restrict <span class="math inline">\(f\)</span> such that it is a linear combination of the covariates, i.e. <span class="math inline">\(f(X) = X^T\beta\)</span>. Hence <span class="math inline">\(\hat{f}(X) = X^T\hat{\beta}\)</span>.</p>
 <p>The A-learning estimator is the minimizer of <span class="math display">\[L_A(f) = \frac{1}{n}\sum_{i = 1}^n (Y_i - {\{(T_i+1)/2 -\pi(x_i)\} } {\times f(x_i))^2}.\]</span></p>
 <div id="choice-of-m-function" class="section level3">
-<h3>Choice of <span class="math inline">\(M\)</span> function</h3>
+<h3><span class="header-section-number">1.0.1</span> Choice of <span class="math inline">\(M\)</span> function</h3>
 <p>The <code>personalized</code> package offers a flexible range of choices both for the form of <span class="math inline">\(f(X)\)</span> and also for the loss function <span class="math inline">\(M(y, v)\)</span>. Every choice of <span class="math inline">\(f\)</span> and <span class="math inline">\(M\)</span> can be used for either the weighting method or for the A-learning method. In this package, we limit the use of <span class="math inline">\(M\)</span> to natural choices corresponding to the type of outcome. For example, the squared error loss <span class="math inline">\(M(y, v) = (v - y) ^ 2\)</span> corresponds to continuous responses; the logistic loss <span class="math inline">\(M(y, v) = y \cdot log(1 + \exp\{-v\})\)</span> corresponds to binary outcomes, and the loss associated with the negative partial likelihood of the Cox proportional hazards model corresponds to time-to-event outcomes.</p>
 </div>
 <div id="choice-of-f" class="section level3">
-<h3>Choice of <span class="math inline">\(f\)</span></h3>
+<h3><span class="header-section-number">1.0.2</span> Choice of <span class="math inline">\(f\)</span></h3>
 <p>The choices of <span class="math inline">\(f\)</span> offered in the <code>personalized</code> package are varied. A familiar, interpretable choice of <span class="math inline">\(f(X)\)</span> is <span class="math inline">\(X^T\beta\)</span>. Also offered is an additive model, i.e. <span class="math inline">\(f(X) = \sum_{j = 1}^pf_j(X_j)\)</span>; this option is accessed through use of the <code>mgcv</code> package, which provides estimation procedures for generalized additive models (GAMs). Another flexible, but less interpretable choice offered here is related to gradient boosted decision trees, which model <span class="math inline">\(f\)</span> as <span class="math inline">\(f(X) = \sum_{k = 1}^Kf_K(X)\)</span>, where each <span class="math inline">\(f_K\)</span> is a decision tree model.</p>
 </div>
 <div id="variable-selection" class="section level3">
-<h3>Variable Selection</h3>
+<h3><span class="header-section-number">1.0.3</span> Variable Selection</h3>
 <p>For subgroup identification models with <span class="math inline">\(f(X) = X^T\beta\)</span>, the <code>personalized</code> package also allows for variable selection. Instead of minimizing <span class="math inline">\(L_W(f)\)</span> or <span class="math inline">\(L_A(f)\)</span>, we instead minimize a penalized version: <span class="math inline">\(L_W(f) + \lambda||\beta||_1\)</span> or <span class="math inline">\(L_A(f) + \lambda||\beta||_1\)</span>.</p>
 </div>
 </div>
 <div id="user-guide" class="section level1">
-<h1>User Guide</h1>
+<h1><span class="header-section-number">2</span> User Guide</h1>
 <p>The user guide for the <code>personalized</code> package will begin with a quick usage reference so users can quickly get started with a subgroup identification analysis. Following the quick usage reference, the user guide will expand on all the options available in the main functions and the implications of the various options.</p>
 <div id="quick-usage-reference" class="section level2">
-<h2>Quick Usage Reference</h2>
+<h2><span class="header-section-number">2.1</span> Quick Usage Reference</h2>
 <p>First simulate some data where we know the truth. In this simulation, the treatment assignment depends on covariates and hence we must model the propensity score <span class="math inline">\(\pi(x) = Pr(T = 1 | X = x)\)</span>. In this simulation we will assume that larger values of the outcome are better.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(personalized)
 
@@ -164,7 +164,7 @@ xbeta &lt;-<span class="st"> </span>xbeta +<span class="st"> </span>delta *<span
 <span class="co"># simulate continuous outcomes</span>
 y &lt;-<span class="st"> </span><span class="kw">drop</span>(xbeta) +<span class="st"> </span><span class="kw">rnorm</span>(n.obs)</code></pre></div>
 <div id="creating-and-checking-propensity-score-model" class="section level3">
-<h3>Creating and Checking Propensity Score Model</h3>
+<h3><span class="header-section-number">2.1.1</span> Creating and Checking Propensity Score Model</h3>
 <p>The first step in our analysis is to construct a model for the propensity score. In the <code>personalized</code> package, we need to wrap this model in a function which inputs covariate values and the treatment statuses and outputs a propensity score between 0 and 1. Since there are many covariates, we use the lasso to select variables in our propensity score model:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># create function for fitting propensity score model</span>
 prop.func &lt;-<span class="st"> </span>function(x, trt)
@@ -183,7 +183,7 @@ prop.func &lt;-<span class="st"> </span>function(x, trt)
 <p>We can see that our propensity scores have common support.</p>
 </div>
 <div id="fitting-subgroup-identification-model" class="section level3">
-<h3>Fitting Subgroup Identification Model</h3>
+<h3><span class="header-section-number">2.1.2</span> Fitting Subgroup Identification Model</h3>
 <p>The next step is to choose and fit a subgroup identification model. In this example, the outcome is continuous, so we choose the squared error loss function. We also choose the model type (either the weighting or the A-learning method). The main funciton for fitting subgroup identification models is <code>fit.subgroup</code>. Since there are many covariates, we choose a loss function with a lasso penalty to select variables. The underlying fitting function here is <code>cv.glmnet()</code>. We can pass to <code>fit.subgroup()</code> arguments of the <code>cv.glmnet()</code> function, such as <code>nfolds</code> for the number of cross validation folds.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">subgrp.model &lt;-<span class="st"> </span><span class="kw">fit.subgroup</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y,
                              <span class="dt">trt =</span> trt,
@@ -228,7 +228,7 @@ prop.func &lt;-<span class="st"> </span>function(x, trt)
 <p><img src="data:image/png;base64,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" /><!-- --></p>
 </div>
 <div id="evaluating-effect-of-subgroup-identification-model" class="section level3">
-<h3>Evaluating Effect of Subgroup Identification Model</h3>
+<h3><span class="header-section-number">2.1.3</span> Evaluating Effect of Subgroup Identification Model</h3>
 <p>Unfortunately, if we simply look at the average outcome within each subgroup, this will give us a biased estimate of the treatment effects within each subgroup as we have already used the data to estimate the subgroups. Instead, to get a valid estimate of the subgroup treatment effects we can use a bootstrap approach to correcting for this bias. We can alternatively repeatedly partition our data into training and testing samples. In this procedure for each replication we fit a subgroup model using the training data and then evaluate the subgroup treatment effects on the testing data. The argument <code>B</code> specifies the number of replications and the argument <code>train.fraction</code> specifies what proportion of samples are for training in the training and testing partitioning method.</p>
 <p>Both of these approaches can be carried out using the <code>validate.subgroup()</code> function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">validation &lt;-<span class="st"> </span><span class="kw">validate.subgroup</span>(subgrp.model, 
@@ -263,15 +263,15 @@ validation</code></pre></div>
 </div>
 </div>
 <div id="fitting-subgroup-identification-models" class="section level2">
-<h2>Fitting Subgroup Identification Models</h2>
+<h2><span class="header-section-number">2.2</span> Fitting Subgroup Identification Models</h2>
 <div id="section" class="section level3">
-<h3></h3>
+<h3><span class="header-section-number">2.2.1</span> </h3>
 </div>
 <div id="continuous-outcomes" class="section level3">
-<h3>Continuous Outcomes</h3>
+<h3><span class="header-section-number">2.2.2</span> Continuous Outcomes</h3>
 </div>
 <div id="binary-outcomes" class="section level3">
-<h3>Binary Outcomes</h3>
+<h3><span class="header-section-number">2.2.3</span> Binary Outcomes</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># create binary outcomes</span>
 y.binary &lt;-<span class="st"> </span><span class="dv">1</span> *<span class="st"> </span>(xbeta +<span class="st"> </span><span class="kw">rnorm</span>(n.obs, <span class="dt">sd =</span> <span class="dv">2</span>) &gt;<span class="st"> </span><span class="dv">0</span> )</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">subgrp.bin &lt;-<span class="st"> </span><span class="kw">fit.subgroup</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y.binary,
@@ -309,7 +309,7 @@ y.binary &lt;-<span class="st"> </span><span class="dv">1</span> *<span class="s
 ## -1.71039 -0.31334  0.07145  0.44287  1.55721</code></pre>
 </div>
 <div id="time-to-event-outcomes" class="section level3">
-<h3>Time-to-event Outcomes</h3>
+<h3><span class="header-section-number">2.2.4</span> Time-to-event Outcomes</h3>
 <p>First we will generate time-to-event outcomes to illustrate usage of the <code>fit.subgroup()</code> model.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># create time-to-event outcomes</span>
 surv.time &lt;-<span class="st"> </span><span class="kw">exp</span>(-<span class="dv">20</span> -<span class="st"> </span>xbeta +<span class="st"> </span><span class="kw">rnorm</span>(n.obs, <span class="dt">sd =</span> <span class="dv">1</span>))
@@ -355,41 +355,41 @@ subgrp.cox &lt;-<span class="st"> </span><span class="kw">fit.subgroup</span>(<s
 ## V50  0.019809373</code></pre>
 </div>
 <div id="plotting" class="section level3">
-<h3>Plotting</h3>
+<h3><span class="header-section-number">2.2.5</span> Plotting</h3>
 </div>
 </div>
 <div id="validating-subgroup-identification-models" class="section level2">
-<h2>Validating Subgroup Identification Models</h2>
+<h2><span class="header-section-number">2.3</span> Validating Subgroup Identification Models</h2>
 <p>An important aspect of estimating the impact of estimated subgroups is obtaining estimates of the treatment effect within the estimated subgroups. Ideally, the treatment should have a positive impact within the subgroup of patients who are recommended to the treatment and the control should have a positive impact within the subgroup of patients who were not recommended the treatment.</p>
 <p>Since our estimated subgroups are conditional on observing the outcomes of the patients, taking the average outcomes by treatment status within each subgroup to estimate the treatment effects within subgroups will yield biased and typically overly-optimistic estimates. Instead, we need to use resampling-based procedures to estimate these effects reliably.</p>
 <div id="repeated-trainingtest-splitting" class="section level3">
-<h3>Repeated Training/Test Splitting</h3>
+<h3><span class="header-section-number">2.3.1</span> Repeated Training/Test Splitting</h3>
 </div>
 <div id="bootstrap-bias-correction" class="section level3">
-<h3>Bootstrap Bias Correction</h3>
+<h3><span class="header-section-number">2.3.2</span> Bootstrap Bias Correction</h3>
 </div>
 </div>
 </div>
 <div id="reference-manual" class="section level1">
-<h1>Reference Manual</h1>
+<h1><span class="header-section-number">3</span> Reference Manual</h1>
 <div id="check.overlap" class="section level2">
-<h2><code>check.overlap()</code></h2>
+<h2><span class="header-section-number">3.1</span> <code>check.overlap()</code></h2>
 <p>The primary function of <code>check.overlap()</code> is to visualize the estimated propensity scores to evaluate whether there is sufficient overlap of the propensity scores between treatment groups. Overlap is required for the validity of propensity score based methods.</p>
 </div>
 <div id="fit.subgroup" class="section level2">
-<h2><code>fit.subgroup()</code></h2>
+<h2><span class="header-section-number">3.2</span> <code>fit.subgroup()</code></h2>
 <p>The primary function of <code>fit.subgroup()</code> is to estimate the parameters in a subgroup identification model.</p>
 </div>
 <div id="validate.subgroup" class="section level2">
-<h2><code>validate.subgroup()</code></h2>
+<h2><span class="header-section-number">3.3</span> <code>validate.subgroup()</code></h2>
 <p>The function of <code>validate.subgroup()</code> is to evaluate the impact of an estimated subgroup. In particular, <code>validate.subgroup()</code> provides methods to determine if treatment effects are truly different between the different estimated subgroups.</p>
 </div>
 <div id="plot.subgroup_fitted-plot.subgroup_validated-and-plotcompare" class="section level2">
-<h2><code>plot.subgroup_fitted()</code>, <code>plot.subgroup_validated()</code>, and <code>plotCompare()</code></h2>
+<h2><span class="header-section-number">3.4</span> <code>plot.subgroup_fitted()</code>, <code>plot.subgroup_validated()</code>, and <code>plotCompare()</code></h2>
 <p>These functions plot the outcomes or average outcomes within both subgroups and treatment groups. This can give users a sense of the impact of the estimated subgroups. The <code>plotCompare()</code> function allows users to make plots which compare multiple subgroup identification models or validation results.</p>
 </div>
 <div id="predict.subgroup_fitted" class="section level2">
-<h2><code>predict.subgroup_fitted()</code></h2>
+<h2><span class="header-section-number">3.5</span> <code>predict.subgroup_fitted()</code></h2>
 <p>The function <code>predict.subgroup_fitted()</code> allows users to estimate the benefit score (<span class="math inline">\(\hat{f}(X)\)</span>) for new patients. The benefit score is used to assign patients to treatment groups based on a particular subgroup identification model, i.e. if <span class="math inline">\(f(x) &gt; 0\)</span>, then a patient with <span class="math inline">\(X = x\)</span> should be assigned to the treatment group to maximize their expected outcome.</p>
 </div>
 </div>

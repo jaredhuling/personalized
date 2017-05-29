@@ -203,9 +203,9 @@ subgrp.bin2 <- fit.subgroup(x = x, y = y.binary,
                             family = "binomial",
                             loss = "logistic_loss_gbm",
                             shrinkage = 0.025,  # options for gbm
-                            n.trees = 1500, 
+                            n.trees = 1500,
                             interaction.depth = 3,
-                            cv.folds = 5)      
+                            cv.folds = 5)
 ```
 
 We can see that at least on the training data, the performance of the gradient-boosting model is better.
@@ -253,32 +253,43 @@ summary(subgrp.cox)
 
 An important aspect of estimating the impact of estimated subgroups is obtaining estimates of the treatment effect within the estimated subgroups. Ideally, the treatment should have a positive impact within the subgroup of patients who are recommended to the treatment and the control should have a positive impact within the subgroup of patients who were not recommended the treatment.
 
-Since our estimated subgroups are conditional on observing the outcomes of the patients, taking the average outcomes by treatment status within each subgroup to estimate the treatment effects within subgroups will yield biased and typically overly-optimistic estimates. Instead, we need to use resampling-based procedures to estimate these effects reliably.
+Since our estimated subgroups are conditional on observing the outcomes of the patients, taking the average outcomes by treatment status within each subgroup to estimate the treatment effects within subgroups will yield biased and typically overly-optimistic estimates. Instead, we need to use resampling-based procedures to estimate these effects reliably. There are two methods for subgroup treatment effect estimation. Both methods are available using the `validate.subgroup()` function. 
+
 
 ### Repeated Training/Test Splitting
 
+The first method is prediction-based. For each replication in this procedure, data are randomly partitioned into a training and testing portion. For each replocation the subgroup identification model is estimated using the training procedure and the subgroup treatment effects are estimated using the test data. This method requires two arguments to be passed to `validate.subgroup()`. The first argument is `B`, the number of replications and the second argument is `train.fraction`, which is the proportion of all samples which will be used for training (hence `1 - train.fraction` is the portion of samples used for testing).
+
+```{r train_test_ex}
+validation <- validate.subgroup(subgrp.model, 
+                                B = 25L,  # specify the number of replications
+                                method = "training_test_replication",
+                                train.fraction = 0.75)
+
+validation
+```
 
 ### Bootstrap Bias Correction
 
+The second method is a bootstrap-based method which seeks to estimate the bias in the estimates of the subgroup treatment effects and then corrects for this bias (Harrell, et al. 1996).
 
-# Reference Manual
+- For a statistic $d$ let $d_{train}(X)$ be the statistic estimated with the training data and evaluated on data $X$ and $d_{b}(X)$ be the statistics estimated using a bootstrap sample $X_b$ (samples with replacement from $X$) and evaluated on $X$
+	
+	\vfill
+	
+- The bootstrap estimate of the amount of bias with regards to the statistic $d$ is
+$$
+{bias}(X) = \frac{1}{B}\sum_{b = 1}^B d_b(X_b) - d_b(X)
+$$
 
-## `check.overlap()`
 
-The primary function of `check.overlap()` is to visualize the estimated propensity scores to evaluate whether there is sufficient overlap of the propensity scores between treatment groups. Overlap is required for the validity of propensity score based methods.
+- Then a bias-corrected estimate of the statistic $d$ is $$d_{train}(X) - {bias}(X)$$
 
-## `fit.subgroup()`
 
-The primary function of `fit.subgroup()` is to estimate the parameters in a subgroup identification model.
+```{r boot_bias_ex}
+validation <- validate.subgroup(subgrp.model, 
+                                B = 25L,  # specify the number of replications
+                                method = "boot_bias_correction")
 
-## `validate.subgroup()`
-
-The function of `validate.subgroup()` is to evaluate the impact of an estimated subgroup. In particular, `validate.subgroup()` provides methods to determine if treatment effects are truly different between the different estimated subgroups.
-
-## `plot.subgroup_fitted()`, `plot.subgroup_validated()`, and `plotCompare()`
-
-These functions plot the outcomes or average outcomes within both subgroups and treatment groups. This can give users a sense of the impact of the estimated subgroups. The `plotCompare()` function allows users to make plots which compare multiple subgroup identification models or validation results.
-
-## `predict.subgroup_fitted()`
-
-The function `predict.subgroup_fitted()` allows users to estimate the benefit score ($\hat{f}(X)$) for new patients. The benefit score is used to assign patients to treatment groups based on a particular subgroup identification model, i.e. if $f(x) > 0$, then a patient with $X = x$ should be assigned to the treatment group to maximize their expected outcome.
+validation
+```
