@@ -9,6 +9,7 @@ output:
         toc: true
         toc_depth: 3
         number_sections: true
+        self_contained: true
 vignette: >
   %\VignetteIndexEntry{Usage of the Personalized Package}
   %\VignetteEngine{knitr::rmarkdown}
