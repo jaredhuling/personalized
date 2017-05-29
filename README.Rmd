@@ -13,9 +13,7 @@ library(knitr)
 opts_chunk$set(message = FALSE)
 ```
 
-|  OS             | Build           |
-|-----------------|-----------------|
-| Linux x86_64 / OSX   | [![Build Status](https://travis-ci.org/jaredhuling/personalized.svg?branch=master)](https://travis-ci.org/jaredhuling/personalized)  
+[![Build Status](https://travis-ci.org/jaredhuling/personalized.svg?branch=master)](https://travis-ci.org/jaredhuling/personalized)
 
 
 ## Introduction to the 'personalized' package
