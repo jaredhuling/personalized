@@ -52,11 +52,8 @@ The choices of $f$ offered in the `personalized` package are varied. A familiar,
 For subgroup identification models with $f(X) = X^T\beta$, the `personalized` package also allows for variable selection. Instead of minimizing $L_W(f)$ or $L_A(f)$, we instead minimize a penalized version: $L_W(f) + \lambda||\beta||_1$ or $L_A(f) + \lambda||\beta||_1$.
 
 
-# User Guide
 
-The user guide for the `personalized` package will begin with a quick usage reference so users can quickly get started with a subgroup identification analysis. Following the quick usage reference, the user guide will expand on all the options available in the main functions and the implications of the various options.
-
-## Quick Usage Reference
+# Quick Usage Reference
 
 First simulate some data where we know the truth. In this simulation, the treatment assignment depends on covariates and hence we must model the propensity score $\pi(x) = Pr(T = 1 | X = x)$. In this simulation we will assume that larger values of the outcome are better. 
 
@@ -84,7 +81,7 @@ xbeta <- xbeta + delta * (2 * trt - 1)
 y <- drop(xbeta) + rnorm(n.obs)
 ```
 
-### Creating and Checking Propensity Score Model
+## Creating and Checking Propensity Score Model
 The first step in our analysis is to construct a model for the propensity score. In the `personalized` package, we need to wrap this model in a function which inputs covariate values and the treatment statuses and outputs a propensity score between 0 and 1. Since there are many covariates, we use the lasso to select variables in our propensity score model:
 
 ```{r create_propensity}
@@ -109,7 +106,7 @@ check.overlap(x, trt, prop.func)
 
 We can see that our propensity scores have common support. 
 
-### Fitting Subgroup Identification Model
+## Fitting Subgroup Identification Model
 
 The next step is to choose and fit a subgroup identification model. In this example, the outcome is continuous, so we choose the squared error loss function. We also choose the model type (either the weighting or the A-learning method). The main funciton for fitting subgroup identification models is `fit.subgroup`. 
 Since there are many covariates, we choose a loss function with a lasso penalty to select variables. The underlying fitting function here is `cv.glmnet()`. We can pass to `fit.subgroup()` arguments of the `cv.glmnet()` function, such as `nfolds` for the number of cross validation folds.
@@ -135,7 +132,7 @@ Alternatively, we can create an interaction plot. This plot represents the avera
 plot(subgrp.model, type = "interaction")
 ```
 
-### Evaluating Effect of Subgroup Identification Model
+## Evaluating Effect of Subgroup Identification Model
 
 
 Unfortunately, if we simply look at the average outcome within each subgroup, this will give us a biased estimate of the treatment effects within each subgroup as we have already used the data to estimate the subgroups. Instead, to get a valid estimate of the subgroup treatment effects we can use a bootstrap approach to correcting for this bias. We can alternatively repeatedly partition our data into training and testing samples. In this procedure for each replication we fit a subgroup model using the training data and then evaluate the subgroup treatment effects on the testing data. The argument `B` specifies the number of replications and the argument `train.fraction` specifies what proportion of samples are for training in the training and testing partitioning method.
@@ -167,6 +164,11 @@ plotCompare(subgrp.model, validation, type = "interaction")
 ```
 
 Note that the estimated treatment effects within subgroups are attenuated for the validated results. It is common for the estimated treatment effects within subgroups to be overly-optimistic based on the training data. 
+
+# User Guide
+
+The user guide for the `personalized` package will begin with a quick usage reference so users can quickly get started with a subgroup identification analysis. Following the quick usage reference, the user guide will expand on all the options available in the main functions and the implications of the various options.
+
 
 ## Fitting Subgroup Identification Models
 
