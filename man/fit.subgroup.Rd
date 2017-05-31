@@ -4,11 +4,11 @@
 \alias{fit.subgroup}
 \title{Fitting subgroup identification models}
 \usage{
-fit.subgroup(x, y, trt, propensity.func, family = c("gaussian", "binomial",
-  "cox"), loss = c("sq_loss_lasso", "logistic_loss_lasso", "cox_loss_lasso",
-  "sq_loss_lasso_gam", "logistic_loss_lasso_gam", "sq_loss_gam",
-  "logistic_loss_gam", "sq_loss_gbm", "abs_loss_gbm", "huberized_loss_gbm",
-  "logistic_loss_gbm"), method = c("weighting", "a_learning"), cutpoint = 0,
+fit.subgroup(x, y, trt, propensity.func, loss = c("sq_loss_lasso",
+  "logistic_loss_lasso", "cox_loss_lasso", "sq_loss_lasso_gam",
+  "logistic_loss_lasso_gam", "sq_loss_gam", "logistic_loss_gam", "sq_loss_gbm",
+  "abs_loss_gbm", "huberized_loss_gbm", "logistic_loss_gbm"),
+  method = c("weighting", "a_learning"), cutpoint = 0,
   larger.outcome.better = TRUE, retcall = TRUE, ...)
 }
 \arguments{
@@ -24,9 +24,6 @@ the propensity score, ie Pr(trt = 1 | X = x). Function should take two arguments
 For a randomized controlled trial this can simply be a function that returns a constant equal to the proportion
 of patients assigned to the treatment group, i.e.:
 \code{propensity.func = function(x, trt) 0.5}.}
-
-\item{family}{family for the response. \code{gaussian} for continuous outcomes, \code{binomial} for binomial outcomes,
-and \code{cox} for time-to-event outcomes}
 
 \item{loss}{choice of both the M function from Chen, et al (2017) and potentially the penalty used for variable selection.
 All \code{loss} options starting with \code{sq_loss} use M(y, v) = (v - y) ^ 2, all options starting with \code{logistic_loss} use
@@ -120,7 +117,6 @@ prop.func <- function(x, trt)
 subgrp.model <- fit.subgroup(x = x, y = y,
                            trt = trt01,
                            propensity.func = prop.func,
-                           family = "gaussian",
                            loss   = "sq_loss_lasso",
                            nfolds = 5)              # option for cv.glmnet
 
@@ -131,7 +127,6 @@ summary(subgrp.model)
 subgrp.modelg <- fit.subgroup(x = x, y = y,
                             trt = trt01,
                             propensity.func = prop.func,
-                            family = "gaussian",
                             loss   = "sq_loss_lasso_gam",
                             method.gam = "REML",     # option for gam
                             nfolds = 5)              # option for cv.glmnet
@@ -141,7 +136,6 @@ subgrp.modelg
 subgrp.model.bin <- fit.subgroup(x = x, y = y.binary,
                            trt = trt01,
                            propensity.func = prop.func,
-                           family = "binomial",
                            loss   = "logistic_loss_lasso",
                            type.measure = "auc",    # option for cv.glmnet
                            nfolds = 5)              # option for cv.glmnet
@@ -152,7 +146,6 @@ library(survival)
 subgrp.model.cox <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
                            trt = trt01,
                            propensity.func = prop.func,
-                           family = "cox",
                            loss   = "cox_loss_lasso",
                            nfolds = 5)              # option for cv.glmnet
 
