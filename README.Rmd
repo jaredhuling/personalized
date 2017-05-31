@@ -40,4 +40,54 @@ library(personalized)
 ?validate.subgroup
 ```
 
+```{r use_fit_subgroup, fig.path="vignettes/"}
+set.seed(123)
+n.obs  <- 250
+n.vars <- 1000
+x <- matrix(rnorm(n.obs * n.vars, sd = 3), n.obs, n.vars)
+
+
+# simulate non-randomized treatment
+xbetat   <- 0.5 + 0.5 * x[,21] - 0.5 * x[,41] + 0.5 * x[,1] * x[,12]
+trt.prob <- exp(xbetat) / (1 + exp(xbetat))
+trt01    <- rbinom(n.obs, 1, prob = trt.prob)
+
+trt      <- 2 * trt01 - 1
+
+# simulate response
+delta <- (0.5 + x[,2] - x[,3] - x[,11])
+xbeta <- x[,1] + x[,11] - 0.5 * x[,12]^2 + x[,13] + 0.5 * x[,15] ^ 2
+xbeta <- xbeta + delta * trt
+
+# continuous outcomes
+y <- drop(xbeta) + rnorm(n.obs, sd = 2)
+
+# create function for fitting propensity score model
+prop.func <- function(x, trt)
+{
+    # fit propensity score model
+    propens.model <- cv.glmnet(y = trt,
+                               x = x, family = "binomial")
+    
+    # return predicted Pr(trt = 1 | X = x)
+    pi.x <- predict(propens.model, s = "lambda.min",
+                    newx = x, type = "response")[,1]
+    pi.x
+}
+
+subgrp.model <- fit.subgroup(x = x, y = y,
+                             trt = trt01,
+                             propensity.func = prop.func,
+                             method = "a_learning",
+                             loss   = "sq_loss_lasso",
+                             nfolds = 10)              # option for cv.glmnet
+
+summary(subgrp.model)
+
+```
+
+```{r plot_model, fig.path="vignettes/"}
+plot(subgrp.model)
+```
+
 
