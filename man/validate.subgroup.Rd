@@ -62,7 +62,6 @@ prop.func <- function(x, trt)
 subgrp.model <- fit.subgroup(x = x, y = y,
                              trt = trt01,
                              propensity.func = prop.func,
-                             family = "gaussian",
                              loss   = "sq_loss_lasso",
                              nfolds = 5)    # option for cv.glmnet
 
