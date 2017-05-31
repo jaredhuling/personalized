@@ -142,7 +142,6 @@ prop.func &lt;-<span class="st"> </span>function(x, trt)
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">subgrp.model &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y,
                              <span class="dt">trt =</span> trt,
                              <span class="dt">propensity.func =</span> prop.func,
-                             <span class="dt">family =</span> <span class="st">"gaussian"</span>,
                              <span class="dt">loss   =</span> <span class="st">"sq_loss_lasso"</span>,
                              <span class="dt">nfolds =</span> <span class="dv">10</span>)              <span class="co"># option for cv.glmnet</span>
 
@@ -322,10 +321,6 @@ validation</code></pre></div>
 <p>The argument <code>...</code> is used to pass arguments to the underlying modeling functions. For example, if the lasso is specified to be used in the <code>loss</code> argument, <code>...</code> is used to pass arguments to the <code>cv.glmnet()</code> function from the <code>glmnet</code> <code>R</code> package. If <code>gam</code> is present in the name for the <code>loss</code> argument, the underlying model is fit using the <code>gam()</code> function of <code>mgcv</code>, so arguments to <code>gam()</code> can be passed using <code>...</code>. The only tricky part for <code>gam()</code> is that it also has an argument titled <code>method</code> and hence instead, to change the <code>method</code> argument of <code>gam()</code>, the user can pass values using <code>method.gam</code> which will then be passed as the argument for <code>method</code> in the <code>gam()</code> function.</p>
 </div>
 </div>
-<div id="explanation-of-returned-object" class="section level3">
-<h3 class="hasAnchor">
-<a href="#explanation-of-returned-object" class="anchor"></a>Explanation of Returned Object</h3>
-</div>
 <div id="continuous-outcomes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#continuous-outcomes" class="anchor"></a>Continuous Outcomes</h3>
@@ -337,6 +332,58 @@ validation</code></pre></div>
 <li><code>'sq_loss_gbm'</code></li>
 <li><code>'abs_loss_gbm'</code></li>
 </ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">subgrp.model2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y,
+                             <span class="dt">trt =</span> trt,
+                             <span class="dt">propensity.func =</span> prop.func,
+                             <span class="dt">loss   =</span> <span class="st">"sq_loss_lasso_gam"</span>,
+                             <span class="dt">nfolds =</span> <span class="dv">10</span>)              <span class="co"># option for cv.glmnet</span>
+
+<span class="kw">summary</span>(subgrp.model2)</code></pre></div>
+<pre><code>## family:  gaussian 
+## loss:    sq_loss_lasso_gam 
+## method:  weighting 
+## 
+## Average Outcomes:
+##                  Recommended Trt   Recommended Ctrl
+## Received Trt   -5.8729 (n = 300) -20.8214 (n = 290)
+## Received Ctrl -16.6884 (n = 189)  -9.7266 (n = 221)
+## 
+##  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
+##                  10.8155 (n = 489)                  11.0948 (n = 511) 
+## 
+## Benefit score quantiles: 
+##       0%      25%      50%      75%     100% 
+## -25.3595  -4.8937  -0.1945   4.3787  27.0727</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## y ~ -1 + Trt + s(V1) + s(V2) + s(V3) + s(V6) + s(V8) + s(V11) + 
+##     s(V13) + s(V17) + s(V21) + s(V37) + s(V40)
+## 
+## Parametric coefficients:
+##     Estimate Std. Error t value Pr(&gt;|t|)
+## Trt   0.2177     0.8920   0.244    0.807
+## 
+## Approximate significance of smooth terms:
+##          edf Ref.df     F p-value   
+## s(V1)  2.394  3.055 2.022 0.11646   
+## s(V2)  2.790  3.565 4.646 0.00158 **
+## s(V3)  1.000  1.000 9.109 0.00261 **
+## s(V6)  1.000  1.000 1.751 0.18610   
+## s(V8)  1.000  1.000 2.305 0.12925   
+## s(V11) 6.284  7.474 1.977 0.05962 . 
+## s(V13) 1.000  1.000 5.184 0.02300 * 
+## s(V17) 1.000  1.000 2.384 0.12292   
+## s(V21) 1.000  1.000 5.294 0.02161 * 
+## s(V37) 1.000  1.000 2.852 0.09157 . 
+## s(V40) 1.000  1.000 1.327 0.24962   
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## R-sq.(adj) =  0.0556   Deviance explained = 7.67%
+## GCV = 1513.8  Scale est. = 1482.8    n = 1000</code></pre>
 </div>
 <div id="binary-outcomes" class="section level3">
 <h3 class="hasAnchor">
@@ -355,14 +402,12 @@ y.binary &lt;-<span class="st"> </span><span class="dv">1</span> *<span class="s
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">subgrp.bin &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y.binary,
                            <span class="dt">trt =</span> trt,
                            <span class="dt">propensity.func =</span> prop.func,
-                           <span class="dt">family =</span> <span class="st">"binomial"</span>,
                            <span class="dt">loss   =</span> <span class="st">"logistic_loss_lasso"</span>,
                            <span class="dt">nfolds =</span> <span class="dv">10</span>)      <span class="co"># option for cv.glmnet</span></code></pre></div>
 <p>When gradient-boosted decision trees are used for <span class="math inline">\(f(X)\)</span> by the package <code>gbm</code>, care must be taken to choose the hyperparameters effectively. Specifically, <code>shrinkage</code> (similar to the step-size in gradient descent), <code>n.trees</code> (the number of trees to fit), and <code>interaction.depth</code> (the maximum depth of each tree) should be tuned according to the data at hand. By default for gradient-boosting models, <code>fit.subgroup</code> plots the cross validation error versus the number of trees to give the user a sense of if their choice of tuning parameters is effective.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">subgrp.bin2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y.binary,
                             <span class="dt">trt =</span> trt,
                             <span class="dt">propensity.func =</span> prop.func,
-                            <span class="dt">family =</span> <span class="st">"binomial"</span>,
                             <span class="dt">loss =</span> <span class="st">"logistic_loss_gbm"</span>,
                             <span class="dt">shrinkage =</span> <span class="fl">0.025</span>,  <span class="co"># options for gbm</span>
                             <span class="dt">n.trees =</span> <span class="dv">1500</span>,
@@ -376,15 +421,15 @@ y.binary &lt;-<span class="st"> </span><span class="dv">1</span> *<span class="s
 ## 
 ## Average Outcomes:
 ##                Recommended Trt Recommended Ctrl
-## Received Trt  0.4505 (n = 333) 0.2179 (n = 257)
-## Received Ctrl 0.1858 (n = 226) 0.4565 (n = 184)
+## Received Trt  0.4363 (n = 314) 0.2246 (n = 276)
+## Received Ctrl  0.162 (n = 216) 0.4588 (n = 194)
 ## 
 ##  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-##                   0.2646 (n = 559)                   0.2386 (n = 441) 
+##                   0.2743 (n = 530)                   0.2341 (n = 470) 
 ## 
 ## Benefit score quantiles: 
 ##       0%      25%      50%      75%     100% 
-## -1.71039 -0.31334  0.07145  0.44287  1.55721</code></pre>
+## -1.39413 -0.27654  0.02111  0.30929  1.22481</code></pre>
 </div>
 <div id="time-to-event-outcomes" class="section level3">
 <h3 class="hasAnchor">
@@ -406,7 +451,6 @@ subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
                            <span class="dt">trt =</span> trt,
                            <span class="dt">propensity.func =</span> prop.func,
                            <span class="dt">method =</span> <span class="st">"weighting"</span>,
-                           <span class="dt">family =</span> <span class="st">"cox"</span>,
                            <span class="dt">loss   =</span> <span class="st">"cox_loss_lasso"</span>,
                            <span class="dt">nfolds =</span> <span class="dv">10</span>)      <span class="co"># option for cv.glmnet</span></code></pre></div>
 <p>The subgroup treatment effects are estimated using the restricted mean statistic and can be displayed with <code><a href="../reference/summary.html">summary.subgroup_fitted()</a></code> or <code><a href="../reference/print.html">print.subgroup_fitted()</a></code> like the following:</p>
@@ -417,29 +461,31 @@ subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 ## 
 ## Average Outcomes:
 ##                  Recommended Trt   Recommended Ctrl
-## Received Trt  111.3755 (n = 288) 161.0332 (n = 302)
-## Received Ctrl  19.8434 (n = 196) 572.0919 (n = 214)
+## Received Trt  217.9631 (n = 284) 124.3198 (n = 306)
+## Received Ctrl  93.4427 (n = 196) 730.8055 (n = 214)
 ## 
 ##  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-##                  91.5322 (n = 484)                 411.0587 (n = 516) 
+##                 124.5204 (n = 480)                 606.4857 (n = 520) 
 ## 
 ## Benefit score quantiles: 
 ##        0%       25%       50%       75%      100% 
-## -0.503100 -0.139077 -0.005873  0.124318  0.823023 
+## -0.498336 -0.133796 -0.007869  0.112389  0.691535 
 ## 
-## 6 variables selected by the lasso (cross validation criterion).
+## 5 variables selected by the lasso (cross validation criterion).
 ## 
 ##         Estimate
-## V1   0.002372512
-## V2   0.050775420
-## V3  -0.010795939
-## V11 -0.028090026
-## V13  0.006981945
-## V50  0.019809373</code></pre>
+## V1   0.009553232
+## V2   0.046273735
+## V3  -0.014153922
+## V11 -0.022057802
+## V50  0.019614042</code></pre>
 </div>
 <div id="plotting-fitted-models" class="section level3">
 <h3 class="hasAnchor">
 <a href="#plotting-fitted-models" class="anchor"></a>Plotting Fitted Models</h3>
+<p>Multiple models can be visually compared using the <code><a href="../reference/plotCompare.html">plotCompare()</a></code> function, which offers the same plotting options as the <code><a href="../reference/plot.html">plot.subgroup_fitted()</a></code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotCompare.html">plotCompare</a></span>(subgrp.model, subgrp.model2)</code></pre></div>
+<p><img src="usage_of_the_personalized_package_files/figure-html/plot_compare_ex2-1.png" width="672"></p>
 </div>
 </div>
 <div id="validating-subgroup-identification-models" class="section level2">
@@ -451,24 +497,20 @@ subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 <p>An important aspect of estimating the impact of estimated subgroups is obtaining estimates of the treatment effect within the estimated subgroups. Ideally, the treatment should have a positive impact within the subgroup of patients who are recommended to the treatment and the control should have a positive impact within the subgroup of patients who were not recommended the treatment.</p>
 <p>Since our estimated subgroups are conditional on observing the outcomes of the patients, taking the average outcomes by treatment status within each subgroup to estimate the treatment effects within subgroups will yield biased and typically overly-optimistic estimates. Instead, we need to use resampling-based procedures to estimate these effects reliably. There are two methods for subgroup treatment effect estimation. Both methods are available using the <code><a href="../reference/validate.subgroup.html">validate.subgroup()</a></code> function.</p>
 </div>
-<div id="explanation-of-major-function-arguments-1" class="section level3">
-<h3 class="hasAnchor">
-<a href="#explanation-of-major-function-arguments-1" class="anchor"></a>Explanation of Major Function Arguments</h3>
-</div>
-<div id="explanation-of-returned-object-1" class="section level3">
-<h3 class="hasAnchor">
-<a href="#explanation-of-returned-object-1" class="anchor"></a>Explanation of Returned Object</h3>
-</div>
 <div id="repeated-trainingtest-splitting" class="section level3">
 <h3 class="hasAnchor">
 <a href="#repeated-trainingtest-splitting" class="anchor"></a>Repeated Training/Test Splitting</h3>
 <p>The first method is prediction-based. For each replication in this procedure, data are randomly partitioned into a training and testing portion. For each replocation the subgroup identification model is estimated using the training procedure and the subgroup treatment effects are estimated using the test data. This method requires two arguments to be passed to <code><a href="../reference/validate.subgroup.html">validate.subgroup()</a></code>. The first argument is <code>B</code>, the number of replications and the second argument is <code>train.fraction</code>, which is the proportion of all samples which will be used for training (hence <code>1 - train.fraction</code> is the portion of samples used for testing).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">validation &lt;-<span class="st"> </span><span class="kw"><a href="../reference/validate.subgroup.html">validate.subgroup</a></span>(subgrp.model, 
-                                <span class="dt">B =</span> 25L,  <span class="co"># specify the number of replications</span>
-                                <span class="dt">method =</span> <span class="st">"training_test_replication"</span>,
-                                <span class="dt">train.fraction =</span> <span class="fl">0.75</span>)
+<p>The main object which needs to be passed to <code><a href="../reference/validate.subgroup.html">validate.subgroup()</a></code> is a fitted object returned by the <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code>. Note that in order to validate a fitted object from <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code>, the model must be fit with the <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> <code>retcall</code> set to <code>TRUE</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># check that the object is an object returned by fit.subgroup()</span>
+<span class="kw">class</span>(subgrp.model2)</code></pre></div>
+<pre><code>## [1] "subgroup_fitted"</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">validation2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/validate.subgroup.html">validate.subgroup</a></span>(subgrp.model, 
+                                 <span class="dt">B =</span> 25L,  <span class="co"># specify the number of replications</span>
+                                 <span class="dt">method =</span> <span class="st">"training_test_replication"</span>,
+                                 <span class="dt">train.fraction =</span> <span class="fl">0.75</span>)
 
-validation</code></pre></div>
+validation2</code></pre></div>
 <pre><code>## family:  gaussian 
 ## loss:    sq_loss_lasso 
 ## method:  weighting 
@@ -497,11 +539,11 @@ validation</code></pre></div>
 \]</span></p></li>
 <li><p>Then a bias-corrected estimate of the statistic <span class="math inline">\(d\)</span> is <span class="math display">\[d_{train}(X) - {bias}(X)\]</span></p></li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">validation &lt;-<span class="st"> </span><span class="kw"><a href="../reference/validate.subgroup.html">validate.subgroup</a></span>(subgrp.model, 
-                                <span class="dt">B =</span> 25L,  <span class="co"># specify the number of replications</span>
-                                <span class="dt">method =</span> <span class="st">"boot_bias_correction"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">validation3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/validate.subgroup.html">validate.subgroup</a></span>(subgrp.model, 
+                                 <span class="dt">B =</span> 25L,  <span class="co"># specify the number of replications</span>
+                                 <span class="dt">method =</span> <span class="st">"boot_bias_correction"</span>)
 
-validation</code></pre></div>
+validation3</code></pre></div>
 <pre><code>## family:  gaussian 
 ## loss:    sq_loss_lasso 
 ## method:  weighting 
@@ -515,6 +557,13 @@ validation</code></pre></div>
 ## 
 ##  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
 ##               5.8437 (SE = 2.1738)               6.9931 (SE = 2.5126)</code></pre>
+</div>
+<div id="plotting-validated-models" class="section level3">
+<h3 class="hasAnchor">
+<a href="#plotting-validated-models" class="anchor"></a>Plotting Validated Models</h3>
+<p>Multiple validated models can be visually compared using the <code><a href="../reference/plotCompare.html">plotCompare()</a></code> function, which offers the same plotting options as the <code><a href="../reference/plot.html">plot.subgroup_validated()</a></code> function. Here we compare the model fitted using <code>sq_loss_lasso</code> to the one fitted using <code>sq_loss_lasso_gam</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotCompare.html">plotCompare</a></span>(validation, validation2)</code></pre></div>
+<p><img src="usage_of_the_personalized_package_files/figure-html/plot_compare_ex3-1.png" width="672"></p>
 </div>
 </div>
 </div>
