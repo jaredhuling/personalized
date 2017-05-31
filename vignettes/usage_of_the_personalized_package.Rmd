@@ -168,7 +168,18 @@ Note that the estimated treatment effects within subgroups are attenuated for th
 
 ## Overview
 
+In this user guide we will provide more detailed information about the entire subgroup identification modeling process in the `personalized` package. Specifically, we will explore more thoroughly the four steps outlined in the introduction section. 
 
+## Creating and Checking a propensity Score Model
+
+The propensity score, $\pi(x) = Pr(T = 1 | X = x)$ is a crucial component of the subgroup identification models in the `personalized` package, especially for the analysis of data that comes from an observational study. 
+
+### Observational Studies
+
+
+### Randomized Controlled Trials
+
+For data from RCTs, the users can simply use a constant function for the propensity score. For example, if patients were equally randomized to the treatment and control groups, we know that $\pi(x) = 1/2$. 
 
 ## Fitting Subgroup Identification Models
 
@@ -211,6 +222,13 @@ propensity.func <- function(x, trt)
 propensity.func(x, trt)[101:105]
 trt[101:105]
 ```
+
+For randomized controlled trials with equal probability of assignment to treatment and control, the user can simply define `propensity.func` as:
+```{r propens_func_example_const}
+propensity.func <- function(x, trt) 0.5
+```
+
+which always returns the constant $1/2$.
 
 #### `loss`
 

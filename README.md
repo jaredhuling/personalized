@@ -38,7 +38,7 @@ library(personalized)
 ```r
 set.seed(123)
 n.obs  <- 250
-n.vars <- 100
+n.vars <- 1000
 x <- matrix(rnorm(n.obs * n.vars, sd = 3), n.obs, n.vars)
 
 
@@ -87,26 +87,43 @@ summary(subgrp.model)
 ## 
 ## Average Outcomes:
 ##                Recommended Trt Recommended Ctrl
-## Received Trt   4.4917 (n = 74)  -4.639 (n = 68)
-## Received Ctrl -6.1364 (n = 62)  2.1427 (n = 46)
+## Received Trt   5.2193 (n = 73) -5.9879 (n = 69)
+## Received Ctrl -6.8308 (n = 70)  5.7565 (n = 38)
 ## 
 ##  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-##                  10.6281 (n = 136)                   6.7817 (n = 114) 
+##                  12.0501 (n = 143)                  11.7444 (n = 107) 
 ## 
 ## Benefit score quantiles: 
-##       0%      25%      50%      75%     100% 
-## -15.5465  -4.1472   0.5254   5.4670  17.7227 
+##      0%     25%     50%     75%    100% 
+## -20.187  -5.491   1.821   7.587  21.276 
 ## 
-## 7 variables selected by the lasso (cross validation criterion).
+## 24 variables selected by the lasso (cross validation criterion).
 ## 
-##        Estimate
-## V2   1.24291538
-## V3  -1.30705442
-## V6   0.32361980
-## V7  -0.57852824
-## V11 -0.96475524
-## V29  0.06694316
-## V33 -0.07032150
+##          Estimate
+## V2    1.176672910
+## V3   -1.677310716
+## V6    0.557432561
+## V11  -1.295443491
+## V24   0.172071675
+## V145 -0.161864923
+## V197  0.129665339
+## V298  0.159134624
+## V336  0.038150991
+## V349 -0.005098594
+## V431 -0.148129193
+## V508 -0.003919389
+## V512 -0.172885742
+## V540  0.115712326
+## V555 -0.110480828
+## V600 -0.492156891
+## V603 -0.144105401
+## V644  0.148491828
+## V707 -0.459510002
+## V768  0.136137419
+## V828  0.806748213
+## V950  0.071287675
+## V953 -0.180628947
+## V971 -0.003399006
 ```
 
 

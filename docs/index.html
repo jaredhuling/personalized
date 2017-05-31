@@ -67,6 +67,93 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(personalized)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">?fit.subgroup
 ?validate.subgroup</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">123</span>)
+n.obs  &lt;-<span class="st"> </span><span class="dv">250</span>
+n.vars &lt;-<span class="st"> </span><span class="dv">1000</span>
+x &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(n.obs *<span class="st"> </span>n.vars, <span class="dt">sd =</span> <span class="dv">3</span>), n.obs, n.vars)
+
+
+<span class="co"># simulate non-randomized treatment</span>
+xbetat   &lt;-<span class="st"> </span><span class="fl">0.5</span> +<span class="st"> </span><span class="fl">0.5</span> *<span class="st"> </span>x[,<span class="dv">21</span>] -<span class="st"> </span><span class="fl">0.5</span> *<span class="st"> </span>x[,<span class="dv">41</span>] +<span class="st"> </span><span class="fl">0.5</span> *<span class="st"> </span>x[,<span class="dv">1</span>] *<span class="st"> </span>x[,<span class="dv">12</span>]
+trt.prob &lt;-<span class="st"> </span><span class="kw">exp</span>(xbetat) /<span class="st"> </span>(<span class="dv">1</span> +<span class="st"> </span><span class="kw">exp</span>(xbetat))
+trt01    &lt;-<span class="st"> </span><span class="kw">rbinom</span>(n.obs, <span class="dv">1</span>, <span class="dt">prob =</span> trt.prob)
+
+trt      &lt;-<span class="st"> </span><span class="dv">2</span> *<span class="st"> </span>trt01 -<span class="st"> </span><span class="dv">1</span>
+
+<span class="co"># simulate response</span>
+delta &lt;-<span class="st"> </span>(<span class="fl">0.5</span> +<span class="st"> </span>x[,<span class="dv">2</span>] -<span class="st"> </span>x[,<span class="dv">3</span>] -<span class="st"> </span>x[,<span class="dv">11</span>])
+xbeta &lt;-<span class="st"> </span>x[,<span class="dv">1</span>] +<span class="st"> </span>x[,<span class="dv">11</span>] -<span class="st"> </span><span class="fl">0.5</span> *<span class="st"> </span>x[,<span class="dv">12</span>]^<span class="dv">2</span> +<span class="st"> </span>x[,<span class="dv">13</span>] +<span class="st"> </span><span class="fl">0.5</span> *<span class="st"> </span>x[,<span class="dv">15</span>] ^<span class="st"> </span><span class="dv">2</span>
+xbeta &lt;-<span class="st"> </span>xbeta +<span class="st"> </span>delta *<span class="st"> </span>trt
+
+<span class="co"># continuous outcomes</span>
+y &lt;-<span class="st"> </span><span class="kw">drop</span>(xbeta) +<span class="st"> </span><span class="kw">rnorm</span>(n.obs, <span class="dt">sd =</span> <span class="dv">2</span>)
+
+<span class="co"># create function for fitting propensity score model</span>
+prop.func &lt;-<span class="st"> </span>function(x, trt)
+{
+    <span class="co"># fit propensity score model</span>
+    propens.model &lt;-<span class="st"> </span><span class="kw">cv.glmnet</span>(<span class="dt">y =</span> trt,
+                               <span class="dt">x =</span> x, <span class="dt">family =</span> <span class="st">"binomial"</span>)
+    
+    <span class="co"># return predicted Pr(trt = 1 | X = x)</span>
+    pi.x &lt;-<span class="st"> </span><span class="kw">predict</span>(propens.model, <span class="dt">s =</span> <span class="st">"lambda.min"</span>,
+                    <span class="dt">newx =</span> x, <span class="dt">type =</span> <span class="st">"response"</span>)[,<span class="dv">1</span>]
+    pi.x
+}
+
+subgrp.model &lt;-<span class="st"> </span><span class="kw"><a href="reference/fit.subgroup.html">fit.subgroup</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y,
+                             <span class="dt">trt =</span> trt01,
+                             <span class="dt">propensity.func =</span> prop.func,
+                             <span class="dt">method =</span> <span class="st">"a_learning"</span>,
+                             <span class="dt">loss   =</span> <span class="st">"sq_loss_lasso"</span>,
+                             <span class="dt">nfolds =</span> <span class="dv">10</span>)              <span class="co"># option for cv.glmnet</span>
+
+<span class="kw">summary</span>(subgrp.model)</code></pre></div>
+<pre><code>## family:  gaussian 
+## loss:    sq_loss_lasso 
+## method:  a_learning 
+## 
+## Average Outcomes:
+##                Recommended Trt Recommended Ctrl
+## Received Trt   5.2193 (n = 73) -5.9879 (n = 69)
+## Received Ctrl -6.8308 (n = 70)  5.7565 (n = 38)
+## 
+##  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
+##                  12.0501 (n = 143)                  11.7444 (n = 107) 
+## 
+## Benefit score quantiles: 
+##      0%     25%     50%     75%    100% 
+## -20.187  -5.491   1.821   7.587  21.276 
+## 
+## 24 variables selected by the lasso (cross validation criterion).
+## 
+##          Estimate
+## V2    1.176672910
+## V3   -1.677310716
+## V6    0.557432561
+## V11  -1.295443491
+## V24   0.172071675
+## V145 -0.161864923
+## V197  0.129665339
+## V298  0.159134624
+## V336  0.038150991
+## V349 -0.005098594
+## V431 -0.148129193
+## V508 -0.003919389
+## V512 -0.172885742
+## V540  0.115712326
+## V555 -0.110480828
+## V600 -0.492156891
+## V603 -0.144105401
+## V644  0.148491828
+## V707 -0.459510002
+## V768  0.136137419
+## V828  0.806748213
+## V950  0.071287675
+## V953 -0.180628947
+## V971 -0.003399006</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(subgrp.model)</code></pre></div>
+<p><img src="articles/plot_model-1.png" width="672"></p>
 </div>
 </div>
   </div>
