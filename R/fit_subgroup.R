@@ -12,8 +12,6 @@
 #' For a randomized controlled trial this can simply be a function that returns a constant equal to the proportion
 #' of patients assigned to the treatment group, i.e.:
 #' \code{propensity.func = function(x, trt) 0.5}.
-#' @param family family for the response. \code{gaussian} for continuous outcomes, \code{binomial} for binomial outcomes,
-#' and \code{cox} for time-to-event outcomes
 #' @param loss choice of both the M function from Chen, et al (2017) and potentially the penalty used for variable selection.
 #' All \code{loss} options starting with \code{sq_loss} use M(y, v) = (v - y) ^ 2, all options starting with \code{logistic_loss} use
 #' the logistic loss: M(y, v) = y * log(1 + exp{-v}), and all options starting with \code{cox_loss} use the negative partial likelihood loss for the Cox PH model.
@@ -105,7 +103,6 @@
 #' subgrp.model <- fit.subgroup(x = x, y = y,
 #'                            trt = trt01,
 #'                            propensity.func = prop.func,
-#'                            family = "gaussian",
 #'                            loss   = "sq_loss_lasso",
 #'                            nfolds = 5)              # option for cv.glmnet
 #'
@@ -116,7 +113,6 @@
 #' subgrp.modelg <- fit.subgroup(x = x, y = y,
 #'                             trt = trt01,
 #'                             propensity.func = prop.func,
-#'                             family = "gaussian",
 #'                             loss   = "sq_loss_lasso_gam",
 #'                             method.gam = "REML",     # option for gam
 #'                             nfolds = 5)              # option for cv.glmnet
@@ -126,7 +122,6 @@
 #' subgrp.model.bin <- fit.subgroup(x = x, y = y.binary,
 #'                            trt = trt01,
 #'                            propensity.func = prop.func,
-#'                            family = "binomial",
 #'                            loss   = "logistic_loss_lasso",
 #'                            type.measure = "auc",    # option for cv.glmnet
 #'                            nfolds = 5)              # option for cv.glmnet
@@ -137,7 +132,6 @@
 #' subgrp.model.cox <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
 #'                            trt = trt01,
 #'                            propensity.func = prop.func,
-#'                            family = "cox",
 #'                            loss   = "cox_loss_lasso",
 #'                            nfolds = 5)              # option for cv.glmnet
 #'
@@ -149,7 +143,6 @@ fit.subgroup <- function(x,
                          y,
                          trt,
                          propensity.func,
-                         family     = c("gaussian", "binomial", "cox"),
                          loss       = c("sq_loss_lasso",
                                         "logistic_loss_lasso",
                                         "cox_loss_lasso",
@@ -168,9 +161,13 @@ fit.subgroup <- function(x,
                          ...)
 {
 
-    family <- match.arg(family)
     loss   <- match.arg(loss)
     method <- match.arg(method)
+
+    # set default family and change later
+    # if the loss argument is set to something
+    # not for continuous outcomes
+    family <- "gaussian"
 
     dims   <- dim(x)
     if (is.null(dims)) stop("x must be a matrix object.")
@@ -183,28 +180,32 @@ fit.subgroup <- function(x,
     # other options selected
     if (class(y) == "Surv")
     {
-        if (length(grep("cox", loss))   == 0 |
-            length(grep("cox", family)) == 0 )
+        if (length(grep("cox_loss", loss))   == 0)
         {
             stop("Loss and family must correspond to a Cox model for time-to-event outcomes.")
+        } else
+        {
+            family <- "cox"
         }
     }
 
-    if (length(grep("cox", loss))   != 0 |
-        length(grep("cox", family)) != 0 )
+    if (length(grep("cox_loss", loss)) > 0)
     {
         if (class(y) != "Surv")
         {
             stop("Must provide 'Surv' object if loss/family corresponds to a Cox model. See
                  '?Surv' for more information about 'Surv' objects.")
+        } else
+        {
+            family <- "cox"
         }
     }
 
-    if (family == "gaussian" & length(grep("logistic", loss)) != 0)
+    if (length(grep("logistic_loss", loss)) > 0 |
+        length(grep("huberized_loss", loss)) > 0)
     {
-        stop("logistic loss for continuous outcomes not available.")
+        family <- "binomial"
     }
-
 
     larger.outcome.better <- as.logical(larger.outcome.better[1])
     retcall <- as.logical(retcall[1])

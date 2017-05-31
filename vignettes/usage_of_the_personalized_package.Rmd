@@ -167,18 +167,117 @@ Note that the estimated treatment effects within subgroups are attenuated for th
 
 # User Guide
 
-The user guide for the `personalized` package will begin with a quick usage reference so users can quickly get started with a subgroup identification analysis. Following the quick usage reference, the user guide will expand on all the options available in the main functions and the implications of the various options.
+## Overview
+
 
 
 ## Fitting Subgroup Identification Models
 
-### 
+### Overview
+
+The core component of the `personalized` package is in fitting subgroup identification models with the `fit.subgroup()` function. This function provides fitting capabilities for many different outcomes, choices of loss function, choice of underlying model for $\Delta(X)$, and model class (either the weighting method or A-learning). 
+
+### Explanation of Major Function Arguments
+
+#### `x`
+
+The argument `x` is for the design matrix. Each column of `x` corresponds to a variable to be used in the model for $\Delta(X)$ and each row of `x` corresponds to an observation. Every variable in `x` will be used for the subgroup identification model (however some variables may be removed if a variable selection procedure is specified for `loss`).
+
+#### `y`
+
+The argument `y` is for the response vector. Each element in `y` is a patient observation. In the case of time-to-event outcomes `y` should be specified as a `Surv` object. For example the user should specify `y = Surv(time, status)`, where `time` is the observed time and `status` is an indicator that the observed time is the survival time. 
+
+#### `trt`
+
+The argument `trt` corresponds to the vector of observed treatment statuses. Each element in `trt` shoulld be either the integer 1 or the integer 0, where 1 in the $i$th position means means patient $i$ received the treatment and 0 in the $i$th position indicates patient $i$ did not receive treatment. 
+
+#### `propensity.func`
+
+The argument `propensity.func` corresponds to a function which returns a propensity score. While it seems cumbersome to have to specify a function instead of a vector of probabilities, it is crucial for later validation for the propensity scores to be re-estimated using the resampled or sampled data (this will be explained further in the section below for the `validate.subgroup()` function). The user should specify a function which inputs two arguments: `trt` and `x`, where `trt` corresponds to the `trt` argument for the `fit.subgroup()` function and  `x` corresponds to the `x` argument for the `fit.subgroup()` function. The function supplied to `propensity.func` should contain code that uses `x` and `trt` to fit a propensity score model and then return an estimated propensity score for each observation in `x`. A basic example which uses ` logistic regression model to estimate the propensity score is the following: 
+
+```{r propens_func_example_glm}
+propensity.func <- function(x, trt)
+{
+    # save data in a data.frame
+    data.fr <- data.frame(trt = trt, x)
+    
+    # fit propensity score model
+    propensity.model <- glm(trt ~ ., family = binomial(), data = data.fr)
+    
+    # create estimated probabilities
+    pi.x <- predict(propensity.model, type = "response")
+    return(pi.x)
+}
+
+propensity.func(x, trt)[101:105]
+trt[101:105]
+```
+
+#### `loss`
+
+The `loss` argument specifies the combination of $M$ function (i.e. loss function) and underlying model for $f(X)$, the form of the estimator of $\Delta(X)$. The name of each possible value for `loss` has two parts:
+
+1. The first part, which corresponds to the $M$ function
+1. The second part, which corresponds to the form of $f(X)$ and whether variable selection via the lasso is used
+
+An example is `sq_loss_lasso`, which corresponds to using $M(y, v) = (y - v) ^ 2$, a linear form of $f$, i.e. $f(X) = X^T\beta$, and an additional penalty term $\sum_{j = 1}^p|\beta_j|$ added to the loss function for variable selection. Other forms of $M$ are `logistic_loss`, which corresponds to the negative log-likelihood for a logistic regression model, and `cox_loss`, which corresponds to the negative log-likelihood for the Cox proportional hazards model, `abs_loss` for $M(y, v) = |y - v|$, and `huberized_loss` for a huberized hinge loss $M(y, v) = (1 - yv) ^ 2/(2\delta)I(1 - \delta < yv \leq 1) + (1 - yv - \delta/2)I(yv \leq 1 - \delta)$ for binary outcomes. 
+
+All options containing `lasso` in the name use the `cv.glmnet()` function of the `glmnet` package for the underlying model fitting and variable selection. Please see the documentation of `cv.glmnet()` for information about other arguments which can be passed to it.
+
+Any options for `loss` which end with `lasso_gam` have a two-stage model. Variables are selected using a linear or generalized linear model in the first stage and then the selected variables are used in a generalized additive model in the second stage. Univariate nonparametric smoother terms are used in the second stage for all continuous variables. Binary variables are used as linear terms in the model. All `loss` options containing `gam` in the name use the `gam()` function of the `R` package `mgcv`. Please see the documentation of `gam()` for information about other arguments which can be passed to it.
+
+All options that end in `gbm` use a gradient-boosted decision tree model for $f(X)$. These models are machine learning models which can provide more flexible estimation. These models are essentially a sum of many decision trees models. However, this procedure results in a "black box" model which may be more challenging or impossible to interpret. The `gbm`-based models are fit using the `gbm` `R` package. Please see the documentation for the `gbm` function of the `gbm` package for more details on the possible arguments. Tuning the values of the hyperparameters `shrinkage`, `n.trees`, and `interaction.depth` is crucial for a successful gradient-boosting model. These arguments can be passed to the `fit.subgroup()` function. By default, when `gbm`-based models are used, a plot of the cross validation error versus the number of trees is displayed. If this plot has values which are still decreasing significantly by the maximum value of the number of trees, then it is recommended to either increase the number of trees (`n.trees`), the maximum tree depth (`interaction.depth`), or increase the step size of the algorithm (`shrinkage`). 
+
+
+
+#### `method`
+
+The `method` argument is used to specify whether the weighting or A-learning model is used. Specify `'weighting'` for the weighting method and specify `'a_learning'` for the A-learning method.
+
+#### `larger.outcome.better`
+
+The argument `larger.outcome.better` is a boolean variable indicating whether larger values of the outcome are better or preferred. If `larger.outcome.better = TRUE`, then `fit.subgroup()` will seek to estimate subgroups in a way that maximizes the population average outcome and if `larger.outcome.better = FALSE`, `fit.subgroup()` will seek to minimize the population average outcome.
+
+#### `cutpoint` 
+
+The cutpoint is the value of the benefit score (i.e. $f(X)$) above which patients will be recommended the treatment. In other words for outcomes where larger values are better and a cutpoint with value $c$ if $f(x) > c$ for a patient with covariate values $X = x$, then they will be recommended to have the treatment instead of recommended the control. If lower values are better for the outcome, $c$ will be the value below which patients will be recommended the treatment (i.e. a patient will be recommended the treatment if $f(x) < c$). By default, the cutpoint is the population-average optimal value of 0. However, users may wish to increase this value if there are limited resources for treatment allocation. 
+
+
+
+#### `retcall`
+
+The argument `retcall` is a boolean variable which indicates whether to return the arguments passed to `fit.subgroup()`. It must be set to `TRUE` if the user wishes to later validate the fitted model object from `fit.subgroup()` using the `validate.subgroup()` function. This is necessary because when `retcall = TRUE`, the design matrix `x`, response `y`, and treatment vector `trt` must be re-sampled in either the bootstrap procedure or training and testing resampling procedure of `validate.subgroup()`. The only time when `retcall` should be set to `FALSE` is when the design matrix is too big to be stored in the fitted model object.
+
+
+#### `...`
+
+The argument `...` is used to pass arguments to the underlying modeling functions. For example, if the lasso is specified to be used in the `loss` argument, `...` is used to pass arguments to the `cv.glmnet()` function from the `glmnet` `R` package. If `gam` is present in the name for the `loss` argument, the underlying model is fit using the `gam()` function of `mgcv`, so arguments to `gam()` can be passed using `...`. The only tricky part for `gam()` is that it also has an argument titled `method` and hence instead, to change the `method` argument of `gam()`, the user can pass values using `method.gam` which will then be passed as the argument for `method` in the `gam()` function. 
+
+### Explanation of Returned Object
+
+
 
 ### Continuous Outcomes
 
+The `loss` argument options that are available for continuous outcomes are:
 
+- `'sq_loss_lasso'`
+- `'sq_loss_lasso_gam'`
+- `'sq_loss_gam'`
+- `'sq_loss_gbm'`
+- `'abs_loss_gbm'`
 
 ### Binary Outcomes
+
+The `loss` argument options that are available for binary outcomes are:
+
+- `'logistic_loss_lasso'`
+- `'logistic_loss_lasso_gam'`
+- `'logistic_loss_gam'`
+- `'huberized_loss_gbm'`
+- `'logistic_loss_gbm'`
+
+Note that all options that are available for continuous options can also potentially be used for binary outcomes. 
 
 ```{r binary_example}
 # create binary outcomes
@@ -217,6 +316,10 @@ subgrp.bin
 
 ### Time-to-event Outcomes
 
+The `loss` argument options that are available for continuous outcomes are:
+
+- `'cox_loss_lasso'`
+
 First we will generate time-to-event outcomes to illustrate usage of the `fit.subgroup()` model.
 
 ```{r tte_example}
@@ -248,14 +351,24 @@ summary(subgrp.cox)
 
 
 
-### Plotting 
+### Plotting Fitted Models
 
 
 ## Validating Subgroup Identification Models
 
+
+### Overview
+
+
 An important aspect of estimating the impact of estimated subgroups is obtaining estimates of the treatment effect within the estimated subgroups. Ideally, the treatment should have a positive impact within the subgroup of patients who are recommended to the treatment and the control should have a positive impact within the subgroup of patients who were not recommended the treatment.
 
 Since our estimated subgroups are conditional on observing the outcomes of the patients, taking the average outcomes by treatment status within each subgroup to estimate the treatment effects within subgroups will yield biased and typically overly-optimistic estimates. Instead, we need to use resampling-based procedures to estimate these effects reliably. There are two methods for subgroup treatment effect estimation. Both methods are available using the `validate.subgroup()` function. 
+
+
+### Explanation of Major Function Arguments
+
+
+### Explanation of Returned Object
 
 
 ### Repeated Training/Test Splitting
