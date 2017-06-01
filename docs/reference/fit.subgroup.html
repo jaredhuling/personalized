@@ -81,7 +81,7 @@
     <pre class="usage"><span class='fu'>fit.subgroup</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>trt</span>, <span class='no'>propensity.func</span>, <span class='kw'>loss</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"sq_loss_lasso"</span>,
   <span class='st'>"logistic_loss_lasso"</span>, <span class='st'>"cox_loss_lasso"</span>, <span class='st'>"sq_loss_lasso_gam"</span>,
   <span class='st'>"logistic_loss_lasso_gam"</span>, <span class='st'>"sq_loss_gam"</span>, <span class='st'>"logistic_loss_gam"</span>, <span class='st'>"sq_loss_gbm"</span>,
-  <span class='st'>"abs_loss_gbm"</span>, <span class='st'>"huberized_loss_gbm"</span>, <span class='st'>"logistic_loss_gbm"</span>),
+  <span class='st'>"abs_loss_gbm"</span>, <span class='st'>"huberized_loss_gbm"</span>, <span class='st'>"logistic_loss_gbm"</span>, <span class='st'>"cox_loss_gbm"</span>),
   <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"weighting"</span>, <span class='st'>"a_learning"</span>), <span class='kw'>cutpoint</span> <span class='kw'>=</span> <span class='fl'>0</span>,
   <span class='kw'>larger.outcome.better</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>retcall</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
     
@@ -131,6 +131,7 @@ is complex.</p><ul>
 <li><p><code>"abs_loss_gbm"</code> - M(y, v) = |v - y| with gradient-boosted decision trees model</p></li>
 <li><p><code>"huberized_loss_gbm"</code> - M corresponds to Huberized hinge loss (for binary outcomes) with gradient-boosted decision trees model</p></li>
 <li><p><code>"logistic_loss_gbm"</code> - M(y, v) = y * log(1 + exp-v) with gradient-boosted decision trees model</p></li>
+<li><p><code>"cox_loss_gbm"</code> - M corresponds to the negative partial likelihood of the cox model with gradient-boosted decision trees model</p></li>
 </ul></td>
     </tr>
     <tr>

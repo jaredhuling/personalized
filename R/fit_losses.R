@@ -622,10 +622,14 @@ fit_cox_loss_gbm <- function(x, y, wts, family, ...)
         list.dots$cv.folds <- 5L
     }
 
+    surv.vnames <- colnames(y)
 
-    df <- data.frame(y = y, x)
+    time.idx   <- which(surv.vnames == "time")
+    status.idx <- which(surv.vnames == "status")
 
-    formula.gbm <- as.formula("y ~ . - 1")
+    df <- data.frame(cox_gbm_time = y[,time.idx], cox_gbm_status = y[,status.idx], x)
+
+    formula.gbm <- as.formula("Surv(cox_gbm_time, cox_gbm_status) ~ . - 1")
 
     # fit a model with a lasso
     # penalty and desired loss

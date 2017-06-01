@@ -7,7 +7,7 @@
 fit.subgroup(x, y, trt, propensity.func, loss = c("sq_loss_lasso",
   "logistic_loss_lasso", "cox_loss_lasso", "sq_loss_lasso_gam",
   "logistic_loss_lasso_gam", "sq_loss_gam", "logistic_loss_gam", "sq_loss_gbm",
-  "abs_loss_gbm", "huberized_loss_gbm", "logistic_loss_gbm"),
+  "abs_loss_gbm", "huberized_loss_gbm", "logistic_loss_gbm", "cox_loss_gbm"),
   method = c("weighting", "a_learning"), cutpoint = 0,
   larger.outcome.better = TRUE, retcall = TRUE, ...)
 }
@@ -46,6 +46,7 @@ is complex.
     \item{\code{"abs_loss_gbm"}}{ - M(y, v) = |v - y| with gradient-boosted decision trees model}
     \item{\code{"huberized_loss_gbm"}}{ - M corresponds to Huberized hinge loss (for binary outcomes) with gradient-boosted decision trees model}
     \item{\code{"logistic_loss_gbm"}}{ - M(y, v) = y * log(1 + exp{-v}) with gradient-boosted decision trees model}
+    \item{\code{"cox_loss_gbm"}}{ - M corresponds to the negative partial likelihood of the cox model with gradient-boosted decision trees model}
 }}
 
 \item{method}{subgroup ID model type. Either the weighting or A-learning method of Chen et al, (2017)}

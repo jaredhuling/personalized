@@ -46,7 +46,7 @@ $$L_A(f) = \frac{1}{n}\sum_{i = 1}^n (Y_i - {\{(T_i+1)/2 -\pi(x_i)\} } {\times f
 The `personalized` package offers a flexible range of choices both for the form of $f(X)$ and also for the loss function $M(y, v)$. Every choice of $f$ and $M$ can be used for either the weighting method or for the A-learning method. In this package, we limit the use of $M$ to natural choices corresponding to the type of outcome. For example, the squared error loss $M(y, v) = (v - y) ^ 2$ corresponds to continuous responses; the logistic loss $M(y, v) = y \cdot log(1 + \exp\{-v\})$ corresponds to binary outcomes, and the loss associated with the negative partial likelihood of the Cox proportional hazards model corresponds to time-to-event outcomes.
 
 ### Choice of $f$ 
-The choices of $f$ offered in the `personalized` package are varied. A familiar, interpretable choice of $f(X)$ is $X^T\beta$. Also offered is an additive model, i.e. $f(X) = \sum_{j = 1}^pf_j(X_j)$; this option is accessed through use of the `mgcv` package, which provides estimation procedures for generalized additive models (GAMs). Another flexible, but less interpretable choice offered here is related to gradient boosted decision trees, which model $f$ as $f(X) = \sum_{k = 1}^Kf_K(X)$, where each $f_K$ is a decision tree model.
+The choices of $f$ offered in the `personalized` package are varied. A familiar, interpretable choice of $f(X)$ is $X^T\beta$. Also offered is an additive model, i.e. $f(X) = \sum_{j = 1}^pf_j(X_j)$; this option is accessed through use of the `mgcv` package, which provides estimation procedures for generalized additive models (GAMs). Another flexible, but less interpretable choice offered here is related to gradient boosted decision trees, which model $f$ as $f(X) = \sum_{k = 1}^Kf_k(X)$, where each $f_k$ is a decision tree model.
 
 ### Variable Selection
 For subgroup identification models with $f(X) = X^T\beta$, the `personalized` package also allows for variable selection. Instead of minimizing $L_W(f)$ or $L_A(f)$, we instead minimize a penalized version: $L_W(f) + \lambda||\beta||_1$ or $L_A(f) + \lambda||\beta||_1$.
@@ -176,6 +176,10 @@ The propensity score, $\pi(x) = Pr(T = 1 | X = x)$ is a crucial component of the
 
 ### Observational Studies
 
+For data from observational studies, the user must construct a model for the propensity score. Typically this is done usine a logistic regression model with 
+
+$$ \mbox{logit}(\pi(X)) = \mbox{logit} Pr(T = 1 | X) = X^T\beta.$$
+When this model is not appropriate, users may use a more flexible model, or utilize variable selection techniques if there are a large number of covariates. More details on how this is implemented are documented within the `fit.subgroup()` documentation below.
 
 ### Randomized Controlled Trials
 
@@ -342,6 +346,7 @@ subgrp.bin
 The `loss` argument options that are available for continuous outcomes are:
 
 - `'cox_loss_lasso'`
+- `'cox_loss_gbm'`
 
 First we will generate time-to-event outcomes to illustrate usage of the `fit.subgroup()` model.
 
@@ -375,6 +380,19 @@ summary(subgrp.cox)
 
 ### Plotting Fitted Models
 
+The outcomes (or average outcomes) of patients within different subgroups can be plotted using the `plot()` function. In particular, this function plots patient outcomes by treatment group within each subgroup of patients (those recommended the treatment by the model and those recommended the control by the model). Boxplots of the outcomes can be plotted in addition to densities and and interaction plot of the average outcomes within each of these groups. They can all be generated like the following:
+
+```{r plot_ex_model_1}
+plot(subgrp.model)
+```
+
+```{r plot_ex_model_2}
+plot(subgrp.model, type = "density")
+```
+
+```{r plot_ex_model_3}
+plot(subgrp.model, type = "interaction")
+```
 
 Multiple models can be visually compared using the `plotCompare()` function, which offers the same plotting options as the `plot.subgroup_fitted()` function.  
 
@@ -441,6 +459,15 @@ validation3
 
 ### Plotting Validated Models
 
+The results for each of the iterations of either the bootstrap of the training and testing partitioning procedure can be plotted using the `plot()` function similarly to how the `plot()` function can be used for fitted objects from `fit.subgroup()`. Similarly, boxplots, density plots, and interaction plots are all available through the `type` argument:
+
+```{r plot_ex_model_1a}
+plot(validation)
+```
+
+```{r plot_ex_model_1b}
+plot(validation, type = "density")
+```
 
 Multiple validated models can be visually compared using the `plotCompare()` function, which offers the same plotting options as the `plot.subgroup_validated()` function. Here we compare the model fitted using `sq_loss_lasso` to the one fitted using `sq_loss_lasso_gam`:
 

@@ -82,7 +82,7 @@
 <h3 class="hasAnchor">
 <a href="#choice-of-f" class="anchor"></a>Choice of <span class="math inline">\(f\)</span>
 </h3>
-<p>The choices of <span class="math inline">\(f\)</span> offered in the <code>personalized</code> package are varied. A familiar, interpretable choice of <span class="math inline">\(f(X)\)</span> is <span class="math inline">\(X^T\beta\)</span>. Also offered is an additive model, i.e. <span class="math inline">\(f(X) = \sum_{j = 1}^pf_j(X_j)\)</span>; this option is accessed through use of the <code>mgcv</code> package, which provides estimation procedures for generalized additive models (GAMs). Another flexible, but less interpretable choice offered here is related to gradient boosted decision trees, which model <span class="math inline">\(f\)</span> as <span class="math inline">\(f(X) = \sum_{k = 1}^Kf_K(X)\)</span>, where each <span class="math inline">\(f_K\)</span> is a decision tree model.</p>
+<p>The choices of <span class="math inline">\(f\)</span> offered in the <code>personalized</code> package are varied. A familiar, interpretable choice of <span class="math inline">\(f(X)\)</span> is <span class="math inline">\(X^T\beta\)</span>. Also offered is an additive model, i.e. <span class="math inline">\(f(X) = \sum_{j = 1}^pf_j(X_j)\)</span>; this option is accessed through use of the <code>mgcv</code> package, which provides estimation procedures for generalized additive models (GAMs). Another flexible, but less interpretable choice offered here is related to gradient boosted decision trees, which model <span class="math inline">\(f\)</span> as <span class="math inline">\(f(X) = \sum_{k = 1}^Kf_k(X)\)</span>, where each <span class="math inline">\(f_k\)</span> is a decision tree model.</p>
 </div>
 <div id="variable-selection" class="section level3">
 <h3 class="hasAnchor">
@@ -231,6 +231,8 @@ validation</code></pre></div>
 <div id="observational-studies" class="section level3">
 <h3 class="hasAnchor">
 <a href="#observational-studies" class="anchor"></a>Observational Studies</h3>
+<p>For data from observational studies, the user must construct a model for the propensity score. Typically this is done usine a logistic regression model with</p>
+<p><span class="math display">\[ \mbox{logit}(\pi(X)) = \mbox{logit} Pr(T = 1 | X) = X^T\beta.\]</span> When this model is not appropriate, users may use a more flexible model, or utilize variable selection techniques if there are a large number of covariates. More details on how this is implemented are documented within the <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> documentation below.</p>
 </div>
 <div id="randomized-controlled-trials" class="section level3">
 <h3 class="hasAnchor">
@@ -455,6 +457,7 @@ y.binary &lt;-<span class="st"> </span><span class="dv">1</span> *<span class="s
 <p>The <code>loss</code> argument options that are available for continuous outcomes are:</p>
 <ul>
 <li><code>'cox_loss_lasso'</code></li>
+<li><code>'cox_loss_gbm'</code></li>
 </ul>
 <p>First we will generate time-to-event outcomes to illustrate usage of the <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> model.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># create time-to-event outcomes</span>
@@ -501,6 +504,13 @@ subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 <div id="plotting-fitted-models" class="section level3">
 <h3 class="hasAnchor">
 <a href="#plotting-fitted-models" class="anchor"></a>Plotting Fitted Models</h3>
+<p>The outcomes (or average outcomes) of patients within different subgroups can be plotted using the <code>plot()</code> function. In particular, this function plots patient outcomes by treatment group within each subgroup of patients (those recommended the treatment by the model and those recommended the control by the model). Boxplots of the outcomes can be plotted in addition to densities and and interaction plot of the average outcomes within each of these groups. They can all be generated like the following:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(subgrp.model)</code></pre></div>
+<p><img src="usage_of_the_personalized_package_files/figure-html/plot_ex_model_1-1.png" width="672"></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(subgrp.model, <span class="dt">type =</span> <span class="st">"density"</span>)</code></pre></div>
+<p><img src="usage_of_the_personalized_package_files/figure-html/plot_ex_model_2-1.png" width="672"></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(subgrp.model, <span class="dt">type =</span> <span class="st">"interaction"</span>)</code></pre></div>
+<p><img src="usage_of_the_personalized_package_files/figure-html/plot_ex_model_3-1.png" width="672"></p>
 <p>Multiple models can be visually compared using the <code><a href="../reference/plotCompare.html">plotCompare()</a></code> function, which offers the same plotting options as the <code><a href="../reference/plot.html">plot.subgroup_fitted()</a></code> function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotCompare.html">plotCompare</a></span>(subgrp.model, subgrp.model2)</code></pre></div>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_compare_ex2-1.png" width="672"></p>
@@ -579,6 +589,11 @@ validation3</code></pre></div>
 <div id="plotting-validated-models" class="section level3">
 <h3 class="hasAnchor">
 <a href="#plotting-validated-models" class="anchor"></a>Plotting Validated Models</h3>
+<p>The results for each of the iterations of either the bootstrap of the training and testing partitioning procedure can be plotted using the <code>plot()</code> function similarly to how the <code>plot()</code> function can be used for fitted objects from <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code>. Similarly, boxplots, density plots, and interaction plots are all available through the <code>type</code> argument:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(validation)</code></pre></div>
+<p><img src="usage_of_the_personalized_package_files/figure-html/plot_ex_model_1a-1.png" width="672"></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(validation, <span class="dt">type =</span> <span class="st">"density"</span>)</code></pre></div>
+<p><img src="usage_of_the_personalized_package_files/figure-html/plot_ex_model_1b-1.png" width="672"></p>
 <p>Multiple validated models can be visually compared using the <code><a href="../reference/plotCompare.html">plotCompare()</a></code> function, which offers the same plotting options as the <code><a href="../reference/plot.html">plot.subgroup_validated()</a></code> function. Here we compare the model fitted using <code>sq_loss_lasso</code> to the one fitted using <code>sq_loss_lasso_gam</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotCompare.html">plotCompare</a></span>(validation, validation2)</code></pre></div>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_compare_ex3-1.png" width="672"></p>

@@ -158,12 +158,12 @@ validate.subgroup <- function(model,
             # need to handle differently if outcome is a matrix
             if (is.matrix(y))
             {
-                model$call$y    <- y[samp.idx,]
-                y.test   <- y[-samp.idx,]
+                model$call$y <- y[samp.idx,]
+                y.test       <- y[-samp.idx,]
             } else
             {
-                model$call$y    <- y[samp.idx]
-                y.test   <- y[-samp.idx]
+                model$call$y <- y[samp.idx]
+                y.test       <- y[-samp.idx]
             }
             trt.test <- trt[-samp.idx]
 
