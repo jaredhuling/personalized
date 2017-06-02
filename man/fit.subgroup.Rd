@@ -8,8 +8,8 @@ fit.subgroup(x, y, trt, propensity.func, loss = c("sq_loss_lasso",
   "logistic_loss_lasso", "cox_loss_lasso", "sq_loss_lasso_gam",
   "logistic_loss_lasso_gam", "sq_loss_gam", "logistic_loss_gam", "sq_loss_gbm",
   "abs_loss_gbm", "huberized_loss_gbm", "logistic_loss_gbm", "cox_loss_gbm"),
-  method = c("weighting", "a_learning"), cutpoint = 0,
-  larger.outcome.better = TRUE, retcall = TRUE, ...)
+  method = c("weighting", "a_learning"), augment.func = NULL,
+  cutpoint = 0, larger.outcome.better = TRUE, retcall = TRUE, ...)
 }
 \arguments{
 \item{x}{The design matrix (not including intercept term)}
@@ -50,6 +50,14 @@ is complex.
 }}
 
 \item{method}{subgroup ID model type. Either the weighting or A-learning method of Chen et al, (2017)}
+
+\item{augment.func}{function which inputs the response \code{y}, the covariates \code{x}, and \code{trt} and outputs
+predicted values for the response using a model constructed with \code{x}. \code{augment.func()} can also be simply
+a function of \code{x} and \code{y}. This function is used for efficiency augmentation.
+When the form of the augmentation function is correct, it can provide efficient estimation of the subgroups
+Example: \code{augment.func <- function(x, y) {lmod <- lm(y ~ x); return(fitted(lmod))}}
+
+Example 2: \code{augment.func <- function(x, y, trt) {lmod <- lm(y ~ x + trt); return(fitted(lmod))}}}
 
 \item{cutpoint}{numeric value for patients with benefit scores above which
 (or below which if \code{larger.outcome.better = FALSE})

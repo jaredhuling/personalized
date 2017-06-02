@@ -36,6 +36,13 @@
 #'     \item{\code{"cox_loss_gbm"}}{ - M corresponds to the negative partial likelihood of the cox model with gradient-boosted decision trees model}
 #' }
 #' @param method subgroup ID model type. Either the weighting or A-learning method of Chen et al, (2017)
+#' @param augment.func function which inputs the response \code{y}, the covariates \code{x}, and \code{trt} and outputs
+#' predicted values for the response using a model constructed with \code{x}. \code{augment.func()} can also be simply
+#' a function of \code{x} and \code{y}. This function is used for efficiency augmentation.
+#' When the form of the augmentation function is correct, it can provide efficient estimation of the subgroups
+#' Example: \code{augment.func <- function(x, y) {lmod <- lm(y ~ x); return(fitted(lmod))}}
+#'
+#' Example 2: \code{augment.func <- function(x, y, trt) {lmod <- lm(y ~ x + trt); return(fitted(lmod))}}
 #' @param cutpoint numeric value for patients with benefit scores above which
 #' (or below which if \code{larger.outcome.better = FALSE})
 #' will be recommended to be in the treatment group
@@ -157,6 +164,7 @@ fit.subgroup <- function(x,
                                         "logistic_loss_gbm",
                                         "cox_loss_gbm"),
                          method     = c("weighting", "a_learning"),
+                         augment.func = NULL,
                          cutpoint   = 0,
                          larger.outcome.better = TRUE,
                          retcall    = TRUE,
@@ -207,6 +215,55 @@ fit.subgroup <- function(x,
         length(grep("huberized_loss", loss)) > 0)
     {
         family <- "binomial"
+    }
+
+
+
+    # check to make sure arguments of augment.func are correct
+    if (!is.null(augment.func))
+    {
+        augmentfunc.names <- sort(names(formals(augment.func)))
+        if (length(augmentfunc.names) == 3)
+        {
+            if (any(augmentfunc.names != c("trt", "x", "y")))
+            {
+                stop("arguments of augment.func() should be 'trt', 'x', and 'y'")
+            }
+        } else if (length(augmentfunc.names) == 2)
+        {
+            if (any(augmentfunc.names != c("x", "y")))
+            {
+                stop("arguments of augment.func() should be 'x' and 'y'")
+            }
+            augment.func2 <- augment.func
+            augment.func  <- function(trt, x, y) augment.func2(x = x, y = y)
+        } else
+        {
+            stop("augment.func() should only have either two arguments: 'x' and 'y', or three arguments:
+                 'trt', 'x', and 'y'")
+        }
+    }
+
+
+    # check to make sure arguments of augment.func are correct
+    if (family == "gaussian" & !is.null(augment.func))
+    {
+        B.x   <- unname(drop(augment.func(trt = trt, x = x, y = y)))
+
+        if (NROW(B.x) != NROW(y))
+        {
+            stop("augment.func() should return the same number of predictions as observations in y")
+        }
+
+        y.adj <- y - B.x
+    } else
+    {
+        y.adj <- y
+    }
+
+    if (!is.null(augment.func) & family != "gaussian")
+    {
+        warning("Efficiency augmentation not available for non-continuous outcomes yet. No augmentation applied.")
     }
 
     larger.outcome.better <- as.logical(larger.outcome.better[1])
@@ -272,7 +329,7 @@ fit.subgroup <- function(x,
 
     # identify correct fitting function and call it
     fit_fun      <- paste0("fit_", loss)
-    fitted.model <- do.call(fit_fun, list(x = x.tilde, y = y, wts = wts, family = family, ...))
+    fitted.model <- do.call(fit_fun, list(x = x.tilde, y = y.adj, wts = wts, family = family, ...))
 
     # save extra results
     fitted.model$call   <- this.call
