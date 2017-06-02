@@ -376,7 +376,39 @@ The subgroup treatment effects are estimated using the restricted mean statistic
 summary(subgrp.cox)
 ```
 
+### Efficiency Augmentation
 
+The `personalized` package also allows for efficiency augmentation of the subgroup identification models for continuous outcomes. The basic idea of efficiency augmentation is to construct a model for the main effects of the model and shift the outcome based on these main effects. The resulting estimator based on the shifted outcome can be more efficient than using the outcome itself.
+
+In the `personalized` package, this involves providing `fit.subgroup()` a function which inputs the covariate information `x` and the outcomes `y` and outputs a prediction for `y` based on `x`. The following is an example of such a function:
+
+```{r efficiency_func_example}
+adjustment.func <- function(x, y)
+{
+    df.x  <- data.frame(x)
+    
+    # add all squared terms to model
+    form  <- eval(paste(" ~ -1 + ", 
+                paste(paste('poly(', colnames(df.x), ', 2)', sep=''), 
+                      collapse=" + ")))
+    mm    <- model.matrix(as.formula(form), data = df.x)
+    cvmod <- cv.glmnet(y = y, x = mm, nfolds = 10)
+    predictions <- predict(cvmod, newx = mm, s = "lambda.min")
+}
+```
+
+Then this can be used in `fit.subgroup()` by passing the function to the argument `augment.func` like the following:
+```{r efficiency_ex}
+
+subgrp.model.eff <- fit.subgroup(x = x, y = y,
+                             trt = trt,
+                             propensity.func = prop.func,
+                             loss   = "sq_loss_lasso",
+                             augment.func = adjustment.func,
+                             nfolds = 10)              # option for cv.glmnet
+
+summary(subgrp.model.eff)
+```
 
 ### Plotting Fitted Models
 
@@ -397,7 +429,7 @@ plot(subgrp.model, type = "interaction")
 Multiple models can be visually compared using the `plotCompare()` function, which offers the same plotting options as the `plot.subgroup_fitted()` function.  
 
 ```{r plot_compare_ex2}
-plotCompare(subgrp.model, subgrp.model2)
+plotCompare(subgrp.model, subgrp.model.eff)
 ```
 
 ## Validating Subgroup Identification Models
@@ -421,14 +453,14 @@ The main object which needs to be passed to `validate.subgroup()` is a fitted ob
 ```{r train_test_ex}
 
 # check that the object is an object returned by fit.subgroup()
-class(subgrp.model2)
+class(subgrp.model.eff)
 
-validation2 <- validate.subgroup(subgrp.model, 
+validation.eff <- validate.subgroup(subgrp.model.eff, 
                                  B = 25L,  # specify the number of replications
                                  method = "training_test_replication",
                                  train.fraction = 0.75)
 
-validation2
+validation.eff
 ```
 
 ### Bootstrap Bias Correction
@@ -469,10 +501,10 @@ plot(validation)
 plot(validation, type = "density")
 ```
 
-Multiple validated models can be visually compared using the `plotCompare()` function, which offers the same plotting options as the `plot.subgroup_validated()` function. Here we compare the model fitted using `sq_loss_lasso` to the one fitted using `sq_loss_lasso_gam`:
+Multiple validated models can be visually compared using the `plotCompare()` function, which offers the same plotting options as the `plot.subgroup_validated()` function. Here we compare the model fitted using `sq_loss_lasso` to the one fitted using `sq_loss_lasso` and efficiency augmentation:
 
 ```{r plot_compare_ex3}
-plotCompare(validation, validation2)
+plotCompare(validation, validation.eff)
 ```
 
-
+We can see above that the model with efficiency augmentation finds subgroups with more impactful treatment effects.

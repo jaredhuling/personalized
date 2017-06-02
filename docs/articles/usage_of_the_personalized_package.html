@@ -50,7 +50,7 @@
       <h1>Usage of the Personalized Package</h1>
                         <h4 class="author">Jared Huling</h4>
             
-            <h4 class="date">2017-05-31</h4>
+            <h4 class="date">2017-06-02</h4>
           </div>
 
     
@@ -501,6 +501,58 @@ subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 ## V11 -0.022057802
 ## V50  0.019614042</code></pre>
 </div>
+<div id="efficiency-augmentation" class="section level3">
+<h3 class="hasAnchor">
+<a href="#efficiency-augmentation" class="anchor"></a>Efficiency Augmentation</h3>
+<p>The <code>personalized</code> package also allows for efficiency augmentation of the subgroup identification models for continuous outcomes. The basic idea of efficiency augmentation is to construct a model for the main effects of the model and shift the outcome based on these main effects. The resulting estimator based on the shifted outcome can be more efficient than using the outcome itself.</p>
+<p>In the <code>personalized</code> package, this involves providing <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> a function which inputs the covariate information <code>x</code> and the outcomes <code>y</code> and outputs a prediction for <code>y</code> based on <code>x</code>. The following is an example of such a function:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">adjustment.func &lt;-<span class="st"> </span>function(x, y)
+{
+    df.x  &lt;-<span class="st"> </span><span class="kw">data.frame</span>(x)
+    
+    <span class="co"># add all squared terms to model</span>
+    form  &lt;-<span class="st"> </span><span class="kw">eval</span>(<span class="kw">paste</span>(<span class="st">" ~ -1 + "</span>, 
+                <span class="kw">paste</span>(<span class="kw">paste</span>(<span class="st">'poly('</span>, <span class="kw">colnames</span>(df.x), <span class="st">', 2)'</span>, <span class="dt">sep=</span><span class="st">''</span>), 
+                      <span class="dt">collapse=</span><span class="st">" + "</span>)))
+    mm    &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="kw">as.formula</span>(form), <span class="dt">data =</span> df.x)
+    cvmod &lt;-<span class="st"> </span><span class="kw">cv.glmnet</span>(<span class="dt">y =</span> y, <span class="dt">x =</span> mm, <span class="dt">nfolds =</span> <span class="dv">10</span>)
+    predictions &lt;-<span class="st"> </span><span class="kw">predict</span>(cvmod, <span class="dt">newx =</span> mm, <span class="dt">s =</span> <span class="st">"lambda.min"</span>)
+}</code></pre></div>
+<p>Then this can be used in <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> by passing the function to the argument <code>augment.func</code> like the following:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">subgrp.model.eff &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y,
+                             <span class="dt">trt =</span> trt,
+                             <span class="dt">propensity.func =</span> prop.func,
+                             <span class="dt">loss   =</span> <span class="st">"sq_loss_lasso"</span>,
+                             <span class="dt">augment.func =</span> adjustment.func,
+                             <span class="dt">nfolds =</span> <span class="dv">10</span>)              <span class="co"># option for cv.glmnet</span>
+
+<span class="kw">summary</span>(subgrp.model.eff)</code></pre></div>
+<pre><code>## family:  gaussian 
+## loss:    sq_loss_lasso 
+## method:  weighting 
+## 
+## Average Outcomes:
+##                  Recommended Trt   Recommended Ctrl
+## Received Trt  -10.4651 (n = 303) -16.1294 (n = 287)
+## Received Ctrl -18.7664 (n = 212)   -6.693 (n = 198)
+## 
+##  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
+##                   8.3013 (n = 515)                   9.4364 (n = 485) 
+## 
+## Benefit score quantiles: 
+##       0%      25%      50%      75%     100% 
+## -11.5976  -2.4900   0.1272   2.6141  10.5525 
+## 
+## 6 variables selected by the lasso (cross validation criterion).
+## 
+##         Estimate
+## V2   0.861687172
+## V3  -0.549912434
+## V11 -0.728651654
+## V20 -0.008783494
+## V30 -0.037449897
+## V47 -0.134335144</code></pre>
+</div>
 <div id="plotting-fitted-models" class="section level3">
 <h3 class="hasAnchor">
 <a href="#plotting-fitted-models" class="anchor"></a>Plotting Fitted Models</h3>
@@ -512,7 +564,7 @@ subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(subgrp.model, <span class="dt">type =</span> <span class="st">"interaction"</span>)</code></pre></div>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_ex_model_3-1.png" width="672"></p>
 <p>Multiple models can be visually compared using the <code><a href="../reference/plotCompare.html">plotCompare()</a></code> function, which offers the same plotting options as the <code><a href="../reference/plot.html">plot.subgroup_fitted()</a></code> function.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotCompare.html">plotCompare</a></span>(subgrp.model, subgrp.model2)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotCompare.html">plotCompare</a></span>(subgrp.model, subgrp.model.eff)</code></pre></div>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_compare_ex2-1.png" width="672"></p>
 </div>
 </div>
@@ -531,14 +583,14 @@ subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 <p>The first method is prediction-based. For each replication in this procedure, data are randomly partitioned into a training and testing portion. For each replocation the subgroup identification model is estimated using the training procedure and the subgroup treatment effects are estimated using the test data. This method requires two arguments to be passed to <code><a href="../reference/validate.subgroup.html">validate.subgroup()</a></code>. The first argument is <code>B</code>, the number of replications and the second argument is <code>train.fraction</code>, which is the proportion of all samples which will be used for training (hence <code>1 - train.fraction</code> is the portion of samples used for testing).</p>
 <p>The main object which needs to be passed to <code><a href="../reference/validate.subgroup.html">validate.subgroup()</a></code> is a fitted object returned by the <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code>. Note that in order to validate a fitted object from <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code>, the model must be fit with the <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> <code>retcall</code> set to <code>TRUE</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># check that the object is an object returned by fit.subgroup()</span>
-<span class="kw">class</span>(subgrp.model2)</code></pre></div>
+<span class="kw">class</span>(subgrp.model.eff)</code></pre></div>
 <pre><code>## [1] "subgroup_fitted"</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">validation2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/validate.subgroup.html">validate.subgroup</a></span>(subgrp.model, 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">validation.eff &lt;-<span class="st"> </span><span class="kw"><a href="../reference/validate.subgroup.html">validate.subgroup</a></span>(subgrp.model.eff, 
                                  <span class="dt">B =</span> 25L,  <span class="co"># specify the number of replications</span>
                                  <span class="dt">method =</span> <span class="st">"training_test_replication"</span>,
                                  <span class="dt">train.fraction =</span> <span class="fl">0.75</span>)
 
-validation2</code></pre></div>
+validation.eff</code></pre></div>
 <pre><code>## family:  gaussian 
 ## loss:    sq_loss_lasso 
 ## method:  weighting 
@@ -547,11 +599,11 @@ validation2</code></pre></div>
 ## 
 ## Average Test Set Outcomes:
 ##                      Recommended Trt       Recommended Ctrl
-## Received Trt  -10.8837 (SE = 2.7942)  -15.4978 (SE = 2.669)
-## Received Ctrl -14.6538 (SE = 2.8199) -11.8643 (SE = 3.5639)
+## Received Trt  -10.1769 (SE = 2.8146) -15.3119 (SE = 2.5351)
+## Received Ctrl -18.6555 (SE = 2.4117)  -6.7609 (SE = 2.5968)
 ## 
 ##  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-##               3.7701 (SE = 3.7377)               3.6335 (SE = 4.2794)</code></pre>
+##               8.4785 (SE = 3.8957)               8.5509 (SE = 4.3826)</code></pre>
 </div>
 <div id="bootstrap-bias-correction" class="section level3">
 <h3 class="hasAnchor">
@@ -580,11 +632,11 @@ validation3</code></pre></div>
 ## 
 ## Average Bootstrap Bias-Corrected Outcomes:
 ##                      Recommended Trt       Recommended Ctrl
-## Received Trt   -9.0586 (SE = 1.4467)  -17.9544 (SE = 2.004)
-## Received Ctrl -14.9024 (SE = 1.4783) -10.9613 (SE = 1.3971)
+## Received Trt   -9.1345 (SE = 1.4925) -17.5627 (SE = 1.4851)
+## Received Ctrl -15.2528 (SE = 1.9605)  -11.3529 (SE = 1.649)
 ## 
 ##  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-##               5.8437 (SE = 2.1738)               6.9931 (SE = 2.5126)</code></pre>
+##               6.1182 (SE = 2.6145)               6.2098 (SE = 2.3404)</code></pre>
 </div>
 <div id="plotting-validated-models" class="section level3">
 <h3 class="hasAnchor">
@@ -594,9 +646,10 @@ validation3</code></pre></div>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_ex_model_1a-1.png" width="672"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(validation, <span class="dt">type =</span> <span class="st">"density"</span>)</code></pre></div>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_ex_model_1b-1.png" width="672"></p>
-<p>Multiple validated models can be visually compared using the <code><a href="../reference/plotCompare.html">plotCompare()</a></code> function, which offers the same plotting options as the <code><a href="../reference/plot.html">plot.subgroup_validated()</a></code> function. Here we compare the model fitted using <code>sq_loss_lasso</code> to the one fitted using <code>sq_loss_lasso_gam</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotCompare.html">plotCompare</a></span>(validation, validation2)</code></pre></div>
+<p>Multiple validated models can be visually compared using the <code><a href="../reference/plotCompare.html">plotCompare()</a></code> function, which offers the same plotting options as the <code><a href="../reference/plot.html">plot.subgroup_validated()</a></code> function. Here we compare the model fitted using <code>sq_loss_lasso</code> to the one fitted using <code>sq_loss_lasso</code> and efficiency augmentation:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotCompare.html">plotCompare</a></span>(validation, validation.eff)</code></pre></div>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_compare_ex3-1.png" width="672"></p>
+<p>We can see above that the model with efficiency augmentation finds subgroups with more impactful treatment effects.</p>
 </div>
 </div>
 </div>

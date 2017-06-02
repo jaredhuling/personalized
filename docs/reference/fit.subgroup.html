@@ -82,8 +82,8 @@
   <span class='st'>"logistic_loss_lasso"</span>, <span class='st'>"cox_loss_lasso"</span>, <span class='st'>"sq_loss_lasso_gam"</span>,
   <span class='st'>"logistic_loss_lasso_gam"</span>, <span class='st'>"sq_loss_gam"</span>, <span class='st'>"logistic_loss_gam"</span>, <span class='st'>"sq_loss_gbm"</span>,
   <span class='st'>"abs_loss_gbm"</span>, <span class='st'>"huberized_loss_gbm"</span>, <span class='st'>"logistic_loss_gbm"</span>, <span class='st'>"cox_loss_gbm"</span>),
-  <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"weighting"</span>, <span class='st'>"a_learning"</span>), <span class='kw'>cutpoint</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>larger.outcome.better</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>retcall</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"weighting"</span>, <span class='st'>"a_learning"</span>), <span class='kw'>augment.func</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>cutpoint</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>larger.outcome.better</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>retcall</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -137,6 +137,15 @@ is complex.</p><ul>
     <tr>
       <th>method</th>
       <td><p>subgroup ID model type. Either the weighting or A-learning method of Chen et al, (2017)</p></td>
+    </tr>
+    <tr>
+      <th>augment.func</th>
+      <td><p>function which inputs the response <code>y</code>, the covariates <code>x</code>, and <code>trt</code> and outputs
+predicted values for the response using a model constructed with <code>x</code>. <code>augment.func()</code> can also be simply
+a function of <code>x</code> and <code>y</code>. This function is used for efficiency augmentation.
+When the form of the augmentation function is correct, it can provide efficient estimation of the subgroups
+Example: <code>augment.func &lt;- function(x, y) {lmod &lt;- lm(y ~ x); return(fitted(lmod))}</code></p>
+<p>Example 2: <code>augment.func &lt;- function(x, y, trt) {lmod &lt;- lm(y ~ x + trt); return(fitted(lmod))}</code></p></td>
     </tr>
     <tr>
       <th>cutpoint</th>
