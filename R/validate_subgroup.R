@@ -121,7 +121,8 @@ validate.subgroup <- function(model,
         stop("train.fraction must be between 0 and 1")
     }
 
-    if (is.null(model$call)) stop("retcall argument must be set to TRUE for fitted model")
+    if (is.null(model$call)) stop("retcall argument must be set to TRUE for fitted model
+                                  to use validate.subgroup()")
 
 
     # no need to store passed arguments for the bootstrap or training/testing replications
