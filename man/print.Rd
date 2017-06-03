@@ -16,7 +16,7 @@
   digits = max(getOption("digits") - 3, 3), ...)
 }
 \arguments{
-\item{x}{a fitted object from either \code{fit.subgroup} or \code{validate.subgroup}}
+\item{x}{a fitted object from either \code{fit.subgroup}, \code{validate.subgroup}, or \code{summaryize.subgroups()}}
 
 \item{digits}{minimal number of significant digits to print.}
 
@@ -25,12 +25,6 @@
 \item{p.value}{a p-value threshold for mean differences below which covariates will be displayed. For example,
 setting \code{p.value = 0.05} will display all covariates that have a significant difference between subgroups
  with p-value less than 0.05. Defaults to 1, which displays all covariates}
-
-\item{x}{an object returned by from either \code{summaryize.subgroups()}}
-
-\item{digits}{minimal number of significant digits to print.}
-
-\item{...}{further arguments passed to or from \code{\link[base]{print.default}}.}
 }
 \description{
 Prints results for estimated subgroup treatment effects
@@ -42,5 +36,4 @@ Prints summary results for estimated subgroup treatment effects
 and \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models.
 
 \code{\link[personalized]{summarize.subgroups}} for function which summarizes subgroup covariate values
-and \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models.
 }

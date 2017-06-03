@@ -7,7 +7,7 @@
 #' @seealso \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models.
 #' @importFrom stats t.test chisq.test
 #' @export
-summarize.subgroups <- function(object, digits = max(getOption('digits')-3, 3), ...)
+summarize.subgroups <- function(object)
 {
 
     if (is.null(object$call)) stop("retcall argument must be set to TRUE for fitted model
@@ -81,14 +81,10 @@ summarize.subgroups <- function(object, digits = max(getOption('digits')-3, 3), 
 #'
 #' @description Prints summary results for estimated subgroup treatment effects
 #'
-#' @param x an object returned by from either \code{summaryize.subgroups()}
 #' @param p.value a p-value threshold for mean differences below which covariates will be displayed. For example,
 #' setting \code{p.value = 0.05} will display all covariates that have a significant difference between subgroups
 #'  with p-value less than 0.05. Defaults to 1, which displays all covariates
-#' @param digits minimal number of significant digits to print.
-#' @param ... further arguments passed to or from \code{\link[base]{print.default}}.
 #' @seealso \code{\link[personalized]{summarize.subgroups}} for function which summarizes subgroup covariate values
-#' and \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models.
 #' @rdname print
 #' @export
 print.subgroup_summary <- function(x, p.value = 1, digits = max(getOption('digits')-3, 3), ...)

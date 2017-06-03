@@ -4,7 +4,7 @@
 \alias{summarize.subgroups}
 \title{Summarizing covariates within estimated subgroups}
 \usage{
-summarize.subgroups(object, digits = max(getOption("digits") - 3, 3), ...)
+summarize.subgroups(object)
 }
 \arguments{
 \item{object}{a fitted object from \code{fit.subgroup()}}
