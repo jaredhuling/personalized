@@ -394,6 +394,7 @@ adjustment.func <- function(x, y)
     mm    <- model.matrix(as.formula(form), data = df.x)
     cvmod <- cv.glmnet(y = y, x = mm, nfolds = 10)
     predictions <- predict(cvmod, newx = mm, s = "lambda.min")
+    predictions
 }
 ```
 

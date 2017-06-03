@@ -50,7 +50,7 @@
       <h1>Usage of the Personalized Package</h1>
                         <h4 class="author">Jared Huling</h4>
             
-            <h4 class="date">2017-06-02</h4>
+            <h4 class="date">2017-06-03</h4>
           </div>
 
     
@@ -164,15 +164,15 @@ prop.func &lt;-<span class="st"> </span>function(x, trt)
 ## 
 ## 8 variables selected by the lasso (cross validation criterion).
 ## 
-##        Estimate
-## V1   0.05794759
-## V2   0.65747101
-## V3  -0.45725571
-## V6  -0.10531434
-## V11 -0.39937925
-## V13  0.30203536
-## V17  0.24494122
-## V37 -0.17585886</code></pre>
+##     Estimate
+## V1    0.0579
+## V2    0.6575
+## V3   -0.4573
+## V6   -0.1053
+## V11  -0.3994
+## V13   0.3020
+## V17   0.2449
+## V37  -0.1759</code></pre>
 <p>We can then plot the outcomes of patients in the different subgroups:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(subgrp.model)</code></pre></div>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_model-1.png" width="672"></p>
@@ -494,12 +494,12 @@ subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 ## 
 ## 5 variables selected by the lasso (cross validation criterion).
 ## 
-##         Estimate
-## V1   0.009553232
-## V2   0.046273735
-## V3  -0.014153922
-## V11 -0.022057802
-## V50  0.019614042</code></pre>
+##     Estimate
+## V1    0.0096
+## V2    0.0463
+## V3   -0.0142
+## V11  -0.0221
+## V50   0.0196</code></pre>
 </div>
 <div id="efficiency-augmentation" class="section level3">
 <h3 class="hasAnchor">
@@ -517,6 +517,7 @@ subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
     mm    &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="kw">as.formula</span>(form), <span class="dt">data =</span> df.x)
     cvmod &lt;-<span class="st"> </span><span class="kw">cv.glmnet</span>(<span class="dt">y =</span> y, <span class="dt">x =</span> mm, <span class="dt">nfolds =</span> <span class="dv">10</span>)
     predictions &lt;-<span class="st"> </span><span class="kw">predict</span>(cvmod, <span class="dt">newx =</span> mm, <span class="dt">s =</span> <span class="st">"lambda.min"</span>)
+    predictions
 }</code></pre></div>
 <p>Then this can be used in <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> by passing the function to the argument <code>augment.func</code> like the following:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">subgrp.model.eff &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y,
@@ -545,13 +546,13 @@ subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 ## 
 ## 6 variables selected by the lasso (cross validation criterion).
 ## 
-##         Estimate
-## V2   0.861687172
-## V3  -0.549912434
-## V11 -0.728651654
-## V20 -0.008783494
-## V30 -0.037449897
-## V47 -0.134335144</code></pre>
+##     Estimate
+## V2    0.8617
+## V3   -0.5499
+## V11  -0.7287
+## V20  -0.0088
+## V30  -0.0374
+## V47  -0.1343</code></pre>
 </div>
 <div id="plotting-fitted-models" class="section level3">
 <h3 class="hasAnchor">
