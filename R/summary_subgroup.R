@@ -33,7 +33,7 @@ summary.subgroup_fitted <- function(object, digits = max(getOption('digits')-3, 
             coefmat <- matrix(est.coef[sel.idx], ncol = 1)
             rownames(coefmat) <- sel.varnames
             colnames(coefmat) <- "Estimate"
-            print.default(coefmat, quote = FALSE, right = TRUE, na.print = "NA", ...)
+            print.default(round(coefmat, digits), quote = FALSE, right = TRUE, na.print = "NA", ...)
         } else
         {
             cat("No variables selected by the lasso with cross validation. \n\n")

@@ -336,6 +336,7 @@ fit.subgroup <- function(x,
     fitted.model$family <- family
     fitted.model$loss   <- loss
     fitted.model$method <- method
+    fitted.model$larger.outcome.better <- larger.outcome.better
     fitted.model$benefit.scores <- fitted.model$predict(x)
 
     # calculate sizes of subgroups and the

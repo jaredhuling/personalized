@@ -72,7 +72,7 @@ predict.subgroup_fitted <- function(object,
 
     if (type == "trt.group")
     {
-        if (object$call$larger.outcome.better)
+        if (object$larger.outcome.better)
         {
             retval <- 1 * (retval > cutpoint)
         } else
