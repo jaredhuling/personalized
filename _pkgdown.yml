@@ -1,10 +1,10 @@
 template:
   params:
-    bootswatch: flatly
+    bootswatch: cerulean
 
 navbar:
   left:
-  - text: Intro
+  - text: Vignette
     href: articles/usage_of_the_personalized_package.html
   - text: Reference
     href: reference/index.html
