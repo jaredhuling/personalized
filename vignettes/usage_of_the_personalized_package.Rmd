@@ -109,7 +109,7 @@ We can see that our propensity scores have common support.
 ## Fitting Subgroup Identification Model
 
 The next step is to choose and fit a subgroup identification model. In this example, the outcome is continuous, so we choose the squared error loss function. We also choose the model type (either the weighting or the A-learning method). The main function for fitting subgroup identification models is `fit.subgroup`. 
-Since there are many covariates, we choose a loss function with a lasso penalty to select variables. The underlying fitting function here is `cv.glmnet()`. We can pass to `fit.subgroup()` arguments of the `cv.glmnet()` function, such as `nfolds` for the number of cross validation folds. 
+Since there are many covariates, we choose a loss function with a lasso penalty to select variables. The underlying fitting function here is `cv.glmnet()`. We can pass to `fit.subgroup()` arguments of the `cv.glmnet()` function, such as `nfolds` for the number of cross validation folds.
 
 ```{r fit_model}
 subgrp.model <- fit.subgroup(x = x, y = y,
