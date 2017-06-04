@@ -1,35 +1,31 @@
-
 #' Summarizing covariates within estimated subgroups
 #'
 #' @description Summarizes covariate values within the estimated subgroups
-#'
-#' @param object a fitted object from \code{fit.subgroup()}
-#' @seealso \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models.
-#' @importFrom stats t.test chisq.test
+#' @param x a fitted object from \code{fit.subgroup()} or a matrix of covariate values
+#' @param ... optional arguments to \code{summarize.subgroups} methods
 #' @export
-summarize.subgroups <- function(object)
+summarize.subgroups <- function(x, ...) UseMethod("summarize.subgroups")
+
+
+#' @param subgroup vector of indicators of same length as the number of rows in x if x is a matrix.
+#' A value of 1 in the ith position of \code{subgroup} indicates patient i is in the subgroup
+#' of patients recommended the treatment and a value of 0 in the ith position of \code{subgroup} indicates patient i is in the subgroup
+#' of patients recommended the control.
+#' If x is a fitted object returned by \code{fit.subgroup()}, \code{subgroup} is not needed.
+#' @rdname summarize.subgroups
+#' @export
+summarize.subgroups.default <- function(x, subgroup, ...)
 {
-
-    if (is.null(object$call)) stop("retcall argument must be set to TRUE for fitted model
-                                  to use summarize.subgroups()")
-
-
-    # save data objects because they
-    # will be written over by resampled versions later
-    x      <- object$call$x
-    bene.scores <- object$benefit.scores
-    if (object$larger.outcome.better)
-    {
-        subgroup <- 1 * (bene.scores > 0)
-    } else
-    {
-        subgroup <- 1 * (bene.scores < 0)
-    }
-    y      <- object$call$y
+    vnames <- colnames(x)
 
     n.obs  <- NROW(x)
     n.vars <- NCOL(x)
-    vnames <- object$var.names
+
+    if (is.null(vnames))
+    {
+        vnames <- paste0("V", 1:n.vars)
+    }
+
 
     # find which variables are binary
     var.levels <- numeric(n.vars)
@@ -71,10 +67,87 @@ summarize.subgroups <- function(object)
     rownames(compare.mat) <- vnames
 
     compare.mat <- data.frame(compare.mat)
-    colnames(compare.mat) <- c("mean (recomm. trt)", "mean (recomm. ctrl)", "diff",
-                               "p.value", "SE (recomm. trt)", "SE (recomm. ctrl)")
+    colnames(compare.mat) <- c("avg (recom trt)", "avg (recom ctrl)", "diff",
+                               "p.value", "SE (recom trt)", "SE (recom ctrl)")
     class(compare.mat) <- c("subgroup_summary", "data.frame")
     compare.mat
+}
+
+
+#' @seealso \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models.
+#' @rdname summarize.subgroups
+#' @export
+#' @examples
+#' library(personalized)
+#'
+#' set.seed(123)
+#' n.obs  <- 1000
+#' n.vars <- 50
+#' x <- matrix(rnorm(n.obs * n.vars, sd = 3), n.obs, n.vars)
+#'
+#'
+#' # simulate non-randomized treatment
+#' xbetat   <- 0.5 + 0.5 * x[,21] - 0.5 * x[,41]
+#' trt.prob <- exp(xbetat) / (1 + exp(xbetat))
+#' trt01    <- rbinom(n.obs, 1, prob = trt.prob)
+#'
+#' trt      <- 2 * trt01 - 1
+#'
+#' # simulate response
+#' delta <- 2 * (0.5 + x[,2] - x[,3] - x[,11] + x[,1] * x[,12])
+#' xbeta <- x[,1] + x[,11] - 2 * x[,12]^2 + x[,13]
+#' xbeta <- xbeta + delta * trt
+#'
+#' # continuous outcomes
+#' y <- drop(xbeta) + rnorm(n.obs, sd = 2)
+#'
+#' # create function for fitting propensity score model
+#' prop.func <- function(x, trt)
+#' {
+#'     # fit propensity score model
+#'     propens.model <- cv.glmnet(y = trt,
+#'                                x = x, family = "binomial")
+#'     pi.x <- predict(propens.model, s = "lambda.min",
+#'                     newx = x, type = "response")[,1]
+#'     pi.x
+#' }
+#'
+#' subgrp.model <- fit.subgroup(x = x, y = y,
+#'                              trt = trt01,
+#'                              propensity.func = prop.func,
+#'                              loss   = "sq_loss_lasso",
+#'                              nfolds = 5)    # option for cv.glmnet
+#'
+#' comp <- summarize.subgroups(subgrp.model)
+#' print(comp, p.value = 0.01)
+#'
+#' # or we can simply supply the matrix x and the subgroups
+#' comp2 <- summarize.subgroups(x, subgroup = 1 * (subgrp.model$benefit.scores > 0))
+summarize.subgroups.subgroup_fitted <- function(x, ...)
+{
+
+    object <- x
+    if (is.null(object$call)) stop("retcall argument must be set to TRUE for fitted model
+                                    to use summarize.subgroups()")
+
+
+    # save data objects because they
+    # will be written over by resampled versions later
+    x      <- object$call$x
+    bene.scores <- object$benefit.scores
+    if (object$larger.outcome.better)
+    {
+        subgroup <- 1 * (bene.scores > 0)
+    } else
+    {
+        subgroup <- 1 * (bene.scores < 0)
+    }
+
+    vnames <- object$var.names
+
+    colnames(x) <- vnames
+
+    summarize.subgroups.default(x = x, subgroup = subgroup)
 }
 
 #' Printing summary results for fitted subgroup identification models

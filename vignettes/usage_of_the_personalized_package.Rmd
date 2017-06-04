@@ -433,6 +433,21 @@ Multiple models can be visually compared using the `plotCompare()` function, whi
 plotCompare(subgrp.model, subgrp.model.eff)
 ```
 
+### Comparing Subgroups from a Fitted Model
+
+The `summarize.subgroups()` function compares the means of covariate values within the estimated subgroups. P-values for the differences within subgroups are also computed. For continuous variables, the p-value will come from a t-test and for binary variables, the p-value will come from a chi-squared test. 
+
+```{r summarize_sub}
+comp <- summarize.subgroups(subgrp.model)
+```
+
+The user can optionally print only the covariates which have significant differences between subgroups with a p-value below a given threshold like the following:
+
+```{r print_summarize}
+print(comp, p.value = 0.01)
+```
+
+
 ## Validating Subgroup Identification Models
 
 

@@ -2,15 +2,76 @@
 % Please edit documentation in R/summarize_subgroups.R
 \name{summarize.subgroups}
 \alias{summarize.subgroups}
+\alias{summarize.subgroups.default}
+\alias{summarize.subgroups.subgroup_fitted}
 \title{Summarizing covariates within estimated subgroups}
 \usage{
-summarize.subgroups(object)
+summarize.subgroups(x, ...)
+
+\method{summarize.subgroups}{default}(x, subgroup, ...)
+
+\method{summarize.subgroups}{subgroup_fitted}(x, ...)
 }
 \arguments{
-\item{object}{a fitted object from \code{fit.subgroup()}}
+\item{x}{a fitted object from \code{fit.subgroup()} or a matrix of covariate values}
+
+\item{...}{optional arguments to \code{summarize.subgroups} methods}
+
+\item{subgroup}{vector of indicators of same length as the number of rows in x if x is a matrix.
+A value of 1 in the ith position of \code{subgroup} indicates patient i is in the subgroup
+of patients recommended the treatment and a value of 0 in the ith position of \code{subgroup} indicates patient i is in the subgroup
+of patients recommended the control.
+If x is a fitted object returned by \code{fit.subgroup()}, \code{subgroup} is not needed.}
 }
 \description{
 Summarizes covariate values within the estimated subgroups
+}
+\examples{
+library(personalized)
+
+set.seed(123)
+n.obs  <- 1000
+n.vars <- 50
+x <- matrix(rnorm(n.obs * n.vars, sd = 3), n.obs, n.vars)
+
+
+# simulate non-randomized treatment
+xbetat   <- 0.5 + 0.5 * x[,21] - 0.5 * x[,41]
+trt.prob <- exp(xbetat) / (1 + exp(xbetat))
+trt01    <- rbinom(n.obs, 1, prob = trt.prob)
+
+trt      <- 2 * trt01 - 1
+
+# simulate response
+delta <- 2 * (0.5 + x[,2] - x[,3] - x[,11] + x[,1] * x[,12])
+xbeta <- x[,1] + x[,11] - 2 * x[,12]^2 + x[,13]
+xbeta <- xbeta + delta * trt
+
+# continuous outcomes
+y <- drop(xbeta) + rnorm(n.obs, sd = 2)
+
+# create function for fitting propensity score model
+prop.func <- function(x, trt)
+{
+    # fit propensity score model
+    propens.model <- cv.glmnet(y = trt,
+                               x = x, family = "binomial")
+    pi.x <- predict(propens.model, s = "lambda.min",
+                    newx = x, type = "response")[,1]
+    pi.x
+}
+
+subgrp.model <- fit.subgroup(x = x, y = y,
+                             trt = trt01,
+                             propensity.func = prop.func,
+                             loss   = "sq_loss_lasso",
+                             nfolds = 5)    # option for cv.glmnet
+
+comp <- summarize.subgroups(subgrp.model)
+print(comp, p.value = 0.01)
+
+# or we can simply supply the matrix x and the subgroups
+comp2 <- summarize.subgroups(x, subgroup = 1 * (subgrp.model$benefit.scores > 0))
 }
 \seealso{
 \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models.
