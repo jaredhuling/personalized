@@ -568,6 +568,38 @@ subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotCompare.html">plotCompare</a></span>(subgrp.model, subgrp.model.eff)</code></pre></div>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_compare_ex2-1.png" width="672"></p>
 </div>
+<div id="comparing-subgroups-from-a-fitted-model" class="section level3">
+<h3 class="hasAnchor">
+<a href="#comparing-subgroups-from-a-fitted-model" class="anchor"></a>Comparing Subgroups from a Fitted Model</h3>
+<p>The <code><a href="../reference/summarize.subgroups.html">summarize.subgroups()</a></code> function compares the means of covariate values within the estimated subgroups. P-values for the differences within subgroups are also computed. For continuous variables, the p-value will come from a t-test and for binary variables, the p-value will come from a chi-squared test.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">comp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/summarize.subgroups.html">summarize.subgroups</a></span>(subgrp.model)</code></pre></div>
+<p>The user can optionally print only the covariates which have significant differences between subgroups with a p-value below a given threshold like the following:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(comp, <span class="dt">p.value =</span> <span class="fl">0.01</span>)</code></pre></div>
+<pre><code>##     avg (recom trt) avg (recom ctrl)    diff   p.value SE (recom trt)
+## V1           0.4152          -0.3411  0.7562 5.601e-05         0.1293
+## V2           1.6357          -1.4743  3.1100 2.534e-68         0.1148
+## V3          -1.0671           1.0087 -2.0758 6.623e-31         0.1237
+## V6          -0.1829           0.4075 -0.5904 1.685e-03         0.1280
+## V11         -0.8902           1.1067 -1.9969 4.994e-27         0.1269
+## V13          0.4546          -0.8727  1.3273 2.115e-12         0.1312
+## V14          0.3485          -0.1502  0.4988 8.677e-03         0.1317
+## V17          0.4818          -0.8306  1.3124 6.146e-12         0.1371
+## V33         -0.2490           0.2462 -0.4952 7.925e-03         0.1302
+## V37         -0.5302           0.4917 -1.0219 8.188e-08         0.1324
+##     SE (recom ctrl)
+## V1           0.1349
+## V2           0.1178
+## V3           0.1217
+## V6           0.1370
+## V11          0.1278
+## V13          0.1325
+## V14          0.1365
+## V17          0.1294
+## V33          0.1330
+## V37          0.1350</code></pre>
+<p>The covariate values and estimated subgroups can be directly used by the <code><a href="../reference/summarize.subgroups.html">summarize.subgroups()</a></code> function:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">comp2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/summarize.subgroups.html">summarize.subgroups</a></span>(x, <span class="dt">subgroup =</span> subgrp.model$benefit.scores &gt;<span class="st"> </span><span class="dv">0</span>)</code></pre></div>
+</div>
 </div>
 <div id="validating-subgroup-identification-models" class="section level2">
 <h2 class="hasAnchor">

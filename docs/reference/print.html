@@ -76,6 +76,7 @@
 
     
     <p>Prints results for estimated subgroup treatment effects</p>
+<p>Prints summary results for estimated subgroup treatment effects</p>
     
 
     <pre class="usage"><span class='co'># S3 method for subgroup_fitted</span>
@@ -84,14 +85,18 @@
 
 <span class='co'># S3 method for subgroup_validated</span>
 <span class='fu'>print</span>(<span class='no'>x</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fu'>max</span>(<span class='fu'>getOption</span>(<span class='st'>"digits"</span>) - <span class='fl'>3</span>,
-  <span class='fl'>3</span>), <span class='no'>...</span>)</pre>
+  <span class='fl'>3</span>), <span class='no'>...</span>)
+
+<span class='co'># S3 method for subgroup_summary</span>
+<span class='fu'>print</span>(<span class='no'>x</span>, <span class='kw'>p.value</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fu'>max</span>(<span class='fu'>getOption</span>(<span class='st'>"digits"</span>) - <span class='fl'>3</span>, <span class='fl'>3</span>), <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>a fitted object from either <code>fit.subgroup</code> or <code>validate.subgroup</code></p></td>
+      <td><p>a fitted object from either <code>fit.subgroup</code>, <code>validate.subgroup</code>, or <code>summaryize.subgroups()</code></p></td>
     </tr>
     <tr>
       <th>digits</th>
@@ -101,12 +106,19 @@
       <th>...</th>
       <td><p>further arguments passed to or from <code><a href='http://www.rdocumentation.org/packages/base/topics/print.default'>print.default</a></code>.</p></td>
     </tr>
+    <tr>
+      <th>p.value</th>
+      <td><p>a p-value threshold for mean differences below which covariates will be displayed. For example,
+setting <code>p.value = 0.05</code> will display all covariates that have a significant difference between subgroups
+ with p-value less than 0.05. Defaults to 1, which displays all covariates</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <p><code><a href='validate.subgroup.html'>validate.subgroup</a></code> for function which creates validation results
-and <code><a href='fit.subgroup.html'>fit.subgroup</a></code> for function which fits subgroup identification models.</p>
+and <code><a href='fit.subgroup.html'>fit.subgroup</a></code> for function which fits subgroup identification models.
+    <code><a href='summarize.subgroups.html'>summarize.subgroups</a></code> for function which summarizes subgroup covariate values</p>
     
 
   </div>
