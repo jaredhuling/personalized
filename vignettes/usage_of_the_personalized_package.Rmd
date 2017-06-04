@@ -449,7 +449,7 @@ print(comp, p.value = 0.01)
 
 
 The covariate values and estimated subgroups can be directly used by the `summarize.subgroups()` function:
-```{r summarize_sub}
+```{r summarize_sub2}
 comp2 <- summarize.subgroups(x, subgroup = subgrp.model > 0)
 ```
 
