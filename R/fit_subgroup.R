@@ -23,7 +23,7 @@
 #' is complex.
 #' \itemize{
 #'     \item{\code{"sq_loss_lasso"}}{ - M(y, v) = (v - y) ^ 2 with linear model and lasso penalty}
-#'     \item{\code{"logistic_loss_lasso"}}{ - M(y, v) = y * log(1 + exp{-v}) with with linear model and lasso penalty}
+#'     \item{\code{"logistic_loss_lasso"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with with linear model and lasso penalty}
 #'     \item{\code{"cox_loss_lasso"}}{ - M corresponds to the negative partial likelihood of the cox model with linear model and additionally a lasso penalty}
 #'     \item{\code{"sq_loss_lasso_gam"}}{ - M(y, v) = (v - y) ^ 2 with variables selected by lasso penalty and generalized additive model fit on the selected variables}
 #'     \item{\code{"logistic_loss_lasso_gam"}}{ - M(y, v) = y * log(1 + exp{-v}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
@@ -32,7 +32,7 @@
 #'     \item{\code{"sq_loss_gbm"}}{ - M(y, v) = (v - y) ^ 2 with gradient-boosted decision trees model}
 #'     \item{\code{"abs_loss_gbm"}}{ - M(y, v) = |v - y| with gradient-boosted decision trees model}
 #'     \item{\code{"huberized_loss_gbm"}}{ - M corresponds to Huberized hinge loss (for binary outcomes) with gradient-boosted decision trees model}
-#'     \item{\code{"logistic_loss_gbm"}}{ - M(y, v) = y * log(1 + exp{-v}) with gradient-boosted decision trees model}
+#'     \item{\code{"logistic_loss_gbm"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with gradient-boosted decision trees model}
 #'     \item{\code{"cox_loss_gbm"}}{ - M corresponds to the negative partial likelihood of the cox model with gradient-boosted decision trees model}
 #' }
 #' @param method subgroup ID model type. Either the weighting or A-learning method of Chen et al, (2017)
@@ -40,7 +40,7 @@
 #' predicted values for the response using a model constructed with \code{x}. \code{augment.func()} can also be simply
 #' a function of \code{x} and \code{y}. This function is used for efficiency augmentation.
 #' When the form of the augmentation function is correct, it can provide efficient estimation of the subgroups
-#' Example: \code{augment.func <- function(x, y) {lmod <- lm(y ~ x); return(fitted(lmod))}}
+#' Example 1: \code{augment.func <- function(x, y) {lmod <- lm(y ~ x); return(fitted(lmod))}}
 #'
 #' Example 2: \code{augment.func <- function(x, y, trt) {lmod <- lm(y ~ x + trt); return(fitted(lmod))}}
 #' @param cutpoint numeric value for patients with benefit scores above which
@@ -186,11 +186,13 @@ fit.subgroup <- function(x,
     vnames <- colnames(x)
     if (is.null(vnames)) vnames <- paste0("V", 1:dims[2])
 
+    outcome.weighted <- FALSE
+
     # make sure outcome is consistent with
     # other options selected
     if (class(y) == "Surv")
     {
-        if (length(grep("cox_loss", loss))   == 0)
+        if (length(grep("cox_loss", loss)) == 0)
         {
             stop("Loss and family must correspond to a Cox model for time-to-event outcomes.")
         } else
