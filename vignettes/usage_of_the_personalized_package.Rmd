@@ -36,11 +36,11 @@ $$E(Y|X, T) = g(X) + T\Delta(X).$$ Here, $\Delta(X)$ represents the interaction 
 We call the term $\Delta(X)$ a benefit score, as it reflects how much a patient is expected to benefit from a treatment in terms of their outcome. For a patient with $X = x$, if $\Delta(x) > 0$ (assuming larger outcomes are better), the treatment is beneficial in terms of the expected outcome, and if $\Delta(X) \leq 0$, the control is better than the treatment. Hence to identify which subgroup of patients benefits from a treatment, we seek to estimate $\Delta(X)$.
 
 In the framework of Chen, et al. (2017), there are two main methods for estimating subgroups. The first is called the weighting method. The weighting method estimates $\Delta(X)$ by minimizing the following objective function with respect to $f(X)$:
-$$L_W(f) = \frac{1}{n}\sum_{i = 1}^n\frac{(Y_i -  T_i\times f(x_i)) ^ 2}{ {T_i\pi(x_i)+(1-T_i)/2} },$$
+$$L_W(f) = \frac{1}{n}\sum_{i = 1}^n\frac{M(Y_i, T_i\times f(x_i)) }{ {T_i\pi(x_i)+(1-T_i)/2} },$$
 where $\pi(x) = Pr(T = 1|X = x)$ is the propensity score function. Here, $\hat{f}$ is our estimated benefit score. Hence $\hat{f} = \mbox{argmin}_f L_W(f)$ is our estimate of $\Delta(X)$. If we want a simple functional form for the estimate $\hat{f}$, we can restrict the form of $f$ such that it is a linear combination of the covariates, i.e. $f(X) = X^T\beta$. Hence $\hat{f}(X) = X^T\hat{\beta}$.
 
 The A-learning estimator is the minimizer of 
-$$L_A(f) = \frac{1}{n}\sum_{i = 1}^n (Y_i - {\{(T_i+1)/2 -\pi(x_i)\} } {\times f(x_i))^2}.$$
+$$L_A(f) = \frac{1}{n}\sum_{i = 1}^n M(Y_i, {\{(T_i+1)/2 -\pi(x_i)\} } {\times f(x_i))}.$$
 
 ### Choice of $M$ function
 The `personalized` package offers a flexible range of choices both for the form of $f(X)$ and also for the loss function $M(y, v)$. Every choice of $f$ and $M$ can be used for either the weighting method or for the A-learning method. In this package, we limit the use of $M$ to natural choices corresponding to the type of outcome. For example, the squared error loss $M(y, v) = (v - y) ^ 2$ corresponds to continuous responses; the logistic loss $M(y, v) = y \cdot log(1 + \exp\{-v\})$ corresponds to binary outcomes, and the loss associated with the negative partial likelihood of the Cox proportional hazards model corresponds to time-to-event outcomes.

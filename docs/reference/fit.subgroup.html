@@ -121,7 +121,7 @@ with nonparametric additive terms for each selected variable. <code>sq_loss_gam<
 allows for flexible estimation using machine learning and can be useful when the underlying treatment-covariate interaction
 is complex.</p><ul>
 <li><p><code>"sq_loss_lasso"</code> - M(y, v) = (v - y) ^ 2 with linear model and lasso penalty</p></li>
-<li><p><code>"logistic_loss_lasso"</code> - M(y, v) = y * log(1 + exp-v) with with linear model and lasso penalty</p></li>
+<li><p><code>"logistic_loss_lasso"</code> - M(y, v) = -[yv - log(1 + exp{-v})] with with linear model and lasso penalty</p></li>
 <li><p><code>"cox_loss_lasso"</code> - M corresponds to the negative partial likelihood of the cox model with linear model and additionally a lasso penalty</p></li>
 <li><p><code>"sq_loss_lasso_gam"</code> - M(y, v) = (v - y) ^ 2 with variables selected by lasso penalty and generalized additive model fit on the selected variables</p></li>
 <li><p><code>"logistic_loss_lasso_gam"</code> - M(y, v) = y * log(1 + exp-v) with variables selected by lasso penalty and generalized additive model fit on the selected variables</p></li>
@@ -130,7 +130,7 @@ is complex.</p><ul>
 <li><p><code>"sq_loss_gbm"</code> - M(y, v) = (v - y) ^ 2 with gradient-boosted decision trees model</p></li>
 <li><p><code>"abs_loss_gbm"</code> - M(y, v) = |v - y| with gradient-boosted decision trees model</p></li>
 <li><p><code>"huberized_loss_gbm"</code> - M corresponds to Huberized hinge loss (for binary outcomes) with gradient-boosted decision trees model</p></li>
-<li><p><code>"logistic_loss_gbm"</code> - M(y, v) = y * log(1 + exp-v) with gradient-boosted decision trees model</p></li>
+<li><p><code>"logistic_loss_gbm"</code> - M(y, v) = -[yv - log(1 + exp{-v})] with gradient-boosted decision trees model</p></li>
 <li><p><code>"cox_loss_gbm"</code> - M corresponds to the negative partial likelihood of the cox model with gradient-boosted decision trees model</p></li>
 </ul></td>
     </tr>
@@ -144,7 +144,7 @@ is complex.</p><ul>
 predicted values for the response using a model constructed with <code>x</code>. <code>augment.func()</code> can also be simply
 a function of <code>x</code> and <code>y</code>. This function is used for efficiency augmentation.
 When the form of the augmentation function is correct, it can provide efficient estimation of the subgroups
-Example: <code>augment.func &lt;- function(x, y) {lmod &lt;- lm(y ~ x); return(fitted(lmod))}</code></p>
+Example 1: <code>augment.func &lt;- function(x, y) {lmod &lt;- lm(y ~ x); return(fitted(lmod))}</code></p>
 <p>Example 2: <code>augment.func &lt;- function(x, y, trt) {lmod &lt;- lm(y ~ x + trt); return(fitted(lmod))}</code></p></td>
     </tr>
     <tr>
@@ -243,30 +243,32 @@ from <code>fit.subgroup</code>.</p>
 #&gt; method:  weighting 
 #&gt; 
 #&gt; Average Outcomes:
-#&gt;                  Recommended Trt   Recommended Ctrl
-#&gt; Received Trt   -4.1232 (n = 288) -22.9439 (n = 289)
-#&gt; Received Ctrl -20.3607 (n = 207)  -7.0747 (n = 216)
+#&gt;                  Recommended Trt  Recommended Ctrl
+#&gt; Received Trt   -2.7736 (n = 256) -22.144 (n = 321)
+#&gt; Received Ctrl -21.3209 (n = 199) -6.6962 (n = 224)
 #&gt; 
 #&gt;  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-#&gt;                  16.2375 (n = 495)                  15.8692 (n = 505) 
+#&gt;                  18.5473 (n = 455)                  15.4479 (n = 545) 
 #&gt; 
 #&gt; Benefit score quantiles: 
 #&gt;      0%     25%     50%     75%    100% 
-#&gt; -24.942  -5.421  -0.147   5.599  22.435 
+#&gt; -26.984  -6.531  -1.056   4.878  22.578 
 #&gt; 
-#&gt; 10 variables selected by the lasso (cross validation criterion).
+#&gt; 12 variables selected by the lasso (cross validation criterion).
 #&gt; 
 #&gt;     Estimate
-#&gt; V1    0.1492
-#&gt; V2    1.8248
-#&gt; V3   -1.8821
-#&gt; V11  -0.3680
-#&gt; V12  -0.0628
-#&gt; V13   0.5366
-#&gt; V21  -0.0135
-#&gt; V22  -0.0463
-#&gt; V42  -0.1682
-#&gt; V47  -0.0178</div><div class='input'>
+#&gt; Trt  -0.8824
+#&gt; V1    0.2072
+#&gt; V2    1.8824
+#&gt; V3   -1.9520
+#&gt; V11  -0.4108
+#&gt; V12  -0.1054
+#&gt; V13   0.5645
+#&gt; V21  -0.1077
+#&gt; V22  -0.1024
+#&gt; V41   0.0660
+#&gt; V42  -0.2235
+#&gt; V47  -0.0421</div><div class='input'>
 <span class='co'># fit lasso + gam model with REML option for gam</span>
 
 <span class='no'>subgrp.modelg</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>,
@@ -304,37 +306,36 @@ from <code>fit.subgroup</code>.</p>
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;                Recommended Trt Recommended Ctrl
-#&gt; Received Trt  0.5479 (n = 292) 0.1754 (n = 285)
-#&gt; Received Ctrl 0.1981 (n = 212) 0.4834 (n = 211)
+#&gt; Received Trt  0.5309 (n = 324) 0.1502 (n = 253)
+#&gt; Received Ctrl 0.2292 (n = 240) 0.4863 (n = 183)
 #&gt; 
 #&gt;  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-#&gt;                   0.3498 (n = 504)                    0.308 (n = 496) 
+#&gt;                   0.3017 (n = 564)                   0.3361 (n = 436) 
 #&gt; 
 #&gt; Benefit score quantiles: 
-#&gt;        0%       25%       50%       75%      100% 
-#&gt; -1.432536 -0.289574  0.003732  0.331134  1.296622 </div><div class='input'>
+#&gt;       0%      25%      50%      75%     100% 
+#&gt; -1.49663 -0.24413  0.07284  0.43341  1.49749 </div><div class='input'>
 <span class='fu'>library</span>(<span class='no'>survival</span>)
 <span class='no'>subgrp.model.cox</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'>Surv</span>(<span class='no'>y.time.to.event</span>, <span class='no'>status</span>),
                            <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
                            <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>,
                            <span class='kw'>loss</span>   <span class='kw'>=</span> <span class='st'>"cox_loss_lasso"</span>,
-                           <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>5</span>)              <span class='co'># option for cv.glmnet</span>
-
+                           <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>5</span>)              <span class='co'># option for cv.glmnet</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Cox model has no intercept</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Cox model has no intercept</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Cox model has no intercept</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Cox model has no intercept</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Cox model has no intercept</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Cox model has no intercept</span></div><div class='input'>
 <span class='no'>subgrp.model.cox</span></div><div class='output co'>#&gt; family:  cox 
 #&gt; loss:    cox_loss_lasso 
 #&gt; method:  weighting 
 #&gt; 
 #&gt; Average Outcomes:
-#&gt;                  Recommended Trt   Recommended Ctrl
-#&gt; Received Trt  199.0745 (n = 286) 147.5837 (n = 291)
-#&gt; Received Ctrl  22.4873 (n = 209) 185.6328 (n = 214)
+#&gt;                 Recommended Trt   Recommended Ctrl
+#&gt; Received Trt  68.8973 (n = 265) 152.5531 (n = 312)
+#&gt; Received Ctrl 19.9534 (n = 194) 193.8419 (n = 229)
 #&gt; 
 #&gt;  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-#&gt;                 176.5872 (n = 495)                   38.049 (n = 505) 
+#&gt;                  48.9438 (n = 459)                  41.2888 (n = 541) 
 #&gt; 
 #&gt; Benefit score quantiles: 
-#&gt;        0%       25%       50%       75%      100% 
-#&gt; -1.171862 -0.323993 -0.005214  0.315696  1.513575 </div><div class='input'>
+#&gt;       0%      25%      50%      75%     100% 
+#&gt; -1.26474 -0.38744 -0.05997  0.27320  1.47516 </div><div class='input'>
 
 </div></pre>
   </div>

@@ -164,17 +164,17 @@ doi:10.1002/(SICI)1097-0258(19960229)15:4&lt;361::AID-SIM168&gt;3.0.CO;2-4</p>
 
 <span class='no'>subgrp.model</span>$<span class='no'>subgroup.trt.effects</span></div><div class='output co'>#&gt; $subgroup.effects
 #&gt;  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-#&gt;                           17.78308                           15.82889 
+#&gt;                           20.07929                           15.24970 
 #&gt; 
 #&gt; $avg.outcomes
 #&gt;               Recommended Trt Recommended Ctrl
-#&gt; Received Trt         -7.04661        -26.53161
-#&gt; Received Ctrl       -24.82969        -10.70272
+#&gt; Received Trt         -6.06678        -25.72407
+#&gt; Received Ctrl       -26.14607        -10.47437
 #&gt; 
 #&gt; $sample.sizes
 #&gt;               Recommended Trt Recommended Ctrl
-#&gt; Received Trt              262              315
-#&gt; Received Ctrl             235              188
+#&gt; Received Trt              236              341
+#&gt; Received Ctrl             218              205
 #&gt; </div><div class='input'>
 <span class='no'>x.test</span> <span class='kw'>&lt;-</span> <span class='fu'>matrix</span>(<span class='fu'>rnorm</span>(<span class='fl'>10</span> * <span class='no'>n.obs</span> * <span class='no'>n.vars</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>3</span>), <span class='fl'>10</span> * <span class='no'>n.obs</span>, <span class='no'>n.vars</span>)
 
@@ -203,20 +203,20 @@ doi:10.1002/(SICI)1097-0258(19960229)15:4&lt;361::AID-SIM168&gt;3.0.CO;2-4</p>
 #&gt; validation method:  training_test_replication 
 #&gt; 
 #&gt; Average Test Set Outcomes:
-#&gt;                      Recommended Trt       Recommended Ctrl
-#&gt; Received Trt   -9.2951 (SE = 2.2056) -24.9641 (SE = 2.8805)
-#&gt; Received Ctrl -25.4602 (SE = 3.0254) -14.1532 (SE = 4.5646)
+#&gt;                     Recommended Trt       Recommended Ctrl
+#&gt; Received Trt  -9.2668 (SE = 1.9945) -23.7774 (SE = 2.8927)
+#&gt; Received Ctrl -26.114 (SE = 3.7305) -14.4519 (SE = 4.1699)
 #&gt; 
 #&gt;  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-#&gt;              16.1651 (SE = 4.9436)              10.8109 (SE = 4.2924) </div><div class='input'>
+#&gt;              16.8472 (SE = 5.1464)               9.3255 (SE = 5.0555) </div><div class='input'>
 <span class='no'>bene.score.test</span> <span class='kw'>&lt;-</span> <span class='no'>subgrp.model</span>$<span class='fu'>predict</span>(<span class='no'>x.test</span>)
 
 <span class='fu'>mean</span>(<span class='no'>y.test</span>[<span class='no'>bene.score.test</span> <span class='kw'>&gt;</span> <span class='fl'>0</span> <span class='kw'>&amp;</span> <span class='no'>trt01.test</span> <span class='kw'>==</span> <span class='fl'>1</span>]) -
-       <span class='fu'>mean</span>(<span class='no'>y.test</span>[<span class='no'>bene.score.test</span> <span class='kw'>&gt;</span> <span class='fl'>0</span> <span class='kw'>&amp;</span> <span class='no'>trt01.test</span> <span class='kw'>==</span> <span class='fl'>0</span>])</div><div class='output co'>#&gt; [1] 15.40698</div><div class='input'><span class='fu'>mean</span>(<span class='no'>y.test</span>[<span class='no'>bene.score.test</span> <span class='kw'>&lt;=</span> <span class='fl'>0</span> <span class='kw'>&amp;</span> <span class='no'>trt01.test</span> <span class='kw'>==</span> <span class='fl'>0</span>]) -
-       <span class='fu'>mean</span>(<span class='no'>y.test</span>[<span class='no'>bene.score.test</span> <span class='kw'>&lt;=</span> <span class='fl'>0</span> <span class='kw'>&amp;</span> <span class='no'>trt01.test</span> <span class='kw'>==</span> <span class='fl'>1</span>])</div><div class='output co'>#&gt; [1] 11.99954</div><div class='input'>
+       <span class='fu'>mean</span>(<span class='no'>y.test</span>[<span class='no'>bene.score.test</span> <span class='kw'>&gt;</span> <span class='fl'>0</span> <span class='kw'>&amp;</span> <span class='no'>trt01.test</span> <span class='kw'>==</span> <span class='fl'>0</span>])</div><div class='output co'>#&gt; [1] 16.53727</div><div class='input'><span class='fu'>mean</span>(<span class='no'>y.test</span>[<span class='no'>bene.score.test</span> <span class='kw'>&lt;=</span> <span class='fl'>0</span> <span class='kw'>&amp;</span> <span class='no'>trt01.test</span> <span class='kw'>==</span> <span class='fl'>0</span>]) -
+       <span class='fu'>mean</span>(<span class='no'>y.test</span>[<span class='no'>bene.score.test</span> <span class='kw'>&lt;=</span> <span class='fl'>0</span> <span class='kw'>&amp;</span> <span class='no'>trt01.test</span> <span class='kw'>==</span> <span class='fl'>1</span>])</div><div class='output co'>#&gt; [1] 10.88687</div><div class='input'>
 <span class='fu'>quantile</span>(<span class='no'>valmod</span>$<span class='no'>boot.results</span><span class='kw'>[[</span><span class='fl'>1</span>]][,<span class='fl'>1</span>], <span class='fu'>c</span>(<span class='fl'>0.025</span>, <span class='fl'>0.975</span>))</div><div class='output co'>#&gt;      2.5%     97.5% 
-#&gt;  8.980891 22.857691 </div><div class='input'><span class='fu'>quantile</span>(<span class='no'>valmod</span>$<span class='no'>boot.results</span><span class='kw'>[[</span><span class='fl'>1</span>]][,<span class='fl'>2</span>], <span class='fu'>c</span>(<span class='fl'>0.025</span>, <span class='fl'>0.975</span>))</div><div class='output co'>#&gt;      2.5%     97.5% 
-#&gt;  3.836292 16.484719 </div></pre>
+#&gt;  9.810621 23.980167 </div><div class='input'><span class='fu'>quantile</span>(<span class='no'>valmod</span>$<span class='no'>boot.results</span><span class='kw'>[[</span><span class='fl'>1</span>]][,<span class='fl'>2</span>], <span class='fu'>c</span>(<span class='fl'>0.025</span>, <span class='fl'>0.975</span>))</div><div class='output co'>#&gt;       2.5%      97.5% 
+#&gt;  0.9705566 15.7637391 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

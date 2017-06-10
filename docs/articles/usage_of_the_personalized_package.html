@@ -50,7 +50,7 @@
       <h1>Usage of the Personalized Package</h1>
                         <h4 class="author">Jared Huling</h4>
             
-            <h4 class="date">2017-06-03</h4>
+            <h4 class="date">2017-06-10</h4>
           </div>
 
     
@@ -69,10 +69,10 @@
 <li>Visualize and examine model and subgroup treatment effects</li>
 </ol>
 <p>The available subgroup identification models are those under the purview of the general subgroup identification framework proposed by Chen, et al. (2017). In this section we will give a brief summary of this framework and what elements of it are available in the <code>personalized</code> package.</p>
-<p>In general we are interested in understanding the impact of a treatment on an outcome and in particular determining if and how different patients respond differently to a treatment in terms of their expected outcome. Assume the outcome we observe <span class="math inline">\(Y\)</span> is such that larger values are preferable. In addition to the outcome, we also observe patient covariate information <span class="math inline">\(X \in \mathbb{R}^p\)</span> and the treatment status <span class="math inline">\(T \in \{-1,1\}\)</span>, where <span class="math inline">\(T = 1\)</span> indicates that a patient received the treatment, and <span class="math inline">\(T = -1\)</span> indicates as patient observed the control. For the purposes of this package, we assume that the expected outcome conditional on the covariate and treatment status information can be represented by <span class="math display">\[E(Y|X, T) = g(X) + T\Delta(X).\]</span> Here, <span class="math inline">\(\Delta(X)\)</span> represents the interaction between treatment and covariates and <span class="math inline">\(g(X)\)</span> represents the main effects of the patient covariate information on the outcome.</p>
+<p>In general we are interested in understanding the impact of a treatment on an outcome and in particular determining if and how different patients respond differently to a treatment in terms of their expected outcome. Assume the outcome we observe <span class="math inline">\(Y\)</span> is such that larger values are preferable. In addition to the outcome, we also observe patient covariate information <span class="math inline">\(X \in \mathbb{R}^p\)</span> and the treatment status <span class="math inline">\(T \in \{-1,1\}\)</span>, where <span class="math inline">\(T = 1\)</span> indicates that a patient received the treatment, and <span class="math inline">\(T = -1\)</span> indicates a patient received the control. For the purposes of this package, we assume that the expected outcome conditional on the covariate and treatment status information can be represented by <span class="math display">\[E(Y|X, T) = g(X) + T\Delta(X).\]</span> Here, <span class="math inline">\(\Delta(X)\)</span> represents the interaction between treatment and covariates and <span class="math inline">\(g(X)\)</span> represents the main effects of the patient covariate information on the outcome.</p>
 <p>We call the term <span class="math inline">\(\Delta(X)\)</span> a benefit score, as it reflects how much a patient is expected to benefit from a treatment in terms of their outcome. For a patient with <span class="math inline">\(X = x\)</span>, if <span class="math inline">\(\Delta(x) &gt; 0\)</span> (assuming larger outcomes are better), the treatment is beneficial in terms of the expected outcome, and if <span class="math inline">\(\Delta(X) \leq 0\)</span>, the control is better than the treatment. Hence to identify which subgroup of patients benefits from a treatment, we seek to estimate <span class="math inline">\(\Delta(X)\)</span>.</p>
-<p>In the framework of Chen, et al. (2017), there are two main methods for estimating subgroups. The first is called the weighting method. The weighting method estimates <span class="math inline">\(\Delta(X)\)</span> by minimizing the following objective function with respect to <span class="math inline">\(f(X)\)</span>: <span class="math display">\[L_W(f) = \frac{1}{n}\sum_{i = 1}^n\frac{(Y_i -  T_i\times f(x_i)) ^ 2}{ {T_i\pi(x_i)+(1-T_i)/2} },\]</span> where <span class="math inline">\(\pi(x) = Pr(T = 1|X = x)\)</span> is the propensity score function. Here, <span class="math inline">\(\hat{f}\)</span> is our estimated benefit score. Hence <span class="math inline">\(\hat{f} = \mbox{argmin}_f L_W(f)\)</span> is our estimate of <span class="math inline">\(\Delta(X)\)</span>. If we want a simple functional form for the estimate <span class="math inline">\(\hat{f}\)</span>, we can restrict <span class="math inline">\(f\)</span> such that it is a linear combination of the covariates, i.e. <span class="math inline">\(f(X) = X^T\beta\)</span>. Hence <span class="math inline">\(\hat{f}(X) = X^T\hat{\beta}\)</span>.</p>
-<p>The A-learning estimator is the minimizer of <span class="math display">\[L_A(f) = \frac{1}{n}\sum_{i = 1}^n (Y_i - {\{(T_i+1)/2 -\pi(x_i)\} } {\times f(x_i))^2}.\]</span></p>
+<p>In the framework of Chen, et al. (2017), there are two main methods for estimating subgroups. The first is called the weighting method. The weighting method estimates <span class="math inline">\(\Delta(X)\)</span> by minimizing the following objective function with respect to <span class="math inline">\(f(X)\)</span>: <span class="math display">\[L_W(f) = \frac{1}{n}\sum_{i = 1}^n\frac{M(Y_i, T_i\times f(x_i)) }{ {T_i\pi(x_i)+(1-T_i)/2} },\]</span> where <span class="math inline">\(\pi(x) = Pr(T = 1|X = x)\)</span> is the propensity score function. Here, <span class="math inline">\(\hat{f}\)</span> is our estimated benefit score. Hence <span class="math inline">\(\hat{f} = \mbox{argmin}_f L_W(f)\)</span> is our estimate of <span class="math inline">\(\Delta(X)\)</span>. If we want a simple functional form for the estimate <span class="math inline">\(\hat{f}\)</span>, we can restrict the form of <span class="math inline">\(f\)</span> such that it is a linear combination of the covariates, i.e. <span class="math inline">\(f(X) = X^T\beta\)</span>. Hence <span class="math inline">\(\hat{f}(X) = X^T\hat{\beta}\)</span>.</p>
+<p>The A-learning estimator is the minimizer of <span class="math display">\[L_A(f) = \frac{1}{n}\sum_{i = 1}^n M(Y_i, {\{(T_i+1)/2 -\pi(x_i)\} } {\times f(x_i))}.\]</span></p>
 <div id="choice-of-m-function" class="section level3">
 <h3 class="hasAnchor">
 <a href="#choice-of-m-function" class="anchor"></a>Choice of <span class="math inline">\(M\)</span> function</h3>
@@ -138,7 +138,7 @@ prop.func &lt;-<span class="st"> </span>function(x, trt)
 <div id="fitting-subgroup-identification-model" class="section level2">
 <h2 class="hasAnchor">
 <a href="#fitting-subgroup-identification-model" class="anchor"></a>Fitting Subgroup Identification Model</h2>
-<p>The next step is to choose and fit a subgroup identification model. In this example, the outcome is continuous, so we choose the squared error loss function. We also choose the model type (either the weighting or the A-learning method). The main funciton for fitting subgroup identification models is <code>fit.subgroup</code>. Since there are many covariates, we choose a loss function with a lasso penalty to select variables. The underlying fitting function here is <code>cv.glmnet()</code>. We can pass to <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> arguments of the <code>cv.glmnet()</code> function, such as <code>nfolds</code> for the number of cross validation folds.</p>
+<p>The next step is to choose and fit a subgroup identification model. In this example, the outcome is continuous, so we choose the squared error loss function. We also choose the model type (either the weighting or the A-learning method). The main function for fitting subgroup identification models is <code>fit.subgroup</code>. Since there are many covariates, we choose a loss function with a lasso penalty to select variables. The underlying fitting function here is <code>cv.glmnet()</code>. We can pass to <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> arguments of the <code>cv.glmnet()</code> function, such as <code>nfolds</code> for the number of cross validation folds.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">subgrp.model &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y,
                              <span class="dt">trt =</span> trt,
                              <span class="dt">propensity.func =</span> prop.func,
@@ -152,27 +152,28 @@ prop.func &lt;-<span class="st"> </span>function(x, trt)
 ## 
 ## Average Outcomes:
 ##                  Recommended Trt   Recommended Ctrl
-## Received Trt   -7.6066 (n = 303) -19.1473 (n = 287)
-## Received Ctrl -16.6438 (n = 212)  -8.9658 (n = 198)
+## Received Trt   -8.3777 (n = 318) -18.8823 (n = 272)
+## Received Ctrl -16.1668 (n = 220)  -9.1948 (n = 190)
 ## 
 ##  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-##                   9.0372 (n = 515)                  10.1815 (n = 485) 
+##                   7.7892 (n = 538)                   9.6875 (n = 462) 
 ## 
 ## Benefit score quantiles: 
 ##       0%      25%      50%      75%     100% 
-## -11.0842  -2.1026   0.1319   2.0584   9.7386 
+## -10.9672  -1.8897   0.3569   2.2806  10.0196 
 ## 
-## 8 variables selected by the lasso (cross validation criterion).
+## 9 variables selected by the lasso (cross validation criterion).
 ## 
 ##     Estimate
-## V1    0.0579
-## V2    0.6575
-## V3   -0.4573
-## V6   -0.1053
-## V11  -0.3994
-## V13   0.3020
-## V17   0.2449
-## V37  -0.1759</code></pre>
+## Trt   0.2231
+## V1    0.0577
+## V2    0.6558
+## V3   -0.4550
+## V6   -0.1070
+## V11  -0.4036
+## V13   0.3108
+## V17   0.2491
+## V37  -0.1768</code></pre>
 <p>We can then plot the outcomes of patients in the different subgroups:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(subgrp.model)</code></pre></div>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_model-1.png" width="672"></p>
@@ -199,11 +200,11 @@ validation</code></pre></div>
 ## 
 ## Average Test Set Outcomes:
 ##                      Recommended Trt       Recommended Ctrl
-## Received Trt   -8.7808 (SE = 4.3435)  -15.878 (SE = 2.5123)
-## Received Ctrl -12.7171 (SE = 5.2784) -11.6575 (SE = 3.5258)
+## Received Trt   -9.8546 (SE = 3.9246) -15.1584 (SE = 4.0828)
+## Received Ctrl -13.9166 (SE = 3.7226)  -10.906 (SE = 4.5293)
 ## 
 ##  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-##               3.9363 (SE = 4.0607)               4.2205 (SE = 4.6719)</code></pre>
+##                4.062 (SE = 4.6831)               4.2525 (SE = 4.8904)</code></pre>
 <p>We can then plot the average outcomes averaged over all replications of the training and testing partition procedure:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(validation)</code></pre></div>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_validation-1.png" width="672"> From the above plot we can evaluate what the impact of the subgroups is. Among patients for whom the model recommends the control is more effective than the treatment, we can see that those who instead take the treatment are worse off than patients who take the control. Similarly, among patients who are recommended the treatment, patients who take the treatment are better off on average than patients who do not take the treatment.</p>
@@ -441,15 +442,15 @@ y.binary &lt;-<span class="st"> </span><span class="dv">1</span> *<span class="s
 ## 
 ## Average Outcomes:
 ##                Recommended Trt Recommended Ctrl
-## Received Trt  0.4363 (n = 314) 0.2246 (n = 276)
-## Received Ctrl  0.162 (n = 216) 0.4588 (n = 194)
+## Received Trt  0.4197 (n = 355) 0.2128 (n = 235)
+## Received Ctrl 0.1748 (n = 246) 0.4939 (n = 164)
 ## 
 ##  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-##                   0.2743 (n = 530)                   0.2341 (n = 470) 
+##                   0.2449 (n = 601)                   0.2811 (n = 399) 
 ## 
 ## Benefit score quantiles: 
-##       0%      25%      50%      75%     100% 
-## -1.39413 -0.27654  0.02111  0.30929  1.22481</code></pre>
+##      0%     25%     50%     75%    100% 
+## -1.2895 -0.1737  0.1229  0.4114  1.3207</code></pre>
 </div>
 <div id="time-to-event-outcomes" class="section level3">
 <h3 class="hasAnchor">
@@ -474,6 +475,37 @@ subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
                            <span class="dt">method =</span> <span class="st">"weighting"</span>,
                            <span class="dt">loss   =</span> <span class="st">"cox_loss_lasso"</span>,
                            <span class="dt">nfolds =</span> <span class="dv">10</span>)      <span class="co"># option for cv.glmnet</span></code></pre></div>
+<pre><code>## Warning in glmnet(x, y, weights = weights, offset = offset, lambda =
+## lambda, : Cox model has no intercept</code></pre>
+<pre><code>## Warning in glmnet(x[!which, , drop = FALSE], y_sub, lambda = lambda, offset
+## = offset_sub, : Cox model has no intercept
+
+## Warning in glmnet(x[!which, , drop = FALSE], y_sub, lambda = lambda, offset
+## = offset_sub, : Cox model has no intercept
+
+## Warning in glmnet(x[!which, , drop = FALSE], y_sub, lambda = lambda, offset
+## = offset_sub, : Cox model has no intercept
+
+## Warning in glmnet(x[!which, , drop = FALSE], y_sub, lambda = lambda, offset
+## = offset_sub, : Cox model has no intercept
+
+## Warning in glmnet(x[!which, , drop = FALSE], y_sub, lambda = lambda, offset
+## = offset_sub, : Cox model has no intercept
+
+## Warning in glmnet(x[!which, , drop = FALSE], y_sub, lambda = lambda, offset
+## = offset_sub, : Cox model has no intercept
+
+## Warning in glmnet(x[!which, , drop = FALSE], y_sub, lambda = lambda, offset
+## = offset_sub, : Cox model has no intercept
+
+## Warning in glmnet(x[!which, , drop = FALSE], y_sub, lambda = lambda, offset
+## = offset_sub, : Cox model has no intercept
+
+## Warning in glmnet(x[!which, , drop = FALSE], y_sub, lambda = lambda, offset
+## = offset_sub, : Cox model has no intercept
+
+## Warning in glmnet(x[!which, , drop = FALSE], y_sub, lambda = lambda, offset
+## = offset_sub, : Cox model has no intercept</code></pre>
 <p>The subgroup treatment effects are estimated using the restricted mean statistic and can be displayed with <code><a href="../reference/summary.html">summary.subgroup_fitted()</a></code> or <code><a href="../reference/print.html">print.subgroup_fitted()</a></code> like the following:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(subgrp.cox)</code></pre></div>
 <pre><code>## family:  cox 
@@ -482,24 +514,29 @@ subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 ## 
 ## Average Outcomes:
 ##                  Recommended Trt   Recommended Ctrl
-## Received Trt  217.9631 (n = 284) 124.3198 (n = 306)
-## Received Ctrl  93.4427 (n = 196) 730.8055 (n = 214)
+## Received Trt  214.7994 (n = 219) 166.9972 (n = 371)
+## Received Ctrl  40.3061 (n = 158) 693.2677 (n = 252)
 ## 
 ##  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-##                 124.5204 (n = 480)                 606.4857 (n = 520) 
+##                 174.4933 (n = 377)                 526.2705 (n = 623) 
 ## 
 ## Benefit score quantiles: 
-##        0%       25%       50%       75%      100% 
-## -0.498336 -0.133796 -0.007869  0.112389  0.691535 
+##       0%      25%      50%      75%     100% 
+## -0.60418 -0.20325 -0.07104  0.07303  0.74891 
 ## 
-## 5 variables selected by the lasso (cross validation criterion).
+## 10 variables selected by the lasso (cross validation criterion).
 ## 
 ##     Estimate
-## V1    0.0096
-## V2    0.0463
-## V3   -0.0142
-## V11  -0.0221
-## V50   0.0196</code></pre>
+## Trt   0.0574
+## V1    0.0147
+## V2    0.0500
+## V3   -0.0193
+## V11  -0.0256
+## V13   0.0059
+## V16  -0.0029
+## V17   0.0032
+## V47  -0.0032
+## V50   0.0223</code></pre>
 </div>
 <div id="efficiency-augmentation" class="section level3">
 <h3 class="hasAnchor">
@@ -534,25 +571,26 @@ subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 ## 
 ## Average Outcomes:
 ##                  Recommended Trt   Recommended Ctrl
-## Received Trt  -10.4651 (n = 303) -16.1294 (n = 287)
-## Received Ctrl -18.7664 (n = 212)   -6.693 (n = 198)
+## Received Trt  -10.4226 (n = 298) -16.0758 (n = 292)
+## Received Ctrl  -18.827 (n = 208)  -6.8697 (n = 202)
 ## 
 ##  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-##                   8.3013 (n = 515)                   9.4364 (n = 485) 
+##                   8.4044 (n = 506)                   9.2061 (n = 494) 
 ## 
 ## Benefit score quantiles: 
-##       0%      25%      50%      75%     100% 
-## -11.5976  -2.4900   0.1272   2.6141  10.5525 
+##        0%       25%       50%       75%      100% 
+## -11.70152  -2.57836   0.04442   2.53750  10.44856 
 ## 
-## 6 variables selected by the lasso (cross validation criterion).
+## 7 variables selected by the lasso (cross validation criterion).
 ## 
 ##     Estimate
-## V2    0.8617
-## V3   -0.5499
-## V11  -0.7287
-## V20  -0.0088
-## V30  -0.0374
-## V47  -0.1343</code></pre>
+## Trt  -0.0815
+## V2    0.8629
+## V3   -0.5513
+## V11  -0.7276
+## V20  -0.0104
+## V30  -0.0367
+## V47  -0.1321</code></pre>
 </div>
 <div id="plotting-fitted-models" class="section level3">
 <h3 class="hasAnchor">
@@ -576,27 +614,27 @@ subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 <p>The user can optionally print only the covariates which have significant differences between subgroups with a p-value below a given threshold like the following:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(comp, <span class="dt">p.value =</span> <span class="fl">0.01</span>)</code></pre></div>
 <pre><code>##     avg (recom trt) avg (recom ctrl)    diff   p.value SE (recom trt)
-## V1           0.4152          -0.3411  0.7562 5.601e-05         0.1293
-## V2           1.6357          -1.4743  3.1100 2.534e-68         0.1148
-## V3          -1.0671           1.0087 -2.0758 6.623e-31         0.1237
-## V6          -0.1829           0.4075 -0.5904 1.685e-03         0.1280
-## V11         -0.8902           1.1067 -1.9969 4.994e-27         0.1269
-## V13          0.4546          -0.8727  1.3273 2.115e-12         0.1312
-## V14          0.3485          -0.1502  0.4988 8.677e-03         0.1317
-## V17          0.4818          -0.8306  1.3124 6.146e-12         0.1371
-## V33         -0.2490           0.2462 -0.4952 7.925e-03         0.1302
-## V37         -0.5302           0.4917 -1.0219 8.188e-08         0.1324
+## V1           0.3957          -0.3561  0.7518 6.564e-05         0.1263
+## V2           1.5509          -1.5303  3.0812 2.128e-66         0.1129
+## V3          -1.0140           1.0502 -2.0642 1.650e-30         0.1212
+## V6          -0.1534           0.4025 -0.5559 3.241e-03         0.1254
+## V11         -0.8904           1.2063 -2.0967 1.095e-29         0.1234
+## V13          0.4492          -0.9325  1.3818 2.738e-13         0.1278
+## V14          0.3555          -0.1832  0.5387 4.690e-03         0.1287
+## V17          0.4091          -0.8114  1.2206 1.618e-10         0.1343
+## V19         -0.3086           0.1809 -0.4895 8.898e-03         0.1279
+## V37         -0.5264           0.5381 -1.0645 2.390e-08         0.1298
 ##     SE (recom ctrl)
-## V1           0.1349
-## V2           0.1178
-## V3           0.1217
-## V6           0.1370
-## V11          0.1278
-## V13          0.1325
-## V14          0.1365
-## V17          0.1294
-## V33          0.1330
-## V37          0.1350</code></pre>
+## V1           0.1386
+## V2           0.1211
+## V3           0.1246
+## V6           0.1405
+## V11          0.1300
+## V13          0.1358
+## V14          0.1399
+## V17          0.1328
+## V19          0.1361
+## V37          0.1376</code></pre>
 <p>The covariate values and estimated subgroups can be directly used by the <code><a href="../reference/summarize.subgroups.html">summarize.subgroups()</a></code> function:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">comp2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/summarize.subgroups.html">summarize.subgroups</a></span>(x, <span class="dt">subgroup =</span> subgrp.model$benefit.scores &gt;<span class="st"> </span><span class="dv">0</span>)</code></pre></div>
 </div>
@@ -631,12 +669,12 @@ validation.eff</code></pre></div>
 ## validation method:  training_test_replication 
 ## 
 ## Average Test Set Outcomes:
-##                      Recommended Trt       Recommended Ctrl
-## Received Trt  -10.1769 (SE = 2.8146) -15.3119 (SE = 2.5351)
-## Received Ctrl -18.6555 (SE = 2.4117)  -6.7609 (SE = 2.5968)
+##                      Recommended Trt      Recommended Ctrl
+## Received Trt  -10.1248 (SE = 2.8927) -15.235 (SE = 2.5161)
+## Received Ctrl -18.5781 (SE = 2.3983) -7.0823 (SE = 3.0084)
 ## 
 ##  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-##               8.4785 (SE = 3.8957)               8.5509 (SE = 4.3826)</code></pre>
+##               8.4532 (SE = 3.9401)               8.1527 (SE = 4.8231)</code></pre>
 </div>
 <div id="bootstrap-bias-correction" class="section level3">
 <h3 class="hasAnchor">
@@ -665,11 +703,11 @@ validation3</code></pre></div>
 ## 
 ## Average Bootstrap Bias-Corrected Outcomes:
 ##                      Recommended Trt       Recommended Ctrl
-## Received Trt   -9.1345 (SE = 1.4925) -17.5627 (SE = 1.4851)
-## Received Ctrl -15.2528 (SE = 1.9605)  -11.3529 (SE = 1.649)
+## Received Trt   -9.9044 (SE = 1.5114) -17.2373 (SE = 1.5124)
+## Received Ctrl -14.9861 (SE = 1.8001) -11.4236 (SE = 1.5942)
 ## 
 ##  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-##               6.1182 (SE = 2.6145)               6.2098 (SE = 2.3404)</code></pre>
+##               5.0817 (SE = 2.4106)               5.8138 (SE = 2.2454)</code></pre>
 </div>
 <div id="plotting-validated-models" class="section level3">
 <h3 class="hasAnchor">
