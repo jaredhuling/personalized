@@ -475,37 +475,6 @@ subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
                            <span class="dt">method =</span> <span class="st">"weighting"</span>,
                            <span class="dt">loss   =</span> <span class="st">"cox_loss_lasso"</span>,
                            <span class="dt">nfolds =</span> <span class="dv">10</span>)      <span class="co"># option for cv.glmnet</span></code></pre></div>
-<pre><code>## Warning in glmnet(x, y, weights = weights, offset = offset, lambda =
-## lambda, : Cox model has no intercept</code></pre>
-<pre><code>## Warning in glmnet(x[!which, , drop = FALSE], y_sub, lambda = lambda, offset
-## = offset_sub, : Cox model has no intercept
-
-## Warning in glmnet(x[!which, , drop = FALSE], y_sub, lambda = lambda, offset
-## = offset_sub, : Cox model has no intercept
-
-## Warning in glmnet(x[!which, , drop = FALSE], y_sub, lambda = lambda, offset
-## = offset_sub, : Cox model has no intercept
-
-## Warning in glmnet(x[!which, , drop = FALSE], y_sub, lambda = lambda, offset
-## = offset_sub, : Cox model has no intercept
-
-## Warning in glmnet(x[!which, , drop = FALSE], y_sub, lambda = lambda, offset
-## = offset_sub, : Cox model has no intercept
-
-## Warning in glmnet(x[!which, , drop = FALSE], y_sub, lambda = lambda, offset
-## = offset_sub, : Cox model has no intercept
-
-## Warning in glmnet(x[!which, , drop = FALSE], y_sub, lambda = lambda, offset
-## = offset_sub, : Cox model has no intercept
-
-## Warning in glmnet(x[!which, , drop = FALSE], y_sub, lambda = lambda, offset
-## = offset_sub, : Cox model has no intercept
-
-## Warning in glmnet(x[!which, , drop = FALSE], y_sub, lambda = lambda, offset
-## = offset_sub, : Cox model has no intercept
-
-## Warning in glmnet(x[!which, , drop = FALSE], y_sub, lambda = lambda, offset
-## = offset_sub, : Cox model has no intercept</code></pre>
 <p>The subgroup treatment effects are estimated using the restricted mean statistic and can be displayed with <code><a href="../reference/summary.html">summary.subgroup_fitted()</a></code> or <code><a href="../reference/print.html">print.subgroup_fitted()</a></code> like the following:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(subgrp.cox)</code></pre></div>
 <pre><code>## family:  cox 
