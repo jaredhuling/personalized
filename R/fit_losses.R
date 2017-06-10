@@ -68,8 +68,7 @@ fit_cox_loss_lasso <- function(x, y, wts, family, ...)
 
     # fit a model with a lasso
     # penalty and desired loss
-    model <- do.call(cv.glmnet, c(list(x = x, y = y, weights = wts, family = "cox",
-                                       intercept = FALSE), list.dots))
+    model <- do.call(cv.glmnet, c(list(x = x, y = y, weights = wts, family = "cox"), list.dots))
 
     pred.func <- function(x)
     {
