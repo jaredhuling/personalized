@@ -17,12 +17,23 @@ fit_sq_loss_lasso <- function(x, y, wts, family, ...)
     ##
     ###################################################################
 
+
+    list.dots <- list(...)
+    dot.names <- names(list.dots)
+
+    if ("penalty.factor" %in% dot.names)
+    {
+        ## ensure treatment is not penalized
+        list.dots$penalty.factor[1] <- 0
+    } else
+    {
+        list.dots$penalty.factor <- c(0, rep(1, ncol(x) - 1))
+    }
+
     # fit a model with a lasso
     # penalty and desired loss
-    model <- cv.glmnet(x = x,  y = y,
-                       weights   = wts,
-                       family    = family,
-                       intercept = FALSE, ...)
+    model <- do.call(cv.glmnet, c(list(x = x, y = y, weights = wts, family = family,
+                                       intercept = FALSE), list.dots))
 
     # define a function which inputs a design matrix
     # and outputs estimated benefit scores: one score
@@ -42,10 +53,23 @@ fit_logistic_loss_lasso <- fit_sq_loss_lasso
 #' @import survival
 fit_cox_loss_lasso <- function(x, y, wts, family, ...)
 {
-    model <- cv.glmnet(x = x,  y = y,
-                       weights   = wts,
-                       family    = "cox",
-                       ...)
+
+    list.dots <- list(...)
+    dot.names <- names(list.dots)
+
+    if ("penalty.factor" %in% dot.names)
+    {
+        ## ensure treatment is not penalized
+        list.dots$penalty.factor[1] <- 0
+    } else
+    {
+        list.dots$penalty.factor <- c(0, rep(1, ncol(x) - 1))
+    }
+
+    # fit a model with a lasso
+    # penalty and desired loss
+    model <- do.call(cv.glmnet, c(list(x = x, y = y, weights = wts, family = "cox",
+                                       intercept = FALSE), list.dots))
 
     pred.func <- function(x)
     {
@@ -81,10 +105,21 @@ fit_sq_loss_lasso_gam <- function(x, y, wts, family, ...)
     # the arguments supplied to cv.glmnet
     # and those supplied to gam
     list.dots <- list(...)
+    dot.names <- names(list.dots)
+
+    if ("penalty.factor" %in% dot.names)
+    {
+        ## ensure treatment is not penalized
+        list.dots$penalty.factor[1] <- 0
+    } else
+    {
+        list.dots$penalty.factor <- c(0, rep(1, ncol(x) - 1))
+    }
+
     glmnet.argnames <- union(names(formals(cv.glmnet)), names(formals(glmnet)))
     gam.argnames    <- names(formals(gam))
 
-    dot.names <- names(list.dots)
+
 
     # since 'method' is an argument of 'fit.subgrp',
     # let the user change the gam 'method' arg by supplying
@@ -92,7 +127,10 @@ fit_sq_loss_lasso_gam <- function(x, y, wts, family, ...)
     dot.names[dot.names == "method.gam"] <- "method"
     names(list.dots)[names(list.dots) == "method.gam"] <- "method"
 
-    # find the arguments relevent for each
+
+
+
+    # find the arguments relevant for each
     # possible ...-supplied function
     dots.idx.glmnet <- match(glmnet.argnames, dot.names)
     dots.idx.gam    <- match(gam.argnames, dot.names)

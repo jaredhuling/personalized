@@ -55,7 +55,7 @@ is complex.
 predicted values for the response using a model constructed with \code{x}. \code{augment.func()} can also be simply
 a function of \code{x} and \code{y}. This function is used for efficiency augmentation.
 When the form of the augmentation function is correct, it can provide efficient estimation of the subgroups
-Example: \code{augment.func <- function(x, y) {lmod <- lm(y ~ x); return(fitted(lmod))}}
+Example 1: \code{augment.func <- function(x, y) {lmod <- lm(y ~ x); return(fitted(lmod))}}
 
 Example 2: \code{augment.func <- function(x, y, trt) {lmod <- lm(y ~ x + trt); return(fitted(lmod))}}}
 
