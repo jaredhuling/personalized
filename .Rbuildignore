@@ -8,3 +8,4 @@ README.html
 ^/\.gitattributes$
 ^.*\docs$
 ^\_pkgdown\.yml$
+docs
