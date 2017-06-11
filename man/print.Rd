@@ -2,8 +2,8 @@
 % Please edit documentation in R/print_subgroup.R, R/summarize_subgroups.R
 \name{print.subgroup_fitted}
 \alias{print.subgroup_fitted}
-\alias{print.subgroup_validated}
 \alias{print.subgroup_summary}
+\alias{print.subgroup_validated}
 \title{Printing results for fitted subgroup identification models}
 \usage{
 \method{print}{subgroup_fitted}(x, digits = max(getOption("digits") - 3, 3),
@@ -37,3 +37,4 @@ and \code{\link[personalized]{fit.subgroup}} for function which fits subgroup id
 
 \code{\link[personalized]{summarize.subgroups}} for function which summarizes subgroup covariate values
 }
+

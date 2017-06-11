@@ -1,16 +1,22 @@
 Package: personalized
 Type: Package
-Title: Estimation and validation methods for subgroup idenfication and personalized medicine
+Title: Estimation and validation methods for subgroup idenfication and
+    personalized medicine
 Version: 0.0.1
 Authors@R: c(person("Jared", "Huling", role = c("aut", "cre"),
     email = "jaredhuling@gmail.com"))
-Description: Provides functions for fitting and validation of subgroup identification and personalized medicine models under the general subgroup identification framework of Chen et al (2017) <doi:10.1111/biom.12676>. This package is intended for use for both randomized controlled trials and observational studies.
+Description: Provides functions for fitting and validation of subgroup
+    identification and personalized medicine models under the general subgroup
+    identification framework of Chen et al (2017) <doi:10.1111/biom.12676>.
+    This package is intended for use for both randomized controlled trials and
+    observational studies.
 URL: https://jaredhuling.github.io/personalized/
 BugReports: https://github.com/jaredhuling/personalized/issues
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
-Suggests: knitr,
+Suggests:
+    knitr,
     rmarkdown
 Imports:
     survival
@@ -19,5 +25,5 @@ Depends:
     mgcv,
     gbm,
     ggplot2
-RoxygenNote: 6.0.1
+RoxygenNote: 5.0.1
 VignetteBuilder: knitr

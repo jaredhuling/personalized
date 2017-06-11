@@ -78,3 +78,4 @@ plotCompare(subgrp.model, subgrp.modelg)
 \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models and
 \code{\link[personalized]{validate.subgroup}} for function which creates validation results.
 }
+
