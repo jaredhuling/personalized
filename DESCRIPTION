@@ -1,13 +1,13 @@
 Package: personalized
 Type: Package
-Title: Estimation and validation methods for subgroup idenfication and
-    personalized medicine
+Title: Estimation and Validation Methods for Subgroup Identification and
+    Personalized Medicine
 Version: 0.0.1
 Authors@R: c(person("Jared", "Huling", role = c("aut", "cre"),
     email = "jaredhuling@gmail.com"))
 Description: Provides functions for fitting and validation of subgroup
     identification and personalized medicine models under the general subgroup
-    identification framework of Chen et al (2017) <doi:10.1111/biom.12676>.
+    identification framework of Chen et al. (2017) <doi:10.1111/biom.12676>.
     This package is intended for use for both randomized controlled trials and
     observational studies.
 URL: https://jaredhuling.github.io/personalized/
