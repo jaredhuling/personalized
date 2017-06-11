@@ -21,8 +21,12 @@ opts_chunk$set(message = FALSE)
 
 The personalized package provides estimation methods for subgroup identification under the framework of [Chen et al (2017)](http://onlinelibrary.wiley.com/doi/10.1111/biom.12676/abstract)
 
-Install using the **devtools** package:
+Install from CRAN using:
+```{r, eval = FALSE}
+install.packages("personalized")
+```
 
+or install the development version using the **devtools** package:
 ```{r, eval = FALSE}
 devtools::install_github("jaredhuling/personalized")
 ```
