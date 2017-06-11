@@ -28,13 +28,13 @@ Validates subgroup treatment effects for fitted
 library(personalized)
 
 set.seed(123)
-n.obs  <- 1000
-n.vars <- 50
+n.obs  <- 500
+n.vars <- 20
 x <- matrix(rnorm(n.obs * n.vars, sd = 3), n.obs, n.vars)
 
 
 # simulate non-randomized treatment
-xbetat   <- 0.5 + 0.5 * x[,21] - 0.5 * x[,41]
+xbetat   <- 0.5 + 0.5 * x[,11] - 0.5 * x[,13]
 trt.prob <- exp(xbetat) / (1 + exp(xbetat))
 trt01    <- rbinom(n.obs, 1, prob = trt.prob)
 
@@ -71,7 +71,7 @@ x.test <- matrix(rnorm(10 * n.obs * n.vars, sd = 3), 10 * n.obs, n.vars)
 
 
 # simulate non-randomized treatment
-xbetat.test   <- 0.5 + 0.5 * x.test[,21] - 0.5 * x.test[,41]
+xbetat.test   <- 0.5 + 0.5 * x.test[,11] - 0.5 * x.test[,13]
 trt.prob.test <- exp(xbetat.test) / (1 + exp(xbetat.test))
 trt01.test    <- rbinom(10 * n.obs, 1, prob = trt.prob.test)
 
