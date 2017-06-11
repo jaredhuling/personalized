@@ -173,4 +173,3 @@ from \code{fit.subgroup}, and \code{\link[personalized]{plot.subgroup_fitted}} f
 results from fitted models
 from \code{fit.subgroup}.
 }
-

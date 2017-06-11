@@ -57,4 +57,3 @@ check.overlap(x = x,
               propensity.func = prop.func)
 
 }
-

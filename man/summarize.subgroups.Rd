@@ -76,4 +76,3 @@ comp2 <- summarize.subgroups(x, subgroup = 1 * (subgrp.model$benefit.scores > 0)
 \seealso{
 \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models.
 }
-

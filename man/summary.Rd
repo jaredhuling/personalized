@@ -21,4 +21,3 @@ Prints summary of results for estimated subgroup treatment effects
 \code{\link[personalized]{validate.subgroup}} for function which creates validation results
 and \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models.
 }
-

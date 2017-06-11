@@ -29,4 +29,3 @@ Computes treatment effects within various subgroups to estimate subgroup treatme
 \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models which generate
 benefit scores.
 }
-
