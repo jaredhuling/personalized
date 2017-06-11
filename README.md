@@ -4,6 +4,7 @@
 
 
 
+[![version](http://www.r-pkg.org/badges/version/personalized)](https://cran.r-project.org/package=personalized)
 [![Build Status](https://travis-ci.org/jaredhuling/personalized.svg?branch=master)](https://travis-ci.org/jaredhuling/personalized)
 
 
