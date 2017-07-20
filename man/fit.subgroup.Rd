@@ -7,7 +7,7 @@
 fit.subgroup(x, y, trt, propensity.func, loss = c("sq_loss_lasso",
   "logistic_loss_lasso", "cox_loss_lasso", "sq_loss_lasso_gam",
   "logistic_loss_lasso_gam", "sq_loss_gam", "logistic_loss_gam", "sq_loss_gbm",
-  "abs_loss_gbm", "huberized_loss_gbm", "logistic_loss_gbm", "cox_loss_gbm"),
+  "abs_loss_gbm", "logistic_loss_gbm", "cox_loss_gbm"),
   method = c("weighting", "a_learning"), augment.func = NULL,
   cutpoint = 0, larger.outcome.better = TRUE, retcall = TRUE, ...)
 }
@@ -44,7 +44,6 @@ is complex.
     \item{\code{"logistic_loss_gam"}}{ - M(y, v) = y * log(1 + exp{-v}) with generalized additive model fit on all variables}
     \item{\code{"sq_loss_gbm"}}{ - M(y, v) = (v - y) ^ 2 with gradient-boosted decision trees model}
     \item{\code{"abs_loss_gbm"}}{ - M(y, v) = |v - y| with gradient-boosted decision trees model}
-    \item{\code{"huberized_loss_gbm"}}{ - M corresponds to Huberized hinge loss (for binary outcomes) with gradient-boosted decision trees model}
     \item{\code{"logistic_loss_gbm"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with gradient-boosted decision trees model}
     \item{\code{"cox_loss_gbm"}}{ - M corresponds to the negative partial likelihood of the cox model with gradient-boosted decision trees model}
 }}
