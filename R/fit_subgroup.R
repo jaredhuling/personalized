@@ -182,6 +182,8 @@ fit.subgroup <- function(x,
 
     y      <- drop(y)
     vnames <- colnames(x)
+
+    # set variable names if they are not set
     if (is.null(vnames)) vnames <- paste0("V", 1:dims[2])
 
     outcome.weighted <- FALSE
@@ -190,7 +192,7 @@ fit.subgroup <- function(x,
     # other options selected
     if (class(y) == "Surv")
     {
-        if (length(grep("cox_loss", loss)) == 0)
+        if (!grepl("cox_loss", loss))
         {
             stop("Loss and family must correspond to a Cox model for time-to-event outcomes.")
         } else
@@ -199,7 +201,8 @@ fit.subgroup <- function(x,
         }
     }
 
-    if (length(grep("cox_loss", loss)) > 0)
+    # set family to cox if cox_loss asked for
+    if (grepl("cox_loss", loss))
     {
         if (class(y) != "Surv")
         {
@@ -211,8 +214,8 @@ fit.subgroup <- function(x,
         }
     }
 
-    if (length(grep("logistic_loss", loss)) > 0 |
-        length(grep("huberized_loss", loss)) > 0)
+    # force family to binomial if loss is binary outcome-specific
+    if (grepl("logistic_loss", loss) | grepl("huberized_loss", loss))
     {
         family <- "binomial"
     }
@@ -261,13 +264,16 @@ fit.subgroup <- function(x,
         y.adj <- y
     }
 
+    # stop if augmentation function provided
+    # for non-gaussian outcomes.
+    # has not been developed yet
     if (!is.null(augment.func) & family != "gaussian")
     {
         warning("Efficiency augmentation not available for non-continuous outcomes yet. No augmentation applied.")
     }
 
     larger.outcome.better <- as.logical(larger.outcome.better[1])
-    retcall <- as.logical(retcall[1])
+    retcall               <- as.logical(retcall[1])
 
     # save the passed arguments for later use in validate.subgroupu()
     # and plot.subgroup_fitted() functions
@@ -310,6 +316,7 @@ fit.subgroup <- function(x,
 
     if (rng.pi[1] <= 0 | rng.pi[2] >= 1) stop("propensity.func() should return values between 0 and 1")
 
+    # create 1 and -1 version of treatment vector
     trt2 <- 2 * trt - 1
 
     # construct modified design matrices
@@ -332,13 +339,13 @@ fit.subgroup <- function(x,
     fitted.model <- do.call(fit_fun, list(x = x.tilde, y = y.adj, wts = wts, family = family, ...))
 
     # save extra results
-    fitted.model$call   <- this.call
-    fitted.model$family <- family
-    fitted.model$loss   <- loss
-    fitted.model$method <- method
+    fitted.model$call                  <- this.call
+    fitted.model$family                <- family
+    fitted.model$loss                  <- loss
+    fitted.model$method                <- method
     fitted.model$larger.outcome.better <- larger.outcome.better
-    fitted.model$var.names <- vnames
-    fitted.model$benefit.scores <- fitted.model$predict(x)
+    fitted.model$var.names             <- vnames
+    fitted.model$benefit.scores        <- fitted.model$predict(x)
 
     # calculate sizes of subgroups and the
     # subgroup treatment effects based on the

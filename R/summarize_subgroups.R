@@ -70,7 +70,7 @@ summarize.subgroups.default <- function(x, subgroup, ...)
     compare.mat <- data.frame(compare.mat)
     colnames(compare.mat) <- c("avg (recom trt)", "avg (recom ctrl)", "diff",
                                "p.value", "SE (recom trt)", "SE (recom ctrl)")
-    class(compare.mat) <- c("subgroup_summary", "data.frame")
+    class(compare.mat)    <- c("subgroup_summary", "data.frame")
     compare.mat
 }
 

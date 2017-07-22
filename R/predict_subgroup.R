@@ -68,8 +68,13 @@ predict.subgroup_fitted <- function(object,
 {
     type <- match.arg(type)
 
+    # simply call prediction function
+    # defined by the loss function used
     retval <- drop(object$predict(newx))
 
+    # need to make predicted (ie recommended)
+    # treatment behavior different if larger
+    # outcomes are better
     if (type == "trt.group")
     {
         if (object$larger.outcome.better)

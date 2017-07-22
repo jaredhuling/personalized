@@ -136,7 +136,7 @@ validate.subgroup <- function(model,
     n.obs <- NROW(x)
 
     # create objects to store results
-    boot.list <- vector(mode = "list", length = length(model$subgroup.trt.effects))
+    boot.list      <- vector(mode = "list", length = length(model$subgroup.trt.effects))
     boot.list[[1]] <- array(NA, dim = c(B, length(model$subgroup.trt.effects[[1]])))
     boot.list[[2]] <- boot.list[[3]] <- array(NA, dim = c(B, dim(model$subgroup.trt.effects[[2]])))
 
@@ -153,7 +153,7 @@ validate.subgroup <- function(model,
             model$call$x    <- x[samp.idx,]
             model$call$trt  <- trt[samp.idx]
 
-            x.test   <- x[-samp.idx,]
+            x.test          <- x[-samp.idx,]
 
             # need to handle differently if outcome is a matrix
             if (is.matrix(y))
@@ -223,15 +223,15 @@ validate.subgroup <- function(model,
 
             # bootstrap is not available because it
             # results in overly optimistic results
-            samp.idx <- sample.int(n.obs, n.obs, replace = TRUE)
+            samp.idx       <- sample.int(n.obs, n.obs, replace = TRUE)
             model$call$x   <- x[samp.idx,]
             model$call$y   <- y[samp.idx]
             model$call$trt <- trt[samp.idx]
 
-            mod.b    <- do.call(fit.subgroup, model$call)
-            boot.list[[1]][b,]  <- mod.b$subgroup.trt.effects[[1]]
-            boot.list[[2]][b,,] <- mod.b$subgroup.trt.effects[[2]]
-            boot.list[[3]][b,,] <- mod.b$subgroup.trt.effects[[3]]
+            mod.b               <- do.call(fit.subgroup, model$call)
+            boot.list[[1]][b,]  <- mod.b$subgroup.trt.effects[[1]] # subgroup-specific trt effects
+            boot.list[[2]][b,,] <- mod.b$subgroup.trt.effects[[2]] # mean of outcome for 2x2 table (trt received vs recommended)
+            boot.list[[3]][b,,] <- mod.b$subgroup.trt.effects[[3]] # sample sizes for 2x2 table
 
         }
     }
@@ -245,9 +245,9 @@ validate.subgroup <- function(model,
 
     # compute averages and standard
     # deviations across iterations
-    summary.stats <- list(colMeans(boot.list[[1]]),
-                          apply(boot.list[[2]], c(2, 3), mean),
-                          apply(boot.list[[3]], c(2, 3), mean))
+    summary.stats    <- list(colMeans(boot.list[[1]]),
+                             apply(boot.list[[2]], c(2, 3), mean),
+                             apply(boot.list[[3]], c(2, 3), mean))
 
     summary.stats.se <- list(apply(boot.list[[1]], 2, sd),
                              apply(boot.list[[2]], c(2, 3), sd),
@@ -258,18 +258,18 @@ validate.subgroup <- function(model,
     names(summary.stats$subgroup.effects) <- names(model$subgroup.trt.effects$subgroup.effects)
     dimnames(summary.stats$sample.sizes)  <- dimnames(model$subgroup.trt.effects$sample.sizes)
 
-    names(summary.stats.se[[1]])    <- names(model$subgroup.trt.effects$subgroup.effects)
-    dimnames(summary.stats.se[[3]]) <- dimnames(model$subgroup.trt.effects$sample.sizes)
+    names(summary.stats.se[[1]])          <- names(model$subgroup.trt.effects$subgroup.effects)
+    dimnames(summary.stats.se[[3]])       <- dimnames(model$subgroup.trt.effects$sample.sizes)
 
     names(summary.stats.se) <- paste("SE", names(summary.stats), sep = ".")
 
 
-    ret <- list(avg.results  = summary.stats,
-                se.results   = summary.stats.se,
-                boot.results = boot.list,
-                family       = model$family,
-                loss         = model$loss,
-                method       = model$method,
+    ret <- list(avg.results  = summary.stats,    # means
+                se.results   = summary.stats.se, # std errors
+                boot.results = boot.list,        # this is a list of results for each iter
+                family       = model$family,     # model family
+                loss         = model$loss,       # model loss
+                method       = model$method,     # subgroup method (weighting vs a-learning)
                 val.method   = method)
     class(ret) <- "subgroup_validated"
     ret

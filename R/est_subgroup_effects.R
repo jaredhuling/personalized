@@ -110,7 +110,9 @@ subgroup.effects <- function(benefit.scores, y, trt, cutpoint = 0, larger.outcom
     names(subgroup.effects) <- c("Trt  Effect Among Recommended Trt",
                                  "Ctrl Effect Among Recommended Ctrl")
 
-    list(subgroup.effects = subgroup.effects,
-         avg.outcomes     = res.mat,
-         sample.sizes     = sample.size.mat)
+    list(subgroup.effects = subgroup.effects, # subgroup-specific effects
+                                              # (trt effect among those recommendedtrt and
+                                              #  ctrl effect among rec ctrl)
+         avg.outcomes     = res.mat,          # means within 2x2 table (trt status vs trt rec)
+         sample.sizes     = sample.size.mat)  # sample sizes for 2x2 table
 }
