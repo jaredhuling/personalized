@@ -49,10 +49,10 @@ create.design.matrix <- function(x, trt, reference.trt = NULL)
 
     x.return <- array(0, dim = c(n.obs, n.vars * (n.trts - 1)))
 
-    var.idx.list  <- vector(mode = "list", length = n.trts - 1)
+    var.idx.list        <- vector(mode = "list", length = n.trts - 1)
     names(var.idx.list) <- trt.levels[-n.trts] # remove reference treatment
-    n.vars.cumsum <- c(0, cumsum(rep(n.vars, n.trts)))
-    n.obs.cumsum  <- c(0, cumsum(sample.sizes))
+    n.vars.cumsum       <- c(0, cumsum(rep(n.vars, n.trts)))
+    n.obs.cumsum        <- c(0, cumsum(sample.sizes))
     for (t in 1:(n.trts - 1))
     {
         idx.obs.cur  <- (n.obs.cumsum[t] + 1):n.obs.cumsum[t + 1]
