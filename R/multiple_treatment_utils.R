@@ -3,7 +3,7 @@
 # treatment is treated as a "control".
 # For example, if matrix x is supplied and treatment with three
 # levels where the third level is the reference treatment,
-# create.design.matrix() will return:
+# create.block.matrix.mult.trt() will return:
 # |x_1   0  |
 # |0     x_2|
 # |-x_3 -x_3|
@@ -14,7 +14,7 @@
 # with binary treatments, this simplifies to the normal
 # | x_1|
 # |-x_2|
-create.design.matrix <- function(x, trt, reference.trt = NULL)
+create.block.matrix.mult.trt <- function(x, trt, reference.trt = NULL)
 {
     trt.levels      <- levels(trt)
     n.trts          <- length(trt.levels)

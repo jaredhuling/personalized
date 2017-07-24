@@ -279,13 +279,13 @@ fit.subgroup <- function(x,
     # and plot.subgroup_fitted() functions
     if (retcall)
     {
-        this.call <- mget(names(formals()), sys.frame(sys.nframe()))
+        this.call     <- mget(names(formals()), sys.frame(sys.nframe()))
 
         this.call$... <- NULL
-        this.call <- c(this.call, list(...))
+        this.call     <- c(this.call, list(...))
     } else
     {
-        this.call <- NULL
+        this.call     <- NULL
     }
 
     trt         <- as.integer(trt)
@@ -308,7 +308,7 @@ fit.subgroup <- function(x,
     }
 
     # compute propensity scores
-    pi.x <- propensity.func(x = x, trt = trt)
+    pi.x   <- propensity.func(x = x, trt = trt)
 
     # make sure the resulting propensity scores are in the
     # acceptable range (ie 0-1)
@@ -316,21 +316,15 @@ fit.subgroup <- function(x,
 
     if (rng.pi[1] <= 0 | rng.pi[2] >= 1) stop("propensity.func() should return values between 0 and 1")
 
-    # create 1 and -1 version of treatment vector
-    trt2 <- 2 * trt - 1
+    x.tilde <- create.design.matrix.binary.trt(x      = x,
+                                               pi.x   = pi.x,
+                                               trt    = trt,
+                                               method = method)
 
-    # construct modified design matrices
-    # and weights
-    # depending on what method is used
-    if (method == "weighting")
-    {
-        x.tilde <- trt2 * cbind(1, x)
-        wts     <- 1 / (pi.x * (trt == 1) + (1 - pi.x) * (trt == 0))
-    } else
-    {   # A-learning method
-        x.tilde <- (trt - pi.x) * cbind(1, x)
-        wts     <- rep(1, nrow(x))
-    }
+    wts     <- create.weights.binary.trt(pi.x   = pi.x,
+                                         trt    = trt,
+                                         method = method)
+
 
     colnames(x.tilde) <- c("Trt", vnames)
 
