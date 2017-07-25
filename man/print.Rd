@@ -16,7 +16,7 @@
   digits = max(getOption("digits") - 3, 3), ...)
 }
 \arguments{
-\item{x}{a fitted object from either \code{fit.subgroup}, \code{validate.subgroup}, or \code{summaryize.subgroups()}}
+\item{x}{a fitted object from either \code{fit.subgroup}, \code{validate.subgroup}, or \code{summarize.subgroups()}}
 
 \item{digits}{minimal number of significant digits to print.}
 

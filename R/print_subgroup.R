@@ -2,7 +2,7 @@
 #'
 #' @description Prints results for estimated subgroup treatment effects
 #'
-#' @param x a fitted object from either \code{fit.subgroup}, \code{validate.subgroup}, or \code{summaryize.subgroups()}
+#' @param x a fitted object from either \code{fit.subgroup}, \code{validate.subgroup}, or \code{summarize.subgroups()}
 #' @param digits minimal number of significant digits to print.
 #' @param ... further arguments passed to or from \code{\link[base]{print.default}}.
 #' @seealso \code{\link[personalized]{validate.subgroup}} for function which creates validation results

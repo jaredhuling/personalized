@@ -57,8 +57,9 @@
 #' instead, to change the \code{gam method} argument, instead supply \code{method.gam}, ie \code{method.gam = "REML"}.
 #' @seealso \code{\link[personalized]{validate.subgroup}} for function which creates validation results for subgroup
 #' identification models, \code{\link[personalized]{predict.subgroup_fitted}} for a prediction function for fitted models
-#' from \code{fit.subgroup}, and \code{\link[personalized]{plot.subgroup_fitted}} for a function which plots
-#' results from fitted models
+#' from \code{fit.subgroup}, \code{\link[personalized]{plot.subgroup_fitted}} for a function which plots
+#' results from fitted models, and \code{\link[personalized]{print.subgroup_fitted}}
+#' for arguments for printing options for \code{fit.subgroup()}.
 #' from \code{fit.subgroup}.
 #' @references Chen, S., Tian, L., Cai, T. and Yu, M. (2017), A general statistical framework for subgroup identification
 #' and comparative treatment scoring. Biometrics. doi:10.1111/biom.12676 \url{http://onlinelibrary.wiley.com/doi/10.1111/biom.12676/abstract}

@@ -168,7 +168,8 @@ and comparative treatment scoring. Biometrics. doi:10.1111/biom.12676 \url{http:
 \seealso{
 \code{\link[personalized]{validate.subgroup}} for function which creates validation results for subgroup
 identification models, \code{\link[personalized]{predict.subgroup_fitted}} for a prediction function for fitted models
-from \code{fit.subgroup}, and \code{\link[personalized]{plot.subgroup_fitted}} for a function which plots
-results from fitted models
+from \code{fit.subgroup}, \code{\link[personalized]{plot.subgroup_fitted}} for a function which plots
+results from fitted models, and \code{\link[personalized]{print.subgroup_fitted}}
+for arguments for printing options for \code{fit.subgroup()}.
 from \code{fit.subgroup}.
 }
