@@ -75,7 +75,8 @@ summarize.subgroups.default <- function(x, subgroup, ...)
 }
 
 
-#' @seealso \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models.
+#' @seealso \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models and
+#' \code{\link[personalized]{print.subgroup_summary}} for arguments for printing options for \code{summarize.subgroups()}.
 #' @rdname summarize.subgroups
 #' @export
 #' @examples
