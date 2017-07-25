@@ -78,8 +78,8 @@
     <p>Results in a plot to check whether the propensity score has adequate overlap between treatment groups</p>
     
 
-    <pre class="usage"><span class='fu'>check.overlap</span>(<span class='no'>x</span>, <span class='no'>trt</span>, <span class='no'>propensity.func</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"histogram"</span>, <span class='st'>"density"</span>),
-  <span class='kw'>bins</span> <span class='kw'>=</span> <span class='fl'>50L</span>)</pre>
+    <pre class="usage"><span class='fu'>check.overlap</span>(<span class='no'>x</span>, <span class='no'>trt</span>, <span class='no'>propensity.func</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"histogram"</span>, <span class='st'>"density"</span>,
+  <span class='st'>"both"</span>), <span class='kw'>bins</span> <span class='kw'>=</span> <span class='fl'>50L</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -141,6 +141,11 @@ group or a density (<code>type = "density"</code>) for each treatment group</p><
 <span class='fu'>check.overlap</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>,
               <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
               <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>)</div><img src='check.overlap-2.png' alt='' width='540' height='400' /><div class='input'>
+<span class='co'># now add density plot with histogram</span>
+<span class='fu'>check.overlap</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>,
+              <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
+              <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"both"</span>,
+              <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>)</div><img src='check.overlap-4.png' alt='' width='540' height='400' /><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

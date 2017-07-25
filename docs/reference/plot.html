@@ -127,12 +127,12 @@ and <code><a href='fit.subgroup.html'>fit.subgroup</a></code> for function which
 
 <span class='fu'>set.seed</span>(<span class='fl'>123</span>)
 <span class='no'>n.obs</span>  <span class='kw'>&lt;-</span> <span class='fl'>1000</span>
-<span class='no'>n.vars</span> <span class='kw'>&lt;-</span> <span class='fl'>50</span>
+<span class='no'>n.vars</span> <span class='kw'>&lt;-</span> <span class='fl'>20</span>
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>matrix</span>(<span class='fu'>rnorm</span>(<span class='no'>n.obs</span> * <span class='no'>n.vars</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>3</span>), <span class='no'>n.obs</span>, <span class='no'>n.vars</span>)
 
 
 <span class='co'># simulate non-randomized treatment</span>
-<span class='no'>xbetat</span>   <span class='kw'>&lt;-</span> <span class='fl'>0.5</span> + <span class='fl'>0.5</span> * <span class='no'>x</span>[,<span class='fl'>21</span>] - <span class='fl'>0.5</span> * <span class='no'>x</span>[,<span class='fl'>41</span>]
+<span class='no'>xbetat</span>   <span class='kw'>&lt;-</span> <span class='fl'>0.5</span> + <span class='fl'>0.5</span> * <span class='no'>x</span>[,<span class='fl'>11</span>] - <span class='fl'>0.5</span> * <span class='no'>x</span>[,<span class='fl'>13</span>]
 <span class='no'>trt.prob</span> <span class='kw'>&lt;-</span> <span class='fu'>exp</span>(<span class='no'>xbetat</span>) / (<span class='fl'>1</span> + <span class='fu'>exp</span>(<span class='no'>xbetat</span>))
 <span class='no'>trt01</span>    <span class='kw'>&lt;-</span> <span class='fu'>rbinom</span>(<span class='no'>n.obs</span>, <span class='fl'>1</span>, <span class='kw'>prob</span> <span class='kw'>=</span> <span class='no'>trt.prob</span>)
 
@@ -165,37 +165,37 @@ and <code><a href='fit.subgroup.html'>fit.subgroup</a></code> for function which
 
 <span class='no'>subgrp.model</span>$<span class='no'>subgroup.trt.effects</span></div><div class='output co'>#&gt; $subgroup.effects
 #&gt;  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-#&gt;                           20.07929                           15.24970 
+#&gt;                           13.98552                           18.45793 
 #&gt; 
 #&gt; $avg.outcomes
 #&gt;               Recommended Trt Recommended Ctrl
-#&gt; Received Trt         -6.06678        -25.72407
-#&gt; Received Ctrl       -26.14607        -10.47437
+#&gt; Received Trt        -11.77302       -25.884954
+#&gt; Received Ctrl       -25.75854        -7.427022
 #&gt; 
 #&gt; $sample.sizes
 #&gt;               Recommended Trt Recommended Ctrl
-#&gt; Received Trt              236              341
-#&gt; Received Ctrl             218              205
+#&gt; Received Trt              221              366
+#&gt; Received Ctrl             242              171
 #&gt; </div><div class='input'>
 <span class='fu'>plot</span>(<span class='no'>subgrp.model</span>)</div><img src='plot-4.png' alt='' width='540' height='400' /><div class='input'>
 <span class='fu'>plot</span>(<span class='no'>subgrp.model</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"boxplot"</span>)</div><img src='plot-6.png' alt='' width='540' height='400' /><div class='input'>
 <span class='fu'>plot</span>(<span class='no'>subgrp.model</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"interaction"</span>)</div><img src='plot-8.png' alt='' width='540' height='400' /><div class='input'>
-<span class='no'>valmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='validate.subgroup.html'>validate.subgroup</a></span>(<span class='no'>subgrp.model</span>, <span class='kw'>B</span> <span class='kw'>=</span> <span class='fl'>10</span>,
+<span class='no'>valmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='validate.subgroup.html'>validate.subgroup</a></span>(<span class='no'>subgrp.model</span>, <span class='kw'>B</span> <span class='kw'>=</span> <span class='fl'>5</span>,
                           <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"training_test"</span>,
                           <span class='kw'>train.fraction</span> <span class='kw'>=</span> <span class='fl'>0.75</span>)
 <span class='no'>valmod</span>$<span class='no'>avg.results</span></div><div class='output co'>#&gt; $subgroup.effects
 #&gt;  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-#&gt;                           13.49959                           12.06389 
+#&gt;                           11.60910                           17.76595 
 #&gt; 
 #&gt; $avg.outcomes
 #&gt;               Recommended Trt Recommended Ctrl
-#&gt; Received Trt        -10.52435        -23.89501
-#&gt; Received Ctrl       -24.02394        -11.83112
+#&gt; Received Trt        -12.40451       -25.572851
+#&gt; Received Ctrl       -24.01362        -7.806903
 #&gt; 
 #&gt; $sample.sizes
 #&gt;               Recommended Trt Recommended Ctrl
-#&gt; Received Trt             62.3             80.7
-#&gt; Received Ctrl            59.3             47.7
+#&gt; Received Trt             62.2             89.2
+#&gt; Received Ctrl            58.8             39.8
 #&gt; </div><div class='input'>
 <span class='fu'>plot</span>(<span class='no'>valmod</span>)</div><img src='plot-12.png' alt='' width='540' height='400' /><div class='input'>
 <span class='fu'>plot</span>(<span class='no'>valmod</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"boxplot"</span>)</div><img src='plot-14.png' alt='' width='540' height='400' /><div class='input'>

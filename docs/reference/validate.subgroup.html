@@ -125,13 +125,13 @@ doi:10.1002/(SICI)1097-0258(19960229)15:4&lt;361::AID-SIM168&gt;3.0.CO;2-4</p>
     <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>personalized</span>)
 
 <span class='fu'>set.seed</span>(<span class='fl'>123</span>)
-<span class='no'>n.obs</span>  <span class='kw'>&lt;-</span> <span class='fl'>1000</span>
-<span class='no'>n.vars</span> <span class='kw'>&lt;-</span> <span class='fl'>50</span>
+<span class='no'>n.obs</span>  <span class='kw'>&lt;-</span> <span class='fl'>500</span>
+<span class='no'>n.vars</span> <span class='kw'>&lt;-</span> <span class='fl'>20</span>
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>matrix</span>(<span class='fu'>rnorm</span>(<span class='no'>n.obs</span> * <span class='no'>n.vars</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>3</span>), <span class='no'>n.obs</span>, <span class='no'>n.vars</span>)
 
 
 <span class='co'># simulate non-randomized treatment</span>
-<span class='no'>xbetat</span>   <span class='kw'>&lt;-</span> <span class='fl'>0.5</span> + <span class='fl'>0.5</span> * <span class='no'>x</span>[,<span class='fl'>21</span>] - <span class='fl'>0.5</span> * <span class='no'>x</span>[,<span class='fl'>41</span>]
+<span class='no'>xbetat</span>   <span class='kw'>&lt;-</span> <span class='fl'>0.5</span> + <span class='fl'>0.5</span> * <span class='no'>x</span>[,<span class='fl'>11</span>] - <span class='fl'>0.5</span> * <span class='no'>x</span>[,<span class='fl'>13</span>]
 <span class='no'>trt.prob</span> <span class='kw'>&lt;-</span> <span class='fu'>exp</span>(<span class='no'>xbetat</span>) / (<span class='fl'>1</span> + <span class='fu'>exp</span>(<span class='no'>xbetat</span>))
 <span class='no'>trt01</span>    <span class='kw'>&lt;-</span> <span class='fu'>rbinom</span>(<span class='no'>n.obs</span>, <span class='fl'>1</span>, <span class='kw'>prob</span> <span class='kw'>=</span> <span class='no'>trt.prob</span>)
 
@@ -164,23 +164,23 @@ doi:10.1002/(SICI)1097-0258(19960229)15:4&lt;361::AID-SIM168&gt;3.0.CO;2-4</p>
 
 <span class='no'>subgrp.model</span>$<span class='no'>subgroup.trt.effects</span></div><div class='output co'>#&gt; $subgroup.effects
 #&gt;  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-#&gt;                           20.07929                           15.24970 
+#&gt;                           13.26465                           13.84725 
 #&gt; 
 #&gt; $avg.outcomes
 #&gt;               Recommended Trt Recommended Ctrl
-#&gt; Received Trt         -6.06678        -25.72407
-#&gt; Received Ctrl       -26.14607        -10.47437
+#&gt; Received Trt        -14.39765       -23.675004
+#&gt; Received Ctrl       -27.66231        -9.827756
 #&gt; 
 #&gt; $sample.sizes
 #&gt;               Recommended Trt Recommended Ctrl
-#&gt; Received Trt              236              341
-#&gt; Received Ctrl             218              205
+#&gt; Received Trt              121              159
+#&gt; Received Ctrl             170               50
 #&gt; </div><div class='input'>
 <span class='no'>x.test</span> <span class='kw'>&lt;-</span> <span class='fu'>matrix</span>(<span class='fu'>rnorm</span>(<span class='fl'>10</span> * <span class='no'>n.obs</span> * <span class='no'>n.vars</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>3</span>), <span class='fl'>10</span> * <span class='no'>n.obs</span>, <span class='no'>n.vars</span>)
 
 
 <span class='co'># simulate non-randomized treatment</span>
-<span class='no'>xbetat.test</span>   <span class='kw'>&lt;-</span> <span class='fl'>0.5</span> + <span class='fl'>0.5</span> * <span class='no'>x.test</span>[,<span class='fl'>21</span>] - <span class='fl'>0.5</span> * <span class='no'>x.test</span>[,<span class='fl'>41</span>]
+<span class='no'>xbetat.test</span>   <span class='kw'>&lt;-</span> <span class='fl'>0.5</span> + <span class='fl'>0.5</span> * <span class='no'>x.test</span>[,<span class='fl'>11</span>] - <span class='fl'>0.5</span> * <span class='no'>x.test</span>[,<span class='fl'>13</span>]
 <span class='no'>trt.prob.test</span> <span class='kw'>&lt;-</span> <span class='fu'>exp</span>(<span class='no'>xbetat.test</span>) / (<span class='fl'>1</span> + <span class='fu'>exp</span>(<span class='no'>xbetat.test</span>))
 <span class='no'>trt01.test</span>    <span class='kw'>&lt;-</span> <span class='fu'>rbinom</span>(<span class='fl'>10</span> * <span class='no'>n.obs</span>, <span class='fl'>1</span>, <span class='kw'>prob</span> <span class='kw'>=</span> <span class='no'>trt.prob.test</span>)
 
@@ -203,20 +203,20 @@ doi:10.1002/(SICI)1097-0258(19960229)15:4&lt;361::AID-SIM168&gt;3.0.CO;2-4</p>
 #&gt; validation method:  training_test_replication 
 #&gt; 
 #&gt; Average Test Set Outcomes:
-#&gt;                     Recommended Trt       Recommended Ctrl
-#&gt; Received Trt  -9.2668 (SE = 1.9945) -23.7774 (SE = 2.8927)
-#&gt; Received Ctrl -26.114 (SE = 3.7305) -14.4519 (SE = 4.1699)
+#&gt;                      Recommended Trt       Recommended Ctrl
+#&gt; Received Trt  -18.0328 (SE = 5.6593) -22.7101 (SE = 4.1061)
+#&gt; Received Ctrl -25.1564 (SE = 3.6887) -14.3177 (SE = 8.8949)
 #&gt; 
 #&gt;  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-#&gt;              16.8472 (SE = 5.1464)               9.3255 (SE = 5.0555) </div><div class='input'>
+#&gt;               7.1236 (SE = 7.0019)              8.3924 (SE = 10.1312) </div><div class='input'>
 <span class='no'>bene.score.test</span> <span class='kw'>&lt;-</span> <span class='no'>subgrp.model</span>$<span class='fu'>predict</span>(<span class='no'>x.test</span>)
 
 <span class='fu'>mean</span>(<span class='no'>y.test</span>[<span class='no'>bene.score.test</span> <span class='kw'>&gt;</span> <span class='fl'>0</span> <span class='kw'>&amp;</span> <span class='no'>trt01.test</span> <span class='kw'>==</span> <span class='fl'>1</span>]) -
-       <span class='fu'>mean</span>(<span class='no'>y.test</span>[<span class='no'>bene.score.test</span> <span class='kw'>&gt;</span> <span class='fl'>0</span> <span class='kw'>&amp;</span> <span class='no'>trt01.test</span> <span class='kw'>==</span> <span class='fl'>0</span>])</div><div class='output co'>#&gt; [1] 16.53727</div><div class='input'><span class='fu'>mean</span>(<span class='no'>y.test</span>[<span class='no'>bene.score.test</span> <span class='kw'>&lt;=</span> <span class='fl'>0</span> <span class='kw'>&amp;</span> <span class='no'>trt01.test</span> <span class='kw'>==</span> <span class='fl'>0</span>]) -
-       <span class='fu'>mean</span>(<span class='no'>y.test</span>[<span class='no'>bene.score.test</span> <span class='kw'>&lt;=</span> <span class='fl'>0</span> <span class='kw'>&amp;</span> <span class='no'>trt01.test</span> <span class='kw'>==</span> <span class='fl'>1</span>])</div><div class='output co'>#&gt; [1] 10.88687</div><div class='input'>
+       <span class='fu'>mean</span>(<span class='no'>y.test</span>[<span class='no'>bene.score.test</span> <span class='kw'>&gt;</span> <span class='fl'>0</span> <span class='kw'>&amp;</span> <span class='no'>trt01.test</span> <span class='kw'>==</span> <span class='fl'>0</span>])</div><div class='output co'>#&gt; [1] 13.18799</div><div class='input'><span class='fu'>mean</span>(<span class='no'>y.test</span>[<span class='no'>bene.score.test</span> <span class='kw'>&lt;=</span> <span class='fl'>0</span> <span class='kw'>&amp;</span> <span class='no'>trt01.test</span> <span class='kw'>==</span> <span class='fl'>0</span>]) -
+       <span class='fu'>mean</span>(<span class='no'>y.test</span>[<span class='no'>bene.score.test</span> <span class='kw'>&lt;=</span> <span class='fl'>0</span> <span class='kw'>&amp;</span> <span class='no'>trt01.test</span> <span class='kw'>==</span> <span class='fl'>1</span>])</div><div class='output co'>#&gt; [1] 15.84766</div><div class='input'>
 <span class='fu'>quantile</span>(<span class='no'>valmod</span>$<span class='no'>boot.results</span><span class='kw'>[[</span><span class='fl'>1</span>]][,<span class='fl'>1</span>], <span class='fu'>c</span>(<span class='fl'>0.025</span>, <span class='fl'>0.975</span>))</div><div class='output co'>#&gt;      2.5%     97.5% 
-#&gt;  9.810621 23.980167 </div><div class='input'><span class='fu'>quantile</span>(<span class='no'>valmod</span>$<span class='no'>boot.results</span><span class='kw'>[[</span><span class='fl'>1</span>]][,<span class='fl'>2</span>], <span class='fu'>c</span>(<span class='fl'>0.025</span>, <span class='fl'>0.975</span>))</div><div class='output co'>#&gt;       2.5%      97.5% 
-#&gt;  0.9705566 15.7637391 </div></pre>
+#&gt; -4.673896 16.891682 </div><div class='input'><span class='fu'>quantile</span>(<span class='no'>valmod</span>$<span class='no'>boot.results</span><span class='kw'>[[</span><span class='fl'>1</span>]][,<span class='fl'>2</span>], <span class='fu'>c</span>(<span class='fl'>0.025</span>, <span class='fl'>0.975</span>))</div><div class='output co'>#&gt;     2.5%    97.5% 
+#&gt; -5.24051 25.42524 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
