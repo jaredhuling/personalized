@@ -4,8 +4,8 @@
 \alias{check.overlap}
 \title{Check propensity score overlap}
 \usage{
-check.overlap(x, trt, propensity.func, type = c("histogram", "density"),
-  bins = 50L)
+check.overlap(x, trt, propensity.func, type = c("histogram", "density",
+  "both"), bins = 50L)
 }
 \arguments{
 \item{x}{The design matrix (not including intercept term)}
@@ -54,6 +54,12 @@ prop.func <- function(x, trt)
 
 check.overlap(x = x,
               trt = trt01,
+              propensity.func = prop.func)
+
+# now add density plot with histogram
+check.overlap(x = x,
+              trt = trt01,
+              type = "both",
               propensity.func = prop.func)
 
 }

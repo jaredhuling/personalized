@@ -44,11 +44,17 @@
 #'               trt = trt01,
 #'               propensity.func = prop.func)
 #'
+#' # now add density plot with histogram
+#' check.overlap(x = x,
+#'               trt = trt01,
+#'               type = "both",
+#'               propensity.func = prop.func)
+#'
 #' @export
 check.overlap <- function(x,
                           trt,
                           propensity.func,
-                          type = c("histogram", "density"),
+                          type = c("histogram", "density", "both"),
                           bins = 50L)
 {
     type <- match.arg(type)
@@ -75,13 +81,22 @@ check.overlap <- function(x,
             theme(legend.position = "bottom") +
             ggtitle("Densities of propensity scores by treatment group") +
             xlab("Propensity Score")
-    } else
+    } else if (type == "histogram")
     {
         pl.obj <- ggplot(prop.scores, aes(x = prop.score, fill = Treatment)) +
             geom_histogram(bins = bins, alpha = 0.5, position = "identity") +
             geom_rug(aes(colour = Treatment)) +
             theme(legend.position = "bottom") +
             ggtitle("Histograms of propensity scores by treatment group") +
+            xlab("Propensity Score")
+    } else
+    {
+        pl.obj <- ggplot(prop.scores, aes(x = prop.score, fill = Treatment)) +
+            geom_histogram(aes(y = ..density..), bins = bins, alpha = 0.25, position = "identity") +
+            geom_rug(aes(colour = Treatment)) +
+            geom_density(alpha = 0.25) +
+            theme(legend.position = "bottom") +
+            ggtitle("Densities and histograms of propensity scores by treatment group") +
             xlab("Propensity Score")
     }
     pl.obj
