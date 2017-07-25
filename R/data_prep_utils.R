@@ -39,3 +39,109 @@ create.weights.binary.trt <- function(pi.x, trt, method)
     wts
 }
 
+
+
+create.design.matrix.mult.trt <- function(x, pi.x, trt, method, reference.trt = NULL)
+{
+    # trt must be supplied as integer vector
+    # where 1 = treatment, 0 = control
+
+    # we pass a matrix with intercept (ie treatment main effect)
+    # so that there is one of them per treatment
+    x.block <- create.block.matrix.mult.trt(cbind(1, x), trt)
+
+    # construct modified design matrices
+    # depending on what method is used
+    if (method == "weighting")
+    {
+        x.tilde <- x.block
+    } else
+    {
+        stop("A-learning not available for multiple treatments")
+        # A-learning method
+        x.tilde <- (trt - pi.x) * cbind(1, x)
+    }
+    x.tilde
+}
+
+
+create.weights.mult.trt <- function(pi.x, trt, method)
+{
+    # trt must be supplied as factor
+
+    stop("this doesn't work yet")
+
+    # construct weights
+    # depending on what method is used
+    if (method == "weighting")
+    {
+        wts     <- 1 / (pi.x * (trt == 1) + (1 - pi.x) * (trt == 0))
+    } else
+    {   # A-learning method
+        wts     <- rep(1, length(pi.x))
+    }
+    wts
+}
+
+
+create.design.matrix <- function(x, pi.x, trt, method, reference.trt = NULL)
+{
+    # check if multiple treatments or not
+    if (is.factor(trt))
+    {
+        n.trts <- length(levels(trt))
+    } else
+    {
+        n.trts <- length(unique(trt))
+    }
+
+    is.mult.trt <- n.trts > 2
+
+    if (is.mult.trt)
+    {
+        # set to factor for multiple trtment trt vector if it isn't already
+        if (!is.factor(trt)) trt <- as.factor(trt)
+
+        return( create.design.matrix.mult.trt(x             = x,
+                                              pi.x          = pi.x,
+                                              trt           = trt,
+                                              method        = method,
+                                              reference.trt = reference.trt) )
+    } else
+    {
+        return( create.design.matrix.binary.trt(x      = x,
+                                                pi.x   = pi.x,
+                                                trt    = trt,
+                                                method = method) )
+    }
+}
+
+create.weights <- function(pi.x, trt, method)
+{
+    # check if multiple treatments or not
+    if (is.factor(trt))
+    {
+        n.trts <- length(levels(trt))
+    } else
+    {
+        n.trts <- length(unique(trt))
+    }
+
+    is.mult.trt <- n.trts > 2
+
+    if (is.mult.trt)
+    {
+        # set to factor for multiple trtment trt vector if it isn't already
+        if (!is.factor(trt)) trt <- as.factor(trt)
+
+        return( create.weights.mult.trt(pi.x   = pi.x,
+                                        trt    = trt,
+                                        method = method) )
+    } else
+    {
+        return( create.weights.binary.trt(pi.x   = pi.x,
+                                          trt    = trt,
+                                          method = method) )
+    }
+}
+

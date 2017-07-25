@@ -316,14 +316,16 @@ fit.subgroup <- function(x,
 
     if (rng.pi[1] <= 0 | rng.pi[2] >= 1) stop("propensity.func() should return values between 0 and 1")
 
-    x.tilde <- create.design.matrix.binary.trt(x      = x,
-                                               pi.x   = pi.x,
-                                               trt    = trt,
-                                               method = method)
+    # construct design matrix to be passed to fitting function
+    x.tilde <- create.design.matrix(x      = x,
+                                    pi.x   = pi.x,
+                                    trt    = trt,
+                                    method = method)
 
-    wts     <- create.weights.binary.trt(pi.x   = pi.x,
-                                         trt    = trt,
-                                         method = method)
+    # construct observation weight vector
+    wts     <- create.weights(pi.x   = pi.x,
+                              trt    = trt,
+                              method = method)
 
 
     colnames(x.tilde) <- c("Trt", vnames)

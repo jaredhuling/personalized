@@ -67,7 +67,7 @@ create.block.matrix.mult.trt <- function(x, trt, reference.trt = NULL)
         idx.obs.cur  <- (n.obs.cumsum[t] + 1):n.obs.cumsum[t + 1]
         # replicate columns
         idx.vars.cur <- (n.vars.cumsum[r] + 1):n.vars.cumsum[r + 1]
-        x.return[idx.obs.cur, idx.vars.cur] <- -x[trt.idx[[t]],]
+        x.return[idx.obs.cur, idx.vars.cur] <- -x[trt.idx[[t]],] / (n.trts - 1)
     }
     list(x            = x.return,     # design matrix
          trt.levels   = trt.levels,   # treatment levels (re-ordered based off of reference treatment)
