@@ -125,6 +125,9 @@ summarize.subgroups.default <- function(x, subgroup, ...)
 #'
 #' # or we can simply supply the matrix x and the subgroups
 #' comp2 <- summarize.subgroups(x, subgroup = 1 * (subgrp.model$benefit.scores > 0))
+#'
+#' print(comp2, p.value = 0.01)
+#'
 summarize.subgroups.subgroup_fitted <- function(x, ...)
 {
 
