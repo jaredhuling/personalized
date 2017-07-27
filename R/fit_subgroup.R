@@ -173,10 +173,33 @@ fit.subgroup <- function(x,
     loss   <- match.arg(loss)
     method <- match.arg(method)
 
-    # set default family and change later
-    # if the loss argument is set to something
-    # not for continuous outcomes
-    family <- "gaussian"
+
+    # make sure outcome is consistent with
+    # other options selected if there is any
+    # indication of a survival outcome or model
+    if ( xor(class(y) == "Surv", grepl("cox_loss", loss)) )
+    {
+        ifelse(
+            grepl("cox_loss", loss),
+            stop("Must provide 'Surv' object if loss/family corresponds to a Cox model. See\n
+                 '?Surv' for more information about 'Surv' objects."),
+            stop("Loss and family must correspond to a Cox model for time-to-event outcomes.")
+        )
+    }
+
+    if (grepl("cox_loss", loss))
+    {
+        family <- "cox"
+    }
+    else if (grepl("logistic_loss", loss) | grepl("huberized_loss", loss))
+    {
+        family <- "binomial"
+    }
+    else
+    {
+        family <- "gaussian"
+    }
+
 
     dims   <- dim(x)
     if (is.null(dims)) stop("x must be a matrix object.")
@@ -189,37 +212,6 @@ fit.subgroup <- function(x,
 
     outcome.weighted <- FALSE
 
-    # make sure outcome is consistent with
-    # other options selected
-    if (class(y) == "Surv")
-    {
-        if (!grepl("cox_loss", loss))
-        {
-            stop("Loss and family must correspond to a Cox model for time-to-event outcomes.")
-        } else
-        {
-            family <- "cox"
-        }
-    }
-
-    # set family to cox if cox_loss asked for
-    if (grepl("cox_loss", loss))
-    {
-        if (class(y) != "Surv")
-        {
-            stop("Must provide 'Surv' object if loss/family corresponds to a Cox model. See
-                 '?Surv' for more information about 'Surv' objects.")
-        } else
-        {
-            family <- "cox"
-        }
-    }
-
-    # force family to binomial if loss is binary outcome-specific
-    if (grepl("logistic_loss", loss) | grepl("huberized_loss", loss))
-    {
-        family <- "binomial"
-    }
 
 
 
