@@ -13,7 +13,8 @@
 #' of patients assigned to the treatment group, i.e.:
 #' \code{propensity.func = function(x, trt) 0.5}.
 #' @param type Type of plot to create. Options are either a histogram (\code{type = "histogram"}) for each treatment
-#' group or a density (\code{type = "density"}) for each treatment group
+#' group, a density (\code{type = "density"}) for each treatment group, or to plot both a density and histogram
+#' (\code{type = "code"})
 #' @param bins integer number of bins for histograms when \code{type = "histogram"}
 #' @examples
 #' library(personalized)
