@@ -14,7 +14,7 @@
 # with binary treatments, this simplifies to the normal
 # | x_1|
 # |-x_2|
-create.block.matrix.mult.trt <- function(x, trt, reference.trt = NULL)
+create.block.matrix.mult.trt <- function(x, trt, y, reference.trt = NULL)
 {
     trt.levels      <- levels(trt)
     n.trts          <- length(trt.levels)
