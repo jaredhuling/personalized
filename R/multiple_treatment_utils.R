@@ -53,11 +53,14 @@ create.block.matrix.mult.trt <- function(x, trt, reference.trt = NULL)
     names(var.idx.list) <- trt.levels[-n.trts] # remove reference treatment
     n.vars.cumsum       <- c(0, cumsum(rep(n.vars, n.trts)))
     n.obs.cumsum        <- c(0, cumsum(sample.sizes))
+
+    y.return <- numeric(n.obs)
     for (t in 1:(n.trts - 1))
     {
         idx.obs.cur  <- (n.obs.cumsum[t] + 1):n.obs.cumsum[t + 1]
         idx.vars.cur <- (n.vars.cumsum[t] + 1):n.vars.cumsum[t + 1]
         x.return[idx.obs.cur, idx.vars.cur] <- x[trt.idx[[t]],]
+        y.return[idx.obs.cur] <- y[trt.idx[[t]]]
     }
     t <- n.trts
 
@@ -67,9 +70,15 @@ create.block.matrix.mult.trt <- function(x, trt, reference.trt = NULL)
         idx.obs.cur  <- (n.obs.cumsum[t] + 1):n.obs.cumsum[t + 1]
         # replicate columns
         idx.vars.cur <- (n.vars.cumsum[r] + 1):n.vars.cumsum[r + 1]
-        x.return[idx.obs.cur, idx.vars.cur] <- -x[trt.idx[[t]],] / (n.trts - 1)
+        x.return[idx.obs.cur, idx.vars.cur] <- -x[trt.idx[[t]],]
+
+        if (r == 1)
+        {
+            y.return[idx.obs.cur] <- y[trt.idx[[t]]]
+        }
     }
     list(x            = x.return,     # design matrix
+         y            = y.return,
          trt.levels   = trt.levels,   # treatment levels (re-ordered based off of reference treatment)
          coef.indices = var.idx.list) # list of indices for the coefficients specific
                                       # to specific treatment contrasts
