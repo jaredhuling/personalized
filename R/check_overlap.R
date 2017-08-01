@@ -1,4 +1,4 @@
-
+..density.. <- NULL # need to make variable defined
 
 #' Check propensity score overlap
 #'
@@ -102,3 +102,5 @@ check.overlap <- function(x,
     }
     pl.obj
 }
+
+
