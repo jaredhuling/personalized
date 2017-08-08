@@ -4,7 +4,7 @@
 \alias{fit.subgroup}
 \title{Fitting subgroup identification models}
 \usage{
-fit.subgroup(x, y, trt, propensity.func, loss = c("sq_loss_lasso",
+fit.subgroup(x, y, trt, propensity.func = NULL, loss = c("sq_loss_lasso",
   "logistic_loss_lasso", "cox_loss_lasso", "sq_loss_lasso_gam",
   "logistic_loss_lasso_gam", "sq_loss_gam", "logistic_loss_gam", "sq_loss_gbm",
   "abs_loss_gbm", "logistic_loss_gbm", "cox_loss_gbm"),

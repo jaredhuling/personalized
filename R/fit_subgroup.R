@@ -150,7 +150,7 @@
 fit.subgroup <- function(x,
                          y,
                          trt,
-                         propensity.func,
+                         propensity.func = NULL,
                          loss       = c("sq_loss_lasso",
                                         "logistic_loss_lasso",
                                         "cox_loss_lasso",
@@ -238,6 +238,14 @@ fit.subgroup <- function(x,
             stop("augment.func() should only have either two arguments: 'x' and 'y', or three arguments:
                  'trt', 'x', and 'y'")
         }
+    }
+
+    if (is.null(propensity.func))
+    {
+        # defaults to constant propensity score
+        # the use will almost certainly want to change this
+        mean.trt <- mean(trt == 1)
+        propensity.func <- function(trt, x) rep(mean.trt, length(trt))
     }
 
 
