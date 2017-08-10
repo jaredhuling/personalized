@@ -27,7 +27,7 @@ of patients assigned to the treatment group, i.e.:
 
 \item{loss}{choice of both the M function from Chen, et al (2017) and potentially the penalty used for variable selection.
 All \code{loss} options starting with \code{sq_loss} use M(y, v) = (v - y) ^ 2, all options starting with \code{logistic_loss} use
-the logistic loss: M(y, v) = y * log(1 + exp{-v}), and all options starting with \code{cox_loss} use the negative partial likelihood loss for the Cox PH model.
+the logistic loss: M(y, v) = y * log(1 + exp\{-v\}), and all options starting with \code{cox_loss} use the negative partial likelihood loss for the Cox PH model.
 All options ending with \code{lasso} have a lasso penalty added to the loss for variable selection. \code{sq_loss_lasso_gam}
 and \code{logistic_loss_lasso_gam} first use the lasso to select variables and then fit a generalized additive model
 with nonparametric additive terms for each selected variable. \code{sq_loss_gam} involves a squared error loss with a generalized additive model and no variable selection.
@@ -39,9 +39,9 @@ is complex.
     \item{\code{"logistic_loss_lasso"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with with linear model and lasso penalty}
     \item{\code{"cox_loss_lasso"}}{ - M corresponds to the negative partial likelihood of the cox model with linear model and additionally a lasso penalty}
     \item{\code{"sq_loss_lasso_gam"}}{ - M(y, v) = (v - y) ^ 2 with variables selected by lasso penalty and generalized additive model fit on the selected variables}
-    \item{\code{"logistic_loss_lasso_gam"}}{ - M(y, v) = y * log(1 + exp{-v}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
+    \item{\code{"logistic_loss_lasso_gam"}}{ - M(y, v) = y * log(1 + exp\{-v\}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
     \item{\code{"sq_loss_gam"}}{ - M(y, v) = (v - y) ^ 2 with generalized additive model fit on all variables}
-    \item{\code{"logistic_loss_gam"}}{ - M(y, v) = y * log(1 + exp{-v}) with generalized additive model fit on all variables}
+    \item{\code{"logistic_loss_gam"}}{ - M(y, v) = y * log(1 + exp\{-v\}) with generalized additive model fit on all variables}
     \item{\code{"sq_loss_gbm"}}{ - M(y, v) = (v - y) ^ 2 with gradient-boosted decision trees model}
     \item{\code{"abs_loss_gbm"}}{ - M(y, v) = |v - y| with gradient-boosted decision trees model}
     \item{\code{"logistic_loss_gbm"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with gradient-boosted decision trees model}
@@ -66,14 +66,14 @@ will be recommended to be in the treatment group}
 if a larger outcome is better/preferable and set to \code{FALSE} if a smaller outcome is better/preferable. Defaults to \code{TRUE}.}
 
 \item{retcall}{boolean value. if \code{TRUE} then the passed arguments will be saved. Do not set to \code{FALSE}
-if the \code{validate.subgroupu()} function will later be used for your fitted subgroup model. Only set to \code{FALSE}
-if memory is limited as setting to code{TRUE} saves the design matrix to the fitted object}
+if the \code{validate.subgroup()} function will later be used for your fitted subgroup model. Only set to \code{FALSE}
+if memory is limited as setting to \code{TRUE} saves the design matrix to the fitted object}
 
 \item{...}{options to be passed to underlying fitting function. For all \code{loss} options with \code{lasso},
 this will be passed to \code{cv.glmnet} and for all \code{loss} options with \code{mcp} this will be passed
 to \code{cv.ncvreg}. Note that for all \code{loss} options that use \code{gam()} from the \code{mgcv} package,
 the user cannot supply the \code{gam} argument \code{method} because it is also an argument of \code{fit.subgroup}, so
-instead, to change the \code{gam method} argument, instead supply \code{method.gam}, ie \code{method.gam = "REML"}.}
+instead, to change the \code{gam method} argument, supply \code{method.gam}, ie \code{method.gam = "REML"}.}
 }
 \description{
 Fits subgroup identification model class of Chen, et al (2017)
