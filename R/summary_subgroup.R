@@ -27,9 +27,9 @@ summary.subgroup_fitted <- function(object, digits = max(getOption('digits')-3, 
         ## if variables are selected print out how many are selected
         ## and their coefficient estimates
         sel.varnames <- vnames[sel.idx]
-        cat(length(sel.idx)-2, 
+        cat(length(sel.idx) - 1,
             "out of",
-            length(est.coef)-2,
+            length(est.coef) - 1,
             "variables selected by the lasso (cross validation criterion).\n\n")
         coefmat <- matrix(est.coef[sel.idx], ncol = 1)
         rownames(coefmat) <- sel.varnames
