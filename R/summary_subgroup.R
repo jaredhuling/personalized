@@ -26,18 +26,15 @@ summary.subgroup_fitted <- function(object, digits = max(getOption('digits')-3, 
 
         ## if variables are selected print out how many are selected
         ## and their coefficient estimates
-        if (length(sel.idx) > 0)
-        {
-            sel.varnames <- vnames[sel.idx]
-            cat(length(sel.idx), "variables selected by the lasso (cross validation criterion).\n\n")
-            coefmat <- matrix(est.coef[sel.idx], ncol = 1)
-            rownames(coefmat) <- sel.varnames
-            colnames(coefmat) <- "Estimate"
-            print.default(round(coefmat, digits), quote = FALSE, right = TRUE, na.print = "NA", ...)
-        } else
-        {
-            cat("No variables selected by the lasso with cross validation. \n\n")
-        }
+        sel.varnames <- vnames[sel.idx]
+        cat(length(sel.idx)-2, 
+            "out of",
+            length(est.coef)-2,
+            "variables selected by the lasso (cross validation criterion).\n\n")
+        coefmat <- matrix(est.coef[sel.idx], ncol = 1)
+        rownames(coefmat) <- sel.varnames
+        colnames(coefmat) <- "Estimate"
+        print.default(round(coefmat, digits), quote = FALSE, right = TRUE, na.print = "NA", ...)
     } else
     {
         return(summary(object$model))
