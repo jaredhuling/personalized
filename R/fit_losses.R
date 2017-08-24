@@ -1,3 +1,52 @@
+# Define common predictions function types
+get.pred.func <- function(fit.name) {  
+    
+    # GAM models
+    if (grepl("_gam$",fit.name)) {
+        pred.func <- function(x) { 
+            df.pred <- data.frame(cbind(1, x[,sel.idx[-1] - 1])) 
+            colnames(df.pred) <- colnames(df)[-1] # take out 'y' column name 
+            drop(predict(model, newdata = df.pred, type = "link")) 
+        } 
+    # GBM models
+    } else if (grepl("_gbm$",fit.name)) {
+        pred.func <- function(x) { 
+            df.x <- data.frame(cbind(1, x)) 
+            colnames(df.x) <- vnames 
+            drop(predict(model, newdata = df.x, n.trees = best.iter, type = "link")) 
+        } 
+    # non-GAM/GBM LASSO models (end in _lasso)
+    } else if (grepl("_lasso$",fit.name)) {
+        pred.func <- function(x) { 
+        drop(predict(model, newx = cbind(1, x), type = "link", s = "lambda.min")) 
+        } else {
+      stop(paste0("No prediction method found for loss: ", fit.name))      
+      }
+    }
+return(pred.func)
+} # End get.pred.func
+
+# Define common coefficient return methods
+get.coef.func <- function(fit.name) {
+    
+    # GAM or LASSO_GAM models (using cv.glmnet())
+    if ( grepl("_lasso$",fit.name) | grepl("lasso_gam$",fit.name) ) {
+        coef.func <- function(mod) {
+            coef(mod, s = "lambda.min")
+        }
+    # LOSS_GAM models (using gam() )
+    } else if ( grepl("_loss_gam$",fit.name) ) {
+        coef.func <- function(mod) {
+            coef(mod)
+        }
+    # Not sure what the analogue is for GBM models, since there aren't any coefficients to return
+    } else {      
+        coef.func <- function(mod) {
+            return(NULL)
+        }
+    }   
+return(coef.func)
+} # End get.coef.func
 
 #' @import glmnet
 fit_sq_loss_lasso <- function(x, y, wts, family, ...)
@@ -34,17 +83,11 @@ fit_sq_loss_lasso <- function(x, y, wts, family, ...)
     # penalty and desired loss
     model <- do.call(cv.glmnet, c(list(x = x, y = y, weights = wts, family = family,
                                        intercept = FALSE), list.dots))
-
-    # define a function which inputs a design matrix
-    # and outputs estimated benefit scores: one score
-    # for each row in the design matrix
-    pred.func <- function(x)
-    {
-        drop(predict(model, newx = cbind(1, x), type = "link", s = "lambda.min"))
-    }
-
-    list(predict = pred.func,
-         model   = model)
+  
+    # Return fitted model and extraction methods
+    list(predict = get.pred.func("fit_sq_loss_lasso"),
+         model   = model,
+         coefs   = get.coef.func("fit_sq_loss_lasso")(model))
 }
 
 
@@ -70,15 +113,11 @@ fit_cox_loss_lasso <- function(x, y, wts, family, ...)
     # penalty and desired loss
     model <- do.call(cv.glmnet, c(list(x = x, y = y, weights = wts, family = "cox"), list.dots))
 
-    pred.func <- function(x)
-    {
-        -drop(predict(model, newx = cbind(1, x), type = "link", s = "lambda.min"))
-    }
-
-    list(predict = pred.func,
-         model   = model)
+    # Return fitted model and extraction methods
+    list(predict = get.pred.func("fit_cox_loss_lasso"),
+         model   = model,
+         coefs   = get.coef.func("fit_cox_loss_lasso")(model))
 }
-
 
 
 #' @import mgcv
@@ -222,24 +261,14 @@ fit_sq_loss_lasso_gam <- function(x, y, wts, family, ...)
                                    drop.intercept = TRUE))
     }
 
-    # define a function which inputs a design matrix
-    # and outputs estimated benefit scores: one score
-    # for each row in the design matrix
-    pred.func <- function(x)
-    {
-        df.pred <- data.frame(cbind(1, x[,sel.idx[-1] - 1]))
-        colnames(df.pred) <- colnames(df)[-1] # take out 'y' column name
-        drop(predict(model, newdata = df.pred, type = "link"))
-    }
-
-    list(predict = pred.func,
-         model   = model)
+    # Return fitted model and extraction methods
+    list(predict = get.pred.func("fit_sq_loss_lasso_gam"),
+         model   = model,
+         coefs   = get.coef.func("fit_sq_loss_lasso_gam")(model))
 }
 
 fit_logistic_loss_lasso_gam <- fit_sq_loss_lasso_gam
 fit_cox_loss_lasso_gam      <- fit_sq_loss_lasso_gam
-
-
 
 
 fit_sq_loss_gam <- function(x, y, wts, family, ...)
@@ -336,18 +365,10 @@ fit_sq_loss_gam <- function(x, y, wts, family, ...)
     }
 
 
-    # define a function which inputs a design matrix
-    # and outputs estimated benefit scores: one score
-    # for each row in the design matrix
-    pred.func <- function(x)
-    {
-        df.pred <- data.frame(cbind(1, x[,sel.idx[-1] - 1]))
-        colnames(df.pred) <- colnames(df)[-1] # take out 'y' column name
-        drop(predict(model, newdata = df.pred, type = "link"))
-    }
-
-    list(predict = pred.func,
-         model   = model)
+    # Return fitted model and extraction methods
+    list(predict = get.pred.func("fit_sq_loss_gam"),
+         model   = model,
+         coefs   = get.coef.func("fit_sq_loss_gam")(model))
 }
 
 fit_logistic_loss_gam <- fit_sq_loss_gam
@@ -407,19 +428,10 @@ fit_sq_loss_gbm <- function(x, y, wts, family, ...)
 
     vnames <- colnames(x)
 
-    # define a function which inputs a design matrix
-    # and outputs estimated benefit scores: one score
-    # for each row in the design matrix
-    pred.func <- function(x)
-    {
-        df.x <- data.frame(cbind(1, x))
-        colnames(df.x) <- vnames
-
-        drop(predict(model, newdata = df.x, n.trees = best.iter, type = "link"))
-    }
-
-    list(predict = pred.func,
-         model   = model)
+    # Return fitted model and extraction methods
+    list(predict = get.pred.func("fit_sq_loss_gbm"),
+         model   = model,
+         coefs   = get.coef.func("fit_sq_loss_gbm")(model))
 }
 
 
@@ -474,19 +486,10 @@ fit_abs_loss_gbm <- function(x, y, wts, family, ...)
 
     vnames <- colnames(x)
 
-    # define a function which inputs a design matrix
-    # and outputs estimated benefit scores: one score
-    # for each row in the design matrix
-    pred.func <- function(x)
-    {
-        df.x <- data.frame(cbind(1, x))
-        colnames(df.x) <- vnames
-
-        drop(predict(model, newdata = df.x, n.trees = best.iter, type = "link"))
-    }
-
-    list(predict = pred.func,
-         model   = model)
+    # Return fitted model and extraction methods
+    list(predict = get.pred.func("fit_abs_loss_gbm"),
+         model   = model,
+         coefs   = get.coef.func("fit_abs_loss_gbm")(model))
 }
 
 
@@ -541,19 +544,10 @@ fit_logistic_loss_gbm <- function(x, y, wts, family, ...)
 
     vnames <- colnames(x)
 
-    # define a function which inputs a design matrix
-    # and outputs estimated benefit scores: one score
-    # for each row in the design matrix
-    pred.func <- function(x)
-    {
-        df.x <- data.frame(cbind(1, x))
-        colnames(df.x) <- vnames
-
-        drop(predict(model, newdata = df.x, n.trees = best.iter, type = "link"))
-    }
-
-    list(predict = pred.func,
-         model   = model)
+    # Return fitted model and extraction methods
+    list(predict = get.pred.func("fit_logistic_loss_gbm"),
+         model   = model,
+         coefs   = get.coef.func("fit_logistic_loss_gbm")(model))
 }
 
 
@@ -608,19 +602,10 @@ fit_huberized_loss_gbm <- function(x, y, wts, family, ...)
 
     vnames <- colnames(x)
 
-    # define a function which inputs a design matrix
-    # and outputs estimated benefit scores: one score
-    # for each row in the design matrix
-    pred.func <- function(x)
-    {
-        df.x <- data.frame(cbind(1, x))
-        colnames(df.x) <- vnames
-
-        drop(predict(model, newdata = df.x, n.trees = best.iter, type = "link"))
-    }
-
-    list(predict = pred.func,
-         model   = model)
+    # Return fitted model and extraction methods
+    list(predict = get.pred.func("fit_huberized_loss_gbm"),
+         model   = model,
+         coefs   = get.coef.func("fit_huberized_loss_gbm")(model))
 }
 
 
@@ -679,20 +664,8 @@ fit_cox_loss_gbm <- function(x, y, wts, family, ...)
 
     vnames <- colnames(x)
 
-    # define a function which inputs a design matrix
-    # and outputs estimated benefit scores: one score
-    # for each row in the design matrix
-    pred.func <- function(x)
-    {
-        df.x <- data.frame(cbind(1, x))
-        colnames(df.x) <- vnames
-
-        drop(predict(model, newdata = df.x, n.trees = best.iter, type = "link"))
-    }
-
-    list(predict = pred.func,
-         model   = model)
+    # Return fitted model and extraction methods
+    list(predict = get.pred.func("fit_cox_loss_gbm"),
+         model   = model,
+         coefs   = get.coef.func("fit_cox_loss_gbm")(model))
 }
-
-
-
