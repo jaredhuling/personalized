@@ -91,9 +91,9 @@ fit_sq_loss_lasso <- function(x, y, wts, family, ...)
                                      intercept = FALSE), list.dots))
   
   # Return fitted model and extraction methods
-  list(predict = get.pred.func("fit_sq_loss_lasso", model),
-       model   = model,
-       coefs   = get.coef.func("fit_sq_loss_lasso")(model))
+  list(predict      = get.pred.func("fit_sq_loss_lasso", model),
+       model        = model,
+       coefficients = get.coef.func("fit_sq_loss_lasso")(model))
 }
 
 
@@ -120,9 +120,9 @@ fit_cox_loss_lasso <- function(x, y, wts, family, ...)
   model <- do.call(cv.glmnet, c(list(x = x, y = y, weights = wts, family = "cox"), list.dots))
   
   # Return fitted model and extraction methods
-  list(predict = get.pred.func("fit_cox_loss_lasso", model),
-       model   = model,
-       coefs   = get.coef.func("fit_cox_loss_lasso")(model))
+  list(predict      = get.pred.func("fit_cox_loss_lasso", model),
+       model        = model,
+       coefficients = get.coef.func("fit_cox_loss_lasso")(model))
 }
 
 
@@ -268,9 +268,9 @@ fit_sq_loss_lasso_gam <- function(x, y, wts, family, ...)
   }
   
   # Return fitted model and extraction methods
-  list(predict = get.pred.func("fit_sq_loss_lasso_gam", model),
-       model   = model,
-       coefs   = get.coef.func("fit_sq_loss_lasso_gam")(model))
+  list(predict      = get.pred.func("fit_sq_loss_lasso_gam", model),
+       model        = model,
+       coefficients = get.coef.func("fit_sq_loss_lasso_gam")(model))
 }
 
 fit_logistic_loss_lasso_gam <- fit_sq_loss_lasso_gam
@@ -372,9 +372,9 @@ fit_sq_loss_gam <- function(x, y, wts, family, ...)
   
   
   # Return fitted model and extraction methods
-  list(predict = get.pred.func("fit_sq_loss_gam", model),
-       model   = model,
-       coefs   = get.coef.func("fit_sq_loss_gam")(model))
+  list(predict      = get.pred.func("fit_sq_loss_gam", model),
+       model        = model,
+       coefficients = get.coef.func("fit_sq_loss_gam")(model))
 }
 
 fit_logistic_loss_gam <- fit_sq_loss_gam
@@ -435,9 +435,9 @@ fit_sq_loss_gbm <- function(x, y, wts, family, ...)
   vnames <- colnames(x)
   
   # Return fitted model and extraction methods
-  list(predict = get.pred.func("fit_sq_loss_gbm", model),
-       model   = model,
-       coefs   = get.coef.func("fit_sq_loss_gbm")(model))
+  list(predict      = get.pred.func("fit_sq_loss_gbm", model),
+       model        = model,
+       coefficients = get.coef.func("fit_sq_loss_gbm")(model))
 }
 
 
@@ -493,9 +493,9 @@ fit_abs_loss_gbm <- function(x, y, wts, family, ...)
   vnames <- colnames(x)
   
   # Return fitted model and extraction methods
-  list(predict = get.pred.func("fit_abs_loss_gbm", model),
-       model   = model,
-       coefs   = get.coef.func("fit_abs_loss_gbm")(model))
+  list(predict      = get.pred.func("fit_abs_loss_gbm", model),
+       model        = model,
+       coefficients = get.coef.func("fit_abs_loss_gbm")(model))
 }
 
 
@@ -551,9 +551,9 @@ fit_logistic_loss_gbm <- function(x, y, wts, family, ...)
   vnames <- colnames(x)
   
   # Return fitted model and extraction methods
-  list(predict = get.pred.func("fit_logistic_loss_gbm", model),
-       model   = model,
-       coefs   = get.coef.func("fit_logistic_loss_gbm")(model))
+  list(predict      = get.pred.func("fit_logistic_loss_gbm", model),
+       model        = model,
+       coefficients = get.coef.func("fit_logistic_loss_gbm")(model))
 }
 
 
@@ -609,9 +609,9 @@ fit_huberized_loss_gbm <- function(x, y, wts, family, ...)
   vnames <- colnames(x)
   
   # Return fitted model and extraction methods
-  list(predict = get.pred.func("fit_huberized_loss_gbm", model),
-       model   = model,
-       coefs   = get.coef.func("fit_huberized_loss_gbm")(model))
+  list(predict      = get.pred.func("fit_huberized_loss_gbm", model),
+       model        = model,
+       coefficients = get.coef.func("fit_huberized_loss_gbm")(model))
 }
 
 
@@ -671,9 +671,9 @@ fit_cox_loss_gbm <- function(x, y, wts, family, ...)
   vnames <- colnames(x)
   
   # Return fitted model and extraction methods
-  list(predict = get.pred.func("fit_cox_loss_gbm", model),
-       model   = model,
-       coefs   = get.coef.func("fit_cox_loss_gbm")(model))
+  list(predict      = get.pred.func("fit_cox_loss_gbm", model),
+       model        = model,
+       coefficients = get.coef.func("fit_cox_loss_gbm")(model))
 }
 
 
