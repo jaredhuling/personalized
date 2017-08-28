@@ -140,8 +140,14 @@ validate.subgroup <- function(model,
     boot.list      <- vector(mode = "list", length = length(model$subgroup.trt.effects))
     boot.list[[1]] <- array(NA, dim = c(B, length(model$subgroup.trt.effects[[1]])))
     boot.list[[2]] <- boot.list[[3]] <- array(NA, dim = c(B, dim(model$subgroup.trt.effects[[2]])))
-
-    dimnames(boot.list[[2]]) <- dimnames(boot.list[[2]]) <-
+    # Add extra element to boot.list to collect coefficient information on each run
+    boot.list[[4]] <- matrix(rep(NA,B*length(model$coefficients)),
+                             ncol=B,
+                             dimnames = list(row.names(model$coefficients),paste0("B",1:B)))
+  
+    # Jared, in the following line of code, did you intend for one of them to be boot.list[[3]]?
+    #dimnames(boot.list[[2]]) <- dimnames(boot.list[[2]]) <-
+    dimnames(boot.list[[2]]) <- dimnames(boot.list[[3]]) <-
         c(list(NULL), dimnames(model$subgroup.trt.effects$avg.outcomes))
 
     for (b in 1:B)
@@ -183,6 +189,7 @@ validate.subgroup <- function(model,
             boot.list[[1]][b,]  <- sbgrp.trt.eff.test[[1]]
             boot.list[[2]][b,,] <- sbgrp.trt.eff.test[[2]]
             boot.list[[3]][b,,] <- sbgrp.trt.eff.test[[3]]
+            boot.list[[4]][,b]  <- as.vector(mod.b$coefficients)
 
         } else if (method == "boot_bias_correction")
         {   # bootstrap bias correction
@@ -218,6 +225,7 @@ validate.subgroup <- function(model,
                 (mod.b$subgroup.trt.effects[[2]] - sbgrp.trt.eff.orig[[2]]) # bias estimate portion
             boot.list[[3]][b,,] <- model$subgroup.trt.effects[[3]] -
                 (mod.b$subgroup.trt.effects[[3]] - sbgrp.trt.eff.orig[[3]]) # bias estimate portion
+            boot.list[[4]][,b]  <- as.vector(mod.b$coefficients)
 
         } else
         {   # bootstrap
@@ -233,6 +241,7 @@ validate.subgroup <- function(model,
             boot.list[[1]][b,]  <- mod.b$subgroup.trt.effects[[1]] # subgroup-specific trt effects
             boot.list[[2]][b,,] <- mod.b$subgroup.trt.effects[[2]] # mean of outcome for 2x2 table (trt received vs recommended)
             boot.list[[3]][b,,] <- mod.b$subgroup.trt.effects[[3]] # sample sizes for 2x2 table
+            boot.list[[4]][,b]  <- as.vector(mod.b$coefficients)
 
         }
     }
