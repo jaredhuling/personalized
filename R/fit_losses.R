@@ -1,27 +1,27 @@
 # Define common predictions function types
-get.pred.func <- function(fit.name) {  
+get.pred.func <- function(fit.name, model) {  
   
   # GAM models
   if (grepl("_gam$",fit.name))
   {
-      pred.func <- function(x, mod) { 
+      pred.func <- function(x) { 
         df.pred <- data.frame(cbind(1, x[,sel.idx[-1] - 1])) 
         colnames(df.pred) <- colnames(df)[-1] # take out 'y' column name 
-        drop(predict(mod, newdata = df.pred, type = "link")) 
+        drop(predict(model, newdata = df.pred, type = "link")) 
         } 
   # GBM models
   } else if (grepl("_gbm$",fit.name)) 
   {
-      pred.func <- function(x, mod) { 
+      pred.func <- function(x) { 
         df.x <- data.frame(cbind(1, x)) 
         colnames(df.x) <- vnames 
-        drop(predict(mod, newdata = df.x, n.trees = best.iter, type = "link")) 
+        drop(predict(model, newdata = df.x, n.trees = best.iter, type = "link")) 
       } 
   # non-GAM/GBM LASSO models (loss ends in _lasso)
   } else if (grepl("_lasso$",fit.name)) 
   {
-      pred.func <- function(x, mod) { 
-          drop(predict(mod, newx = cbind(1, x), type = "link", s = "lambda.min")) 
+      pred.func <- function(x) { 
+          drop(predict(model, newx = cbind(1, x), type = "link", s = "lambda.min")) 
       } 
   } else 
   {
