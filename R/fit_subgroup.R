@@ -343,7 +343,6 @@ fit.subgroup <- function(x,
     fitted.model$larger.outcome.better <- larger.outcome.better
     fitted.model$var.names             <- vnames
     fitted.model$benefit.scores        <- fitted.model$predict(x)
-    fitted.model$coefficients          <- fitted.model$coefs
 
     # calculate sizes of subgroups and the
     # subgroup treatment effects based on the
