@@ -4,24 +4,24 @@ get.pred.func <- function(fit.name) {
   # GAM models
   if (grepl("_gam$",fit.name))
   {
-      pred.func <- function(x) { 
+      pred.func <- function(x, mod) { 
         df.pred <- data.frame(cbind(1, x[,sel.idx[-1] - 1])) 
         colnames(df.pred) <- colnames(df)[-1] # take out 'y' column name 
-        drop(predict(model, newdata = df.pred, type = "link")) 
+        drop(predict(mod, newdata = df.pred, type = "link")) 
         } 
   # GBM models
   } else if (grepl("_gbm$",fit.name)) 
   {
-      pred.func <- function(x) { 
+      pred.func <- function(x, mod) { 
         df.x <- data.frame(cbind(1, x)) 
         colnames(df.x) <- vnames 
-        drop(predict(model, newdata = df.x, n.trees = best.iter, type = "link")) 
+        drop(predict(mod, newdata = df.x, n.trees = best.iter, type = "link")) 
       } 
   # non-GAM/GBM LASSO models (loss ends in _lasso)
   } else if (grepl("_lasso$",fit.name)) 
   {
-      pred.func <- function(x) { 
-          drop(predict(model, newx = cbind(1, x), type = "link", s = "lambda.min")) 
+      pred.func <- function(x, mod) { 
+          drop(predict(mod, newx = cbind(1, x), type = "link", s = "lambda.min")) 
       } 
   } else 
   {
@@ -91,7 +91,7 @@ fit_sq_loss_lasso <- function(x, y, wts, family, ...)
                                      intercept = FALSE), list.dots))
   
   # Return fitted model and extraction methods
-  list(predict = get.pred.func("fit_sq_loss_lasso"),
+  list(predict = get.pred.func("fit_sq_loss_lasso", model),
        model   = model,
        coefs   = get.coef.func("fit_sq_loss_lasso")(model))
 }
@@ -120,7 +120,7 @@ fit_cox_loss_lasso <- function(x, y, wts, family, ...)
   model <- do.call(cv.glmnet, c(list(x = x, y = y, weights = wts, family = "cox"), list.dots))
   
   # Return fitted model and extraction methods
-  list(predict = get.pred.func("fit_cox_loss_lasso"),
+  list(predict = get.pred.func("fit_cox_loss_lasso", model),
        model   = model,
        coefs   = get.coef.func("fit_cox_loss_lasso")(model))
 }
@@ -268,7 +268,7 @@ fit_sq_loss_lasso_gam <- function(x, y, wts, family, ...)
   }
   
   # Return fitted model and extraction methods
-  list(predict = get.pred.func("fit_sq_loss_lasso_gam"),
+  list(predict = get.pred.func("fit_sq_loss_lasso_gam", model),
        model   = model,
        coefs   = get.coef.func("fit_sq_loss_lasso_gam")(model))
 }
@@ -372,7 +372,7 @@ fit_sq_loss_gam <- function(x, y, wts, family, ...)
   
   
   # Return fitted model and extraction methods
-  list(predict = get.pred.func("fit_sq_loss_gam"),
+  list(predict = get.pred.func("fit_sq_loss_gam", model),
        model   = model,
        coefs   = get.coef.func("fit_sq_loss_gam")(model))
 }
@@ -435,7 +435,7 @@ fit_sq_loss_gbm <- function(x, y, wts, family, ...)
   vnames <- colnames(x)
   
   # Return fitted model and extraction methods
-  list(predict = get.pred.func("fit_sq_loss_gbm"),
+  list(predict = get.pred.func("fit_sq_loss_gbm", model),
        model   = model,
        coefs   = get.coef.func("fit_sq_loss_gbm")(model))
 }
@@ -493,7 +493,7 @@ fit_abs_loss_gbm <- function(x, y, wts, family, ...)
   vnames <- colnames(x)
   
   # Return fitted model and extraction methods
-  list(predict = get.pred.func("fit_abs_loss_gbm"),
+  list(predict = get.pred.func("fit_abs_loss_gbm", model),
        model   = model,
        coefs   = get.coef.func("fit_abs_loss_gbm")(model))
 }
@@ -551,7 +551,7 @@ fit_logistic_loss_gbm <- function(x, y, wts, family, ...)
   vnames <- colnames(x)
   
   # Return fitted model and extraction methods
-  list(predict = get.pred.func("fit_logistic_loss_gbm"),
+  list(predict = get.pred.func("fit_logistic_loss_gbm", model),
        model   = model,
        coefs   = get.coef.func("fit_logistic_loss_gbm")(model))
 }
@@ -609,7 +609,7 @@ fit_huberized_loss_gbm <- function(x, y, wts, family, ...)
   vnames <- colnames(x)
   
   # Return fitted model and extraction methods
-  list(predict = get.pred.func("fit_huberized_loss_gbm"),
+  list(predict = get.pred.func("fit_huberized_loss_gbm", model),
        model   = model,
        coefs   = get.coef.func("fit_huberized_loss_gbm")(model))
 }
@@ -671,7 +671,7 @@ fit_cox_loss_gbm <- function(x, y, wts, family, ...)
   vnames <- colnames(x)
   
   # Return fitted model and extraction methods
-  list(predict = get.pred.func("fit_cox_loss_gbm"),
+  list(predict = get.pred.func("fit_cox_loss_gbm", model),
        model   = model,
        coefs   = get.coef.func("fit_cox_loss_gbm")(model))
 }
