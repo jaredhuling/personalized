@@ -33,7 +33,7 @@
 #'
 #' @export
 plot.subgroup_validated <- function(x,
-                                    type = c("boxplot", "density", "interaction"),
+                                    type = c("boxplot", "density", "interaction", "stability"),
                                     avg.line = TRUE,
                                     ...)
 {
@@ -115,6 +115,48 @@ plot.subgroup_validated <- function(x,
             theme(legend.position = "bottom") +
             ylab(ylab.text) +
             ggtitle(title.text)
+    } else if (type == "stability")
+    {
+        # Acquire coefficients for each bootstrap iteration (exclude intercept and Trt terms)
+        d <- as.data.frame(x$boot.results[[4]][-c(1,2),])
+
+        # Calculate percentage of times each variable was selected
+        d$pct.selected <- apply(d,1,function(x){sum(x!=0)}/ncol(d)*100)
+
+        # Calculate minimum and maximum coefficients
+        d$bar.min <- apply(d[,grep("B",colnames(d), value=T)],1,function(x){min(x,0)})
+        d$bar.max <- apply(d[,grep("B",colnames(d), value=T)],1,function(x){max(x,0)})
+
+        # Compute color for bars (Both positive/negative, strictly positive, or strictly negative)
+        d$col <- ifelse(d$bar.max > 0 & d$bar.min < 0, "green", ifelse(d$bar.max > 0,"blue","red"))
+
+        # Jointly order by most frequently selected and color type
+        d <- d[order(d$col,-d$pct.selected),]
+
+        # Remove instances where variables were never selected in any boostrap iteration
+        d <- subset(d, pct.selected != 0)
+
+        # Reshape to long for ggplot input
+        d.plot <- reshape(d, 
+                          direction = "long", 
+                          varying=grep("B",colnames(d), value=T),
+                          v.names = "coef",
+                          timevar = "boot.num",
+                          idvar = "plot.idx")
+       # Construct Plot
+       pl.obj <- ggplot(data = subset(d.plot,coef !=0)) +
+                 geom_bar(data=subset(d.plot,boot.num == 1),
+                          mapping = aes(x = plot.idx, y = bar.min, fill = col), color="black", stat="identity") +
+                 geom_bar(data=subset(d.plot,boot.num == 1),
+                          mapping = aes(x = plot.idx, y = bar.max, fill = col), color="black", stat="identity") +
+                 geom_point(mapping = aes(x = plot.idx, y = coef), color = "black") +
+                 geom_hline(yintercept = 0) +
+                 geom_vline(xintercept = c(which.min(d.plot$col=="blue") - 0.5, which.max(d.plot$col=="red") - 0.5), linetype = "dashed") +
+      xlab("Variable Index") +
+      ylab("Coefficient Value") +
+      ggtitle("Validation Stability") +
+      theme(plot.title = element_text(hjust = 0.5)) +
+      scale_fill_identity(name = 'Coefficient Type', guide = 'legend',labels = c("Always Positive","Mixed","Always Negative"))
     } else
     {
         pl.obj <- ggplot(avg.res.2.plot,
