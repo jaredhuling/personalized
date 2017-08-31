@@ -117,46 +117,47 @@ plot.subgroup_validated <- function(x,
             ggtitle(title.text)
     } else if (type == "stability")
     {
-        # Acquire coefficients for each bootstrap iteration (exclude intercept and Trt terms)
-        d <- as.data.frame(x$boot.results[[4]][-c(1,2),])
-
-        # Calculate percentage of times each variable was selected
-        d$pct.selected <- apply(d,1,function(x){sum(x!=0)}/ncol(d)*100)
-
-        # Calculate minimum and maximum coefficients
-        d$bar.min <- apply(d[,grep("B",colnames(d), value=T)],1,function(x){min(x,0)})
-        d$bar.max <- apply(d[,grep("B",colnames(d), value=T)],1,function(x){max(x,0)})
-
-        # Compute color for bars (Both positive/negative, strictly positive, or strictly negative)
-        d$col <- ifelse(d$bar.max > 0 & d$bar.min < 0, "green", ifelse(d$bar.max > 0,"blue","red"))
-
-        # Jointly order by most frequently selected and color type
-        d <- d[order(d$col,-d$pct.selected),]
-
-        # Remove instances where variables were never selected in any boostrap iteration
-        d <- subset(d, pct.selected != 0)
-
-        # Reshape to long for ggplot input
-        d.plot <- reshape(d, 
-                          direction = "long", 
-                          varying=grep("B",colnames(d), value=T),
-                          v.names = "coef",
-                          timevar = "boot.num",
-                          idvar = "plot.idx")
-       # Construct Plot
-       pl.obj <- ggplot(data = subset(d.plot,coef !=0)) +
-                 geom_bar(data=subset(d.plot,boot.num == 1),
-                          mapping = aes(x = plot.idx, y = bar.min, fill = col), color="black", stat="identity") +
-                 geom_bar(data=subset(d.plot,boot.num == 1),
-                          mapping = aes(x = plot.idx, y = bar.max, fill = col), color="black", stat="identity") +
-                 geom_point(mapping = aes(x = plot.idx, y = coef), color = "black") +
-                 geom_hline(yintercept = 0) +
-                 geom_vline(xintercept = c(which.min(d.plot$col=="blue") - 0.5, which.max(d.plot$col=="red") - 0.5), linetype = "dashed") +
+      # Acquire coefficients for each bootstrap iteration (exclude intercept and Trt terms)
+      d <- as.data.frame(validation$boot.results[[4]][-c(1,2),])
+      
+      # Compute percentage of times each variable was selected
+      d$pct.selected <- apply(d,1,function(x){sum(x!=0)}/ncol(d)*100)
+      
+      # Calculate quartiles
+      d$q0 <- apply(d[,grep("B",colnames(d), value=T)],1,function(x){quantile(x[x!=0],0)})
+      #d$q1 <- apply(d[,grep("B",colnames(d), value=T)],1,function(x){quantile(x[x!=0],0.25)})
+      d$q2 <- apply(d[,grep("B",colnames(d), value=T)],1,function(x){quantile(x[x!=0],0.50)})
+      #d$q3 <- apply(d[,grep("B",colnames(d), value=T)],1,function(x){quantile(x[x!=0],0.75)})
+      d$q4 <- apply(d[,grep("B",colnames(d), value=T)],1,function(x){quantile(x[x!=0],1)})
+      
+      # Compute color for bars (Both positive/negative, strictly positive, or strictly negative)
+      d$col <- ifelse(d$q4 > 0 & d$q0 < 0, "green", ifelse(d$q4 > 0,"blue","red"))
+      
+      # Order by color and then descending by group median
+      d <- d[order(d$col,-d$q2),]
+      
+      # Remove instances where variables were never selected
+      d <- subset(d, pct.selected != 0)
+      
+      # Capture names for tooltip
+      d$name <- rownames(d)
+      
+      # Assign variable index
+      d$plot.idx <- 1:nrow(d)
+      
+      # Trim to keep only necessary columns
+      d <- d[,!(names(d) %in% grep("B",names(d),value=T))]
+      # Construct Plot
+      pl.obj <- ggplot(data = d) +
+      geom_rect(mapping = aes(text=name, xmin = plot.idx-0.5, xmax=plot.idx+0.5, ymin = q0, ymax = q4, fill = col), color="black", stat="identity") +
+      geom_point(mapping = aes(text=name, x = plot.idx, y = q2, size=pct.selected), shape=21, color="black", fill="purple", stat="identity") +
+      geom_hline(yintercept = 0) +
+      geom_vline(xintercept = c(which.min(d$col=="blue") - 0.5, which.max(d$col=="red") - 0.5), linetype = "dashed") +
       xlab("Variable Index") +
       ylab("Coefficient Value") +
       ggtitle("Validation Stability") +
-      theme(plot.title = element_text(hjust = 0.5)) +
-      scale_fill_identity(name = 'Coefficient Type', guide = 'legend',labels = c("Always Positive","Mixed","Always Negative"))
+      xlim(0,nrow(d)+1) +
+      theme(plot.title = element_text(hjust = 0.5))
     } else
     {
         pl.obj <- ggplot(avg.res.2.plot,
@@ -170,4 +171,3 @@ plot.subgroup_validated <- function(x,
     }
     pl.obj
 }
-
