@@ -17,6 +17,7 @@
 #' and \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models.
 #' @rdname plot
 #' @import ggplot2
+#' @import plotly
 #'
 #' @examples
 #'
@@ -129,45 +130,52 @@ plot.subgroup_validated <- function(x,
       d$q2 <- apply(d[,grep("B",colnames(d), value=T)],1,function(x){quantile(x[x!=0],0.50)})
       #d$q3 <- apply(d[,grep("B",colnames(d), value=T)],1,function(x){quantile(x[x!=0],0.75)})
       d$q4 <- apply(d[,grep("B",colnames(d), value=T)],1,function(x){quantile(x[x!=0],1)})
-      
-      # Compute color for bars (Both positive/negative, strictly positive, or strictly negative)
-      d$col <- ifelse(d$q4 > 0 & d$q0 < 0, "green", ifelse(d$q4 > 0,"blue","red"))
-      
-      # Order by color and then descending by group median
-      d <- d[order(d$col,-d$q2),]
+
+      # Create label for bar type (Range positive/negative, strictly positive, or strictly negative)
+      d$bar.type <- factor(ifelse(d$q4 > 0 & d$q0 < 0, "Mixed", ifelse(d$q4 > 0,"Always Positive","Always Negative")),
+                           levels=c("Always Negative", "Mixed", "Always Positive"))
+      # Order by most frequently selected and bar type
+      d <- d[order(d$bar.type,-d$pct.selected),]
       
       # Remove instances where variables were never selected
       d <- subset(d, pct.selected != 0)
       
-      # Capture names for tooltip
+      # Capture variable names and assign row index
       d$name <- rownames(d)
-      
-      # Assign variable index
       d$plot.idx <- 1:nrow(d)
       
-      # Trim to keep only necessary columns
+      # Remove individual bootstrap values from plotting data frame
       d <- d[,!(names(d) %in% grep("B",names(d),value=T))]
-      # Construct Plot
-      pl.obj <- ggplot(data = d) +
-      geom_rect(mapping = aes(text=name, xmin = plot.idx-0.5, xmax=plot.idx+0.5, ymin = q0, ymax = q4, fill = col), color="black", stat="identity") +
-      geom_point(mapping = aes(text=name, x = plot.idx, y = q2, size=pct.selected), shape=21, color="black", fill="purple", stat="identity") +
+      
+      # Primary Plot - Range with median points
+      p.primary <- ggplot(data = d) +
+      geom_rect(mapping = aes(xmin = plot.idx-0.5, xmax=plot.idx+0.5, ymin = q0, ymax = q4, fill = bar.type), color="black", stat="identity") +
+      geom_point(mapping = aes(x=plot.idx, y = q2), size= 1.5, shape=21, color="black", fill="purple", stat="identity") +
       geom_hline(yintercept = 0) +
-      geom_vline(xintercept = c(which.min(d$col=="blue") - 0.5, which.max(d$col=="red") - 0.5), linetype = "dashed") +
-      xlab("Variable Index") +
-      ylab("Coefficient Value") +
-      ggtitle("Validation Stability") +
-      xlim(0,nrow(d)+1) +
-      theme(plot.title = element_text(hjust = 0.5))
-    } else
-    {
-        pl.obj <- ggplot(avg.res.2.plot,
-                         aes(x = Recommended, y = Value, group = Received)) +
-            geom_line(aes(colour = Received), size = 1.25) +
-            geom_point(aes(colour = Received), size = 2) +
-            theme(legend.position = "bottom") +
-            scale_x_discrete(expand = c(0.25, 0.25)) +
-            ylab(ylab.text) +
-            ggtitle(title.text)
-    }
-    pl.obj
+      geom_vline(xintercept = c(which.min(d$bar.type=="Always Negative") - 0.5, which.max(d$bar.type=="Always Positive") - 0.5), linetype = "dashed") +
+      xlim(0,nrow(d)+1)
+      
+      # Secondary Plot - Distribution of selection probability
+      p.secondary <- ggplot(data = d) +
+      geom_bar(mapping = aes(x = plot.idx, y = pct.selected, fill = bar.type), stat="identity") +
+      geom_vline(xintercept = c(which.min(d$bar.type=="Always Negative") - 0.5, which.max(d$bar.type=="Always Positive") - 0.5), linetype = "dashed")
+
+      # Text for tooltips
+      tooltip.txt <- paste("Variable:", d$name, "\n", 
+                           "Percent Selected:", d$pct.selected, "\n",
+                           "Median Coefficient Value:", round(d$q2,6))
+      
+      # Enforce tooltips
+      pp.primary=plotly_build(p.primary)
+      ppp.primary <- style(pp.primary, text=tooltip.txt, hoverinfo = "text")
+      pp.secondary=plotly_build(p.secondary)
+      ppp.secondary <- style(pp.secondary, text=tooltip.txt, hoverinfo = "text")
+      
+      # Plot primary and secondary plots together, and label axes
+      pl.obj <- subplot(ppp.primary, ppp.secondary, nrows=2, shareX=T, titleX = TRUE, titleY = TRUE) %>% 
+      layout(title="Variable Selection Across Bootstrap Iterations",showlegend=FALSE, 
+             xaxis = list(title = "Plot Index"), yaxis=list(title="Coefficient Value"), yaxis2=list(title="Percent Selected"))
+      
+      # Return plot
+      pl.obj
 }
