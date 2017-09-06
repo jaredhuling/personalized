@@ -175,7 +175,7 @@ plot.subgroup_validated <- function(x,
       pl.obj <- subplot(ppp.primary, ppp.secondary, nrows=2, shareX=T, titleX = TRUE, titleY = TRUE) %>% 
       layout(title="Variable Selection Across Bootstrap Iterations",showlegend=FALSE, 
              xaxis = list(title = "Plot Index"), yaxis=list(title="Coefficient Value"), yaxis2=list(title="Percent Selected"))
-      
+      }
       # Return plot
       pl.obj
 }
