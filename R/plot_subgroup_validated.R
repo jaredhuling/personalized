@@ -119,7 +119,7 @@ plot.subgroup_validated <- function(x,
     } else if (type == "stability")
     {
       # Acquire coefficients for each bootstrap iteration (exclude intercept and Trt terms)
-      d <- as.data.frame(validation$boot.results[[4]][-c(1,2),])
+      d <- as.data.frame(x$boot.results[[4]][-c(1,2),])
       
       # Compute percentage of times each variable was selected
       d$pct.selected <- apply(d,1,function(x){sum(x!=0)}/ncol(d)*100)
