@@ -37,13 +37,12 @@ create.design.matrix.mult.trt <- function(x, pi.x, trt, y, reference.trt = NULL,
     trt.idx.vec <- c(trt.idx.vec[-which.reference], trt.idx.vec[which.reference])
     trt.levels  <- trt.levels[trt.idx.vec]
 
-    print(trt.idx.vec)
-
     for (t in 1:n.trts)
     {
         trt.idx[[t]]    <- which(levels(trt)[trt] == trt.levels[t])
         sample.sizes[t] <- length(trt.idx[[t]])
     }
+
     n.obs  <- NROW(x)
     n.vars <- NCOL(x)
 

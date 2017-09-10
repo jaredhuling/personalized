@@ -376,10 +376,10 @@ fit.subgroup <- function(x,
     if (rng.pi[1] <= 0 | rng.pi[2] >= 1) stop("propensity.func() should return values between 0 and 1")
 
     # construct design matrix to be passed to fitting function
-    x.tilde <- create.design.matrix(x      = x,
-                                    pi.x   = pi.x,
-                                    trt    = trt,
-                                    method = method,
+    x.tilde <- create.design.matrix(x             = x,
+                                    pi.x          = pi.x,
+                                    trt           = trt,
+                                    method        = method,
                                     reference.trt = reference.trt)
 
     # construct observation weight vector
@@ -423,6 +423,9 @@ fit.subgroup <- function(x,
     fitted.model$larger.outcome.better <- larger.outcome.better
     fitted.model$var.names             <- vnames
     fitted.model$benefit.scores        <- fitted.model$predict(x)
+    fitted.model$n.trts                <- n.trts
+    fitted.model$comparison.trts       <- comparison.trts
+    fitted.model$reference.trt         <- reference.trt
 
     # calculate sizes of subgroups and the
     # subgroup treatment effects based on the

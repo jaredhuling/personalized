@@ -140,6 +140,7 @@ validate.subgroup <- function(model,
     boot.list      <- vector(mode = "list", length = length(model$subgroup.trt.effects))
     boot.list[[1]] <- array(NA, dim = c(B, length(model$subgroup.trt.effects[[1]])))
     boot.list[[2]] <- boot.list[[3]] <- array(NA, dim = c(B, dim(model$subgroup.trt.effects[[2]])))
+    boot.list[[4]] <- numeric(B)
 
     dimnames(boot.list[[2]]) <- dimnames(boot.list[[2]]) <-
         c(list(NULL), dimnames(model$subgroup.trt.effects$avg.outcomes))
@@ -183,6 +184,7 @@ validate.subgroup <- function(model,
             boot.list[[1]][b,]  <- sbgrp.trt.eff.test[[1]]
             boot.list[[2]][b,,] <- sbgrp.trt.eff.test[[2]]
             boot.list[[3]][b,,] <- sbgrp.trt.eff.test[[3]]
+            boot.list[[4]][b]   <- sbgrp.trt.eff.test[[4]]
 
         } else if (method == "boot_bias_correction")
         {   # bootstrap bias correction
@@ -218,6 +220,8 @@ validate.subgroup <- function(model,
                 (mod.b$subgroup.trt.effects[[2]] - sbgrp.trt.eff.orig[[2]]) # bias estimate portion
             boot.list[[3]][b,,] <- model$subgroup.trt.effects[[3]] -
                 (mod.b$subgroup.trt.effects[[3]] - sbgrp.trt.eff.orig[[3]]) # bias estimate portion
+            boot.list[[4]][b]   <- model$subgroup.trt.effects[[4]] -
+                (mod.b$subgroup.trt.effects[[4]] - sbgrp.trt.eff.orig[[4]]) # bias estimate portion
 
         } else
         {   # bootstrap
@@ -231,8 +235,9 @@ validate.subgroup <- function(model,
 
             mod.b               <- do.call(fit.subgroup, model$call)
             boot.list[[1]][b,]  <- mod.b$subgroup.trt.effects[[1]] # subgroup-specific trt effects
-            boot.list[[2]][b,,] <- mod.b$subgroup.trt.effects[[2]] # mean of outcome for 2x2 table (trt received vs recommended)
-            boot.list[[3]][b,,] <- mod.b$subgroup.trt.effects[[3]] # sample sizes for 2x2 table
+            boot.list[[2]][b,,] <- mod.b$subgroup.trt.effects[[2]] # mean of outcome for KxK table (trt received vs recommended)
+            boot.list[[3]][b,,] <- mod.b$subgroup.trt.effects[[3]] # sample sizes for KxK table
+            boot.list[[4]][b]   <- mod.b$subgroup.trt.effects[[4]] # overall subgroup effect
 
         }
     }
@@ -248,11 +253,13 @@ validate.subgroup <- function(model,
     # deviations across iterations
     summary.stats    <- list(colMeans(boot.list[[1]]),
                              apply(boot.list[[2]], c(2, 3), mean),
-                             apply(boot.list[[3]], c(2, 3), mean))
+                             apply(boot.list[[3]], c(2, 3), mean),
+                             mean(boot.list[[4]]))
 
     summary.stats.se <- list(apply(boot.list[[1]], 2, sd),
                              apply(boot.list[[2]], c(2, 3), sd),
-                             apply(boot.list[[3]], c(2, 3), sd))
+                             apply(boot.list[[3]], c(2, 3), sd),
+                             sd(boot.list[[4]]))
 
     names(summary.stats) <- names(boot.list) <- names(model$subgroup.trt.effects)
 
