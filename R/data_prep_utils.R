@@ -81,7 +81,7 @@ create.design.matrix <- function(x, pi.x, trt, y, method, reference.trt = NULL)
         # set to factor for multiple trtment trt vector if it isn't already
         if (!is.factor(trt)) trt <- as.factor(trt)
 
-        return( create.design.matrix.mult.trt(x             = x,
+        return( create.design.matrix.mult.trt(x             = cbind(1, x),
                                               pi.x          = pi.x,
                                               trt           = trt,
                                               #y             = y,
