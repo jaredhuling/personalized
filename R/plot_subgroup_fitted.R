@@ -78,11 +78,12 @@ plot.subgroup_fitted <- function(x,
         cutpoint <- x$call$cutpoint
         lb       <- x$call$larger.outcome.better
 
-        trt.rec  <- if (lb) {1 * (benefit.scores > cutpoint)} else
-            1 * (benefit.scores < cutpoint)
+        trt.rec  <- x$recommended.trts
 
-        res.2.plot[, 1] <- ifelse(trt.rec == 1, "Recommended Trt", "Recommended Ctrl")
-        res.2.plot[, 2] <- ifelse(x$call$trt == 1, "Received Trt", "Received Ctrl")
+        #res.2.plot[, 1] <- ifelse(trt.rec == 1, "Recommended Trt", "Recommended Ctrl")
+        #res.2.plot[, 2] <- ifelse(x$call$trt == 1, "Received Trt", "Received Ctrl")
+        res.2.plot[, 1] <- paste("Recommended", trt.rec)
+        res.2.plot[, 2] <- paste("Received", x$call$trt)
 
         if (class(x$call$y) == "Surv")
         {
@@ -94,10 +95,10 @@ plot.subgroup_fitted <- function(x,
     }
 
 
-    avg.res.2.plot <- data.frame(Recommended = c("Recommended Trt", "Recommended Trt",
-                                                 "Recommended Ctrl", "Recommended Ctrl"),
-                                 Received    = c("Received Trt", "Received Ctrl",
-                                                 "Received Trt", "Received Ctrl"),
+    avg.res.2.plot <- data.frame(Recommended = rep(colnames(avg.res$avg.outcomes),
+                                                   each = ncol(avg.res$avg.outcomes)),
+                                 Received    = rep(rownames(avg.res$avg.outcomes),
+                                                   ncol(avg.res$avg.outcomes)),
                                  Value       = as.vector(avg.res$avg.outcomes))
 
     Recommended <- Received <- Value <- NULL

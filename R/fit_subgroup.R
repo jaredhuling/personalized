@@ -422,10 +422,14 @@ fit.subgroup <- function(x,
     fitted.model$method                <- method
     fitted.model$larger.outcome.better <- larger.outcome.better
     fitted.model$var.names             <- vnames
-    fitted.model$benefit.scores        <- fitted.model$predict(x)
     fitted.model$n.trts                <- n.trts
     fitted.model$comparison.trts       <- comparison.trts
     fitted.model$reference.trt         <- reference.trt
+
+    fitted.model$benefit.scores        <- fitted.model$predict(x)
+    fitted.model$recommended.trts      <- predict.subgroup_fitted(fitted.model, newx = x,
+                                                                  type = "trt.group",
+                                                                  cutpoint = cutpoint)
 
     # calculate sizes of subgroups and the
     # subgroup treatment effects based on the

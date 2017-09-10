@@ -77,13 +77,42 @@ predict.subgroup_fitted <- function(object,
     # outcomes are better
     if (type == "trt.group")
     {
-        if (object$larger.outcome.better)
+        if (object$n.trts > 2)
         {
-            retval <- 1 * (retval > cutpoint)
+            # meaning of larger vs smaller benefit score
+            # is different depending on whether larger means
+            # better or not for the outcome
+            if (object$larger.outcome.better)
+            {
+                best.comp.idx   <- apply(retval, 1, which.max)
+                recommended.trt <- 1 * (retval > cutpoint)
+                rec.ref         <- rowSums(recommended.trt) == 0
+
+                retval <- ifelse(rec.ref, object$reference.trt, object$comparison.trts[best.comp.idx])
+            } else
+            {
+                best.comp.idx   <- apply(retval, 1, which.min)
+                recommended.trt <- 1 * (retval < cutpoint)
+                rec.ref         <- rowSums(recommended.trt) == 0
+
+                retval <- ifelse(rec.ref, object$reference.trt, object$comparison.trts[best.comp.idx])
+            }
+
         } else
         {
-            retval <- 1 * (retval < cutpoint)
+            # meaning of larger vs smaller benefit score
+            # is different depending on whether larger means
+            # better or not for the outcome
+            if (object$larger.outcome.better)
+            {
+                retval <- ifelse(retval > cutpoint, object$comparison.trts, object$reference.trt)
+            } else
+            {
+                retval <- ifelse(retval < cutpoint, object$comparison.trts, object$reference.trt)
+            }
+
         }
+
     }
     retval
 }

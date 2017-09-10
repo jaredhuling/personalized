@@ -45,27 +45,31 @@ plot.subgroup_validated <- function(x,
 
     boot.res <- x$boot.results$avg.outcomes
     avg.res  <- x$avg.results
-    B <- dim(boot.res)[1]
 
-    res.2.plot <- array(NA, dim = c(B * 4, 3))
+    boot.dims <- dim(boot.res)
+
+    n.entries <- prod(boot.dims[2:3])
+    B <- boot.dims[1]
+
+    res.2.plot <- array(NA, dim = c(B * n.entries, 3))
     colnames(res.2.plot) <- c("Recommended", "Received", "Value")
     res.2.plot <- data.frame(res.2.plot)
 
-    avg.res.2.plot <- data.frame(Recommended = c("Recommended Trt", "Recommended Trt",
-                                                 "Recommended Ctrl", "Recommended Ctrl"),
-                                 Received    = c("Received Trt", "Received Ctrl",
-                                                 "Received Trt", "Received Ctrl"),
+    avg.res.2.plot <- data.frame(Recommended = rep(colnames(avg.res$avg.outcomes),
+                                                   each = ncol(avg.res$avg.outcomes)),
+                                 Received    = rep(rownames(avg.res$avg.outcomes),
+                                                   ncol(avg.res$avg.outcomes)),
                                  Value       = as.vector(avg.res$avg.outcomes))
 
     Recommended <- Received <- Value <- NULL
 
     for (b in 1:B)
     {
-        cur.idx <- c(((b - 1) * 4 + 1):(b * 4))
-        res.2.plot[cur.idx, 1] <- c("Recommended Trt", "Recommended Trt",
-                                    "Recommended Ctrl", "Recommended Ctrl")
-        res.2.plot[cur.idx, 2] <- c("Received Trt", "Received Ctrl",
-                                    "Received Trt", "Received Ctrl")
+        cur.idx <- c(((b - 1) * n.entries + 1):(b * n.entries))
+        res.2.plot[cur.idx, 1] <- rep(colnames(boot.res[b,,]),
+                                      each = ncol(boot.res[b,,]))
+        res.2.plot[cur.idx, 2] <- rep(rownames(boot.res[b,,]),
+                                      ncol(boot.res[b,,]))
         res.2.plot[cur.idx, 3] <- as.vector(boot.res[b,,])
     }
 
