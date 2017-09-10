@@ -94,7 +94,29 @@ fit_cox_loss_lasso <- function(x, y, trt, n.trts, wts, family, ...)
 
     pred.func <- function(x)
     {
-        -drop(predict(model, newx = cbind(1, x), type = "link", s = "lambda.min"))
+        if (n.trts == 2)
+        {
+            -drop(predict(model, newx = cbind(1, x), type = "link", s = "lambda.min"))
+        } else
+        {
+            ## need to handle cases with multiple treatments specially
+            ## because we don't want to sum up over all the estimated deltas.
+            ## for K-trtments we estimate K-1 delta functions and thus need
+            ## to extract each one individually.
+            all.coefs <- as.vector(predict(model, type = "coefficients", s = "lambda.min"))[-1]
+            n.coefs.per.trt <- length(all.coefs) / (n.trts - 1)
+
+            n.preds  <- NROW(x)
+            pred.mat <- array(NA, dim = c(n.preds, n.trts - 1))
+            for (t in 1:(n.trts - 1))
+            {
+                idx.coefs.cur <- (n.coefs.per.trt * (t - 1) + 1):(n.coefs.per.trt * t)
+                coefs.cur     <- all.coefs[idx.coefs.cur]
+
+                pred.mat[,t]  <- -drop(cbind(1, x) %*% coefs.cur)
+            }
+            pred.mat
+        }
     }
 
     list(predict = pred.func,

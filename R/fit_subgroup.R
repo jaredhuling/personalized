@@ -278,9 +278,9 @@ fit.subgroup <- function(x,
         reference.trt   <- unique.trts[reference.idx]
     }
 
-    if (n.trts > 2 & grepl("_gbm", loss))
+    if (n.trts > 2 & (grepl("_gbm", loss) | grepl("_gam", loss)) )
     {
-        stop("gbm loss not supported for multiple treatments (number of total treatments > 2)")
+        stop("gbm and gam based losses not supported for multiple treatments (number of total treatments > 2)")
     }
 
     # defaults to constant propensity score within trt levels
