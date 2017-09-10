@@ -3,7 +3,7 @@
 # treatment is treated as a "control".
 # For example, if matrix x is supplied and treatment with three
 # levels where the third level is the reference treatment,
-# create.block.matrix.mult.trt() will return:
+# create.design.matrix.mult.trt() will return:
 # |x_1   0  |
 # |0     x_2|
 # |-x_3 -x_3|
@@ -14,7 +14,7 @@
 # with binary treatments, this simplifies to the normal
 # | x_1|
 # |-x_2|
-create.block.matrix.mult.trt <- function(x, trt, y, reference.trt = NULL)
+create.design.matrix.mult.trt <- function(x, pi.x, trt, y, reference.trt = NULL, method)
 {
     trt.levels      <- levels(trt)
     n.trts          <- length(trt.levels)
@@ -59,8 +59,8 @@ create.block.matrix.mult.trt <- function(x, trt, y, reference.trt = NULL)
     {
         idx.obs.cur  <- (n.obs.cumsum[t] + 1):n.obs.cumsum[t + 1]
         idx.vars.cur <- (n.vars.cumsum[t] + 1):n.vars.cumsum[t + 1]
-        x.return[idx.obs.cur, idx.vars.cur] <- x[trt.idx[[t]],]# * ((n.trts - 2) / (n.trts - 1))
-        y.return[idx.obs.cur] <- y[trt.idx[[t]]]
+        x.return[trt.idx[[t]], idx.vars.cur] <- x[trt.idx[[t]],]# * ((n.trts - 2) / (n.trts - 1))
+        #y.return[idx.obs.cur] <- y[trt.idx[[t]]] # now we don't want to re-order observations
     }
     t <- n.trts
 
@@ -70,16 +70,28 @@ create.block.matrix.mult.trt <- function(x, trt, y, reference.trt = NULL)
         idx.obs.cur  <- (n.obs.cumsum[t] + 1):n.obs.cumsum[t + 1]
         # replicate columns
         idx.vars.cur <- (n.vars.cumsum[r] + 1):n.vars.cumsum[r + 1]
-        x.return[idx.obs.cur, idx.vars.cur] <- -x[trt.idx[[t]],]# * (1 / (n.trts - 1))
+        x.return[trt.idx[[t]], idx.vars.cur] <- -x[trt.idx[[t]],]# * (1 / (n.trts - 1))
 
-        if (r == 1)
-        {
-            y.return[idx.obs.cur] <- y[trt.idx[[t]]]
-        }
+        #if (r == 1)
+        #{
+        #    y.return[idx.obs.cur] <- y[trt.idx[[t]]]
+        #}
     }
-    list(x            = x.return,     # design matrix
-         y            = y.return,
-         trt.levels   = trt.levels,   # treatment levels (re-ordered based off of reference treatment)
-         coef.indices = var.idx.list) # list of indices for the coefficients specific
-                                      # to specific treatment contrasts
+
+    # construct modified design matrices
+    # depending on what method is used
+    if (method == "weighting")
+    {
+        x.tilde <- x.return
+    } else
+    {
+        stop("A-learning not available for multiple treatments")
+        # A-learning method
+        x.tilde <- (trt - pi.x) * x.return
+    }
+
+    # 'trt.levels' is the treatment levels (re-ordered based off of reference treatment)
+    attr(x.tilde, "trt.levels") <- trt.levels
+
+    x.tilde
 }

@@ -1,6 +1,6 @@
 
 #' @import glmnet
-fit_sq_loss_lasso <- function(x, y, wts, family, ...)
+fit_sq_loss_lasso <- function(x, y, trt, n.trts, wts, family, ...)
 {
     # this function must return a fitted model
     # in addition to a function which takes in
@@ -40,7 +40,29 @@ fit_sq_loss_lasso <- function(x, y, wts, family, ...)
     # for each row in the design matrix
     pred.func <- function(x)
     {
-        drop(predict(model, newx = cbind(1, x), type = "link", s = "lambda.min"))
+        if (n.trts == 2)
+        {
+            drop(predict(model, newx = cbind(1, x), type = "link", s = "lambda.min"))
+        } else
+        {
+            ## need to handle cases with multiple treatments specially
+            ## because we don't want to sum up over all the estimated deltas.
+            ## for K-trtments we estimate K-1 delta functions and thus need
+            ## to extract each one individually.
+            all.coefs <- predict(model, type = "coefficients", s = "lambda.min")
+            n.coefs.per.trt <- length(all.coefs) / (n.trts - 1)
+
+            n.preds  <- NROW(x)
+            pred.mat <- array(NA, dim = c(n.preds, n.trts - 1))
+            for (t in 1:(n.trts - 1))
+            {
+                idx.coefs.cur <- (n.coefs.per.trt * (t - 1) + 1):(n.coefs.per.trt * t)
+                coefs.cur     <- all.coefs[idx.coefs.cur]
+
+                pred.mat[,t]  <- drop(cbind(1, x) %*% coefs.cur)
+            }
+            pred.mat
+        }
     }
 
     list(predict = pred.func,
@@ -51,7 +73,7 @@ fit_sq_loss_lasso <- function(x, y, wts, family, ...)
 fit_logistic_loss_lasso <- fit_sq_loss_lasso
 
 #' @import survival
-fit_cox_loss_lasso <- function(x, y, wts, family, ...)
+fit_cox_loss_lasso <- function(x, y, trt, n.trts, wts, family, ...)
 {
 
     list.dots <- list(...)
@@ -83,7 +105,7 @@ fit_cox_loss_lasso <- function(x, y, wts, family, ...)
 
 #' @import mgcv
 #' @importFrom stats as.formula binomial gaussian
-fit_sq_loss_lasso_gam <- function(x, y, wts, family, ...)
+fit_sq_loss_lasso_gam <- function(x, y, trt, n.trts, wts, family, ...)
 {
     # this function must return a fitted model
     # in addition to a function which takes in
@@ -242,7 +264,7 @@ fit_cox_loss_lasso_gam      <- fit_sq_loss_lasso_gam
 
 
 
-fit_sq_loss_gam <- function(x, y, wts, family, ...)
+fit_sq_loss_gam <- function(x, y, trt, n.trts, wts, family, ...)
 {
     # this function must return a fitted model
     # in addition to a function which takes in
@@ -356,7 +378,7 @@ fit_cox_loss_gam      <- fit_sq_loss_gam
 
 
 #' @import gbm
-fit_sq_loss_gbm <- function(x, y, wts, family, ...)
+fit_sq_loss_gbm <- function(x, y, trt, n.trts, wts, family, ...)
 {
     # this function must return a fitted model
     # in addition to a function which takes in
@@ -423,7 +445,7 @@ fit_sq_loss_gbm <- function(x, y, wts, family, ...)
 }
 
 
-fit_abs_loss_gbm <- function(x, y, wts, family, ...)
+fit_abs_loss_gbm <- function(x, y, trt, n.trts, wts, family, ...)
 {
     # this function must return a fitted model
     # in addition to a function which takes in
@@ -490,7 +512,7 @@ fit_abs_loss_gbm <- function(x, y, wts, family, ...)
 }
 
 
-fit_logistic_loss_gbm <- function(x, y, wts, family, ...)
+fit_logistic_loss_gbm <- function(x, y, trt, n.trts, wts, family, ...)
 {
     # this function must return a fitted model
     # in addition to a function which takes in
@@ -557,7 +579,7 @@ fit_logistic_loss_gbm <- function(x, y, wts, family, ...)
 }
 
 
-fit_huberized_loss_gbm <- function(x, y, wts, family, ...)
+fit_huberized_loss_gbm <- function(x, y, trt, n.trts, wts, family, ...)
 {
     # this function must return a fitted model
     # in addition to a function which takes in
@@ -624,7 +646,7 @@ fit_huberized_loss_gbm <- function(x, y, wts, family, ...)
 }
 
 
-fit_cox_loss_gbm <- function(x, y, wts, family, ...)
+fit_cox_loss_gbm <- function(x, y, trt, n.trts, wts, family, ...)
 {
     # this function must return a fitted model
     # in addition to a function which takes in

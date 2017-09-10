@@ -190,12 +190,10 @@ fit.subgroup <- function(x,
     if (grepl("cox_loss", loss))
     {
         family <- "cox"
-    }
-    else if (grepl("logistic_loss", loss) | grepl("huberized_loss", loss))
+    } else if (grepl("logistic_loss", loss) | grepl("huberized_loss", loss))
     {
         family <- "binomial"
-    }
-    else
+    } else
     {
         family <- "gaussian"
     }
@@ -210,6 +208,9 @@ fit.subgroup <- function(x,
     # set variable names if they are not set
     if (is.null(vnames)) vnames <- paste0("V", 1:dims[2])
 
+    ## will be a flag for later use if
+    ## I decide to make outcome-weighted learning
+    ## (ie flipping loss) an option
     outcome.weighted <- FALSE
 
 
@@ -240,12 +241,54 @@ fit.subgroup <- function(x,
         }
     }
 
+    if (is.factor(trt))
+    {
+        # drop any unused levels of trt
+        trt         <- droplevels(trt)
+        unique.trts <- levels(trt)
+        n.trts      <- length(unique.trts)
+    } else
+    {
+        unique.trts <- sort(unique(trt))
+        n.trts      <- length(unique.trts)
+    }
+
+    if (n.trts < 2)           stop("trt must have at least 2 distinct levels")
+    if (n.trts > dims[1] / 3) stop("trt must have no more than n.obs / 3 distinct levels")
+
+
+    if (n.trts > 2 & grepl("_gbm", loss))
+    {
+        stop("gbm loss not supported for multiple treatments (number of total treatments > 2)")
+    }
+
+    # defaults to constant propensity score within trt levels
+    # the user will almost certainly want to change this
     if (is.null(propensity.func))
     {
-        # defaults to constant propensity score
-        # the use will almost certainly want to change this
-        mean.trt <- mean(trt == 1)
-        propensity.func <- function(trt, x) rep(mean.trt, length(trt))
+        if (n.trts == 2)
+        {
+            mean.trt <- mean(trt == unique.trts[2])
+            propensity.func <- function(trt, x) rep(mean.trt, length(trt))
+        } else
+        {
+            mean.trt <- numeric(n.trts)
+            for (t in 1:n.trts)
+            {
+                mean.trt[t] <- mean(trt == unique.trts[t])
+            }
+            propensity.func <- function(trt, x)
+            {
+                pi.x <- numeric(length(trt))
+                for (t in 1:n.trts)
+                {
+                    which.t       <- trt == unique.trts[t]
+                    pi.x[which.t] <- mean(which.t)
+                }
+
+                pi.x
+            }
+        }
     }
 
 
@@ -289,12 +332,6 @@ fit.subgroup <- function(x,
         this.call     <- NULL
     }
 
-    trt         <- as.integer(trt)
-    unique.trts <- sort(unique(trt))
-
-    if (length(unique.trts) != 2)    stop("trt must have 2 distinct levels")
-    if (any(unique.trts != c(0, 1))) stop("trt should be coded as 0 and 1")
-
     # check to make sure arguments of propensity.func are correct
     propfunc.names <- sort(names(formals(propensity.func)))
     if (length(propfunc.names) == 2)
@@ -333,7 +370,8 @@ fit.subgroup <- function(x,
 
     # identify correct fitting function and call it
     fit_fun      <- paste0("fit_", loss)
-    fitted.model <- do.call(fit_fun, list(x = x.tilde, y = y.adj, wts = wts, family = family, ...))
+    fitted.model <- do.call(fit_fun, list(x = x.tilde, trt = trt, n.trts = n.trts,
+                                          y = y.adj, wts = wts, family = family, ...))
 
     # save extra results
     fitted.model$call                  <- this.call
