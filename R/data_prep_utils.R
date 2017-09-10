@@ -41,14 +41,14 @@ create.weights.binary.trt <- function(pi.x, trt, method)
 
 
 
-create.design.matrix.mult.trt <- function(x, pi.x, trt, method, reference.trt = NULL)
+create.design.matrix.mult.trt <- function(x, pi.x, trt, y, method, reference.trt = NULL)
 {
     # trt must be supplied as integer vector
     # where 1 = treatment, 0 = control
 
     # we pass a matrix with intercept (ie treatment main effect)
     # so that there is one of them per treatment
-    x.block <- create.block.matrix.mult.trt(cbind(1, x), trt)
+    x.block <- create.block.matrix.mult.trt(cbind(1, x), trt, y)
 
     # construct modified design matrices
     # depending on what method is used
@@ -84,7 +84,7 @@ create.weights.mult.trt <- function(pi.x, trt, method)
 }
 
 
-create.design.matrix <- function(x, pi.x, trt, method, reference.trt = NULL)
+create.design.matrix <- function(x, pi.x, trt, y, method, reference.trt = NULL)
 {
     # check if multiple treatments or not
     if (is.factor(trt))
@@ -105,6 +105,7 @@ create.design.matrix <- function(x, pi.x, trt, method, reference.trt = NULL)
         return( create.design.matrix.mult.trt(x             = x,
                                               pi.x          = pi.x,
                                               trt           = trt,
+                                              y             = y,
                                               method        = method,
                                               reference.trt = reference.trt) )
     } else

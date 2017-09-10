@@ -59,7 +59,7 @@ create.block.matrix.mult.trt <- function(x, trt, y, reference.trt = NULL)
     {
         idx.obs.cur  <- (n.obs.cumsum[t] + 1):n.obs.cumsum[t + 1]
         idx.vars.cur <- (n.vars.cumsum[t] + 1):n.vars.cumsum[t + 1]
-        x.return[idx.obs.cur, idx.vars.cur] <- x[trt.idx[[t]],]
+        x.return[idx.obs.cur, idx.vars.cur] <- x[trt.idx[[t]],]# * ((n.trts - 2) / (n.trts - 1))
         y.return[idx.obs.cur] <- y[trt.idx[[t]]]
     }
     t <- n.trts
@@ -70,7 +70,7 @@ create.block.matrix.mult.trt <- function(x, trt, y, reference.trt = NULL)
         idx.obs.cur  <- (n.obs.cumsum[t] + 1):n.obs.cumsum[t + 1]
         # replicate columns
         idx.vars.cur <- (n.vars.cumsum[r] + 1):n.vars.cumsum[r + 1]
-        x.return[idx.obs.cur, idx.vars.cur] <- -x[trt.idx[[t]],]
+        x.return[idx.obs.cur, idx.vars.cur] <- -x[trt.idx[[t]],]# * (1 / (n.trts - 1))
 
         if (r == 1)
         {
