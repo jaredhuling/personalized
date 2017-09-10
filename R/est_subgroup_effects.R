@@ -12,10 +12,15 @@
 #' will be recommended to be in the treatment group
 #' @param larger.outcome.better boolean value of whether a larger outcome is better. Set to \code{TRUE}
 #' if a larger outcome is better and set to \code{FALSE} if a smaller outcome is better. Defaults to \code{TRUE}.
+#' @param reference.trt index of which treatment is the reference (in the case of multiple treatments).
+#' This should be known already, as for a \code{trt} with K-levels, there will be K-1 benefit scores (1 per column)
+#' of \code{benefit.scores}, where each column is a comparison of each K-1 treatments with the reference treatment.
+#' The default is the last level of \code{trt} if it is a factor.
 #' @seealso \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models which generate
 #' benefit scores.
 #' @export
-subgroup.effects <- function(benefit.scores, y, trt, cutpoint = 0, larger.outcome.better = TRUE)
+subgroup.effects <- function(benefit.scores, y, trt, cutpoint = 0,
+                             larger.outcome.better = TRUE, reference.trt = NULL)
 {
 
     benefit.scores <- drop(benefit.scores)
@@ -27,92 +32,232 @@ subgroup.effects <- function(benefit.scores, y, trt, cutpoint = 0, larger.outcom
         family <- "cox"
     }
 
-    trt <- drop(trt)
+    if (is.factor(trt))
+    {
+        # drop any unused levels of trt
+        trt         <- droplevels(trt)
+        unique.trts <- levels(trt)
+        n.trts      <- length(unique.trts)
+    } else
+    {
+        unique.trts <- sort(unique(trt))
+        n.trts      <- length(unique.trts)
+    }
 
-    if (length(benefit.scores) != NROW(y))     stop("length of benefit.scores and y do not match")
-    if (length(benefit.scores) != length(trt)) stop("length of benefit.scores and trt do not match")
+    if (n.trts - 1 > NCOL(benefit.scores))
+    {
+        stop("number of unique treatments is larger than the number of treatments represented by the benefit scores provided")
+    }
+
+    if (NROW(benefit.scores) != NROW(y))     stop("length of benefit.scores and y do not match")
+    if (NROW(benefit.scores) != length(trt)) stop("length of benefit.scores and trt do not match")
 
     cutpoint <- as.numeric(cutpoint[1])
 
-    # meaning of larger vs smaller benefit score
-    # is different depending on whether larger means
-    # better or not for the outcome
-    if (larger.outcome.better)
+    if (is.null(reference.trt) | n.trts == 2) # two trt options defaults to first as reference
     {
-        recommended.trt <- 1 * (benefit.scores > cutpoint)
+        reference.idx   <- 1L
+        comparison.idx  <- (1:n.trts)[-reference.idx]
+        comparison.trts <- unique.trts[-reference.idx]
+        reference.trt   <- unique.trts[reference.idx]
     } else
     {
-        recommended.trt <- 1 * (benefit.scores < cutpoint)
+        reference.idx   <- which(unique.trts == reference.trt)
+        comparison.idx  <- (1:n.trts)[-reference.idx]
+        comparison.trts <- unique.trts[-reference.idx]
     }
 
-    # compute mean of outcome within
-    # group of patients who both
-    # received and were recommended the treatment group
-    idx.11  <- (recommended.trt == 1) & (trt == 1)
-
-    # compute mean of outcome within
-    # group of patients who
-    # received control and were recommended the treatment group
-    idx.10  <- (recommended.trt == 1) & (trt == 0)
-
-    # compute mean of outcome within
-    # group of patients who
-    # received treatment and were recommended the control group
-    idx.01  <- (recommended.trt == 0) & (trt == 1)
-
-    # compute mean of outcome within
-    # group of patients who both
-    # received and were recommended the control group
-    idx.00  <- (recommended.trt == 0) & (trt == 0)
-
-
-    mean.11 <- mean.10 <- mean.01 <- mean.00 <- numeric(1L)
-    if (family == "cox")
+    if (n.trts > 2)
     {
-        survf.11 <- survfit(y[idx.11] ~ 1)
-        mean.11  <- summary(survf.11)$table[5]
+        # meaning of larger vs smaller benefit score
+        # is different depending on whether larger means
+        # better or not for the outcome
+        if (larger.outcome.better)
+        {
+            best.comp.idx   <- apply(benefit.scores, 1, which.max)
+            recommended.trt <- 1 * (benefit.scores > cutpoint)
+            rec.ref         <- rowSums(recommended.trt) == 0
 
-        survf.10 <- survfit(y[idx.10] ~ 1)
-        mean.10  <- summary(survf.10)$table[5]
+            recommended.trt <- ifelse(rec.ref, reference.trt, comparison.trts[best.comp.idx])
+        } else
+        {
+            best.comp.idx   <- apply(benefit.scores, 1, which.min)
+            recommended.trt <- 1 * (benefit.scores < cutpoint)
+            rec.ref         <- rowSums(recommended.trt) == 0
 
-        survf.01 <- survfit(y[idx.01] ~ 1)
-        mean.01  <- summary(survf.01)$table[5]
+            recommended.trt <- ifelse(rec.ref, reference.trt, comparison.trts[best.comp.idx])
+        }
 
-        survf.00 <- survfit(y[idx.00] ~ 1)
-        mean.00  <- summary(survf.00)$table[5]
     } else
     {
-        mean.11 <- mean(y[idx.11])
-        mean.10 <- mean(y[idx.10])
-        mean.01 <- mean(y[idx.01])
-        mean.00 <- mean(y[idx.00])
+        # meaning of larger vs smaller benefit score
+        # is different depending on whether larger means
+        # better or not for the outcome
+        if (larger.outcome.better)
+        {
+            recommended.trt <- ifelse(benefit.scores > cutpoint, comparison.trts, reference.trt)
+        } else
+        {
+            recommended.trt <- ifelse(benefit.scores < cutpoint, comparison.trts, reference.trt)
+        }
+
     }
 
-    res.mat <- matrix(0, ncol = 2, nrow = 2)
-    colnames(res.mat) <- c("Recommended Trt", "Recommended Ctrl")
-    rownames(res.mat) <- c("Received Trt",    "Received Ctrl")
+    ## old way before multiple trtments::
+    ##
+    ## compute mean of outcome within
+    ## group of patients who both
+    ## received and were recommended the treatment group
+    #idx.11  <- (recommended.trt == 1) & (trt == 1)
+
+    ## compute mean of outcome within
+    ## group of patients who
+    ## received control and were recommended the treatment group
+    #idx.10  <- (recommended.trt == 1) & (trt == 0)
+
+    ## compute mean of outcome within
+    ## group of patients who
+    ## received treatment and were recommended the control group
+    #idx.01  <- (recommended.trt == 0) & (trt == 1)
+
+    ## compute mean of outcome within
+    ## group of patients who both
+    ## received and were recommended the control group
+    #idx.00  <- (recommended.trt == 0) & (trt == 0)
+
+
+    idx.list <- rep(list(vector(mode = "list", length = n.trts)), n.trts)
+
+    ## loop over all combinations of
+    ## recommendation and observed trt status
+    ## and find who has what combination
+    ## of recommended trt and received trt
+    for (t.recom in 1:n.trts)
+    {
+        for (t.receiv in 1:n.trts)
+        {
+            idx.list[[t.recom]][[t.receiv]] <- (recommended.trt == unique.trts[t.recom]) & (trt == unique.trts[t.receiv])
+        }
+    }
+
+
+    # mean.11 <- mean.10 <- mean.01 <- mean.00 <- numeric(1L)
+    # if (family == "cox")
+    # {
+    #     survf.11 <- survfit(y[idx.11] ~ 1)
+    #     mean.11  <- summary(survf.11)$table[5]
+    #
+    #     survf.10 <- survfit(y[idx.10] ~ 1)
+    #     mean.10  <- summary(survf.10)$table[5]
+    #
+    #     survf.01 <- survfit(y[idx.01] ~ 1)
+    #     mean.01  <- summary(survf.01)$table[5]
+    #
+    #     survf.00 <- survfit(y[idx.00] ~ 1)
+    #     mean.00  <- summary(survf.00)$table[5]
+    # } else
+    # {
+    #     mean.11 <- mean(y[idx.11])
+    #     mean.10 <- mean(y[idx.10])
+    #     mean.01 <- mean(y[idx.01])
+    #     mean.00 <- mean(y[idx.00])
+    # }
+
+    res.mat <- matrix(0, ncol = n.trts, nrow = n.trts)
+    colnames(res.mat) <- paste("Recommended", unique.trts)
+    rownames(res.mat) <- paste("Received", unique.trts)
+
+    #res.mat <- matrix(0, ncol = 2, nrow = 2)
+    #colnames(res.mat) <- c("Recommended Trt", "Recommended Ctrl")
+    #rownames(res.mat) <- c("Received Trt",    "Received Ctrl")
 
     sample.size.mat <- res.mat
 
-    res.mat[1,1] <- mean.11
-    res.mat[1,2] <- mean.01
-    res.mat[2,1] <- mean.10
-    res.mat[2,2] <- mean.00
+    subgroup.effects <- numeric(n.trts)
 
-    sample.size.mat[1,1] <- sum(idx.11)
-    sample.size.mat[1,2] <- sum(idx.01)
-    sample.size.mat[2,1] <- sum(idx.10)
-    sample.size.mat[2,2] <- sum(idx.00)
+    if (family == "cox")
+    {
+        for (t.recom in 1:n.trts)
+        {
+            for (t.receiv in 1:n.trts)
+            {
+                idx.cur <- idx.list[[t.recom]][[t.receiv]]
 
-    subgroup.effects <- c(mean.11 - mean.10,
-                          mean.00 - mean.01)
+                survf <- survfit(y[idx.cur] ~ 1)
+                restricted.mean <- summary(survf)$table[5]
 
-    names(subgroup.effects) <- c("Trt  Effect Among Recommended Trt",
-                                 "Ctrl Effect Among Recommended Ctrl")
+                res.mat[t.recom, t.receiv] <- restricted.mean
+                sample.size.mat[t.recom, t.receiv] <- sum(idx.cur)
+
+                if (t.recom == t.receiv)
+                {
+                    survf <- survfit(y[!idx.cur] ~ 1)
+                    restricted.mean <- summary(survf)$table[5]
+
+                    subgroup.effects[t.recom] <- res.mat[t.recom, t.receiv] - restricted.mean
+                }
+
+            }
+        }
+    } else
+    {
+        for (t.recom in 1:n.trts)
+        {
+            for (t.receiv in 1:n.trts)
+            {
+                idx.cur <- idx.list[[t.recom]][[t.receiv]]
+                res.mat[t.recom, t.receiv] <- mean(y[idx.cur])
+                sample.size.mat[t.recom, t.receiv] <- sum(idx.cur)
+
+                if (t.recom == t.receiv)
+                {
+                    subgroup.effects[t.recom] <- res.mat[t.recom, t.receiv] - mean(y[!idx.cur])
+                }
+
+            }
+        }
+    }
+
+    idx.agree <- recommended.trt == trt
+
+    if (family == "cox")
+    {
+        survf.agree <- survfit(y[idx.agree] ~ 1)
+        restricted.mean.agree <- summary(survf.agree)$table[5]
+
+        survf.disagree <- survfit(y[!idx.agree] ~ 1)
+        restricted.mean.disagree <- summary(survf.disagree)$table[5]
+
+        overall.subgroup.effect <- restricted.mean.agree - restricted.mean.disagree
+    } else
+    {
+        overall.subgroup.effect <- mean(y[idx.agree]) - mean(y[!idx.agree])
+    }
+
+    #res.mat[1,1] <- mean.11
+    #res.mat[1,2] <- mean.01
+    #res.mat[2,1] <- mean.10
+    #res.mat[2,2] <- mean.00
+
+    #sample.size.mat[1,1] <- sum(idx.11)
+    #sample.size.mat[1,2] <- sum(idx.01)
+    #sample.size.mat[2,1] <- sum(idx.10)
+    #sample.size.mat[2,2] <- sum(idx.00)
+
+    #subgroup.effects <- c(mean.11 - mean.10,
+    #                      mean.00 - mean.01)
+
+    #names(subgroup.effects) <- c("Trt  Effect Among Recommended Trt",
+    #                             "Ctrl Effect Among Recommended Ctrl")
+
+    names(subgroup.effects) <- paste(unique.trts, "effect among recommended", unique.trts)
 
     list(subgroup.effects = subgroup.effects, # subgroup-specific effects
-                                              # (trt effect among those recommendedtrt and
+                                              # (trt effect among those recommended trt and
                                               #  ctrl effect among rec ctrl)
          avg.outcomes     = res.mat,          # means within 2x2 table (trt status vs trt rec)
-         sample.sizes     = sample.size.mat)  # sample sizes for 2x2 table
+         sample.sizes     = sample.size.mat,  # sample sizes for 2x2 table
+         overall.subgroup.effect = overall.subgroup.effect) # overall difference in means among those
+                                                            # whose recommendation agrees with what they received
+                                                            # vs those whose recommendation differs from what they received
 }

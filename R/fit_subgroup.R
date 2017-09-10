@@ -47,6 +47,8 @@
 #' will be recommended to be in the treatment group
 #' @param larger.outcome.better boolean value of whether a larger outcome is better/preferable. Set to \code{TRUE}
 #' if a larger outcome is better/preferable and set to \code{FALSE} if a smaller outcome is better/preferable. Defaults to \code{TRUE}.
+#' @param reference.trt which treatment should be treated as the reference treatment. Defaults to the first level of \code{trt}
+#' if \code{trt} is a factor or the first alphabetical or numerically first treatment level.
 #' @param retcall boolean value. if \code{TRUE} then the passed arguments will be saved. Do not set to \code{FALSE}
 #' if the \code{validate.subgroup()} function will later be used for your fitted subgroup model. Only set to \code{FALSE}
 #' if memory is limited as setting to \code{TRUE} saves the design matrix to the fitted object
@@ -166,6 +168,7 @@ fit.subgroup <- function(x,
                          augment.func = NULL,
                          cutpoint   = 0,
                          larger.outcome.better = TRUE,
+                         reference.trt = NULL,
                          retcall    = TRUE,
                          ...)
 {
@@ -256,6 +259,24 @@ fit.subgroup <- function(x,
     if (n.trts < 2)           stop("trt must have at least 2 distinct levels")
     if (n.trts > dims[1] / 3) stop("trt must have no more than n.obs / 3 distinct levels")
 
+    if (!is.null(reference.trt))
+    {
+        if (!(reference.trt %in% unique.trts))
+        {
+            stop("reference.trt must be one of the treatment levels")
+        }
+
+        reference.idx   <- which(unique.trts == reference.trt)
+        comparison.idx  <- (1:n.trts)[-reference.idx]
+        comparison.trts <- unique.trts[-reference.idx]
+
+    } else
+    {
+        reference.idx   <- 1L
+        comparison.idx  <- (1:n.trts)[-reference.idx]
+        comparison.trts <- unique.trts[-reference.idx]
+        reference.trt   <- unique.trts[reference.idx]
+    }
 
     if (n.trts > 2 & grepl("_gbm", loss))
     {
@@ -268,7 +289,7 @@ fit.subgroup <- function(x,
     {
         if (n.trts == 2)
         {
-            mean.trt <- mean(trt == unique.trts[2])
+            mean.trt <- mean(trt == unique.trts[2L])
             propensity.func <- function(trt, x) rep(mean.trt, length(trt))
         } else
         {
@@ -358,15 +379,36 @@ fit.subgroup <- function(x,
     x.tilde <- create.design.matrix(x      = x,
                                     pi.x   = pi.x,
                                     trt    = trt,
-                                    method = method)
+                                    method = method,
+                                    reference.trt = reference.trt)
 
     # construct observation weight vector
     wts     <- create.weights(pi.x   = pi.x,
                               trt    = trt,
                               method = method)
 
+    if (n.trts == 2)
+    {
+        colnames(x.tilde) <- c("Trt", vnames)
+    }
 
-    colnames(x.tilde) <- c("Trt", vnames)
+    if (n.trts > 2)
+    {
+        all.cnames <- numeric(ncol(x.tilde))
+        len.names  <- length(vnames) + 1
+        for (tr in 1:(n.trts - 1))
+        {
+            idx.cur <- ((len.names * (tr - 1)) + 1):(len.names * tr)
+            all.cnames[idx.cur] <- c( comparison.trts[tr],
+                                      paste(vnames, 1:(n.trts - 1), sep = ".") )
+        }
+    } else
+    {
+        all.cnames <- c( comparison.trts[tr],
+                         vnames )
+    }
+
+    colnames(x.tilde) <- all.cnames
 
     # identify correct fitting function and call it
     fit_fun      <- paste0("fit_", loss)
@@ -387,7 +429,8 @@ fit.subgroup <- function(x,
     # benefit scores and specified benefit score cutpoint
     fitted.model$subgroup.trt.effects <- subgroup.effects(fitted.model$benefit.scores,
                                                           y, trt, cutpoint,
-                                                          larger.outcome.better)
+                                                          larger.outcome.better,
+                                                          reference.trt = reference.trt)
 
     class(fitted.model) <- "subgroup_fitted"
 

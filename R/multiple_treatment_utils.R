@@ -14,18 +14,20 @@
 # with binary treatments, this simplifies to the normal
 # | x_1|
 # |-x_2|
-create.design.matrix.mult.trt <- function(x, pi.x, trt, y, reference.trt = NULL, method)
+create.design.matrix.mult.trt <- function(x, pi.x, trt, y, reference.trt = NULL,
+                                          method = c("weighting", "a_learning"))
 {
     trt.levels      <- levels(trt)
     n.trts          <- length(trt.levels)
     trt.idx         <- vector(mode = "list", length = n.trts)
     sample.sizes    <- numeric(n.trts)
+    method          <- match.arg(method)
 
     # if not specified, set reference treatment
     # to be the last one
     if (is.null(reference.trt))
     {
-        reference.trt <- trt.levels[n.trts]
+        reference.trt <- trt.levels[1L]
     }
     which.reference <- which(trt.levels == reference.trt)
 
@@ -34,6 +36,8 @@ create.design.matrix.mult.trt <- function(x, pi.x, trt, y, reference.trt = NULL,
     trt.idx.vec <- 1:n.trts
     trt.idx.vec <- c(trt.idx.vec[-which.reference], trt.idx.vec[which.reference])
     trt.levels  <- trt.levels[trt.idx.vec]
+
+    print(trt.idx.vec)
 
     for (t in 1:n.trts)
     {
@@ -59,7 +63,21 @@ create.design.matrix.mult.trt <- function(x, pi.x, trt, y, reference.trt = NULL,
     {
         idx.obs.cur  <- (n.obs.cumsum[t] + 1):n.obs.cumsum[t + 1]
         idx.vars.cur <- (n.vars.cumsum[t] + 1):n.vars.cumsum[t + 1]
-        x.return[trt.idx[[t]], idx.vars.cur] <- x[trt.idx[[t]],]# * ((n.trts - 2) / (n.trts - 1))
+
+        # construct modified design matrices
+        # depending on what method is used
+        if (method == "weighting")
+        {
+            x.return[trt.idx[[t]], idx.vars.cur] <- x[trt.idx[[t]],]
+        } else
+        {
+            stop("A-learning not available for multiple treatments")
+            # A-learning method
+
+            x.return[trt.idx[[t]], idx.vars.cur] <- (1 - pi.x[trt.idx[[t]]]) * x[trt.idx[[t]],]
+        }
+
+
         #y.return[idx.obs.cur] <- y[trt.idx[[t]]] # now we don't want to re-order observations
     }
     t <- n.trts
@@ -70,7 +88,18 @@ create.design.matrix.mult.trt <- function(x, pi.x, trt, y, reference.trt = NULL,
         idx.obs.cur  <- (n.obs.cumsum[t] + 1):n.obs.cumsum[t + 1]
         # replicate columns
         idx.vars.cur <- (n.vars.cumsum[r] + 1):n.vars.cumsum[r + 1]
-        x.return[trt.idx[[t]], idx.vars.cur] <- -x[trt.idx[[t]],]# * (1 / (n.trts - 1))
+
+        # construct modified design matrices
+        # depending on what method is used
+        if (method == "weighting")
+        {
+            x.return[trt.idx[[t]], idx.vars.cur] <- -x[trt.idx[[t]],]
+        } else
+        {
+            stop("A-learning not available for multiple treatments")
+            # A-learning method
+            x.return[trt.idx[[t]], idx.vars.cur] <- -(1 - pi.x[trt.idx[[t]]]) * x[trt.idx[[t]],]
+        }
 
         #if (r == 1)
         #{
@@ -78,20 +107,9 @@ create.design.matrix.mult.trt <- function(x, pi.x, trt, y, reference.trt = NULL,
         #}
     }
 
-    # construct modified design matrices
-    # depending on what method is used
-    if (method == "weighting")
-    {
-        x.tilde <- x.return
-    } else
-    {
-        stop("A-learning not available for multiple treatments")
-        # A-learning method
-        x.tilde <- (trt - pi.x) * x.return
-    }
 
     # 'trt.levels' is the treatment levels (re-ordered based off of reference treatment)
-    attr(x.tilde, "trt.levels") <- trt.levels
+    attr(x.return, "trt.levels") <- trt.levels
 
-    x.tilde
+    x.return
 }
