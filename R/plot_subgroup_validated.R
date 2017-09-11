@@ -16,8 +16,10 @@
 #' @seealso \code{\link[personalized]{validate.subgroup}} for function which creates validation results
 #' and \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models.
 #' @rdname plot
-#' @import ggplot2
 #' @import plotly
+#' @importFrom ggplot2 ggplot aes geom_density geom_rug coord_flip facet_grid theme xlab
+#' @importFrom ggplot2 ylab ggtitle geom_vline geom_boxplot geom_line geom_point
+#' @importFrom ggplot2 scale_x_discrete
 #'
 #' @examples
 #'
