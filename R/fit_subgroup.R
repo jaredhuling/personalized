@@ -404,7 +404,7 @@ fit.subgroup <- function(x,
         }
     } else
     {
-        all.cnames <- c( comparison.trts[tr],
+        all.cnames <- c( comparison.trts,
                          vnames )
     }
 
