@@ -1,14 +1,25 @@
 # Define common predictions function types
-get.pred.func <- function(fit.name, model, n.trts)
+get.pred.func <- function(fit.name, model, n.trts, sel.idx)
 {
     # GAM models
     if (grepl("_gam$",fit.name))
     {
-        pred.func <- function(x)
+        if (grepl("_cox", fit.name))
         {
-            df.pred <- data.frame(cbind(1, x[,sel.idx[-1] - 1]))
-            colnames(df.pred) <- colnames(df)[-1] # take out 'y' column name
-            drop(predict(model, newdata = df.pred, type = "link"))
+            pred.func <- function(x)
+            {
+                df.pred <- data.frame(cbind(1, x[,sel.idx[-1] - 1]))
+                colnames(df.pred) <- colnames(df)[-1] # take out 'y' column name
+                -drop(predict(model, newdata = df.pred, type = "link"))
+            }
+        } else
+        {
+            pred.func <- function(x)
+            {
+                df.pred <- data.frame(cbind(1, x[,sel.idx[-1] - 1]))
+                colnames(df.pred) <- colnames(df)[-1] # take out 'y' column name
+                drop(predict(model, newdata = df.pred, type = "link"))
+            }
         }
         # GBM models
     } else if (grepl("_gbm$",fit.name))
@@ -328,7 +339,7 @@ fit_sq_loss_lasso_gam <- function(x, y, trt, n.trts, wts, family, ...)
   }
 
   # Return fitted model and extraction methods
-  list(predict      = get.pred.func("fit_sq_loss_lasso_gam", model, n.trts),
+  list(predict      = get.pred.func("fit_sq_loss_lasso_gam", model, n.trts, sel.idx),
        model        = model,
        coefficients = get.coef.func("fit_sq_loss_lasso_gam", n.trts)(model))
 }
