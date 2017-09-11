@@ -21,7 +21,8 @@ Suggests:
     knitr,
     rmarkdown
 Imports:
-    survival
+    survival,
+    plotly
 Depends:
     glmnet,
     mgcv,

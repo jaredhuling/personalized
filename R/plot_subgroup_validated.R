@@ -125,6 +125,8 @@ plot.subgroup_validated <- function(x,
         # Acquire coefficients for each bootstrap iteration (exclude intercept and Trt terms)
         d <- as.data.frame(x$boot.results[[4]][-c(1,2),])
 
+        pct.selected <- q0 <- q2 <- q4 <- bar.type <- plot.idx <- NULL
+
         # Compute percentage of times each variable was selected
         d$pct.selected <- apply(d,1,function(x){sum(x!=0)}/ncol(d)*100)
 

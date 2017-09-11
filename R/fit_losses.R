@@ -1,9 +1,10 @@
 # Define common predictions function types
 get.pred.func <- function(fit.name, model, env = parent.frame())
 {
-    n.trts  <- env$n.trts
-    vnames  <- env$vnames
-    sel.idx <- env$sel.idx
+    n.trts    <- env$n.trts
+    vnames    <- env$vnames
+    sel.idx   <- env$sel.idx
+    best.iter <- env$best.iter
     # GAM models
     if (grepl("_gam$",fit.name))
     {
