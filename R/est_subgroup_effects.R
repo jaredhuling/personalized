@@ -191,7 +191,7 @@ subgroup.effects <- function(benefit.scores, y, trt, cutpoint = 0,
 
                 if (t.recom == t.receiv)
                 {
-                    idx.disagree <- unlist(idx.list[[t.recom]][-t.receiv])
+                    idx.disagree <- Reduce("|", idx.list[[t.recom]][-t.receiv])
                     survf <- survfit(y[idx.disagree] ~ 1)
                     restricted.mean <- summary(survf)$table[5]
 
@@ -212,7 +212,7 @@ subgroup.effects <- function(benefit.scores, y, trt, cutpoint = 0,
 
                 if (t.recom == t.receiv)
                 {
-                    idx.disagree <- unlist(idx.list[[t.recom]][-t.receiv])
+                    idx.disagree <- Reduce("|", idx.list[[t.recom]][-t.receiv])
                     subgroup.effects[t.recom] <- res.mat[t.recom, t.receiv] - mean(y[idx.disagree])
                 }
 
