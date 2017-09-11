@@ -449,7 +449,7 @@ fit_sq_loss_gbm <- function(x, y, trt, n.trts, wts, family, ...)
 
     best.iter <- gbm.perf(model, method = "cv")
 
-    vnames <- colnames(x)
+    vnames <- colnames(df)[-1]
 
     # define a function which inputs a design matrix
     # and outputs estimated benefit scores: one score
@@ -516,7 +516,7 @@ fit_abs_loss_gbm <- function(x, y, trt, n.trts, wts, family, ...)
 
     best.iter <- gbm.perf(model, method = "cv")
 
-    vnames <- colnames(x)
+    vnames <- colnames(df)[-1]
 
     # define a function which inputs a design matrix
     # and outputs estimated benefit scores: one score
@@ -583,7 +583,7 @@ fit_logistic_loss_gbm <- function(x, y, trt, n.trts, wts, family, ...)
 
     best.iter <- gbm.perf(model, method = "cv")
 
-    vnames <- colnames(x)
+    vnames <- colnames(df)[-1]
 
     # define a function which inputs a design matrix
     # and outputs estimated benefit scores: one score
@@ -650,7 +650,7 @@ fit_huberized_loss_gbm <- function(x, y, trt, n.trts, wts, family, ...)
 
     best.iter <- gbm.perf(model, method = "cv")
 
-    vnames <- colnames(x)
+    vnames <- colnames(df)[-1]
 
     # define a function which inputs a design matrix
     # and outputs estimated benefit scores: one score
@@ -721,7 +721,7 @@ fit_cox_loss_gbm <- function(x, y, trt, n.trts, wts, family, ...)
 
     best.iter <- gbm.perf(model, method = "cv")
 
-    vnames <- colnames(x)
+    vnames <- colnames(df)[-1]
 
     # define a function which inputs a design matrix
     # and outputs estimated benefit scores: one score
