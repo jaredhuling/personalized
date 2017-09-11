@@ -387,11 +387,6 @@ fit.subgroup <- function(x,
                               trt    = trt,
                               method = method)
 
-    if (n.trts == 2)
-    {
-        colnames(x.tilde) <- c("Trt", vnames)
-    }
-
     if (n.trts > 2)
     {
         all.cnames <- numeric(ncol(x.tilde))
@@ -415,6 +410,7 @@ fit.subgroup <- function(x,
     fitted.model <- do.call(fit_fun, list(x = x.tilde, trt = trt, n.trts = n.trts,
                                           y = y.adj, wts = wts, family = family, ...))
 
+
     # save extra results
     fitted.model$call                  <- this.call
     fitted.model$family                <- family
@@ -427,6 +423,7 @@ fit.subgroup <- function(x,
     fitted.model$reference.trt         <- reference.trt
 
     fitted.model$benefit.scores        <- fitted.model$predict(x)
+
     fitted.model$recommended.trts      <- predict.subgroup_fitted(fitted.model, newx = x,
                                                                   type = "trt.group",
                                                                   cutpoint = cutpoint)
