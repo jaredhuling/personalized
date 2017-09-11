@@ -167,7 +167,7 @@ fit_sq_loss_lasso <- function(x, y, trt, n.trts, wts, family, ...)
   # Return fitted model and extraction methods
   list(predict      = get.pred.func("fit_sq_loss_lasso", model),
        model        = model,
-       coefficients = get.coef.func("fit_sq_loss_lasso", n.trts)(model))
+       coefficients = get.coef.func("fit_sq_loss_lasso")(model))
 }
 
 
