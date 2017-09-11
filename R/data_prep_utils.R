@@ -34,12 +34,12 @@ create.design.matrix.binary.trt <- function(x, pi.x, trt, method, reference.trt 
     if (method == "weighting")
     {
         # create 1 and -1 version of treatment vector
-        trt2 <- 2 * (trt == reference.trt) - 1
+        trt2 <- 2 * (trt != reference.trt) - 1
 
         x.tilde <- trt2 * cbind(1, x)
     } else
     {   # A-learning method
-        x.tilde <- (1 * (trt == reference.trt) - pi.x) * cbind(1, x)
+        x.tilde <- (1 * (trt != reference.trt) - pi.x) * cbind(1, x)
     }
     x.tilde
 }
