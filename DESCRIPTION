@@ -26,7 +26,6 @@ Depends:
     glmnet,
     mgcv,
     gbm,
-    ggplot2,
-    plotly
+    ggplot2
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr
