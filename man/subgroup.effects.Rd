@@ -5,7 +5,7 @@
 \title{Computes treatment effects within various subgroups}
 \usage{
 subgroup.effects(benefit.scores, y, trt, cutpoint = 0,
-  larger.outcome.better = TRUE)
+  larger.outcome.better = TRUE, reference.trt = NULL)
 }
 \arguments{
 \item{benefit.scores}{vector of estimated benefit scores}
@@ -21,6 +21,11 @@ will be recommended to be in the treatment group}
 
 \item{larger.outcome.better}{boolean value of whether a larger outcome is better. Set to \code{TRUE}
 if a larger outcome is better and set to \code{FALSE} if a smaller outcome is better. Defaults to \code{TRUE}.}
+
+\item{reference.trt}{index of which treatment is the reference (in the case of multiple treatments).
+This should be known already, as for a \code{trt} with K-levels, there will be K-1 benefit scores (1 per column)
+of \code{benefit.scores}, where each column is a comparison of each K-1 treatments with the reference treatment.
+The default is the last level of \code{trt} if it is a factor.}
 }
 \description{
 Computes treatment effects within various subgroups to estimate subgroup treatment effects

@@ -47,6 +47,8 @@
 #' will be recommended to be in the treatment group
 #' @param larger.outcome.better boolean value of whether a larger outcome is better/preferable. Set to \code{TRUE}
 #' if a larger outcome is better/preferable and set to \code{FALSE} if a smaller outcome is better/preferable. Defaults to \code{TRUE}.
+#' @param reference.trt which treatment should be treated as the reference treatment. Defaults to the first level of \code{trt}
+#' if \code{trt} is a factor or the first alphabetical or numerically first treatment level.
 #' @param retcall boolean value. if \code{TRUE} then the passed arguments will be saved. Do not set to \code{FALSE}
 #' if the \code{validate.subgroup()} function will later be used for your fitted subgroup model. Only set to \code{FALSE}
 #' if memory is limited as setting to \code{TRUE} saves the design matrix to the fitted object
@@ -166,6 +168,7 @@ fit.subgroup <- function(x,
                          augment.func = NULL,
                          cutpoint   = 0,
                          larger.outcome.better = TRUE,
+                         reference.trt = NULL,
                          retcall    = TRUE,
                          ...)
 {
@@ -190,12 +193,10 @@ fit.subgroup <- function(x,
     if (grepl("cox_loss", loss))
     {
         family <- "cox"
-    }
-    else if (grepl("logistic_loss", loss) | grepl("huberized_loss", loss))
+    } else if (grepl("logistic_loss", loss) | grepl("huberized_loss", loss))
     {
         family <- "binomial"
-    }
-    else
+    } else
     {
         family <- "gaussian"
     }
@@ -210,6 +211,9 @@ fit.subgroup <- function(x,
     # set variable names if they are not set
     if (is.null(vnames)) vnames <- paste0("V", 1:dims[2])
 
+    ## will be a flag for later use if
+    ## I decide to make outcome-weighted learning
+    ## (ie flipping loss) an option
     outcome.weighted <- FALSE
 
 
@@ -240,12 +244,72 @@ fit.subgroup <- function(x,
         }
     }
 
+    if (is.factor(trt))
+    {
+        # drop any unused levels of trt
+        trt         <- droplevels(trt)
+        unique.trts <- levels(trt)
+        n.trts      <- length(unique.trts)
+    } else
+    {
+        unique.trts <- sort(unique(trt))
+        n.trts      <- length(unique.trts)
+    }
+
+    if (n.trts < 2)           stop("trt must have at least 2 distinct levels")
+    if (n.trts > dims[1] / 3) stop("trt must have no more than n.obs / 3 distinct levels")
+
+    if (!is.null(reference.trt))
+    {
+        if (!(reference.trt %in% unique.trts))
+        {
+            stop("reference.trt must be one of the treatment levels")
+        }
+
+        reference.idx   <- which(unique.trts == reference.trt)
+        comparison.idx  <- (1:n.trts)[-reference.idx]
+        comparison.trts <- unique.trts[-reference.idx]
+
+    } else
+    {
+        reference.idx   <- 1L
+        comparison.idx  <- (1:n.trts)[-reference.idx]
+        comparison.trts <- unique.trts[-reference.idx]
+        reference.trt   <- unique.trts[reference.idx]
+    }
+
+    if (n.trts > 2 & (grepl("_gbm", loss) | grepl("_gam", loss)) )
+    {
+        stop("gbm and gam based losses not supported for multiple treatments (number of total treatments > 2)")
+    }
+
+    # defaults to constant propensity score within trt levels
+    # the user will almost certainly want to change this
     if (is.null(propensity.func))
     {
-        # defaults to constant propensity score
-        # the use will almost certainly want to change this
-        mean.trt <- mean(trt == 1)
-        propensity.func <- function(trt, x) rep(mean.trt, length(trt))
+        if (n.trts == 2)
+        {
+            mean.trt <- mean(trt == unique.trts[2L])
+            propensity.func <- function(trt, x) rep(mean.trt, length(trt))
+        } else
+        {
+            mean.trt <- numeric(n.trts)
+            for (t in 1:n.trts)
+            {
+                mean.trt[t] <- mean(trt == unique.trts[t])
+            }
+            propensity.func <- function(trt, x)
+            {
+                pi.x <- numeric(length(trt))
+                for (t in 1:n.trts)
+                {
+                    which.t       <- trt == unique.trts[t]
+                    pi.x[which.t] <- mean(which.t)
+                }
+
+                pi.x
+            }
+        }
     }
 
 
@@ -289,12 +353,6 @@ fit.subgroup <- function(x,
         this.call     <- NULL
     }
 
-    trt         <- as.integer(trt)
-    unique.trts <- sort(unique(trt))
-
-    if (length(unique.trts) != 2)    stop("trt must have 2 distinct levels")
-    if (any(unique.trts != c(0, 1))) stop("trt should be coded as 0 and 1")
-
     # check to make sure arguments of propensity.func are correct
     propfunc.names <- sort(names(formals(propensity.func)))
     if (length(propfunc.names) == 2)
@@ -318,22 +376,44 @@ fit.subgroup <- function(x,
     if (rng.pi[1] <= 0 | rng.pi[2] >= 1) stop("propensity.func() should return values between 0 and 1")
 
     # construct design matrix to be passed to fitting function
-    x.tilde <- create.design.matrix(x      = x,
-                                    pi.x   = pi.x,
-                                    trt    = trt,
-                                    method = method)
+    x.tilde <- create.design.matrix(x             = x,
+                                    pi.x          = pi.x,
+                                    trt           = trt,
+                                    method        = method,
+                                    reference.trt = reference.trt)
 
     # construct observation weight vector
     wts     <- create.weights(pi.x   = pi.x,
                               trt    = trt,
                               method = method)
 
+    if (n.trts == 2)
+    {
+        colnames(x.tilde) <- c("Trt", vnames)
+    }
 
-    colnames(x.tilde) <- c("Trt", vnames)
+    if (n.trts > 2)
+    {
+        all.cnames <- numeric(ncol(x.tilde))
+        len.names  <- length(vnames) + 1
+        for (tr in 1:(n.trts - 1))
+        {
+            idx.cur <- ((len.names * (tr - 1)) + 1):(len.names * tr)
+            all.cnames[idx.cur] <- c( comparison.trts[tr],
+                                      paste(vnames, 1:(n.trts - 1), sep = ".") )
+        }
+    } else
+    {
+        all.cnames <- c( comparison.trts,
+                         vnames )
+    }
+
+    colnames(x.tilde) <- all.cnames
 
     # identify correct fitting function and call it
     fit_fun      <- paste0("fit_", loss)
-    fitted.model <- do.call(fit_fun, list(x = x.tilde, y = y.adj, wts = wts, family = family, ...))
+    fitted.model <- do.call(fit_fun, list(x = x.tilde, trt = trt, n.trts = n.trts,
+                                          y = y.adj, wts = wts, family = family, ...))
 
     # save extra results
     fitted.model$call                  <- this.call
@@ -342,14 +422,22 @@ fit.subgroup <- function(x,
     fitted.model$method                <- method
     fitted.model$larger.outcome.better <- larger.outcome.better
     fitted.model$var.names             <- vnames
+    fitted.model$n.trts                <- n.trts
+    fitted.model$comparison.trts       <- comparison.trts
+    fitted.model$reference.trt         <- reference.trt
+
     fitted.model$benefit.scores        <- fitted.model$predict(x)
+    fitted.model$recommended.trts      <- predict.subgroup_fitted(fitted.model, newx = x,
+                                                                  type = "trt.group",
+                                                                  cutpoint = cutpoint)
 
     # calculate sizes of subgroups and the
     # subgroup treatment effects based on the
     # benefit scores and specified benefit score cutpoint
     fitted.model$subgroup.trt.effects <- subgroup.effects(fitted.model$benefit.scores,
                                                           y, trt, cutpoint,
-                                                          larger.outcome.better)
+                                                          larger.outcome.better,
+                                                          reference.trt = reference.trt)
 
     class(fitted.model) <- "subgroup_fitted"
 

@@ -9,7 +9,8 @@ fit.subgroup(x, y, trt, propensity.func = NULL, loss = c("sq_loss_lasso",
   "logistic_loss_lasso_gam", "sq_loss_gam", "logistic_loss_gam", "sq_loss_gbm",
   "abs_loss_gbm", "logistic_loss_gbm", "cox_loss_gbm"),
   method = c("weighting", "a_learning"), augment.func = NULL,
-  cutpoint = 0, larger.outcome.better = TRUE, retcall = TRUE, ...)
+  cutpoint = 0, larger.outcome.better = TRUE, reference.trt = NULL,
+  retcall = TRUE, ...)
 }
 \arguments{
 \item{x}{The design matrix (not including intercept term)}
@@ -64,6 +65,9 @@ will be recommended to be in the treatment group}
 
 \item{larger.outcome.better}{boolean value of whether a larger outcome is better/preferable. Set to \code{TRUE}
 if a larger outcome is better/preferable and set to \code{FALSE} if a smaller outcome is better/preferable. Defaults to \code{TRUE}.}
+
+\item{reference.trt}{which treatment should be treated as the reference treatment. Defaults to the first level of \code{trt}
+if \code{trt} is a factor or the first alphabetical or numerically first treatment level.}
 
 \item{retcall}{boolean value. if \code{TRUE} then the passed arguments will be saved. Do not set to \code{FALSE}
 if the \code{validate.subgroup()} function will later be used for your fitted subgroup model. Only set to \code{FALSE}

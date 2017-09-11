@@ -16,7 +16,7 @@ print.subgroup_fitted <- function(x, digits = max(getOption('digits')-3, 3), ...
     cat("loss:   ", x$loss, "\n")
     cat("method: ", x$method, "\n\n")
     Cf <- matrix(paste0(round(x$subgroup.trt.effects$avg.outcomes, digits),
-                        " (n = ", x$subgroup.trt.effects$sample.sizes, ")"), ncol = 2)
+                        " (n = ", x$subgroup.trt.effects$sample.sizes, ")"), ncol = ncol(x$subgroup.trt.effects$avg.outcomes))
     dimnames(Cf) <- dimnames(x$subgroup.trt.effects$avg.outcomes)
 
     cat("Average Outcomes:\n")
@@ -55,7 +55,7 @@ print.subgroup_validated <- function(x, digits = max(getOption('digits')-3, 3), 
     cat(paste0("Average ", valtext, "\n"))
 
     Cf <- matrix(paste0(round(x$avg.results$avg.outcomes, digits),
-                        " (SE = ", round(x$se.results$SE.avg.outcomes, digits), ")"), ncol = 2)
+                        " (SE = ", round(x$se.results$SE.avg.outcomes, digits), ")"), ncol = ncol(x$avg.results$avg.outcomes))
     dimnames(Cf) <- dimnames(x$avg.results$avg.outcomes)
 
     print.default(Cf, quote = FALSE, right = TRUE, na.print = "NA",
