@@ -190,6 +190,6 @@ plot.subgroup_validated <- function(x,
             ylab(ylab.text) +
             ggtitle(title.text)
     }
-      # Return plot
-      pl.obj
+    # Return plot
+    pl.obj
 }

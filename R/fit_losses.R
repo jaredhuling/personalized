@@ -104,7 +104,7 @@ get.coef.func <- function(fit.name, env = parent.frame())
 {
     n.trts <- env$n.trts
     # GAM or LASSO_GAM models (using cv.glmnet())
-    if ( grepl("_lasso$",fit.name) | grepl("lasso_gam$",fit.name) )
+    if ( grepl("_lasso$", fit.name) | grepl("lasso_gam$", fit.name) )
     {
         coef.func <- function(mod)
         {
