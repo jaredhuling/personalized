@@ -129,6 +129,8 @@ get.coef.func <- function(fit.name, env = parent.frame())
 } # End get.coef.func
 
 #' @import glmnet
+#' @importFrom stats coef
+#' @importFrom graphics layout
 fit_sq_loss_lasso <- function(x, y, trt, n.trts, wts, family, ...)
 {
   # this function must return a fitted model
