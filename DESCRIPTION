@@ -21,12 +21,12 @@ Suggests:
     knitr,
     rmarkdown
 Imports:
-    survival,
-    plotly
+    survival
 Depends:
     glmnet,
     mgcv,
     gbm,
-    ggplot2
+    ggplot2,
+    plotly
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr
