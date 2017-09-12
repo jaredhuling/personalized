@@ -184,7 +184,7 @@ plot.subgroup_validated <- function(x,
         ppp.primary <- style(pp.primary, text=tooltip.txt, hoverinfo = "text")
 
         pp.secondary=plotly_build(p.secondary)
-        ppp.secondary <- style(pp.secondary, text=tooltip.txt, hoverinfo = "text")
+        ppp.secondary <- style(pp.secondary, text=tooltip.txt, hoverinfo = "none")
 
         # Plot primary and secondary plots together, and label axes
         pl.obj <- subplot(ppp.primary, ppp.secondary, nrows=2, shareX=TRUE, titleX = TRUE, titleY = TRUE) %>%
