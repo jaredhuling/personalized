@@ -141,7 +141,7 @@ plot.subgroup_validated <- function(x,
         d$is.consistent <- sapply(signs,function(x){any(table(x) / length(x) >= .95)})
 
         # Calculate min, median, and max
-        summary.stats <- apply(d[,grep("B",colnames(d), value=T)],1,function(x){summary(x[x!=0])})
+        summary.stats <- apply(d[,grep("B",colnames(d), value=TRUE)],1,function(x){summary(x[x!=0])})
         d$min <- summary.stats["Min.",]
         d$med <- summary.stats["Median",]
         d$max <- summary.stats["Max.",]
@@ -158,7 +158,7 @@ plot.subgroup_validated <- function(x,
         d$plot.idx <- 1:nrow(d)
 
         # Remove individual bootstrap values from plotting data frame
-        d <- d[,!(names(d) %in% grep("B",names(d),value=T))]
+        d <- d[,!(names(d) %in% grep("B",names(d),value=TRUE))]
 
         # Primary Plot - Range with median points
         p.primary <- ggplot(data = d) +
@@ -187,7 +187,7 @@ plot.subgroup_validated <- function(x,
         ppp.secondary <- style(pp.secondary, text=tooltip.txt, hoverinfo = "text")
 
         # Plot primary and secondary plots together, and label axes
-        pl.obj <- subplot(ppp.primary, ppp.secondary, nrows=2, shareX=T, titleX = TRUE, titleY = TRUE) %>%
+        pl.obj <- subplot(ppp.primary, ppp.secondary, nrows=2, shareX=TRUE, titleX = TRUE, titleY = TRUE) %>%
             layout(title="Variable Selection Across Bootstrap Iterations",
                    showlegend=FALSE,
                    xaxis =  list(title = "Plot Index"),
