@@ -16,8 +16,10 @@
 #' @seealso \code{\link[personalized]{validate.subgroup}} for function which creates validation results
 #' and \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models.
 #' @rdname plot
-#' @import ggplot2
 #' @import plotly
+#' @importFrom ggplot2 ggplot aes geom_density geom_rug coord_flip facet_grid theme xlab
+#' @importFrom ggplot2 ylab ggtitle geom_vline geom_boxplot geom_line geom_point
+#' @importFrom ggplot2 scale_x_discrete geom_histogram geom_rect geom_hline xlim geom_bar
 #'
 #' @examples
 #'
@@ -95,11 +97,11 @@ plot.subgroup_validated <- function(x,
     {
         pl.obj <- ggplot(res.2.plot,
                          aes(x = Value, fill = Received)) +
-                      geom_density(alpha = 0.65) +
-                      geom_rug(aes(colour = Received), alpha = 0.85) +
-                      coord_flip() +
-                      facet_grid( ~ Recommended) +
-                      theme(legend.position = "bottom") +
+            geom_density(alpha = 0.65) +
+            geom_rug(aes(colour = Received), alpha = 0.85) +
+            coord_flip() +
+            facet_grid( ~ Recommended) +
+            theme(legend.position = "bottom") +
             xlab(ylab.text) +
             ggtitle(title.text)
         if (avg.line)
@@ -107,8 +109,8 @@ plot.subgroup_validated <- function(x,
             pl.obj <- pl.obj + geom_vline(data = avg.res.2.plot,
                                           aes(xintercept = Value),
                                           size = 1.25) +
-                               geom_vline(data = avg.res.2.plot,
-                                          aes(xintercept = Value, colour = Received))
+                geom_vline(data = avg.res.2.plot,
+                           aes(xintercept = Value, colour = Received))
         }
     } else if (type == "boxplot")
     {
@@ -124,6 +126,8 @@ plot.subgroup_validated <- function(x,
     {
       # Acquire coefficients for each bootstrap iteration (exclude Intercept and Trt terms)
       d <- as.data.frame(x$boot.results[[4]][-c(1,2),])
+      
+      pct.selected <- is.consistent <- med <- bar.type <- name <- plot.idx <- NULL
       
       # Compute percentage of times each variable was selected
       d$pct.selected <- apply(d,1,function(x){sum(x!=0)}/ncol(d)*100)
@@ -192,4 +196,5 @@ plot.subgroup_validated <- function(x,
       }
       # Return plot
       pl.obj
+
 }
