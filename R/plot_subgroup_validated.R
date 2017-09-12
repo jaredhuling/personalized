@@ -122,17 +122,17 @@ plot.subgroup_validated <- function(x,
             ggtitle(title.text)
     } else if (type == "stability")
     {
-      # Acquire coefficients for each bootstrap iteration (exclude intercept and Trt terms)
+      # Acquire coefficients for each bootstrap iteration (exclude Intercept and Trt terms)
       d <- as.data.frame(x$boot.results[[4]][-c(1,2),])
       
       # Compute percentage of times each variable was selected
       d$pct.selected <- apply(d,1,function(x){sum(x!=0)}/ncol(d)*100)
 
-      # Remove instances of variables which were never selected in any bootstrap iteration
+      # Remove instances where variables were never selected in any bootstrap iteration
       d <- subset(d, pct.selected != 0)
 
-      # Compute percentage of time variable has consistent sign, among selected times
-      # If, among the selected instances, the sign parity agreed 95% of the time or higher, then it is deemed consistent
+      # Compute percentage of time variable has consistent sign.
+      # A variable is deemed consistent if it has the same sign at least 95% of the times it was selected.
       signs <- apply(d[,grep("B",colnames(d), value=T)],1,function(x){sign(x)[x!=0]})
       d$is.consistent <- sapply(signs,function(x){any(table(x) / length(x) >= .95)})
 
@@ -142,18 +142,18 @@ plot.subgroup_validated <- function(x,
       d$med <- summary.stats["Median",]
       d$max <- summary.stats["Max.",]
 
-      # Create label for bar type (Range positive/negative, strictly positive, or strictly negative)
+      # Create label for bar type (Positive/Negative Tendency or Mixed)
       d$bar.type <- factor(ifelse(d$is.consistent, ifelse(d$med > 0,"Positive Tendency","Negative Tendency"),"Mixed"),
                            levels=c("Negative Tendency", "Mixed", "Positive Tendency"))
  
-      # Order by most frequently selected and color type
+      # Order by most frequently selected and bar type
       d <- d[order(d$bar.type,-d$pct.selected),]
 
       # Add variable name and plot index to data for plotting purposes
       d$name <- rownames(d)
       d$plot.idx <- 1:nrow(d)
 
-      # Delete Bootstrap values to make plotly run faster
+      # Remove individual bootstrap values from plotting data frame
       d <- d[,!(names(d) %in% grep("B",names(d),value=T))]
 
       # Primary Plot - Range with median points
