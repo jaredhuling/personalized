@@ -186,8 +186,8 @@ subgroup.effects <- function(benefit.scores, y, trt, cutpoint = 0,
                 survf <- survfit(y[idx.cur] ~ 1)
                 restricted.mean <- summary(survf)$table[5]
 
-                res.mat[t.recom, t.receiv] <- restricted.mean
-                sample.size.mat[t.recom, t.receiv] <- sum(idx.cur)
+                res.mat[t.receiv, t.recom] <- restricted.mean
+                sample.size.mat[t.receiv, t.recom] <- sum(idx.cur)
 
                 if (t.recom == t.receiv)
                 {
@@ -195,7 +195,7 @@ subgroup.effects <- function(benefit.scores, y, trt, cutpoint = 0,
                     survf <- survfit(y[idx.disagree] ~ 1)
                     restricted.mean <- summary(survf)$table[5]
 
-                    subgroup.effects[t.recom] <- res.mat[t.recom, t.receiv] - restricted.mean
+                    subgroup.effects[t.recom] <- res.mat[t.receiv, t.recom] - restricted.mean
                 }
 
             }
