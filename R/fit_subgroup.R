@@ -367,13 +367,38 @@ fit.subgroup <- function(x,
     }
 
     # compute propensity scores
-    pi.x   <- propensity.func(x = x, trt = trt)
+    pi.x   <- drop(propensity.func(x = x, trt = trt))
 
     # make sure the resulting propensity scores are in the
     # acceptable range (ie 0-1)
     rng.pi <- range(pi.x)
 
     if (rng.pi[1] <= 0 | rng.pi[2] >= 1) stop("propensity.func() should return values between 0 and 1")
+
+    ## if returned propensity score
+    ## is a matrix, then pick out the
+    ## right column for each row so we
+    ## always get Pr(T = T_i | X = x)
+    if (!is.null(dim(pi.x)))
+    {
+        if (is.factor(trt))
+        {
+            values <- levels(trt)[trt]
+        } else
+        {
+            values <- trt
+        }
+
+        levels.pi.mat <- colnames(pi.x)
+        if (is.null(levels.pi.mat))
+        {
+            levels.pi.mat <- unique.trts
+        }
+
+        # return the probability corresponding to the
+        # treatment that was observed
+        pi.x <- pi.x[cbind(1:nrow(pi.x), match(values, levels.pi.mat))]
+    }
 
     # construct design matrix to be passed to fitting function
     x.tilde <- create.design.matrix(x             = x,

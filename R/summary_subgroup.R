@@ -47,7 +47,7 @@ summary.subgroup_fitted <- function(object, digits = max(getOption('digits')-3, 
             ## remove the unecessary ".#" artificially added to variable names
             vnames    <- gsub("[.][0-9]*$", "", vnames)
 
-            all.coefs <- unname(as.vector(drop(all.coefs)))
+            all.coefs <- unname(as.vector(drop(est.coef)))
 
             n.coefs.per.trt <- length(all.coefs) / (object$n.trts - 1)
             for (t in 1:(object$n.trts - 1))
