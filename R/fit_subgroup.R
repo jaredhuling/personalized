@@ -381,6 +381,11 @@ fit.subgroup <- function(x,
     ## always get Pr(T = T_i | X = x)
     if (!is.null(dim(pi.x)))
     {
+        if (ncol(pi.x) != n.trts)
+        {
+            stop("Number of columns in the matrix returned by propensity.func() is not the same
+                 as the number of levels of 'trt'.")
+        }
         if (is.factor(trt))
         {
             values <- levels(trt)[trt]
