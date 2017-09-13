@@ -207,13 +207,13 @@ subgroup.effects <- function(benefit.scores, y, trt, cutpoint = 0,
             for (t.receiv in 1:n.trts)
             {
                 idx.cur <- idx.list[[t.recom]][[t.receiv]]
-                res.mat[t.recom, t.receiv] <- mean(y[idx.cur])
-                sample.size.mat[t.recom, t.receiv] <- sum(idx.cur)
+                res.mat[t.receiv, t.recom] <- mean(y[idx.cur])
+                sample.size.mat[t.receiv, t.recom] <- sum(idx.cur)
 
                 if (t.recom == t.receiv)
                 {
                     idx.disagree <- Reduce("|", idx.list[[t.recom]][-t.receiv])
-                    subgroup.effects[t.recom] <- res.mat[t.recom, t.receiv] - mean(y[idx.disagree])
+                    subgroup.effects[t.recom] <- res.mat[t.receiv, t.recom] - mean(y[idx.disagree])
                 }
 
             }
