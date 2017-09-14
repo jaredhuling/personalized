@@ -183,19 +183,26 @@ subgroup.effects <- function(benefit.scores, y, trt, cutpoint = 0,
             {
                 idx.cur <- idx.list[[t.recom]][[t.receiv]]
 
-                survf <- survfit(y[idx.cur] ~ 1)
-                restricted.mean <- summary(survf)$table[5]
-
-                res.mat[t.receiv, t.recom] <- restricted.mean
-                sample.size.mat[t.receiv, t.recom] <- sum(idx.cur)
-
-                if (t.recom == t.receiv)
+                if (sum(idx.cur))
                 {
-                    idx.disagree <- Reduce("|", idx.list[[t.recom]][-t.receiv])
-                    survf <- survfit(y[idx.disagree] ~ 1)
+                    survf <- survfit(y[idx.cur] ~ 1)
                     restricted.mean <- summary(survf)$table[5]
 
-                    subgroup.effects[t.recom] <- res.mat[t.receiv, t.recom] - restricted.mean
+                    res.mat[t.receiv, t.recom] <- restricted.mean
+                    sample.size.mat[t.receiv, t.recom] <- sum(idx.cur)
+
+                    if (t.recom == t.receiv)
+                    {
+                        idx.disagree <- Reduce("|", idx.list[[t.recom]][-t.receiv])
+                        survf <- survfit(y[idx.disagree] ~ 1)
+                        restricted.mean <- summary(survf)$table[5]
+
+                        subgroup.effects[t.recom] <- res.mat[t.receiv, t.recom] - restricted.mean
+                    }
+                } else
+                {
+                    res.mat[t.receiv, t.recom] <- NaN
+                    subgroup.effects[t.recom]  <- NaN
                 }
 
             }
@@ -224,11 +231,23 @@ subgroup.effects <- function(benefit.scores, y, trt, cutpoint = 0,
 
     if (family == "cox")
     {
-        survf.agree <- survfit(y[idx.agree] ~ 1)
-        restricted.mean.agree <- summary(survf.agree)$table[5]
+        if (sum(idx.agree))
+        {
+            survf.agree <- survfit(y[idx.agree] ~ 1)
+            restricted.mean.agree <- summary(survf.agree)$table[5]
+        } else
+        {
+            restricted.mean.agree <- NaN
+        }
 
-        survf.disagree <- survfit(y[!idx.agree] ~ 1)
-        restricted.mean.disagree <- summary(survf.disagree)$table[5]
+        if (sum(!idx.agree))
+        {
+            survf.disagree <- survfit(y[!idx.agree] ~ 1)
+            restricted.mean.disagree <- summary(survf.disagree)$table[5]
+        } else
+        {
+            restricted.mean.disagree <- NaN
+        }
 
         overall.subgroup.effect <- restricted.mean.agree - restricted.mean.disagree
     } else

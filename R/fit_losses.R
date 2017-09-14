@@ -49,7 +49,7 @@ get.pred.func <- function(fit.name, model, env = parent.frame())
                     ## because we don't want to sum up over all the estimated deltas.
                     ## for K-trtments we estimate K-1 delta functions and thus need
                     ## to extract each one individually.
-                    all.coefs <- as.vector(predict(model, type = "coefficients", s = "lambda.min"))[-1]
+                    all.coefs <- as.vector(predict(model, type = "coefficients", s = "lambda.min"))
                     n.coefs.per.trt <- length(all.coefs) / (n.trts - 1)
 
                     n.preds  <- NROW(x)
