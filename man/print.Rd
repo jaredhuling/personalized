@@ -10,7 +10,7 @@
   ...)
 
 \method{print}{subgroup_validated}(x, digits = max(getOption("digits") - 3,
-  3), ...)
+  3), sample.pct = FALSE, ...)
 
 \method{print}{subgroup_summary}(x, p.value = 1,
   digits = max(getOption("digits") - 3, 3), ...)
@@ -21,6 +21,10 @@
 \item{digits}{minimal number of significant digits to print.}
 
 \item{...}{further arguments passed to or from \code{\link[base]{print.default}}.}
+
+\item{sample.pct}{boolean variable of whether to print the percent of the test sample within each subgroup. If false
+the sample size itself, not the percent is printed. This may not be informative if the test sample size is much different
+from the total sample size}
 
 \item{p.value}{a p-value threshold for mean differences below which covariates will be displayed. For example,
 setting \code{p.value = 0.05} will display all covariates that have a significant difference between subgroups

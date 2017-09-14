@@ -35,9 +35,12 @@ print.subgroup_fitted <- function(x, digits = max(getOption('digits')-3, 3), ...
     print(quantile(x$benefit.scores), digits = digits)
 }
 
+#' @param sample.pct boolean variable of whether to print the percent of the test sample within each subgroup. If false
+#' the sample size itself, not the percent is printed. This may not be informative if the test sample size is much different
+#' from the total sample size
 #' @rdname print
 #' @export
-print.subgroup_validated <- function(x, digits = max(getOption('digits')-3, 3), ...)
+print.subgroup_validated <- function(x, digits = max(getOption('digits')-3, 3), sample.pct = FALSE, ...)
 {
     cat("family: ", x$family, "\n")
     cat("loss:   ", x$loss, "\n")
@@ -54,8 +57,20 @@ print.subgroup_validated <- function(x, digits = max(getOption('digits')-3, 3), 
 
     cat(paste0("Average ", valtext, "\n"))
 
-    Cf <- matrix(paste0(round(x$avg.results$avg.outcomes, digits),
-                        " (SE = ", round(x$se.results$SE.avg.outcomes, digits), ")"), ncol = ncol(x$avg.results$avg.outcomes))
+    if (sample.pct)
+    {
+        Cf <- matrix(paste0(round(x$avg.results$avg.outcomes, digits),
+                            " (SE = ", round(x$se.results$SE.avg.outcomes, digits),
+                            ", ", round(100 * x$avg.results$sample.sizes / sum(x$avg.results$sample.sizes),
+                                         digits), "%)"),
+                     ncol = ncol(x$avg.results$avg.outcomes))
+    } else
+    {
+        Cf <- matrix(paste0(round(x$avg.results$avg.outcomes, digits),
+                            " (SE = ", round(x$se.results$SE.avg.outcomes, digits),
+                            ", n = ", round(x$avg.results$sample.sizes, digits), ")"),
+                     ncol = ncol(x$avg.results$avg.outcomes))
+    }
     dimnames(Cf) <- dimnames(x$avg.results$avg.outcomes)
 
     print.default(Cf, quote = FALSE, right = TRUE, na.print = "NA",
