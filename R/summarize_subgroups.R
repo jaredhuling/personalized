@@ -3,7 +3,8 @@
 #' @description Summarizes covariate values within the estimated subgroups
 #' @param x a fitted object from \code{fit.subgroup()} or a matrix of covariate values
 #' @param ... optional arguments to \code{summarize.subgroups} methods
-#' @importFrom stats t.test chisq.test
+#' @importFrom stats t.test chisq.test fisher.test
+#' @importFrom methods is
 #' @export
 summarize.subgroups <- function(x, ...) UseMethod("summarize.subgroups")
 
