@@ -21,7 +21,8 @@ Suggests:
     knitr,
     rmarkdown
 Imports:
-    survival
+    survival,
+    methods
 Depends:
     glmnet,
     mgcv,
