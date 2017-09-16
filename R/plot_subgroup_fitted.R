@@ -64,6 +64,8 @@ plot.subgroup_fitted <- function(x,
 
     avg.res  <- x$subgroup.trt.effects
 
+    outcome.lab <- "Outcome"
+
     if (type != "interaction")
     {
         if (is.null(x$call)) stop("retcall argument must be set to TRUE for fitted model object")
@@ -88,6 +90,7 @@ plot.subgroup_fitted <- function(x,
         if (class(x$call$y) == "Surv")
         {
             res.2.plot[, 3] <- log(x$call$y[,1])
+            outcome.lab <- "log survival time"
         } else
         {
             res.2.plot[, 3] <- x$call$y
@@ -114,7 +117,7 @@ plot.subgroup_fitted <- function(x,
             coord_flip() +
             facet_grid( ~ Recommended) +
             theme(legend.position = "bottom") +
-            xlab("Outcome") +
+            xlab(outcome.lab) +
             ggtitle("Individual Observations Among Subgroups")
         if (avg.line)
         {
@@ -132,7 +135,7 @@ plot.subgroup_fitted <- function(x,
             geom_rug(aes(colour = Received), alpha = 0.85) +
             facet_grid( ~ Recommended) +
             theme(legend.position = "bottom") +
-            ylab("Outcome") +
+            ylab(outcome.lab) +
             ggtitle("Individual Observations Among Subgroups")
     } else
     {
@@ -142,7 +145,7 @@ plot.subgroup_fitted <- function(x,
             geom_point(aes(colour = Received), size = 2) +
             theme(legend.position = "bottom") +
             scale_x_discrete(expand = c(0.25, 0.25)) +
-            ylab("Average Outcome") +
+            ylab(paste0("Average ", outcome.lab)) +
             ggtitle("Average Outcomes Among Subgroups")
     }
     pl.obj
