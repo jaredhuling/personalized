@@ -41,7 +41,14 @@ summary.subgroup_fitted <- function(object, digits = max(getOption('digits')-3, 
             print.default(round(coefmat, digits), quote = FALSE, right = TRUE, na.print = "NA", ...)
         } else
         {
-            est.coef  <- predict(object$model, type = "coef", s = "lambda.min")[-1,,drop=FALSE]
+            ## no extra intercept term when the model is a cox model
+            if (class(object$model$glmnet.fit)[1] == "coxnet")
+            {
+                est.coef  <- predict(object$model, type = "coef", s = "lambda.min")
+            } else
+            {
+                est.coef  <- predict(object$model, type = "coef", s = "lambda.min")[-1,,drop=FALSE]
+            }
             vnames    <- rownames(est.coef)
 
             ## remove the unecessary ".#" artificially added to variable names

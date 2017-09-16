@@ -152,13 +152,17 @@ fit_sq_loss_lasso <- function(x, y, trt, n.trts, wts, family, ...)
   list.dots <- list(...)
   dot.names <- names(list.dots)
 
+  n.unique.vars <- ncol(x) / (n.trts - 1)
+  zero.pen.idx  <- ((1:(n.trts - 1) ) - 1) * n.unique.vars + 1
+
   if ("penalty.factor" %in% dot.names)
   {
     ## ensure treatment is not penalized
-    list.dots$penalty.factor[1] <- 0
+    list.dots$penalty.factor[zero.pen.idx] <- 0
   } else
   {
-    list.dots$penalty.factor <- c(0, rep(1, ncol(x) - 1))
+    list.dots$penalty.factor <- rep(1, ncol(x))
+    list.dots$penalty.factor[zero.pen.idx] <- 0
   }
 
   # fit a model with a lasso
@@ -182,13 +186,17 @@ fit_cox_loss_lasso <- function(x, y, trt, n.trts, wts, family, ...)
   list.dots <- list(...)
   dot.names <- names(list.dots)
 
+  n.unique.vars <- ncol(x) / (n.trts - 1)
+  zero.pen.idx  <- ((1:(n.trts - 1) ) - 1) * n.unique.vars + 1
+
   if ("penalty.factor" %in% dot.names)
   {
-    ## ensure treatment is not penalized
-    list.dots$penalty.factor[1] <- 0
+      ## ensure treatment is not penalized
+      list.dots$penalty.factor[zero.pen.idx] <- 0
   } else
   {
-    list.dots$penalty.factor <- c(0, rep(1, ncol(x) - 1))
+      list.dots$penalty.factor <- rep(1, ncol(x))
+      list.dots$penalty.factor[zero.pen.idx] <- 0
   }
 
   # fit a model with a lasso
