@@ -5,7 +5,7 @@
 \title{Validating fitted subgroup identification models}
 \usage{
 validate.subgroup(model, B = 50L, method = c("training_test_replication",
-  "boot_bias_correction"), train.fraction = 0.5)
+  "boot_bias_correction"), train.fraction = 0.5, parallel = FALSE)
 }
 \arguments{
 \item{model}{fitted model object returned by \code{fit.subgroup()} function}
@@ -19,6 +19,11 @@ for this option)}
 
 \item{train.fraction}{fraction (between 0 and 1) of samples to be used for training in
 training/test replication. Only used for \code{method = "training_test_replication"}}
+
+\item{parallel}{Should the loop over replications be parallelized? If \code{FALSE}, then no, if \code{TRUE}, then yes.
+If user sets \code{parallel = TRUE} and the fitted \code{fit.subgroup()} object uses the parallel version of
+an internal model, say for \code{cv.glmnet()}, then the internal parallelization will be overridden so as
+not to create a conflict of parallelism.}
 }
 \description{
 Validates subgroup treatment effects for fitted

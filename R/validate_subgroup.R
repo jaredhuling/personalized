@@ -11,6 +11,10 @@
 #' @param B integer. number of bootstrap replications or refitting replications.
 #' @param train.fraction fraction (between 0 and 1) of samples to be used for training in
 #' training/test replication. Only used for \code{method = "training_test_replication"}
+#' @param parallel Should the loop over replications be parallelized? If \code{FALSE}, then no, if \code{TRUE}, then yes.
+#' If user sets \code{parallel = TRUE} and the fitted \code{fit.subgroup()} object uses the parallel version of
+#' an internal model, say for \code{cv.glmnet()}, then the internal parallelization will be overridden so as
+#' not to create a conflict of parallelism.
 #' @seealso \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models,
 #' \code{\link[personalized]{plot.subgroup_validated}} for plotting of validation results, and
 #' \code{\link[personalized]{print.subgroup_validated}} for arguments for printing options for \code{validate.subgroup()}.
@@ -100,7 +104,8 @@ validate.subgroup <- function(model,
                               B              = 50L,
                               method         = c("training_test_replication",
                                                  "boot_bias_correction"),
-                              train.fraction = 0.5)
+                              train.fraction = 0.5,
+                              parallel       = FALSE)
 {
     method <- match.arg(method)
 
@@ -134,6 +139,13 @@ validate.subgroup <- function(model,
     trt <- model$call$trt
     y   <- model$call$y
 
+    ## override any internal parallelization
+    ## if there is a conflict of parallelization
+    if (parallel & ("parallel" %in% names(model$call)) )
+    {
+        model$call$parallel <- FALSE
+    }
+
     n.obs <- NROW(x)
 
     # create objects to store results
@@ -149,104 +161,229 @@ validate.subgroup <- function(model,
     dimnames(boot.list[[2]]) <- dimnames(boot.list[[3]]) <-
         c(list(NULL), dimnames(model$subgroup.trt.effects$avg.outcomes))
 
-    for (b in 1:B)
+    if (parallel)
     {
-        if (method == "training_test_replication")
-        {
-            # randomly split/partition data into training and testing sets
-            train.samp.size <- floor(n.obs * train.fraction)
-            samp.idx        <- sample.int(n.obs, train.samp.size, replace = FALSE)
-            model$call$x    <- x[samp.idx,]
-            model$call$trt  <- trt[samp.idx]
-
-            x.test          <- x[-samp.idx,]
-
-            # need to handle differently if outcome is a matrix
-            if (is.matrix(y))
-            {
-                model$call$y <- y[samp.idx,]
-                y.test       <- y[-samp.idx,]
-            } else
-            {
-                model$call$y <- y[samp.idx]
-                y.test       <- y[-samp.idx]
-            }
-            trt.test <- trt[-samp.idx]
-
-            # fit subgroup model on training data
-            mod.b    <- do.call(fit.subgroup, model$call)
-
-            # compute benefit scores on testing data
-            benefit.scores.test <- mod.b$predict(x.test)
-
-            # estimate subgroup treatment effects on test data
-            sbgrp.trt.eff.test  <- subgroup.effects(benefit.scores.test,
-                                                    y.test, trt.test,
-                                                    model$call$cutpoint)
-
-            # save results
-            boot.list[[1]][b,]  <- sbgrp.trt.eff.test[[1]]
-            boot.list[[2]][b,,] <- sbgrp.trt.eff.test[[2]]
-            boot.list[[3]][b,,] <- sbgrp.trt.eff.test[[3]]
-            boot.list[[4]][,b]  <- as.vector(mod.b$coefficients)
-            boot.list[[5]][b]   <- sbgrp.trt.eff.test[[4]]
-
-        } else if (method == "boot_bias_correction")
-        {   # bootstrap bias correction
-
-            # take a bootstrap sample with replacement
-            samp.idx <- sample.int(n.obs, n.obs, replace = TRUE)
-            model$call$x   <- x[samp.idx,]
-
-            if (is.matrix(y))
-            {
-                model$call$y   <- y[samp.idx,]
-            } else
-            {
-                model$call$y   <- y[samp.idx]
-            }
-            model$call$trt <- trt[samp.idx]
-
-            # fit subgroup model on resampled data
-            mod.b    <- do.call(fit.subgroup, model$call)
-
-            # calculate benefit scores and resulting
-            # subgroup treatment effects on the original data
-            benefit.scores.orig <- mod.b$predict(x)
-
-            sbgrp.trt.eff.orig  <- subgroup.effects(benefit.scores.orig,
-                                                    y, trt,
-                                                    model$call$cutpoint)
-
-            # subtract estimated bias for current bootstrap iteration
-            boot.list[[1]][b,]  <- model$subgroup.trt.effects[[1]] -
-                (mod.b$subgroup.trt.effects[[1]] - sbgrp.trt.eff.orig[[1]]) # bias estimate portion
-            boot.list[[2]][b,,] <- model$subgroup.trt.effects[[2]] -
-                (mod.b$subgroup.trt.effects[[2]] - sbgrp.trt.eff.orig[[2]]) # bias estimate portion
-            boot.list[[3]][b,,] <- model$subgroup.trt.effects[[3]] -
-                (mod.b$subgroup.trt.effects[[3]] - sbgrp.trt.eff.orig[[3]]) # bias estimate portion
-            boot.list[[4]][,b]  <- as.vector(mod.b$coefficients)
-            boot.list[[5]][b]   <- model$subgroup.trt.effects[[4]] -
-                (mod.b$subgroup.trt.effects[[4]] - sbgrp.trt.eff.orig[[4]]) # bias estimate portion
-
-        } else
-        {   # bootstrap
-
-            # bootstrap is not available because it
-            # results in overly optimistic results
-            samp.idx       <- sample.int(n.obs, n.obs, replace = TRUE)
-            model$call$x   <- x[samp.idx,]
-            model$call$y   <- y[samp.idx]
-            model$call$trt <- trt[samp.idx]
-
-            mod.b               <- do.call(fit.subgroup, model$call)
-            boot.list[[1]][b,]  <- mod.b$subgroup.trt.effects[[1]] # subgroup-specific trt effects
-            boot.list[[2]][b,,] <- mod.b$subgroup.trt.effects[[2]] # mean of outcome for KxK table (trt received vs recommended)
-            boot.list[[3]][b,,] <- mod.b$subgroup.trt.effects[[3]] # sample sizes for KxK table
-            boot.list[[4]][,b]  <- as.vector(mod.b$coefficients)
-            boot.list[[5]][b]   <- mod.b$subgroup.trt.effects[[4]] # overall subgroup effect
-
+        comb <- function(x, ...) {
+            lapply(seq_along(x),
+                   function(i) c(x[[i]], lapply(list(...), function(y) y[[i]])))
         }
+
+        outlist <- foreach(i = seq(B), .combine = "comb", .multicombine = TRUE,
+                           .init=list(list(), list(), list(), list(), list())) %dopar%
+        {
+            if (method == "training_test_replication")
+            {
+                # randomly split/partition data into training and testing sets
+                train.samp.size <- floor(n.obs * train.fraction)
+                samp.idx        <- sample.int(n.obs, train.samp.size, replace = FALSE)
+                model$call$x    <- x[samp.idx,]
+                model$call$trt  <- trt[samp.idx]
+
+                x.test          <- x[-samp.idx,]
+
+                # need to handle differently if outcome is a matrix
+                if (is.matrix(y))
+                {
+                    model$call$y <- y[samp.idx,]
+                    y.test       <- y[-samp.idx,]
+                } else
+                {
+                    model$call$y <- y[samp.idx]
+                    y.test       <- y[-samp.idx]
+                }
+                trt.test <- trt[-samp.idx]
+
+                # fit subgroup model on training data
+                mod.b    <- do.call(fit.subgroup, model$call)
+
+                # compute benefit scores on testing data
+                benefit.scores.test <- mod.b$predict(x.test)
+
+                # estimate subgroup treatment effects on test data
+                sbgrp.trt.eff.test  <- subgroup.effects(benefit.scores.test,
+                                                        y.test, trt.test,
+                                                        model$call$cutpoint)
+
+                # save results
+                res  <- list(sbgrp.trt.eff.test[[1]],
+                             sbgrp.trt.eff.test[[2]],
+                             sbgrp.trt.eff.test[[3]],
+                             as.vector(mod.b$coefficients),
+                             sbgrp.trt.eff.test[[4]])
+
+            } else if (method == "boot_bias_correction")
+            {   # bootstrap bias correction
+
+                # take a bootstrap sample with replacement
+                samp.idx <- sample.int(n.obs, n.obs, replace = TRUE)
+                model$call$x   <- x[samp.idx,]
+
+                if (is.matrix(y))
+                {
+                    model$call$y   <- y[samp.idx,]
+                } else
+                {
+                    model$call$y   <- y[samp.idx]
+                }
+                model$call$trt <- trt[samp.idx]
+
+                # fit subgroup model on resampled data
+                mod.b    <- do.call(fit.subgroup, model$call)
+
+                # calculate benefit scores and resulting
+                # subgroup treatment effects on the original data
+                benefit.scores.orig <- mod.b$predict(x)
+
+                sbgrp.trt.eff.orig  <- subgroup.effects(benefit.scores.orig,
+                                                        y, trt,
+                                                        model$call$cutpoint)
+
+                # subtract estimated bias for current bootstrap iteration
+                res  <- list(model$subgroup.trt.effects[[1]] -
+                                (mod.b$subgroup.trt.effects[[1]] - sbgrp.trt.eff.orig[[1]]), # bias estimate portion
+                             model$subgroup.trt.effects[[2]] -
+                                (mod.b$subgroup.trt.effects[[2]] - sbgrp.trt.eff.orig[[2]]), # bias estimate portion
+                             model$subgroup.trt.effects[[3]] -
+                                (mod.b$subgroup.trt.effects[[3]] - sbgrp.trt.eff.orig[[3]]), # bias estimate portion
+                             as.vector(mod.b$coefficients),
+                             model$subgroup.trt.effects[[4]] -
+                                (mod.b$subgroup.trt.effects[[4]] - sbgrp.trt.eff.orig[[4]])) # bias estimate portion
+
+            } else
+            {   # bootstrap
+
+                # bootstrap is not available because it
+                # results in overly optimistic results
+                samp.idx       <- sample.int(n.obs, n.obs, replace = TRUE)
+                model$call$x   <- x[samp.idx,]
+                model$call$y   <- y[samp.idx]
+                model$call$trt <- trt[samp.idx]
+
+                mod.b               <- do.call(fit.subgroup, model$call)
+
+                res <- list(mod.b$subgroup.trt.effects[[1]], # subgroup-specific trt effects
+                            mod.b$subgroup.trt.effects[[2]], # mean of outcome for KxK table (trt received vs recommended)
+                            mod.b$subgroup.trt.effects[[3]], # sample sizes for KxK table
+                            as.vector(mod.b$coefficients),
+                            mod.b$subgroup.trt.effects[[4]]) # overall subgroup effect
+
+            }
+
+            res
+        } # end parallel foreach loop
+
+        ## collect results as they are collected for non-parallel loop
+        boot.list[[1]] <- unname(Reduce('rbind', outlist[[1]]))
+        for (b in 1:B)
+        {
+            boot.list[[2]][b,,] <- outlist[[2]][[b]]
+            boot.list[[3]][b,,] <- outlist[[3]][[b]]
+        }
+
+        boot.list[[4]] <- unname(Reduce('cbind', outlist[[4]]))
+        boot.list[[5]] <- unname(Reduce('c', outlist[[5]]))
+        rm(outlist)
+    } else
+    {
+        for (b in 1:B)
+        {
+            if (method == "training_test_replication")
+            {
+                # randomly split/partition data into training and testing sets
+                train.samp.size <- floor(n.obs * train.fraction)
+                samp.idx        <- sample.int(n.obs, train.samp.size, replace = FALSE)
+                model$call$x    <- x[samp.idx,]
+                model$call$trt  <- trt[samp.idx]
+
+                x.test          <- x[-samp.idx,]
+
+                # need to handle differently if outcome is a matrix
+                if (is.matrix(y))
+                {
+                    model$call$y <- y[samp.idx,]
+                    y.test       <- y[-samp.idx,]
+                } else
+                {
+                    model$call$y <- y[samp.idx]
+                    y.test       <- y[-samp.idx]
+                }
+                trt.test <- trt[-samp.idx]
+
+                # fit subgroup model on training data
+                mod.b    <- do.call(fit.subgroup, model$call)
+
+                # compute benefit scores on testing data
+                benefit.scores.test <- mod.b$predict(x.test)
+
+                # estimate subgroup treatment effects on test data
+                sbgrp.trt.eff.test  <- subgroup.effects(benefit.scores.test,
+                                                        y.test, trt.test,
+                                                        model$call$cutpoint)
+
+                # save results
+                boot.list[[1]][b,]  <- sbgrp.trt.eff.test[[1]]
+                boot.list[[2]][b,,] <- sbgrp.trt.eff.test[[2]]
+                boot.list[[3]][b,,] <- sbgrp.trt.eff.test[[3]]
+                boot.list[[4]][,b]  <- as.vector(mod.b$coefficients)
+                boot.list[[5]][b]   <- sbgrp.trt.eff.test[[4]]
+
+            } else if (method == "boot_bias_correction")
+            {   # bootstrap bias correction
+
+                # take a bootstrap sample with replacement
+                samp.idx <- sample.int(n.obs, n.obs, replace = TRUE)
+                model$call$x   <- x[samp.idx,]
+
+                if (is.matrix(y))
+                {
+                    model$call$y   <- y[samp.idx,]
+                } else
+                {
+                    model$call$y   <- y[samp.idx]
+                }
+                model$call$trt <- trt[samp.idx]
+
+                # fit subgroup model on resampled data
+                mod.b    <- do.call(fit.subgroup, model$call)
+
+                # calculate benefit scores and resulting
+                # subgroup treatment effects on the original data
+                benefit.scores.orig <- mod.b$predict(x)
+
+                sbgrp.trt.eff.orig  <- subgroup.effects(benefit.scores.orig,
+                                                        y, trt,
+                                                        model$call$cutpoint)
+
+                # subtract estimated bias for current bootstrap iteration
+                boot.list[[1]][b,]  <- model$subgroup.trt.effects[[1]] -
+                    (mod.b$subgroup.trt.effects[[1]] - sbgrp.trt.eff.orig[[1]]) # bias estimate portion
+                boot.list[[2]][b,,] <- model$subgroup.trt.effects[[2]] -
+                    (mod.b$subgroup.trt.effects[[2]] - sbgrp.trt.eff.orig[[2]]) # bias estimate portion
+                boot.list[[3]][b,,] <- model$subgroup.trt.effects[[3]] -
+                    (mod.b$subgroup.trt.effects[[3]] - sbgrp.trt.eff.orig[[3]]) # bias estimate portion
+                boot.list[[4]][,b]  <- as.vector(mod.b$coefficients)
+                boot.list[[5]][b]   <- model$subgroup.trt.effects[[4]] -
+                    (mod.b$subgroup.trt.effects[[4]] - sbgrp.trt.eff.orig[[4]]) # bias estimate portion
+
+            } else
+            {   # bootstrap
+
+                # bootstrap is not available because it
+                # results in overly optimistic results
+                samp.idx       <- sample.int(n.obs, n.obs, replace = TRUE)
+                model$call$x   <- x[samp.idx,]
+                model$call$y   <- y[samp.idx]
+                model$call$trt <- trt[samp.idx]
+
+                mod.b               <- do.call(fit.subgroup, model$call)
+                boot.list[[1]][b,]  <- mod.b$subgroup.trt.effects[[1]] # subgroup-specific trt effects
+                boot.list[[2]][b,,] <- mod.b$subgroup.trt.effects[[2]] # mean of outcome for KxK table (trt received vs recommended)
+                boot.list[[3]][b,,] <- mod.b$subgroup.trt.effects[[3]] # sample sizes for KxK table
+                boot.list[[4]][,b]  <- as.vector(mod.b$coefficients)
+                boot.list[[5]][b]   <- mod.b$subgroup.trt.effects[[4]] # overall subgroup effect
+
+            }
+        } ## end resampling loop
     }
 
     # ugly way to handle cases where
