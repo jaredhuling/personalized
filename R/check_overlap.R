@@ -70,6 +70,11 @@ check.overlap <- function(x,
 
     if (rng.pi[1] <= 0 | rng.pi[2] >= 1) stop("propensity.func() should return values between 0 and 1")
 
+    # should be FALSE for treatment/control scenario,
+    # TRUE for multiple treatment scenario
+    multiplot <- FALSE
+
+    dim.pi.x <- dim(pi.x)
     if (!is.null(dim.pi.x))
     {
         if (length(dim.pi.x) == 1)
@@ -77,36 +82,35 @@ check.overlap <- function(x,
             pi.x <- as.vector(pi.x)
             prop.scores <- data.frame(Treatment = as.factor(trt), prop.score = pi.x)
 
-        } else if (length(dim.pi.x) == 2)
-        {
-            if (ncol(pi.x) != n.trts)
-            {
-                stop("Number of columns in the matrix returned by propensity.func() is not the same
-                     as the number of levels of 'trt'.")
-            }
-            if (is.factor(trt))
-            {
-                values <- levels(trt)[trt]
-            } else
-            {
-                values <- trt
-            }
-
-            levels.pi.mat <- colnames(pi.x)
-            if (is.null(levels.pi.mat))
-            {
-                levels.pi.mat <- unique.trts
-            }
-
-            # return the probability corresponding to the
-            # treatment that was observed
-            pi.x <- pi.x[cbind(1:nrow(pi.x), match(values, levels.pi.mat))]
-        } else
+        } else if (length(dim.pi.x) > 2)
         {
             stop("propensity.func() returns a multidimensional array; it can only return a vector or matrix.")
         }
 
-        prop.scores <- data.frame(Treatment = as.factor(trt), prop.score = pi.x)
+
+        trt.names <- colnames(pi.x)
+
+        if (is.null(trt.names))
+        {
+            if (is.factor(trt))
+            {
+                # drop any unused levels of trt
+                trt         <- droplevels(trt)
+                trt.names   <- levels(trt)
+            } else
+            {
+                trt.names   <- sort(unique(trt))
+            }
+
+        }
+
+        prop.scores <- data.frame(Treatment_Received = as.factor(rep(trt, ncol(pi.x))),
+                                  Treatment = rep(trt.names, NROW(trt)),
+                                  prop.score = as.vector(t(pi.x)))
+
+        levels(prop.scores$Treatment_Received) <- paste(levels(prop.scores$Treatment_Received), "Group")
+
+        multiplot <- TRUE
 
     } else
     {
@@ -141,6 +145,11 @@ check.overlap <- function(x,
             theme(legend.position = "bottom") +
             ggtitle("Densities and histograms of propensity scores by treatment group") +
             xlab("Propensity Score")
+    }
+
+    if (multiplot)
+    {
+        pl.obj <- pl.obj + facet_grid(Treatment_Received ~ .)
     }
     pl.obj
 }
