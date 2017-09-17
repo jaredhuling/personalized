@@ -78,8 +78,18 @@ print.subgroup_validated <- function(x, digits = max(getOption('digits')-3, 3), 
 
     cat("\n")
 
-    Cf2 <- paste0(round(x$avg.results$subgroup.effects, digits),
-                         " (SE = ", round(x$se.results$SE.subgroup.effects, digits), ")")
+    if (sample.pct)
+    {
+        Cf2 <- paste0(round(x$avg.results$subgroup.effects, digits),
+                             " (SE = ", round(x$se.results$SE.subgroup.effects, digits),
+                      ", n = ", round(100 * colSums(x$avg.results$sample.sizes) /
+                                          sum(x$avg.results$sample.sizes), digits), "%)")
+    } else
+    {
+        Cf2 <- paste0(round(x$avg.results$subgroup.effects, digits),
+                      " (SE = ", round(x$se.results$SE.subgroup.effects, digits),
+                      ", n = ", round(colSums(x$avg.results$sample.sizes), digits), ")")
+    }
     names(Cf2) <- names(x$avg.results$subgroup.effects)
     print.default(Cf2, quote = FALSE, right = TRUE, na.print = "NA",
                   ...)
