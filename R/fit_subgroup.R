@@ -379,30 +379,41 @@ fit.subgroup <- function(x,
     ## is a matrix, then pick out the
     ## right column for each row so we
     ## always get Pr(T = T_i | X = x)
-    if (!is.null(dim(pi.x)))
+
+    dim.pi.x <- dim(pi.x)
+    if (!is.null(dim.pi.x))
     {
-        if (ncol(pi.x) != n.trts)
+        if (length(dim.pi.x) == 1)
         {
-            stop("Number of columns in the matrix returned by propensity.func() is not the same
-                 as the number of levels of 'trt'.")
-        }
-        if (is.factor(trt))
+            pi.x <- as.vector(pi.x)
+        } else if (length(dim.pi.x) == 2)
         {
-            values <- levels(trt)[trt]
+            if (ncol(pi.x) != n.trts)
+            {
+                stop("Number of columns in the matrix returned by propensity.func() is not the same
+                     as the number of levels of 'trt'.")
+            }
+            if (is.factor(trt))
+            {
+                values <- levels(trt)[trt]
+            } else
+            {
+                values <- trt
+            }
+
+            levels.pi.mat <- colnames(pi.x)
+            if (is.null(levels.pi.mat))
+            {
+                levels.pi.mat <- unique.trts
+            }
+
+            # return the probability corresponding to the
+            # treatment that was observed
+            pi.x <- pi.x[cbind(1:nrow(pi.x), match(values, levels.pi.mat))]
         } else
         {
-            values <- trt
+            stop("propensity.func() returns a multidimensional array; it can only return a vector or matrix.")
         }
-
-        levels.pi.mat <- colnames(pi.x)
-        if (is.null(levels.pi.mat))
-        {
-            levels.pi.mat <- unique.trts
-        }
-
-        # return the probability corresponding to the
-        # treatment that was observed
-        pi.x <- pi.x[cbind(1:nrow(pi.x), match(values, levels.pi.mat))]
     }
 
     # construct design matrix to be passed to fitting function
