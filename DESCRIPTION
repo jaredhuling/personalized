@@ -22,7 +22,8 @@ Suggests:
     rmarkdown
 Imports:
     survival,
-    methods
+    methods,
+    foreach
 Depends:
     glmnet,
     mgcv,
