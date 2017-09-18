@@ -57,7 +57,15 @@ print.subgroup_validated <- function(x, digits = max(getOption('digits')-3, 3), 
     cat("family: ", x$family, "\n")
     cat("loss:   ", x$loss, "\n")
     cat("method: ", x$method, "\n\n")
-    cat("validation method: ", x$val.method, "\n\n")
+    cat("validation method: ", x$val.method, "\n")
+    if (is.null(x$iterations))
+    {
+        iters <- length(x$boot.results$overall.subgroup.effect)
+    } else
+    {
+        iters <- x$iterations
+    }
+    cat("iterations: ", iters, "\n\n")
 
     if (x$val.method == "training_test_replication")
     {

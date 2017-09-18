@@ -25,6 +25,7 @@
 #' evaluating assumptions and adequacy, and measuring and reducing errors. Statistics in medicine, 15, 361-387.
 #' doi:10.1002/(SICI)1097-0258(19960229)15:4<361::AID-SIM168>3.0.CO;2-4
 #' @importFrom stats predict sd
+#' @import foreach
 #' @examples
 #' library(personalized)
 #'
@@ -426,7 +427,8 @@ validate.subgroup <- function(model,
                 family       = model$family,     # model family
                 loss         = model$loss,       # model loss
                 method       = model$method,     # subgroup method (weighting vs a-learning)
-                val.method   = method)
+                val.method   = method,
+                iterations   = B)
     class(ret) <- "subgroup_validated"
     ret
 }
