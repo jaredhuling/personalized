@@ -93,6 +93,11 @@ plot(valmod, type = "boxplot")
 
 plot(valmod, type = "interaction")
 
+# visualize the frequency of particular variables
+# of being selected across the resampling iterations with
+# 'type = "stability"'
+plot(valmod, type = "stability")
+
 }
 \seealso{
 \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models.

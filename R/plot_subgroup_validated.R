@@ -34,6 +34,11 @@
 #'
 #' plot(valmod, type = "interaction")
 #'
+#' # visualize the frequency of particular variables
+#' # of being selected across the resampling iterations with
+#' # 'type = "stability"'
+#' plot(valmod, type = "stability")
+#'
 #' @export
 plot.subgroup_validated <- function(x,
                                     type = c("boxplot", "density", "interaction", "stability"),
@@ -126,48 +131,48 @@ plot.subgroup_validated <- function(x,
     {
       # Acquire coefficients for each bootstrap iteration (exclude Intercept and Trt terms)
       d <- as.data.frame(x$boot.results[[4]][-c(1,2),])
-      
+
       # Variables to be created in this code block
-      pct.selected <- signs <- is.consistent <- summary.stats <- min.stat  <- med.stat <- max.stat <- 
+      pct.selected <- signs <- is.consistent <- summary.stats <- min.stat  <- med.stat <- max.stat <-
         bar.type <- name <- plot.idx <- Variable <- Selection <- Median <- Range <- p.primary <- p.secondary <- NULL
-      
+
       # Compute percentage of times each variable was selected
       d$pct.selected <- apply(d,1,function(x){sum(x!=0)}/ncol(d)*100)
-      
+
       # Remove instances where variables were never selected in any bootstrap iteration
       d <- subset(d, pct.selected != 0)
-      
+
       # Compute percentage of time variable has consistent sign.
       # A variable is deemed consistent if it has the same sign at least 95% of the times it was selected.
       signs <- apply(d[,grep("B",colnames(d), value=T)],1,function(x){sign(x)[x!=0]})
       d$is.consistent <- sapply(signs,function(x){any(table(x) / length(x) >= .95)})
-      
+
       # Calculate min, median, and max
       summary.stats <- apply(d[,grep("B",colnames(d), value=TRUE)],1,function(x){summary(x[x!=0])})
       d$min.stat <- summary.stats["Min.",]
       d$med.stat <- summary.stats["Median",]
       d$max.stat <- summary.stats["Max.",]
-      
+
       # Create label for bar type (Positive/Negative Tendency or Mixed)
       d$bar.type <- factor(ifelse(d$is.consistent, ifelse(d$med.stat > 0,"Positive Tendency","Negative Tendency"),"Mixed"),
                            levels=c("Negative Tendency", "Mixed", "Positive Tendency"))
-      
+
       # Order by most frequently selected and bar type
       d <- d[order(d$bar.type,-d$pct.selected),]
-      
+
       # Add variable name and plot index to data for plotting purposes
       d$name <- rownames(d)
       d$plot.idx <- 1:nrow(d)
-      
+
       # Remove individual bootstrap values from plotting data frame
       d <- d[,!(names(d) %in% grep("B",names(d),value=TRUE))]
-      
+
       # Create tooltip statistics
       d$Variable <- d$name
       d$Selection <- paste0(d$pct.selected,"%")
       d$Median <- round(d$med.stat,4)
       d$Range <- paste0("[",round(d$min.stat,4),",",round(d$max.stat,4),"]")
-      
+
       # Primary Plot - Range with median points
       p.primary <- ggplot(d, aes(xmin = plot.idx-0.5, xmax=plot.idx+0.5, ymin = min.stat, ymax = max.stat, x=plot.idx, y = med.stat, fill = bar.type,
                                  tooltip1 = Variable, tooltip2 = Selection, tooltip3 = Median, tooltip4 = Range )) +
@@ -176,20 +181,20 @@ plot.subgroup_validated <- function(x,
       geom_hline(yintercept = 0) +
       geom_vline(xintercept = c(which.min(d$bar.type=="Negative Tendency") - 0.5, which.max(d$bar.type=="Positive Tendency") - 0.5), linetype = "dashed") +
       xlim(0,nrow(d)+1)
-      
+
       # Secondary Plot - Distribution of selection probability
       p.secondary <- ggplot(d, aes(x = plot.idx, y = pct.selected, fill = bar.type,
                                    tooltip1 = Variable, tooltip2 = Selection)) +
       geom_bar(stat="identity") +
       geom_vline(xintercept = c(which.min(d$bar.type=="Negative Tendency") - 0.5, which.max(d$bar.type=="Positive Tendency") - 0.5), linetype = "dashed")
-      
+
       # Combine plots and create plotly object
       pl.obj <-
       subplot(ggplotly(p.primary, tooltip = paste0("tooltip",1:4)),
               ggplotly(p.secondary, tooltip = paste0("tooltip",1:2)),
-              nrows=2, 
-              shareX = TRUE, 
-              titleX = TRUE, 
+              nrows=2,
+              shareX = TRUE,
+              titleX = TRUE,
               titleY = TRUE
              ) %>%
       layout(title="Variable Selection Across Bootstrap Iterations",
