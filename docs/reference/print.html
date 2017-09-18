@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Printing results for fitted subgroup identification models � print.subgroup_fitted • personalized</title>
+<title>Printing results for fitted subgroup identification models — print.subgroup_fitted • personalized</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -85,7 +86,7 @@
 
 <span class='co'># S3 method for subgroup_validated</span>
 <span class='fu'>print</span>(<span class='no'>x</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fu'>max</span>(<span class='fu'>getOption</span>(<span class='st'>"digits"</span>) - <span class='fl'>3</span>,
-  <span class='fl'>3</span>), <span class='no'>...</span>)
+  <span class='fl'>3</span>), <span class='kw'>sample.pct</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for subgroup_summary</span>
 <span class='fu'>print</span>(<span class='no'>x</span>, <span class='kw'>p.value</span> <span class='kw'>=</span> <span class='fl'>1</span>,
@@ -96,7 +97,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>a fitted object from either <code>fit.subgroup</code>, <code>validate.subgroup</code>, or <code>summarize.subgroups()</code></p></td>
+      <td><p>a fitted object from either <code>fit.subgroup</code>, <code>validate.subgroup</code>, or <code><a href='summarize.subgroups.html'>summarize.subgroups()</a></code></p></td>
     </tr>
     <tr>
       <th>digits</th>
@@ -105,6 +106,12 @@
     <tr>
       <th>...</th>
       <td><p>further arguments passed to or from <code><a href='http://www.rdocumentation.org/packages/base/topics/print.default'>print.default</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>sample.pct</th>
+      <td><p>boolean variable of whether to print the percent of the test sample within each subgroup. If false
+the sample size itself, not the percent is printed. This may not be informative if the test sample size is much different
+from the total sample size</p></td>
     </tr>
     <tr>
       <th>p.value</th>

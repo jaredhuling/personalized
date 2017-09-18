@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fitting subgroup identification models � fit.subgroup • personalized</title>
+<title>Fitting subgroup identification models — fit.subgroup • personalized</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -78,12 +79,13 @@
     <p>Fits subgroup identification model class of Chen, et al (2017)</p>
     
 
-    <pre class="usage"><span class='fu'>fit.subgroup</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>trt</span>, <span class='no'>propensity.func</span>, <span class='kw'>loss</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"sq_loss_lasso"</span>,
+    <pre class="usage"><span class='fu'>fit.subgroup</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>trt</span>, <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>loss</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"sq_loss_lasso"</span>,
   <span class='st'>"logistic_loss_lasso"</span>, <span class='st'>"cox_loss_lasso"</span>, <span class='st'>"sq_loss_lasso_gam"</span>,
   <span class='st'>"logistic_loss_lasso_gam"</span>, <span class='st'>"sq_loss_gam"</span>, <span class='st'>"logistic_loss_gam"</span>, <span class='st'>"sq_loss_gbm"</span>,
   <span class='st'>"abs_loss_gbm"</span>, <span class='st'>"logistic_loss_gbm"</span>, <span class='st'>"cox_loss_gbm"</span>),
   <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"weighting"</span>, <span class='st'>"a_learning"</span>), <span class='kw'>augment.func</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>cutpoint</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>larger.outcome.better</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>retcall</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>cutpoint</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>larger.outcome.better</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>reference.trt</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>retcall</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -113,7 +115,7 @@ of patients assigned to the treatment group, i.e.:
       <th>loss</th>
       <td><p>choice of both the M function from Chen, et al (2017) and potentially the penalty used for variable selection.
 All <code>loss</code> options starting with <code>sq_loss</code> use M(y, v) = (v - y) ^ 2, all options starting with <code>logistic_loss</code> use
-the logistic loss: M(y, v) = y * log(1 + exp-v), and all options starting with <code>cox_loss</code> use the negative partial likelihood loss for the Cox PH model.
+the logistic loss: M(y, v) = y * log(1 + exp{-v}), and all options starting with <code>cox_loss</code> use the negative partial likelihood loss for the Cox PH model.
 All options ending with <code>lasso</code> have a lasso penalty added to the loss for variable selection. <code>sq_loss_lasso_gam</code>
 and <code>logistic_loss_lasso_gam</code> first use the lasso to select variables and then fit a generalized additive model
 with nonparametric additive terms for each selected variable. <code>sq_loss_gam</code> involves a squared error loss with a generalized additive model and no variable selection.
@@ -124,9 +126,9 @@ is complex.</p><ul>
 <li><p><code>"logistic_loss_lasso"</code> - M(y, v) = -[yv - log(1 + exp{-v})] with with linear model and lasso penalty</p></li>
 <li><p><code>"cox_loss_lasso"</code> - M corresponds to the negative partial likelihood of the cox model with linear model and additionally a lasso penalty</p></li>
 <li><p><code>"sq_loss_lasso_gam"</code> - M(y, v) = (v - y) ^ 2 with variables selected by lasso penalty and generalized additive model fit on the selected variables</p></li>
-<li><p><code>"logistic_loss_lasso_gam"</code> - M(y, v) = y * log(1 + exp-v) with variables selected by lasso penalty and generalized additive model fit on the selected variables</p></li>
+<li><p><code>"logistic_loss_lasso_gam"</code> - M(y, v) = y * log(1 + exp{-v}) with variables selected by lasso penalty and generalized additive model fit on the selected variables</p></li>
 <li><p><code>"sq_loss_gam"</code> - M(y, v) = (v - y) ^ 2 with generalized additive model fit on all variables</p></li>
-<li><p><code>"logistic_loss_gam"</code> - M(y, v) = y * log(1 + exp-v) with generalized additive model fit on all variables</p></li>
+<li><p><code>"logistic_loss_gam"</code> - M(y, v) = y * log(1 + exp{-v}) with generalized additive model fit on all variables</p></li>
 <li><p><code>"sq_loss_gbm"</code> - M(y, v) = (v - y) ^ 2 with gradient-boosted decision trees model</p></li>
 <li><p><code>"abs_loss_gbm"</code> - M(y, v) = |v - y| with gradient-boosted decision trees model</p></li>
 <li><p><code>"logistic_loss_gbm"</code> - M(y, v) = -[yv - log(1 + exp{-v})] with gradient-boosted decision trees model</p></li>
@@ -158,10 +160,15 @@ will be recommended to be in the treatment group</p></td>
 if a larger outcome is better/preferable and set to <code>FALSE</code> if a smaller outcome is better/preferable. Defaults to <code>TRUE</code>.</p></td>
     </tr>
     <tr>
+      <th>reference.trt</th>
+      <td><p>which treatment should be treated as the reference treatment. Defaults to the first level of <code>trt</code>
+if <code>trt</code> is a factor or the first alphabetical or numerically first treatment level.</p></td>
+    </tr>
+    <tr>
       <th>retcall</th>
       <td><p>boolean value. if <code>TRUE</code> then the passed arguments will be saved. Do not set to <code>FALSE</code>
-if the <code>validate.subgroupu()</code> function will later be used for your fitted subgroup model. Only set to <code>FALSE</code>
-if memory is limited as setting to codeTRUE saves the design matrix to the fitted object</p></td>
+if the <code><a href='validate.subgroup.html'>validate.subgroup()</a></code> function will later be used for your fitted subgroup model. Only set to <code>FALSE</code>
+if memory is limited as setting to <code>TRUE</code> saves the design matrix to the fitted object</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -169,14 +176,14 @@ if memory is limited as setting to codeTRUE saves the design matrix to the fitte
 this will be passed to <code>cv.glmnet</code> and for all <code>loss</code> options with <code>mcp</code> this will be passed
 to <code>cv.ncvreg</code>. Note that for all <code>loss</code> options that use <code>gam()</code> from the <code>mgcv</code> package,
 the user cannot supply the <code>gam</code> argument <code>method</code> because it is also an argument of <code>fit.subgroup</code>, so
-instead, to change the <code>gam method</code> argument, instead supply <code>method.gam</code>, ie <code>method.gam = "REML"</code>.</p></td>
+instead, to change the <code>gam method</code> argument, supply <code>method.gam</code>, ie <code>method.gam = "REML"</code>.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Chen, S., Tian, L., Cai, T. and Yu, M. (2017), A general statistical framework for subgroup identification
-and comparative treatment scoring. Biometrics. doi:10.1111/biom.12676 <a href = 'http://onlinelibrary.wiley.com/doi/10.1111/biom.12676/abstract'>http://onlinelibrary.wiley.com/doi/10.1111/biom.12676/abstract</a></p>
+and comparative treatment scoring. Biometrics. doi:10.1111/biom.12676 <a href='http://onlinelibrary.wiley.com/doi/10.1111/biom.12676/abstract'>http://onlinelibrary.wiley.com/doi/10.1111/biom.12676/abstract</a></p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -243,21 +250,21 @@ from <code>fit.subgroup</code>.</p>
 #&gt; method:  weighting 
 #&gt; 
 #&gt; Average Outcomes:
-#&gt;                  Recommended Trt  Recommended Ctrl
-#&gt; Received Trt   -2.7736 (n = 256) -22.144 (n = 321)
-#&gt; Received Ctrl -21.3209 (n = 199) -6.6962 (n = 224)
+#&gt;                Recommended 0      Recommended 1
+#&gt; Received 0 -6.6962 (n = 224) -21.3209 (n = 199)
+#&gt; Received 1 -22.144 (n = 321)  -2.7736 (n = 256)
 #&gt; 
-#&gt;  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-#&gt;                  18.5473 (n = 455)                  15.4479 (n = 545) 
+#&gt; 0 effect among recommended 0 1 effect among recommended 1 
+#&gt;            15.4479 (n = 545)            18.5473 (n = 455) 
 #&gt; 
 #&gt; Benefit score quantiles: 
 #&gt;      0%     25%     50%     75%    100% 
 #&gt; -26.984  -6.531  -1.056   4.878  22.578 
 #&gt; 
-#&gt; 12 variables selected by the lasso (cross validation criterion).
+#&gt; 11 out of 51 variables selected in total by the lasso (cross validation criterion).
 #&gt; 
 #&gt;     Estimate
-#&gt; Trt  -0.8824
+#&gt; 1    -0.8824
 #&gt; V1    0.2072
 #&gt; V2    1.8824
 #&gt; V3   -1.9520
@@ -283,16 +290,16 @@ from <code>fit.subgroup</code>.</p>
 #&gt; method:  weighting 
 #&gt; 
 #&gt; Average Outcomes:
-#&gt;                 Recommended Trt   Recommended Ctrl
-#&gt; Received Trt   2.1198 (n = 311) -31.8704 (n = 266)
-#&gt; Received Ctrl -8.0685 (n = 238) -20.6621 (n = 185)
+#&gt;                 Recommended 0     Recommended 1
+#&gt; Received 0 -22.1433 (n = 175) -7.5312 (n = 248)
+#&gt; Received 1 -35.2978 (n = 231)  0.9697 (n = 346)
 #&gt; 
-#&gt;  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-#&gt;                  10.1883 (n = 549)                  11.2082 (n = 451) 
+#&gt; 0 effect among recommended 0 1 effect among recommended 1 
+#&gt;            13.1546 (n = 406)             8.5009 (n = 594) 
 #&gt; 
 #&gt; Benefit score quantiles: 
 #&gt;       0%      25%      50%      75%     100% 
-#&gt; -143.120  -12.770    2.529   14.880   45.175 </div><div class='input'>
+#&gt; -140.510  -10.494    4.637   16.636   46.873 </div><div class='input'>
 <span class='no'>subgrp.model.bin</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y.binary</span>,
                            <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
                            <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>,
@@ -305,18 +312,18 @@ from <code>fit.subgroup</code>.</p>
 #&gt; method:  weighting 
 #&gt; 
 #&gt; Average Outcomes:
-#&gt;                Recommended Trt Recommended Ctrl
-#&gt; Received Trt  0.5309 (n = 324) 0.1502 (n = 253)
-#&gt; Received Ctrl 0.2292 (n = 240) 0.4863 (n = 183)
+#&gt;               Recommended 0    Recommended 1
+#&gt; Received 0 0.4863 (n = 183) 0.2292 (n = 240)
+#&gt; Received 1 0.1502 (n = 253) 0.5309 (n = 324)
 #&gt; 
-#&gt;  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-#&gt;                   0.3017 (n = 564)                   0.3361 (n = 436) 
+#&gt; 0 effect among recommended 0 1 effect among recommended 1 
+#&gt;             0.3361 (n = 436)             0.3017 (n = 564) 
 #&gt; 
 #&gt; Benefit score quantiles: 
 #&gt;       0%      25%      50%      75%     100% 
 #&gt; -1.49663 -0.24413  0.07284  0.43341  1.49749 </div><div class='input'>
 <span class='fu'>library</span>(<span class='no'>survival</span>)
-<span class='no'>subgrp.model.cox</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'>Surv</span>(<span class='no'>y.time.to.event</span>, <span class='no'>status</span>),
+<span class='no'>subgrp.model.cox</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/survival/topics/Surv'>Surv</a></span>(<span class='no'>y.time.to.event</span>, <span class='no'>status</span>),
                            <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
                            <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>,
                            <span class='kw'>loss</span>   <span class='kw'>=</span> <span class='st'>"cox_loss_lasso"</span>,
@@ -327,12 +334,12 @@ from <code>fit.subgroup</code>.</p>
 #&gt; method:  weighting 
 #&gt; 
 #&gt; Average Outcomes:
-#&gt;                 Recommended Trt   Recommended Ctrl
-#&gt; Received Trt  68.8973 (n = 265) 152.5531 (n = 312)
-#&gt; Received Ctrl 19.9534 (n = 194) 193.8419 (n = 229)
+#&gt;                 Recommended 0     Recommended 1
+#&gt; Received 0 193.8419 (n = 229) 19.9534 (n = 194)
+#&gt; Received 1 152.5531 (n = 312) 68.8973 (n = 265)
 #&gt; 
-#&gt;  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-#&gt;                  48.9438 (n = 459)                  41.2888 (n = 541) 
+#&gt; 0 effect among recommended 0 1 effect among recommended 1 
+#&gt;            41.2888 (n = 541)            48.9438 (n = 459) 
 #&gt; 
 #&gt; Benefit score quantiles: 
 #&gt;       0%      25%      50%      75%     100% 

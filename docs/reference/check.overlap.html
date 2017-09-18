@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Check propensity score overlap � check.overlap • personalized</title>
+<title>Check propensity score overlap — check.overlap • personalized</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -104,7 +105,8 @@ of patients assigned to the treatment group, i.e.:
     <tr>
       <th>type</th>
       <td><p>Type of plot to create. Options are either a histogram (<code>type = "histogram"</code>) for each treatment
-group or a density (<code>type = "density"</code>) for each treatment group</p></td>
+group, a density (<code>type = "density"</code>) for each treatment group, or to plot both a density and histogram
+(<code>type = "code"</code>)</p></td>
     </tr>
     <tr>
       <th>bins</th>
@@ -117,13 +119,13 @@ group or a density (<code>type = "density"</code>) for each treatment group</p><
     <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>personalized</span>)
 
 <span class='fu'>set.seed</span>(<span class='fl'>123</span>)
-<span class='no'>n.obs</span>  <span class='kw'>&lt;-</span> <span class='fl'>1000</span>
-<span class='no'>n.vars</span> <span class='kw'>&lt;-</span> <span class='fl'>50</span>
+<span class='no'>n.obs</span>  <span class='kw'>&lt;-</span> <span class='fl'>500</span>
+<span class='no'>n.vars</span> <span class='kw'>&lt;-</span> <span class='fl'>25</span>
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>matrix</span>(<span class='fu'>rnorm</span>(<span class='no'>n.obs</span> * <span class='no'>n.vars</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>3</span>), <span class='no'>n.obs</span>, <span class='no'>n.vars</span>)
 
 
 <span class='co'># simulate non-randomized treatment</span>
-<span class='no'>xbetat</span>   <span class='kw'>&lt;-</span> <span class='fl'>0.5</span> + <span class='fl'>0.5</span> * <span class='no'>x</span>[,<span class='fl'>21</span>] - <span class='fl'>0.5</span> * <span class='no'>x</span>[,<span class='fl'>41</span>]
+<span class='no'>xbetat</span>   <span class='kw'>&lt;-</span> <span class='fl'>0.25</span> + <span class='fl'>0.5</span> * <span class='no'>x</span>[,<span class='fl'>21</span>] - <span class='fl'>0.5</span> * <span class='no'>x</span>[,<span class='fl'>25</span>]
 <span class='no'>trt.prob</span> <span class='kw'>&lt;-</span> <span class='fu'>exp</span>(<span class='no'>xbetat</span>) / (<span class='fl'>1</span> + <span class='fu'>exp</span>(<span class='no'>xbetat</span>))
 <span class='no'>trt01</span>    <span class='kw'>&lt;-</span> <span class='fu'>rbinom</span>(<span class='no'>n.obs</span>, <span class='fl'>1</span>, <span class='kw'>prob</span> <span class='kw'>=</span> <span class='no'>trt.prob</span>)
 
@@ -140,12 +142,47 @@ group or a density (<code>type = "density"</code>) for each treatment group</p><
 
 <span class='fu'>check.overlap</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>,
               <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
-              <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>)</div><img src='check.overlap-2.png' alt='' width='540' height='400' /><div class='input'>
+              <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>)</div><div class='img'><img src='check.overlap-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 <span class='co'># now add density plot with histogram</span>
 <span class='fu'>check.overlap</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>,
               <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
               <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"both"</span>,
-              <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>)</div><img src='check.overlap-4.png' alt='' width='540' height='400' /><div class='input'>
+              <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>)</div><div class='img'><img src='check.overlap-2.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+
+<span class='co'># simulated non-randomized treatment with multiple levels</span>
+<span class='no'>xbetat_1</span>   <span class='kw'>&lt;-</span> <span class='fl'>0.15</span> + <span class='fl'>0.5</span> * <span class='no'>x</span>[,<span class='fl'>21</span>] - <span class='fl'>0.25</span> * <span class='no'>x</span>[,<span class='fl'>25</span>]
+<span class='no'>xbetat_2</span>   <span class='kw'>&lt;-</span> <span class='fl'>0.15</span> - <span class='fl'>0.5</span> * <span class='no'>x</span>[,<span class='fl'>11</span>] + <span class='fl'>0.25</span> * <span class='no'>x</span>[,<span class='fl'>15</span>]
+<span class='no'>trt.1.prob</span> <span class='kw'>&lt;-</span> <span class='fu'>exp</span>(<span class='no'>xbetat_1</span>) / (<span class='fl'>1</span> + <span class='fu'>exp</span>(<span class='no'>xbetat_1</span>) + <span class='fu'>exp</span>(<span class='no'>xbetat_2</span>))
+<span class='no'>trt.2.prob</span> <span class='kw'>&lt;-</span> <span class='fu'>exp</span>(<span class='no'>xbetat_2</span>) / (<span class='fl'>1</span> + <span class='fu'>exp</span>(<span class='no'>xbetat_1</span>) + <span class='fu'>exp</span>(<span class='no'>xbetat_2</span>))
+<span class='no'>trt.3.prob</span> <span class='kw'>&lt;-</span> <span class='fl'>1</span> - (<span class='no'>trt.1.prob</span> + <span class='no'>trt.2.prob</span>)
+<span class='no'>prob.mat</span> <span class='kw'>&lt;-</span> <span class='fu'>cbind</span>(<span class='no'>trt.1.prob</span>, <span class='no'>trt.2.prob</span>, <span class='no'>trt.3.prob</span>)
+<span class='no'>trt</span>    <span class='kw'>&lt;-</span> <span class='fu'>apply</span>(<span class='no'>prob.mat</span>, <span class='fl'>1</span>, <span class='kw'>function</span>(<span class='no'>rr</span>) <span class='fu'>rmultinom</span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='kw'>prob</span> <span class='kw'>=</span> <span class='no'>rr</span>))
+<span class='no'>trt</span>    <span class='kw'>&lt;-</span> <span class='fu'>apply</span>(<span class='no'>trt</span>, <span class='fl'>2</span>, <span class='kw'>function</span>(<span class='no'>rr</span>) <span class='fu'>which</span>(<span class='no'>rr</span> <span class='kw'>==</span> <span class='fl'>1</span>))
+
+<span class='co'># use multinomial logistic regression model with lasso penalty for propensity</span>
+<span class='no'>propensity.multinom.lasso</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>trt</span>)
+{
+    <span class='kw'>if</span> (!<span class='fu'>is.factor</span>(<span class='no'>trt</span>)) <span class='no'>trt</span> <span class='kw'>&lt;-</span> <span class='fu'>as.factor</span>(<span class='no'>trt</span>)
+    <span class='no'>gfit</span> <span class='kw'>&lt;-</span> <span class='fu'>cv.glmnet</span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>trt</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"multinomial"</span>)
+
+    <span class='co'># predict returns a matrix of probabilities:</span>
+    <span class='co'># one column for each treatment level</span>
+    <span class='no'>propens</span> <span class='kw'>&lt;-</span> <span class='fu'>drop</span>(<span class='fu'>predict</span>(<span class='no'>gfit</span>, <span class='kw'>newx</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='kw'>s</span> <span class='kw'>=</span> <span class='st'>"lambda.min"</span>,
+                            <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0</span>))
+
+    <span class='co'># return the probability corresponding to the</span>
+    <span class='co'># treatment that was observed</span>
+    <span class='no'>probs</span> <span class='kw'>&lt;-</span> <span class='no'>propens</span>[,<span class='fu'>match</span>(<span class='fu'>levels</span>(<span class='no'>trt</span>), <span class='fu'>colnames</span>(<span class='no'>propens</span>))]
+
+    <span class='no'>probs</span>
+}
+
+<span class='fu'>check.overlap</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>,
+              <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt</span>,
+              <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"histogram"</span>,
+              <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>propensity.multinom.lasso</span>)</div><div class='img'><img src='check.overlap-3.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

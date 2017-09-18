@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Predict function for fitted subgroup identification models � predict.subgroup_fitted • personalized</title>
+<title>Predict function for fitted subgroup identification models — predict.subgroup_fitted • personalized</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -157,18 +158,21 @@ will be recommended to be in the treatment group</p></td>
                             <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>5</span>)              <span class='co'># option for cv.glmnet</span>
 
 <span class='no'>subgrp.model</span>$<span class='no'>subgroup.trt.effects</span></div><div class='output co'>#&gt; $subgroup.effects
-#&gt;  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-#&gt;                           20.07929                           15.24970 
+#&gt; 0 effect among recommended 0 1 effect among recommended 1 
+#&gt;                     15.24970                     20.07929 
 #&gt; 
 #&gt; $avg.outcomes
-#&gt;               Recommended Trt Recommended Ctrl
-#&gt; Received Trt         -6.06678        -25.72407
-#&gt; Received Ctrl       -26.14607        -10.47437
+#&gt;            Recommended 0 Recommended 1
+#&gt; Received 0     -10.47437     -26.14607
+#&gt; Received 1     -25.72407      -6.06678
 #&gt; 
 #&gt; $sample.sizes
-#&gt;               Recommended Trt Recommended Ctrl
-#&gt; Received Trt              236              341
-#&gt; Received Ctrl             218              205
+#&gt;            Recommended 0 Recommended 1
+#&gt; Received 0           205           218
+#&gt; Received 1           341           236
+#&gt; 
+#&gt; $overall.subgroup.effect
+#&gt; [1] 17.77298
 #&gt; </div><div class='input'><span class='no'>benefit.scores</span> <span class='kw'>&lt;-</span> <span class='fu'>predict</span>(<span class='no'>subgrp.model</span>, <span class='kw'>newx</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"benefit.score"</span>)
 
 <span class='no'>rec.trt.grp</span> <span class='kw'>&lt;-</span> <span class='fu'>predict</span>(<span class='no'>subgrp.model</span>, <span class='kw'>newx</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"trt.group"</span>)</div></pre>

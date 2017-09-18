@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Validating fitted subgroup identification models � validate.subgroup • personalized</title>
+<title>Validating fitted subgroup identification models — validate.subgroup • personalized</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -80,14 +81,14 @@
     
 
     <pre class="usage"><span class='fu'>validate.subgroup</span>(<span class='no'>model</span>, <span class='kw'>B</span> <span class='kw'>=</span> <span class='fl'>50L</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"training_test_replication"</span>,
-  <span class='st'>"boot_bias_correction"</span>), <span class='kw'>train.fraction</span> <span class='kw'>=</span> <span class='fl'>0.5</span>)</pre>
+  <span class='st'>"boot_bias_correction"</span>), <span class='kw'>train.fraction</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>model</th>
-      <td><p>fitted model object returned by <code>fit.subgroup()</code> function</p></td>
+      <td><p>fitted model object returned by <code><a href='fit.subgroup.html'>fit.subgroup()</a></code> function</p></td>
     </tr>
     <tr>
       <th>B</th>
@@ -104,6 +105,13 @@ for this option)</p></td>
       <th>train.fraction</th>
       <td><p>fraction (between 0 and 1) of samples to be used for training in
 training/test replication. Only used for <code>method = "training_test_replication"</code></p></td>
+    </tr>
+    <tr>
+      <th>parallel</th>
+      <td><p>Should the loop over replications be parallelized? If <code>FALSE</code>, then no, if <code>TRUE</code>, then yes.
+If user sets <code>parallel = TRUE</code> and the fitted <code><a href='fit.subgroup.html'>fit.subgroup()</a></code> object uses the parallel version of
+an internal model, say for <code>cv.glmnet()</code>, then the internal parallelization will be overridden so as
+not to create a conflict of parallelism.</p></td>
     </tr>
     </table>
     
@@ -164,18 +172,21 @@ doi:10.1002/(SICI)1097-0258(19960229)15:4&lt;361::AID-SIM168&gt;3.0.CO;2-4</p>
                              <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>5</span>)    <span class='co'># option for cv.glmnet</span>
 
 <span class='no'>subgrp.model</span>$<span class='no'>subgroup.trt.effects</span></div><div class='output co'>#&gt; $subgroup.effects
-#&gt;  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-#&gt;                           13.26465                           13.84725 
+#&gt; 0 effect among recommended 0 1 effect among recommended 1 
+#&gt;                     13.84725                     13.26465 
 #&gt; 
 #&gt; $avg.outcomes
-#&gt;               Recommended Trt Recommended Ctrl
-#&gt; Received Trt        -14.39765       -23.675004
-#&gt; Received Ctrl       -27.66231        -9.827756
+#&gt;            Recommended 0 Recommended 1
+#&gt; Received 0     -9.827756     -27.66231
+#&gt; Received 1    -23.675004     -14.39765
 #&gt; 
 #&gt; $sample.sizes
-#&gt;               Recommended Trt Recommended Ctrl
-#&gt; Received Trt              121              159
-#&gt; Received Ctrl             170               50
+#&gt;            Recommended 0 Recommended 1
+#&gt; Received 0            50           170
+#&gt; Received 1           159           121
+#&gt; 
+#&gt; $overall.subgroup.effect
+#&gt; [1] 12.67388
 #&gt; </div><div class='input'>
 <span class='no'>x.test</span> <span class='kw'>&lt;-</span> <span class='fu'>matrix</span>(<span class='fu'>rnorm</span>(<span class='fl'>10</span> * <span class='no'>n.obs</span> * <span class='no'>n.vars</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>3</span>), <span class='fl'>10</span> * <span class='no'>n.obs</span>, <span class='no'>n.vars</span>)
 
@@ -204,20 +215,20 @@ doi:10.1002/(SICI)1097-0258(19960229)15:4&lt;361::AID-SIM168&gt;3.0.CO;2-4</p>
 #&gt; validation method:  training_test_replication 
 #&gt; 
 #&gt; Average Test Set Outcomes:
-#&gt;                      Recommended Trt       Recommended Ctrl
-#&gt; Received Trt  -18.0328 (SE = 5.6593) -22.7101 (SE = 4.1061)
-#&gt; Received Ctrl -25.1564 (SE = 3.6887) -14.3177 (SE = 8.8949)
+#&gt;                               Recommended 0                    Recommended 1
+#&gt; Received 0 -14.3177 (SE = 8.8949, n = 13.7)   -25.1564 (SE = 3.6887, n = 43)
+#&gt; Received 1   -22.7101 (SE = 4.1061, n = 37) -18.0328 (SE = 5.6593, n = 31.3)
 #&gt; 
-#&gt;  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-#&gt;               7.1236 (SE = 7.0019)              8.3924 (SE = 10.1312) </div><div class='input'>
+#&gt;    0 effect among recommended 0    1 effect among recommended 1 
+#&gt; 8.3924 (SE = 10.1312, n = 50.7)  7.1236 (SE = 7.0019, n = 74.3) </div><div class='input'>
 <span class='no'>bene.score.test</span> <span class='kw'>&lt;-</span> <span class='no'>subgrp.model</span>$<span class='fu'>predict</span>(<span class='no'>x.test</span>)
 
 <span class='fu'>mean</span>(<span class='no'>y.test</span>[<span class='no'>bene.score.test</span> <span class='kw'>&gt;</span> <span class='fl'>0</span> <span class='kw'>&amp;</span> <span class='no'>trt01.test</span> <span class='kw'>==</span> <span class='fl'>1</span>]) -
        <span class='fu'>mean</span>(<span class='no'>y.test</span>[<span class='no'>bene.score.test</span> <span class='kw'>&gt;</span> <span class='fl'>0</span> <span class='kw'>&amp;</span> <span class='no'>trt01.test</span> <span class='kw'>==</span> <span class='fl'>0</span>])</div><div class='output co'>#&gt; [1] 13.18799</div><div class='input'><span class='fu'>mean</span>(<span class='no'>y.test</span>[<span class='no'>bene.score.test</span> <span class='kw'>&lt;=</span> <span class='fl'>0</span> <span class='kw'>&amp;</span> <span class='no'>trt01.test</span> <span class='kw'>==</span> <span class='fl'>0</span>]) -
        <span class='fu'>mean</span>(<span class='no'>y.test</span>[<span class='no'>bene.score.test</span> <span class='kw'>&lt;=</span> <span class='fl'>0</span> <span class='kw'>&amp;</span> <span class='no'>trt01.test</span> <span class='kw'>==</span> <span class='fl'>1</span>])</div><div class='output co'>#&gt; [1] 15.84766</div><div class='input'>
-<span class='fu'>quantile</span>(<span class='no'>valmod</span>$<span class='no'>boot.results</span><span class='kw'>[[</span><span class='fl'>1</span>]][,<span class='fl'>1</span>], <span class='fu'>c</span>(<span class='fl'>0.025</span>, <span class='fl'>0.975</span>))</div><div class='output co'>#&gt;      2.5%     97.5% 
-#&gt; -4.673896 16.891682 </div><div class='input'><span class='fu'>quantile</span>(<span class='no'>valmod</span>$<span class='no'>boot.results</span><span class='kw'>[[</span><span class='fl'>1</span>]][,<span class='fl'>2</span>], <span class='fu'>c</span>(<span class='fl'>0.025</span>, <span class='fl'>0.975</span>))</div><div class='output co'>#&gt;     2.5%    97.5% 
-#&gt; -5.24051 25.42524 </div></pre>
+<span class='fu'>quantile</span>(<span class='no'>valmod</span>$<span class='no'>boot.results</span><span class='kw'>[[</span><span class='fl'>1</span>]][,<span class='fl'>1</span>], <span class='fu'>c</span>(<span class='fl'>0.025</span>, <span class='fl'>0.975</span>))</div><div class='output co'>#&gt;     2.5%    97.5% 
+#&gt; -5.24051 25.42524 </div><div class='input'><span class='fu'>quantile</span>(<span class='no'>valmod</span>$<span class='no'>boot.results</span><span class='kw'>[[</span><span class='fl'>1</span>]][,<span class='fl'>2</span>], <span class='fu'>c</span>(<span class='fl'>0.025</span>, <span class='fl'>0.975</span>))</div><div class='output co'>#&gt;      2.5%     97.5% 
+#&gt; -4.673896 16.891682 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

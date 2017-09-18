@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plotting results for fitted subgroup identification models � plot.subgroup_fitted • personalized</title>
+<title>Plotting results for fitted subgroup identification models — plot.subgroup_fitted • personalized</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -85,19 +86,19 @@
 
 <span class='co'># S3 method for subgroup_validated</span>
 <span class='fu'>plot</span>(<span class='no'>x</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"boxplot"</span>, <span class='st'>"density"</span>,
-  <span class='st'>"interaction"</span>), <span class='kw'>avg.line</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+  <span class='st'>"interaction"</span>, <span class='st'>"stability"</span>), <span class='kw'>avg.line</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>fitted object returned by <code>validate.subgroup()</code> or <code>fit.subgroup()</code> function</p></td>
+      <td><p>fitted object returned by <code><a href='validate.subgroup.html'>validate.subgroup()</a></code> or <code><a href='fit.subgroup.html'>fit.subgroup()</a></code> function</p></td>
     </tr>
     <tr>
       <th>type</th>
       <td><p>type of plot. <code>"density"</code> results in a density plot for the results
-across all observations (if <code>x</code> is from <code>fit.subgroup()</code>) or if <code>x</code> is from <code>validate.subgroup()</code>
+across all observations (if <code>x</code> is from <code><a href='fit.subgroup.html'>fit.subgroup()</a></code>) or if <code>x</code> is from <code><a href='validate.subgroup.html'>validate.subgroup()</a></code>
 across iterations of either the bootstrap or training/test re-fitting. For the latter
 case the test results will be plotted. <code>"boxplot"</code> results in boxplots across all observations/iterations of either
 the bootstrap or training/test re-fitting. For the latter
@@ -164,42 +165,54 @@ and <code><a href='fit.subgroup.html'>fit.subgroup</a></code> for function which
                            <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>5</span>)              <span class='co'># option for cv.glmnet</span>
 
 <span class='no'>subgrp.model</span>$<span class='no'>subgroup.trt.effects</span></div><div class='output co'>#&gt; $subgroup.effects
-#&gt;  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-#&gt;                           13.98552                           18.45793 
+#&gt; 0 effect among recommended 0 1 effect among recommended 1 
+#&gt;                     18.45793                     13.98552 
 #&gt; 
 #&gt; $avg.outcomes
-#&gt;               Recommended Trt Recommended Ctrl
-#&gt; Received Trt        -11.77302       -25.884954
-#&gt; Received Ctrl       -25.75854        -7.427022
+#&gt;            Recommended 0 Recommended 1
+#&gt; Received 0     -7.427022     -25.75854
+#&gt; Received 1    -25.884954     -11.77302
 #&gt; 
 #&gt; $sample.sizes
-#&gt;               Recommended Trt Recommended Ctrl
-#&gt; Received Trt              221              366
-#&gt; Received Ctrl             242              171
+#&gt;            Recommended 0 Recommended 1
+#&gt; Received 0           171           242
+#&gt; Received 1           366           221
+#&gt; 
+#&gt; $overall.subgroup.effect
+#&gt; [1] 15.95745
 #&gt; </div><div class='input'>
-<span class='fu'>plot</span>(<span class='no'>subgrp.model</span>)</div><img src='plot-4.png' alt='' width='540' height='400' /><div class='input'>
-<span class='fu'>plot</span>(<span class='no'>subgrp.model</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"boxplot"</span>)</div><img src='plot-6.png' alt='' width='540' height='400' /><div class='input'>
-<span class='fu'>plot</span>(<span class='no'>subgrp.model</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"interaction"</span>)</div><img src='plot-8.png' alt='' width='540' height='400' /><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>subgrp.model</span>)</div><div class='img'><img src='plot-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>subgrp.model</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"boxplot"</span>)</div><div class='img'><img src='plot-2.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>subgrp.model</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"interaction"</span>)</div><div class='img'><img src='plot-3.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 <span class='no'>valmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='validate.subgroup.html'>validate.subgroup</a></span>(<span class='no'>subgrp.model</span>, <span class='kw'>B</span> <span class='kw'>=</span> <span class='fl'>5</span>,
                           <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"training_test"</span>,
                           <span class='kw'>train.fraction</span> <span class='kw'>=</span> <span class='fl'>0.75</span>)
 <span class='no'>valmod</span>$<span class='no'>avg.results</span></div><div class='output co'>#&gt; $subgroup.effects
-#&gt;  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-#&gt;                           11.60910                           17.76595 
+#&gt; 0 effect among recommended 0 1 effect among recommended 1 
+#&gt;                     17.76595                     11.60910 
 #&gt; 
 #&gt; $avg.outcomes
-#&gt;               Recommended Trt Recommended Ctrl
-#&gt; Received Trt        -12.40451       -25.572851
-#&gt; Received Ctrl       -24.01362        -7.806903
+#&gt;            Recommended 0 Recommended 1
+#&gt; Received 0     -7.806903     -24.01362
+#&gt; Received 1    -25.572851     -12.40451
 #&gt; 
 #&gt; $sample.sizes
-#&gt;               Recommended Trt Recommended Ctrl
-#&gt; Received Trt             62.2             89.2
-#&gt; Received Ctrl            58.8             39.8
+#&gt;            Recommended 0 Recommended 1
+#&gt; Received 0          39.8          58.8
+#&gt; Received 1          89.2          62.2
+#&gt; 
+#&gt; $overall.subgroup.effect
+#&gt; [1] -0.08804281
 #&gt; </div><div class='input'>
-<span class='fu'>plot</span>(<span class='no'>valmod</span>)</div><img src='plot-12.png' alt='' width='540' height='400' /><div class='input'>
-<span class='fu'>plot</span>(<span class='no'>valmod</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"boxplot"</span>)</div><img src='plot-14.png' alt='' width='540' height='400' /><div class='input'>
-<span class='fu'>plot</span>(<span class='no'>valmod</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"interaction"</span>)</div><img src='plot-16.png' alt='' width='540' height='400' /><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>valmod</span>)</div><div class='img'><img src='plot-4.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>valmod</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"boxplot"</span>)</div><div class='img'><img src='plot-5.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>valmod</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"interaction"</span>)</div><div class='img'><img src='plot-6.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+# visualize the frequency of particular variables
+# of being selected across the resampling iterations with
+# 'type = "stability"'
+# not run:
+# plot(valmod, type = "stability")
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

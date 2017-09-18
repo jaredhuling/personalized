@@ -96,7 +96,8 @@ plot(valmod, type = "interaction")
 # visualize the frequency of particular variables
 # of being selected across the resampling iterations with
 # 'type = "stability"'
-plot(valmod, type = "stability")
+# not run:
+# plot(valmod, type = "stability")
 
 }
 \seealso{

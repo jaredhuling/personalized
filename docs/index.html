@@ -5,7 +5,8 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Estimation and validation methods for subgroup idenfication • personalized</title>
+<title>Estimation and Validation Methods for Subgroup Identification and
+    Personalized Medicine • personalized</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
@@ -56,8 +57,10 @@
 <h2 class="hasAnchor">
 <a href="#installing-the-personalized-package" class="anchor"></a>Installing the ‘personalized’ package</h2>
 <p>The personalized package provides estimation methods for subgroup identification under the framework of <a href="http://onlinelibrary.wiley.com/doi/10.1111/biom.12676/abstract">Chen et al (2017)</a></p>
-<p>Install using the <strong>devtools</strong> package:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools::<span class="kw">install_github</span>(<span class="st">"jaredhuling/personalized"</span>)</code></pre></div>
+<p>Install from CRAN using:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"personalized"</span>)</code></pre></div>
+<p>or install the development version using the <strong>devtools</strong> package:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"jaredhuling/personalized"</span>)</code></pre></div>
 <p>or by cloning and building using <code>R CMD INSTALL</code></p>
 </div>
 <div id="main-functions-of-personalized" class="section level2">
@@ -67,16 +70,17 @@
 <p>Load the package:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(personalized)</code></pre></div>
 <p>Access help files for the main functions of the <code>personalized</code> package:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">?fit.subgroup
-?validate.subgroup</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><a href="reference/fit.subgroup.html">?fit.subgroup
+?validate.subgroup</a></code></pre></div>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Links</h2>
+    <h2 class="hasAnchor">
+<a href="#sidebar" class="anchor"></a>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://jaredhuling.github.io/personalized/">https://​jaredhuling.github.io/​personalized/​</a>
+<li>Download from CRAN at <br><a href="https://cran.r-project.org/package=personalized">https://​cran.r-project.org/​package=personalized</a>
 </li>
 <li>Report a bug at <br><a href="https://github.com/jaredhuling/personalized/issues">https://​github.com/​jaredhuling/​personalized/​issues</a>
 </li>
@@ -86,9 +90,11 @@
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>Jared Huling <br><small class="roles"> Author, maintainer </small> </li>
+<li><a href="authors.html">All authors...</a></li>
 </ul>
 <h2>Dev status</h2>
 <ul class="list-unstyled">
+<li><a href="https://cran.r-project.org/package=personalized"><img src="http://www.r-pkg.org/badges/version/personalized" alt="version"></a></li>
 <li><a href="https://travis-ci.org/jaredhuling/personalized"><img src="https://travis-ci.org/jaredhuling/personalized.svg?branch=master" alt="Build Status"></a></li>
 </ul>
 </div>

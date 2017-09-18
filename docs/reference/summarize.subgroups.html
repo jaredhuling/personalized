@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Summarizing covariates within estimated subgroups � summarize.subgroups • personalized</title>
+<title>Summarizing covariates within estimated subgroups — summarize.subgroups • personalized</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -91,7 +92,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>a fitted object from <code>fit.subgroup()</code> or a matrix of covariate values</p></td>
+      <td><p>a fitted object from <code><a href='fit.subgroup.html'>fit.subgroup()</a></code> or a matrix of covariate values</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -103,7 +104,7 @@
 A value of 1 in the ith position of <code>subgroup</code> indicates patient i is in the subgroup
 of patients recommended the treatment and a value of 0 in the ith position of <code>subgroup</code> indicates patient i is in the subgroup
 of patients recommended the control.
-If x is a fitted object returned by <code>fit.subgroup()</code>, <code>subgroup</code> is not needed.</p></td>
+If x is a fitted object returned by <code><a href='fit.subgroup.html'>fit.subgroup()</a></code>, <code>subgroup</code> is not needed.</p></td>
     </tr>
     </table>
     
@@ -155,26 +156,30 @@ If x is a fitted object returned by <code>fit.subgroup()</code>, <code>subgroup<
                              <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>5</span>)    <span class='co'># option for cv.glmnet</span>
 
 <span class='no'>comp</span> <span class='kw'>&lt;-</span> <span class='fu'>summarize.subgroups</span>(<span class='no'>subgrp.model</span>)
-<span class='fu'>print</span>(<span class='no'>comp</span>, <span class='kw'>p.value</span> <span class='kw'>=</span> <span class='fl'>0.01</span>)</div><div class='output co'>#&gt;     avg (recom trt) avg (recom ctrl)    diff   p.value SE (recom trt)
-#&gt; V1           0.6550          -0.4560  1.1111 3.078e-09         0.1370
-#&gt; V2           1.8912          -1.3392  3.2305 2.105e-74         0.1166
-#&gt; V3          -1.7318           1.3295 -3.0612 2.593e-70         0.1158
-#&gt; V5           0.1854          -0.3309  0.5163 6.601e-03         0.1386
-#&gt; V11         -0.2796           0.3759 -0.6555 5.801e-04         0.1378
-#&gt; V13          0.3487          -0.6363  0.9850 2.472e-07         0.1402
-#&gt; V21         -0.4939           0.3060 -0.7998 3.513e-05         0.1487
-#&gt; V41          0.3934          -0.2198  0.6132 1.080e-03         0.1354
-#&gt;     SE (recom ctrl)
-#&gt; V1           0.1253
-#&gt; V2           0.1127
-#&gt; V3           0.1088
-#&gt; V5           0.1295
-#&gt; V11          0.1306
-#&gt; V13          0.1275
-#&gt; V21          0.1221
-#&gt; V41          0.1291</div><div class='input'>
+<span class='fu'>print</span>(<span class='no'>comp</span>, <span class='kw'>p.value</span> <span class='kw'>=</span> <span class='fl'>0.01</span>)</div><div class='output co'>#&gt;     Avg (recom 0) Avg (recom 1)   0 - 1 pval 0 - 1 SE (recom 0) SE (recom 1)
+#&gt; V1       -0.45605        0.6550 -1.1111  3.078e-09       0.1253       0.1370
+#&gt; V2       -1.33924        1.8912 -3.2305  2.105e-74       0.1127       0.1166
+#&gt; V3        1.32945       -1.7318  3.0612  2.593e-70       0.1088       0.1158
+#&gt; V5       -0.33089        0.1854 -0.5163  6.601e-03       0.1295       0.1386
+#&gt; V11       0.37590       -0.2796  0.6555  5.801e-04       0.1306       0.1378
+#&gt; V13      -0.63635        0.3487 -0.9850  2.472e-07       0.1275       0.1402
+#&gt; V14      -0.08669        0.3391 -0.4258  2.468e-02       0.1325       0.1351
+#&gt; V21       0.30596       -0.4939  0.7998  3.513e-05       0.1221       0.1487
+#&gt; V41      -0.21976        0.3934 -0.6132  1.080e-03       0.1291       0.1354</div><div class='input'>
 <span class='co'># or we can simply supply the matrix x and the subgroups</span>
-<span class='no'>comp2</span> <span class='kw'>&lt;-</span> <span class='fu'>summarize.subgroups</span>(<span class='no'>x</span>, <span class='kw'>subgroup</span> <span class='kw'>=</span> <span class='fl'>1</span> * (<span class='no'>subgrp.model</span>$<span class='no'>benefit.scores</span> <span class='kw'>&gt;</span> <span class='fl'>0</span>))</div></pre>
+<span class='no'>comp2</span> <span class='kw'>&lt;-</span> <span class='fu'>summarize.subgroups</span>(<span class='no'>x</span>, <span class='kw'>subgroup</span> <span class='kw'>=</span> <span class='fl'>1</span> * (<span class='no'>subgrp.model</span>$<span class='no'>benefit.scores</span> <span class='kw'>&gt;</span> <span class='fl'>0</span>))
+
+<span class='fu'>print</span>(<span class='no'>comp2</span>, <span class='kw'>p.value</span> <span class='kw'>=</span> <span class='fl'>0.01</span>)</div><div class='output co'>#&gt;     Avg (recom 0) Avg (recom 1)   0 - 1 pval 0 - 1 SE (recom 0) SE (recom 1)
+#&gt; V1       -0.45605        0.6550 -1.1111  3.078e-09       0.1253       0.1370
+#&gt; V2       -1.33924        1.8912 -3.2305  2.105e-74       0.1127       0.1166
+#&gt; V3        1.32945       -1.7318  3.0612  2.593e-70       0.1088       0.1158
+#&gt; V5       -0.33089        0.1854 -0.5163  6.601e-03       0.1295       0.1386
+#&gt; V11       0.37590       -0.2796  0.6555  5.801e-04       0.1306       0.1378
+#&gt; V13      -0.63635        0.3487 -0.9850  2.472e-07       0.1275       0.1402
+#&gt; V14      -0.08669        0.3391 -0.4258  2.468e-02       0.1325       0.1351
+#&gt; V21       0.30596       -0.4939  0.7998  3.513e-05       0.1221       0.1487
+#&gt; V41      -0.21976        0.3934 -0.6132  1.080e-03       0.1291       0.1354</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

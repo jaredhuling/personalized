@@ -10,3 +10,4 @@ README.html
 ^.*\docs$
 ^\_pkgdown\.yml$
 docs
+^_pkgdown\.yml$

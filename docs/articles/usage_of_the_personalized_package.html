@@ -50,7 +50,7 @@
       <h1>Usage of the Personalized Package</h1>
                         <h4 class="author">Jared Huling</h4>
             
-            <h4 class="date">2017-06-10</h4>
+            <h4 class="date">2017-09-18</h4>
           </div>
 
     
@@ -99,28 +99,28 @@
 <span class="kw">set.seed</span>(<span class="dv">123</span>)
 n.obs  &lt;-<span class="st"> </span><span class="dv">1000</span>
 n.vars &lt;-<span class="st"> </span><span class="dv">50</span>
-x &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(n.obs *<span class="st"> </span>n.vars, <span class="dt">sd =</span> <span class="dv">3</span>), n.obs, n.vars)
+x &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(n.obs <span class="op">*</span><span class="st"> </span>n.vars, <span class="dt">sd =</span> <span class="dv">3</span>), n.obs, n.vars)
 
 <span class="co"># simulate non-randomized treatment</span>
-xbetat   &lt;-<span class="st"> </span><span class="fl">0.5</span> +<span class="st"> </span><span class="fl">0.25</span> *<span class="st"> </span>x[,<span class="dv">21</span>] -<span class="st"> </span><span class="fl">0.25</span> *<span class="st"> </span>x[,<span class="dv">41</span>]
-trt.prob &lt;-<span class="st"> </span><span class="kw">exp</span>(xbetat) /<span class="st"> </span>(<span class="dv">1</span> +<span class="st"> </span><span class="kw">exp</span>(xbetat))
+xbetat   &lt;-<span class="st"> </span><span class="fl">0.5</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.25</span> <span class="op">*</span><span class="st"> </span>x[,<span class="dv">21</span>] <span class="op">-</span><span class="st"> </span><span class="fl">0.25</span> <span class="op">*</span><span class="st"> </span>x[,<span class="dv">41</span>]
+trt.prob &lt;-<span class="st"> </span><span class="kw">exp</span>(xbetat) <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">exp</span>(xbetat))
 trt      &lt;-<span class="st"> </span><span class="kw">rbinom</span>(n.obs, <span class="dv">1</span>, <span class="dt">prob =</span> trt.prob)
 
 <span class="co"># simulate delta</span>
-delta &lt;-<span class="st"> </span>(<span class="fl">0.5</span> +<span class="st"> </span>x[,<span class="dv">2</span>] -<span class="st"> </span><span class="fl">0.5</span> *<span class="st"> </span>x[,<span class="dv">3</span>] -<span class="st"> </span><span class="dv">1</span> *<span class="st"> </span>x[,<span class="dv">11</span>] +<span class="st"> </span><span class="dv">1</span> *<span class="st"> </span>x[,<span class="dv">1</span>] *<span class="st"> </span>x[,<span class="dv">12</span>] )
+delta &lt;-<span class="st"> </span>(<span class="fl">0.5</span> <span class="op">+</span><span class="st"> </span>x[,<span class="dv">2</span>] <span class="op">-</span><span class="st"> </span><span class="fl">0.5</span> <span class="op">*</span><span class="st"> </span>x[,<span class="dv">3</span>] <span class="op">-</span><span class="st"> </span><span class="dv">1</span> <span class="op">*</span><span class="st"> </span>x[,<span class="dv">11</span>] <span class="op">+</span><span class="st"> </span><span class="dv">1</span> <span class="op">*</span><span class="st"> </span>x[,<span class="dv">1</span>] <span class="op">*</span><span class="st"> </span>x[,<span class="dv">12</span>] )
 
 <span class="co"># simulate main effects g(X)</span>
-xbeta &lt;-<span class="st"> </span>x[,<span class="dv">1</span>] +<span class="st"> </span>x[,<span class="dv">11</span>] -<span class="st"> </span><span class="dv">2</span> *<span class="st"> </span>x[,<span class="dv">12</span>]^<span class="dv">2</span> +<span class="st"> </span>x[,<span class="dv">13</span>] +<span class="st"> </span><span class="fl">0.5</span> *<span class="st"> </span>x[,<span class="dv">15</span>] ^<span class="st"> </span><span class="dv">2</span>
-xbeta &lt;-<span class="st"> </span>xbeta +<span class="st"> </span>delta *<span class="st"> </span>(<span class="dv">2</span> *<span class="st"> </span>trt -<span class="st"> </span><span class="dv">1</span>)
+xbeta &lt;-<span class="st"> </span>x[,<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>x[,<span class="dv">11</span>] <span class="op">-</span><span class="st"> </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>x[,<span class="dv">12</span>]<span class="op">^</span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span>x[,<span class="dv">13</span>] <span class="op">+</span><span class="st"> </span><span class="fl">0.5</span> <span class="op">*</span><span class="st"> </span>x[,<span class="dv">15</span>] <span class="op">^</span><span class="st"> </span><span class="dv">2</span>
+xbeta &lt;-<span class="st"> </span>xbeta <span class="op">+</span><span class="st"> </span>delta <span class="op">*</span><span class="st"> </span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>trt <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)
 
 <span class="co"># simulate continuous outcomes</span>
-y &lt;-<span class="st"> </span><span class="kw">drop</span>(xbeta) +<span class="st"> </span><span class="kw">rnorm</span>(n.obs)</code></pre></div>
+y &lt;-<span class="st"> </span><span class="kw">drop</span>(xbeta) <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n.obs)</code></pre></div>
 <div id="creating-and-checking-propensity-score-model" class="section level2">
 <h2 class="hasAnchor">
 <a href="#creating-and-checking-propensity-score-model" class="anchor"></a>Creating and Checking Propensity Score Model</h2>
 <p>The first step in our analysis is to construct a model for the propensity score. In the <code>personalized</code> package, we need to wrap this model in a function which inputs covariate values and the treatment statuses and outputs a propensity score between 0 and 1. Since there are many covariates, we use the lasso to select variables in our propensity score model:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># create function for fitting propensity score model</span>
-prop.func &lt;-<span class="st"> </span>function(x, trt)
+prop.func &lt;-<span class="st"> </span><span class="cf">function</span>(x, trt)
 {
  <span class="co"># fit propensity score model</span>
  propens.model &lt;-<span class="st"> </span><span class="kw">cv.glmnet</span>(<span class="dt">y =</span> trt,
@@ -151,21 +151,21 @@ prop.func &lt;-<span class="st"> </span>function(x, trt)
 ## method:  weighting 
 ## 
 ## Average Outcomes:
-##                  Recommended Trt   Recommended Ctrl
-## Received Trt   -8.3777 (n = 318) -18.8823 (n = 272)
-## Received Ctrl -16.1668 (n = 220)  -9.1948 (n = 190)
+##                 Recommended 0      Recommended 1
+## Received 0  -9.1948 (n = 190) -16.1668 (n = 220)
+## Received 1 -18.8823 (n = 272)  -8.3777 (n = 318)
 ## 
-##  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-##                   7.7892 (n = 538)                   9.6875 (n = 462) 
+## 0 effect among recommended 0 1 effect among recommended 1 
+##             9.6875 (n = 462)             7.7892 (n = 538) 
 ## 
 ## Benefit score quantiles: 
 ##       0%      25%      50%      75%     100% 
 ## -10.9672  -1.8897   0.3569   2.2806  10.0196 
 ## 
-## 9 variables selected by the lasso (cross validation criterion).
+## 8 out of 51 variables selected in total by the lasso (cross validation criterion).
 ## 
 ##     Estimate
-## Trt   0.2231
+## 1     0.2231
 ## V1    0.0577
 ## V2    0.6558
 ## V3   -0.4550
@@ -199,14 +199,18 @@ validation</code></pre></div>
 ## validation method:  training_test_replication 
 ## 
 ## Average Test Set Outcomes:
-##                      Recommended Trt       Recommended Ctrl
-## Received Trt   -9.8546 (SE = 3.9246) -15.1584 (SE = 4.0828)
-## Received Ctrl -13.9166 (SE = 3.7226)  -10.906 (SE = 4.5293)
+##                                Recommended 0
+## Received 0 -11.3604 (SE = 4.0024, n = 49.92)
+## Received 1 -15.7901 (SE = 2.6433, n = 74.44)
+##                                Recommended 1
+## Received 0 -14.4965 (SE = 2.3852, n = 50.44)
+## Received 1  -10.2652 (SE = 3.4167, n = 75.2)
 ## 
-##  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-##                4.062 (SE = 4.6831)               4.2525 (SE = 4.8904)</code></pre>
+##     0 effect among recommended 0     1 effect among recommended 1 
+## 4.4297 (SE = 4.9129, n = 124.36) 4.2312 (SE = 4.7051, n = 125.64)</code></pre>
 <p>We can then plot the average outcomes averaged over all replications of the training and testing partition procedure:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(validation)</code></pre></div>
+<pre><code>## Warning: Removed 4 rows containing non-finite values (stat_boxplot).</code></pre>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_validation-1.png" width="672"> From the above plot we can evaluate what the impact of the subgroups is. Among patients for whom the model recommends the control is more effective than the treatment, we can see that those who instead take the treatment are worse off than patients who take the control. Similarly, among patients who are recommended the treatment, patients who take the treatment are better off on average than patients who do not take the treatment.</p>
 <p>Similarly, we can create an interaction plot of either the bootstrap bias-corrected means within the different subgroups or the average test set means within subgroups. Here, lines crossing is an indicator of differential treatment effect between the subgroups.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(validation, <span class="dt">type =</span> <span class="st">"interaction"</span>)</code></pre></div>
@@ -275,26 +279,26 @@ validation</code></pre></div>
 <a href="#propensity-func" class="anchor"></a><code>propensity.func</code>
 </h4>
 <p>The argument <code>propensity.func</code> corresponds to a function which returns a propensity score. While it seems cumbersome to have to specify a function instead of a vector of probabilities, it is crucial for later validation for the propensity scores to be re-estimated using the resampled or sampled data (this will be explained further in the section below for the <code><a href="../reference/validate.subgroup.html">validate.subgroup()</a></code> function). The user should specify a function which inputs two arguments: <code>trt</code> and <code>x</code>, where <code>trt</code> corresponds to the <code>trt</code> argument for the <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> function and <code>x</code> corresponds to the <code>x</code> argument for the <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> function. The function supplied to <code>propensity.func</code> should contain code that uses <code>x</code> and <code>trt</code> to fit a propensity score model and then return an estimated propensity score for each observation in <code>x</code>. A basic example which uses ` logistic regression model to estimate the propensity score is the following:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">propensity.func &lt;-<span class="st"> </span>function(x, trt)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">propensity.func &lt;-<span class="st"> </span><span class="cf">function</span>(x, trt)
 {
     <span class="co"># save data in a data.frame</span>
     data.fr &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">trt =</span> trt, x)
     
     <span class="co"># fit propensity score model</span>
-    propensity.model &lt;-<span class="st"> </span><span class="kw">glm</span>(trt ~<span class="st"> </span>., <span class="dt">family =</span> <span class="kw">binomial</span>(), <span class="dt">data =</span> data.fr)
+    propensity.model &lt;-<span class="st"> </span><span class="kw">glm</span>(trt <span class="op">~</span><span class="st"> </span>., <span class="dt">family =</span> <span class="kw">binomial</span>(), <span class="dt">data =</span> data.fr)
     
     <span class="co"># create estimated probabilities</span>
     pi.x &lt;-<span class="st"> </span><span class="kw">predict</span>(propensity.model, <span class="dt">type =</span> <span class="st">"response"</span>)
     <span class="kw">return</span>(pi.x)
 }
 
-<span class="kw">propensity.func</span>(x, trt)[<span class="dv">101</span>:<span class="dv">105</span>]</code></pre></div>
+<span class="kw">propensity.func</span>(x, trt)[<span class="dv">101</span><span class="op">:</span><span class="dv">105</span>]</code></pre></div>
 <pre><code>##       101       102       103       104       105 
 ## 0.2251357 0.2786683 0.9021204 0.4400091 0.8250830</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">trt[<span class="dv">101</span>:<span class="dv">105</span>]</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">trt[<span class="dv">101</span><span class="op">:</span><span class="dv">105</span>]</code></pre></div>
 <pre><code>## [1] 0 0 1 1 1</code></pre>
 <p>For randomized controlled trials with equal probability of assignment to treatment and control, the user can simply define <code>propensity.func</code> as:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">propensity.func &lt;-<span class="st"> </span>function(x, trt) <span class="fl">0.5</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">propensity.func &lt;-<span class="st"> </span><span class="cf">function</span>(x, trt) <span class="fl">0.5</span></code></pre></div>
 <p>which always returns the constant <span class="math inline">\(1/2\)</span>.</p>
 </div>
 <div id="loss" class="section level4">
@@ -365,46 +369,42 @@ validation</code></pre></div>
 ## method:  weighting 
 ## 
 ## Average Outcomes:
-##                  Recommended Trt   Recommended Ctrl
-## Received Trt   -5.8729 (n = 300) -20.8214 (n = 290)
-## Received Ctrl -16.6884 (n = 189)  -9.7266 (n = 221)
+##                 Recommended 0      Recommended 1
+## Received 0 -10.2554 (n = 228) -16.2938 (n = 182)
+## Received 1 -20.3298 (n = 297)   -6.014 (n = 293)
 ## 
-##  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-##                  10.8155 (n = 489)                  11.0948 (n = 511) 
+## 0 effect among recommended 0 1 effect among recommended 1 
+##            10.0745 (n = 525)            10.2798 (n = 475) 
 ## 
 ## Benefit score quantiles: 
 ##       0%      25%      50%      75%     100% 
-## -25.3595  -4.8937  -0.1945   4.3787  27.0727</code></pre>
+## -25.6081  -5.0799  -0.4172   4.1884  26.8141</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
 ## 
 ## Formula:
-## y ~ -1 + Trt + s(V1) + s(V2) + s(V3) + s(V6) + s(V8) + s(V11) + 
+## y ~ -1 + 1 + s(V1) + s(V2) + s(V3) + s(V6) + s(V8) + s(V11) + 
 ##     s(V13) + s(V17) + s(V21) + s(V37) + s(V40)
-## 
-## Parametric coefficients:
-##     Estimate Std. Error t value Pr(&gt;|t|)
-## Trt   0.2177     0.8920   0.244    0.807
 ## 
 ## Approximate significance of smooth terms:
 ##          edf Ref.df     F p-value   
-## s(V1)  2.394  3.055 2.022 0.11646   
-## s(V2)  2.790  3.565 4.646 0.00158 **
-## s(V3)  1.000  1.000 9.109 0.00261 **
-## s(V6)  1.000  1.000 1.751 0.18610   
-## s(V8)  1.000  1.000 2.305 0.12925   
-## s(V11) 6.284  7.474 1.977 0.05962 . 
-## s(V13) 1.000  1.000 5.184 0.02300 * 
-## s(V17) 1.000  1.000 2.384 0.12292   
-## s(V21) 1.000  1.000 5.294 0.02161 * 
-## s(V37) 1.000  1.000 2.852 0.09157 . 
-## s(V40) 1.000  1.000 1.327 0.24962   
+## s(V1)  2.413  3.080 2.041 0.11493   
+## s(V2)  2.783  3.557 4.681 0.00151 **
+## s(V3)  1.000  1.000 9.207 0.00247 **
+## s(V6)  1.000  1.000 1.749 0.18637   
+## s(V8)  1.000  1.000 2.290 0.13056   
+## s(V11) 6.303  7.492 1.858 0.05940 . 
+## s(V13) 1.000  1.000 5.130 0.02373 * 
+## s(V17) 1.000  1.000 2.359 0.12487   
+## s(V21) 1.000  1.000 5.279 0.02179 * 
+## s(V37) 1.000  1.000 2.857 0.09129 . 
+## s(V40) 1.000  1.000 1.329 0.24932   
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## R-sq.(adj) =  0.0556   Deviance explained = 7.67%
-## GCV = 1513.8  Scale est. = 1482.8    n = 1000</code></pre>
+## R-sq.(adj) =  0.0557   Deviance explained = 7.67%
+## GCV = 1510.8  Scale est. = 1481.4    n = 1000</code></pre>
 </div>
 <div id="binary-outcomes" class="section level3">
 <h3 class="hasAnchor">
@@ -419,7 +419,7 @@ validation</code></pre></div>
 </ul>
 <p>Note that all options that are available for continuous options can also potentially be used for binary outcomes.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># create binary outcomes</span>
-y.binary &lt;-<span class="st"> </span><span class="dv">1</span> *<span class="st"> </span>(xbeta +<span class="st"> </span><span class="kw">rnorm</span>(n.obs, <span class="dt">sd =</span> <span class="dv">2</span>) &gt;<span class="st"> </span><span class="dv">0</span> )</code></pre></div>
+y.binary &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">*</span><span class="st"> </span>(xbeta <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n.obs, <span class="dt">sd =</span> <span class="dv">2</span>) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span> )</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">subgrp.bin &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y.binary,
                            <span class="dt">trt =</span> trt,
                            <span class="dt">propensity.func =</span> prop.func,
@@ -441,12 +441,12 @@ y.binary &lt;-<span class="st"> </span><span class="dv">1</span> *<span class="s
 ## method:  weighting 
 ## 
 ## Average Outcomes:
-##                Recommended Trt Recommended Ctrl
-## Received Trt  0.4197 (n = 355) 0.2128 (n = 235)
-## Received Ctrl 0.1748 (n = 246) 0.4939 (n = 164)
+##               Recommended 0    Recommended 1
+## Received 0 0.4939 (n = 164) 0.1748 (n = 246)
+## Received 1 0.2128 (n = 235) 0.4197 (n = 355)
 ## 
-##  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-##                   0.2449 (n = 601)                   0.2811 (n = 399) 
+## 0 effect among recommended 0 1 effect among recommended 1 
+##             0.2811 (n = 399)             0.2449 (n = 601) 
 ## 
 ## Benefit score quantiles: 
 ##      0%     25%     50%     75%    100% 
@@ -462,14 +462,14 @@ y.binary &lt;-<span class="st"> </span><span class="dv">1</span> *<span class="s
 </ul>
 <p>First we will generate time-to-event outcomes to illustrate usage of the <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> model.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># create time-to-event outcomes</span>
-surv.time &lt;-<span class="st"> </span><span class="kw">exp</span>(-<span class="dv">20</span> -<span class="st"> </span>xbeta +<span class="st"> </span><span class="kw">rnorm</span>(n.obs, <span class="dt">sd =</span> <span class="dv">1</span>))
+surv.time &lt;-<span class="st"> </span><span class="kw">exp</span>(<span class="op">-</span><span class="dv">20</span> <span class="op">-</span><span class="st"> </span>xbeta <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n.obs, <span class="dt">sd =</span> <span class="dv">1</span>))
 cens.time &lt;-<span class="st"> </span><span class="kw">exp</span>(<span class="kw">rnorm</span>(n.obs, <span class="dt">sd =</span> <span class="dv">3</span>))
 y.time.to.event  &lt;-<span class="st"> </span><span class="kw">pmin</span>(surv.time, cens.time)
-status           &lt;-<span class="st"> </span><span class="dv">1</span> *<span class="st"> </span>(surv.time &lt;=<span class="st"> </span>cens.time)</code></pre></div>
+status           &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">*</span><span class="st"> </span>(surv.time <span class="op">&lt;=</span><span class="st"> </span>cens.time)</code></pre></div>
 <p>For subgroup identification models for time-to-event outcomes, the user should provide <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> with a <code>Surv</code> object for <code>y</code>. This can be done like the following:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(survival)
 <span class="kw">set.seed</span>(<span class="dv">123</span>)
-subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> <span class="kw">Surv</span>(y.time.to.event, status),
+subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> <span class="kw"><a href="http://www.rdocumentation.org/packages/survival/topics/Surv">Surv</a></span>(y.time.to.event, status),
                            <span class="dt">trt =</span> trt,
                            <span class="dt">propensity.func =</span> prop.func,
                            <span class="dt">method =</span> <span class="st">"weighting"</span>,
@@ -482,21 +482,21 @@ subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 ## method:  weighting 
 ## 
 ## Average Outcomes:
-##                  Recommended Trt   Recommended Ctrl
-## Received Trt  214.7994 (n = 219) 166.9972 (n = 371)
-## Received Ctrl  40.3061 (n = 158) 693.2677 (n = 252)
+##                 Recommended 0      Recommended 1
+## Received 0 693.2677 (n = 252)  40.3061 (n = 158)
+## Received 1 166.9972 (n = 371) 214.7994 (n = 219)
 ## 
-##  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-##                 174.4933 (n = 377)                 526.2705 (n = 623) 
+## 0 effect among recommended 0 1 effect among recommended 1 
+##           526.2705 (n = 623)           174.4933 (n = 377) 
 ## 
 ## Benefit score quantiles: 
 ##       0%      25%      50%      75%     100% 
 ## -0.60418 -0.20325 -0.07104  0.07303  0.74891 
 ## 
-## 10 variables selected by the lasso (cross validation criterion).
+## 9 out of 50 variables selected in total by the lasso (cross validation criterion).
 ## 
 ##     Estimate
-## Trt   0.0574
+## 1     0.0574
 ## V1    0.0147
 ## V2    0.0500
 ## V3   -0.0193
@@ -512,7 +512,7 @@ subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 <a href="#efficiency-augmentation" class="anchor"></a>Efficiency Augmentation</h3>
 <p>The <code>personalized</code> package also allows for efficiency augmentation of the subgroup identification models for continuous outcomes. The basic idea of efficiency augmentation is to construct a model for the main effects of the model and shift the outcome based on these main effects. The resulting estimator based on the shifted outcome can be more efficient than using the outcome itself.</p>
 <p>In the <code>personalized</code> package, this involves providing <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> a function which inputs the covariate information <code>x</code> and the outcomes <code>y</code> and outputs a prediction for <code>y</code> based on <code>x</code>. The following is an example of such a function:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">adjustment.func &lt;-<span class="st"> </span>function(x, y)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">adjustment.func &lt;-<span class="st"> </span><span class="cf">function</span>(x, y)
 {
     df.x  &lt;-<span class="st"> </span><span class="kw">data.frame</span>(x)
     
@@ -539,21 +539,21 @@ subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 ## method:  weighting 
 ## 
 ## Average Outcomes:
-##                  Recommended Trt   Recommended Ctrl
-## Received Trt  -10.4226 (n = 298) -16.0758 (n = 292)
-## Received Ctrl  -18.827 (n = 208)  -6.8697 (n = 202)
+##                 Recommended 0      Recommended 1
+## Received 0  -6.8697 (n = 202)  -18.827 (n = 208)
+## Received 1 -16.0758 (n = 292) -10.4226 (n = 298)
 ## 
-##  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-##                   8.4044 (n = 506)                   9.2061 (n = 494) 
+## 0 effect among recommended 0 1 effect among recommended 1 
+##             9.2061 (n = 494)             8.4044 (n = 506) 
 ## 
 ## Benefit score quantiles: 
 ##        0%       25%       50%       75%      100% 
 ## -11.70152  -2.57836   0.04442   2.53750  10.44856 
 ## 
-## 7 variables selected by the lasso (cross validation criterion).
+## 6 out of 51 variables selected in total by the lasso (cross validation criterion).
 ## 
 ##     Estimate
-## Trt  -0.0815
+## 1    -0.0815
 ## V2    0.8629
 ## V3   -0.5513
 ## V11  -0.7276
@@ -582,30 +582,36 @@ subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">comp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/summarize.subgroups.html">summarize.subgroups</a></span>(subgrp.model)</code></pre></div>
 <p>The user can optionally print only the covariates which have significant differences between subgroups with a p-value below a given threshold like the following:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(comp, <span class="dt">p.value =</span> <span class="fl">0.01</span>)</code></pre></div>
-<pre><code>##     avg (recom trt) avg (recom ctrl)    diff   p.value SE (recom trt)
-## V1           0.3957          -0.3561  0.7518 6.564e-05         0.1263
-## V2           1.5509          -1.5303  3.0812 2.128e-66         0.1129
-## V3          -1.0140           1.0502 -2.0642 1.650e-30         0.1212
-## V6          -0.1534           0.4025 -0.5559 3.241e-03         0.1254
-## V11         -0.8904           1.2063 -2.0967 1.095e-29         0.1234
-## V13          0.4492          -0.9325  1.3818 2.738e-13         0.1278
-## V14          0.3555          -0.1832  0.5387 4.690e-03         0.1287
-## V17          0.4091          -0.8114  1.2206 1.618e-10         0.1343
-## V19         -0.3086           0.1809 -0.4895 8.898e-03         0.1279
-## V37         -0.5264           0.5381 -1.0645 2.390e-08         0.1298
-##     SE (recom ctrl)
-## V1           0.1386
-## V2           0.1211
-## V3           0.1246
-## V6           0.1405
-## V11          0.1300
-## V13          0.1358
-## V14          0.1399
-## V17          0.1328
-## V19          0.1361
-## V37          0.1376</code></pre>
+<pre><code>##     Avg (recom 0) Avg (recom 1)   0 - 1 pval 0 - 1 SE (recom 0)
+## V1        -0.3561       0.39572 -0.7518  6.564e-05       0.1386
+## V2        -1.5303       1.55092 -3.0812  2.128e-66       0.1211
+## V3         1.0502      -1.01400  2.0642  1.650e-30       0.1246
+## V6         0.4025      -0.15338  0.5559  3.241e-03       0.1405
+## V11        1.2063      -0.89040  2.0967  1.095e-29       0.1300
+## V13       -0.9325       0.44922 -1.3818  2.738e-13       0.1358
+## V14       -0.1832       0.35552 -0.5387  4.690e-03       0.1399
+## V17       -0.8114       0.40915 -1.2206  1.618e-10       0.1328
+## V19        0.1809      -0.30860  0.4895  8.898e-03       0.1361
+## V27       -0.3318       0.08996 -0.4217  2.399e-02       0.1382
+## V33        0.2442      -0.22611  0.4703  1.176e-02       0.1351
+## V37        0.5381      -0.52638  1.0645  2.390e-08       0.1376
+## V45        0.1902      -0.22873  0.4189  3.011e-02       0.1415
+##     SE (recom 1)
+## V1        0.1263
+## V2        0.1129
+## V3        0.1212
+## V6        0.1254
+## V11       0.1234
+## V13       0.1278
+## V14       0.1287
+## V17       0.1343
+## V19       0.1279
+## V27       0.1253
+## V33       0.1283
+## V37       0.1298
+## V45       0.1311</code></pre>
 <p>The covariate values and estimated subgroups can be directly used by the <code><a href="../reference/summarize.subgroups.html">summarize.subgroups()</a></code> function:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">comp2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/summarize.subgroups.html">summarize.subgroups</a></span>(x, <span class="dt">subgroup =</span> subgrp.model$benefit.scores &gt;<span class="st"> </span><span class="dv">0</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">comp2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/summarize.subgroups.html">summarize.subgroups</a></span>(x, <span class="dt">subgroup =</span> subgrp.model<span class="op">$</span>benefit.scores <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</code></pre></div>
 </div>
 </div>
 <div id="validating-subgroup-identification-models" class="section level2">
@@ -638,12 +644,15 @@ validation.eff</code></pre></div>
 ## validation method:  training_test_replication 
 ## 
 ## Average Test Set Outcomes:
-##                      Recommended Trt      Recommended Ctrl
-## Received Trt  -10.1248 (SE = 2.8927) -15.235 (SE = 2.5161)
-## Received Ctrl -18.5781 (SE = 2.3983) -7.0823 (SE = 3.0084)
+##                              Recommended 0
+## Received 0   -7.0823 (SE = 3.0084, n = 50)
+## Received 1 -15.235 (SE = 2.5161, n = 73.6)
+##                                Recommended 1
+## Received 0 -18.5781 (SE = 2.3983, n = 52.72)
+## Received 1 -10.1248 (SE = 2.8927, n = 73.68)
 ## 
-##  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-##               8.4532 (SE = 3.9401)               8.1527 (SE = 4.8231)</code></pre>
+##    0 effect among recommended 0    1 effect among recommended 1 
+## 8.1527 (SE = 4.8231, n = 123.6) 8.4532 (SE = 3.9401, n = 126.4)</code></pre>
 </div>
 <div id="bootstrap-bias-correction" class="section level3">
 <h3 class="hasAnchor">
@@ -652,7 +661,6 @@ validation.eff</code></pre></div>
 <ul>
 <li>
 <p>For a statistic <span class="math inline">\(d\)</span> let <span class="math inline">\(d_{train}(X)\)</span> be the statistic estimated with the training data and evaluated on data <span class="math inline">\(X\)</span> and <span class="math inline">\(d_{b}(X)\)</span> be the statistics estimated using a bootstrap sample <span class="math inline">\(X_b\)</span> (samples with replacement from <span class="math inline">\(X\)</span>) and evaluated on <span class="math inline">\(X\)</span></p>
-<p></p>
 </li>
 <li><p>The bootstrap estimate of the amount of bias with regards to the statistic <span class="math inline">\(d\)</span> is <span class="math display">\[
 {bias}(X) = \frac{1}{B}\sum_{b = 1}^B d_b(X_b) - d_b(X)
@@ -671,23 +679,29 @@ validation3</code></pre></div>
 ## validation method:  boot_bias_correction 
 ## 
 ## Average Bootstrap Bias-Corrected Outcomes:
-##                      Recommended Trt       Recommended Ctrl
-## Received Trt   -9.9044 (SE = 1.5114) -17.2373 (SE = 1.5124)
-## Received Ctrl -14.9861 (SE = 1.8001) -11.4236 (SE = 1.5942)
+##                                 Recommended 0
+## Received 0 -11.4236 (SE = 1.5942, n = 193.04)
+## Received 1 -17.2373 (SE = 1.5124, n = 267.76)
+##                                Recommended 1
+## Received 0 -14.9861 (SE = 1.8001, n = 212.6)
+## Received 1  -9.9044 (SE = 1.5114, n = 326.6)
 ## 
-##  Trt  Effect Among Recommended Trt Ctrl Effect Among Recommended Ctrl 
-##               5.0817 (SE = 2.4106)               5.8138 (SE = 2.2454)</code></pre>
+##    0 effect among recommended 0    1 effect among recommended 1 
+## 5.8138 (SE = 2.2454, n = 460.8) 5.0817 (SE = 2.4106, n = 539.2)</code></pre>
 </div>
 <div id="plotting-validated-models" class="section level3">
 <h3 class="hasAnchor">
 <a href="#plotting-validated-models" class="anchor"></a>Plotting Validated Models</h3>
 <p>The results for each of the iterations of either the bootstrap of the training and testing partitioning procedure can be plotted using the <code>plot()</code> function similarly to how the <code>plot()</code> function can be used for fitted objects from <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code>. Similarly, boxplots, density plots, and interaction plots are all available through the <code>type</code> argument:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(validation)</code></pre></div>
+<pre><code>## Warning: Removed 4 rows containing non-finite values (stat_boxplot).</code></pre>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_ex_model_1a-1.png" width="672"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(validation, <span class="dt">type =</span> <span class="st">"density"</span>)</code></pre></div>
+<pre><code>## Warning: Removed 4 rows containing non-finite values (stat_density).</code></pre>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_ex_model_1b-1.png" width="672"></p>
 <p>Multiple validated models can be visually compared using the <code><a href="../reference/plotCompare.html">plotCompare()</a></code> function, which offers the same plotting options as the <code><a href="../reference/plot.html">plot.subgroup_validated()</a></code> function. Here we compare the model fitted using <code>sq_loss_lasso</code> to the one fitted using <code>sq_loss_lasso</code> and efficiency augmentation:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotCompare.html">plotCompare</a></span>(validation, validation.eff)</code></pre></div>
+<pre><code>## Warning: Removed 4 rows containing non-finite values (stat_boxplot).</code></pre>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_compare_ex3-1.png" width="672"></p>
 <p>We can see above that the model with efficiency augmentation finds subgroups with more impactful treatment effects.</p>
 </div>
@@ -698,7 +712,8 @@ validation3</code></pre></div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
         <div id="tocnav">
-      <h2>Contents</h2>
+      <h2 class="hasAnchor">
+<a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#introduction-to-personalized">Introduction to <code>personalized</code></a></li>
       <li>

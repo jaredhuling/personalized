@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plot a comparison results for fitted or validated subgroup identification models � plotCompare • personalized</title>
+<title>Plot a comparison results for fitted or validated subgroup identification models — plotCompare • personalized</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -86,12 +87,12 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>...</th>
-      <td><p>the objects to be saved. Must be either objects returned from <code>fit.subgroup()</code> or <code>validate.subgroup()</code></p></td>
+      <td><p>the objects to be saved. Must be either objects returned from <code><a href='fit.subgroup.html'>fit.subgroup()</a></code> or <code><a href='validate.subgroup.html'>validate.subgroup()</a></code></p></td>
     </tr>
     <tr>
       <th>type</th>
       <td><p>type of plot. <code>"density"</code> results in a density plot for the results
-across all observations (if <code>x</code> is from <code>fit.subgroup()</code>) or if <code>x</code> is from <code>validate.subgroup()</code>
+across all observations (if <code>x</code> is from <code><a href='fit.subgroup.html'>fit.subgroup()</a></code>) or if <code>x</code> is from <code><a href='validate.subgroup.html'>validate.subgroup()</a></code>
 across iterations of either the bootstrap or training/test re-fitting. For the latter
 case the test results will be plotted. <code>"boxplot"</code> results in boxplots across all observations/iterations of either
 the bootstrap or training/test re-fitting. For the latter
@@ -158,7 +159,7 @@ value in addition to the density (only valid for <code>type = "density"</code>)<
                            <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>,
                            <span class='kw'>loss</span>   <span class='kw'>=</span> <span class='st'>"sq_loss_lasso_gam"</span>)
 
-<span class='fu'>plotCompare</span>(<span class='no'>subgrp.model</span>, <span class='no'>subgrp.modelg</span>)</div><img src='plotCompare-2.png' alt='' width='540' height='400' /><div class='input'>
+<span class='fu'>plotCompare</span>(<span class='no'>subgrp.model</span>, <span class='no'>subgrp.modelg</span>)</div><div class='img'><img src='plotCompare-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

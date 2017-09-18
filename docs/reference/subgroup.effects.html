@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Computes treatment effects within various subgroups � subgroup.effects • personalized</title>
+<title>Computes treatment effects within various subgroups — subgroup.effects • personalized</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -79,7 +80,7 @@
     
 
     <pre class="usage"><span class='fu'>subgroup.effects</span>(<span class='no'>benefit.scores</span>, <span class='no'>y</span>, <span class='no'>trt</span>, <span class='kw'>cutpoint</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>larger.outcome.better</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+  <span class='kw'>larger.outcome.better</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>reference.trt</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -107,6 +108,13 @@ will be recommended to be in the treatment group</p></td>
       <th>larger.outcome.better</th>
       <td><p>boolean value of whether a larger outcome is better. Set to <code>TRUE</code>
 if a larger outcome is better and set to <code>FALSE</code> if a smaller outcome is better. Defaults to <code>TRUE</code>.</p></td>
+    </tr>
+    <tr>
+      <th>reference.trt</th>
+      <td><p>index of which treatment is the reference (in the case of multiple treatments).
+This should be known already, as for a <code>trt</code> with K-levels, there will be K-1 benefit scores (1 per column)
+of <code>benefit.scores</code>, where each column is a comparison of each K-1 treatments with the reference treatment.
+The default is the last level of <code>trt</code> if it is a factor.</p></td>
     </tr>
     </table>
     
