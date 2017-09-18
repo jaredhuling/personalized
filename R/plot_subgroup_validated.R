@@ -96,7 +96,7 @@ plot.subgroup_validated <- function(x,
 
     if (family == "cox")
     {
-        ylab.text <- "Average Restricted Mean"
+        ylab.text <- "Average Restricted Mean Survival"
     }
 
     if (type == "density")
