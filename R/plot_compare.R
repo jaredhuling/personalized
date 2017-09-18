@@ -98,18 +98,15 @@ plotCompare <- function(...,
     avg.line <- as.logical(avg.line[1])
 
     dat.list <- avg.list <- vector(mode = "list", length = n.obj)
+
+    types.vec <- character(n.obj)
+
+
     for (l in 1:n.obj)
     {
 
         obj.type <- class(list.obj[[l]])[1]
-
-        if (obj.type == "subgroup_fitted")
-        {
-            avg.res  <- list.obj[[l]]$subgroup.trt.effects
-        } else
-        {
-            avg.res  <- list.obj[[l]]$avg.results
-        }
+        types.vec[l] <- obj.type
 
         avg.res.2.plot <- data.frame(Recommended = rep(colnames(avg.res$avg.outcomes),
                                                        each = ncol(avg.res$avg.outcomes)),
@@ -189,7 +186,6 @@ plotCompare <- function(...,
     Recommended <- Received <- Value <- Model <- NULL
 
 
-
     if (type == "density")
     {
         pl.obj <- ggplot(res.2.plot,
@@ -199,8 +195,7 @@ plotCompare <- function(...,
             coord_flip() +
             facet_grid(Recommended ~ Model) +
             theme(legend.position = "bottom") +
-            xlab("Outcome") +
-            ggtitle("Individual Observations Among Subgroups")
+            xlab("Outcome")
         if (avg.line)
         {
             pl.obj <- pl.obj + geom_vline(data = avg.res.2.plot,
@@ -217,8 +212,7 @@ plotCompare <- function(...,
             geom_rug(aes(colour = Received), alpha = 0.85) +
             facet_grid(Recommended ~ Model) +
             theme(legend.position = "bottom") +
-            ylab("Outcome") +
-            ggtitle("Individual Observations Among Subgroups")
+            ylab("Outcome")
     } else
     {
         pl.obj <- ggplot(avg.res.2.plot,
@@ -228,8 +222,7 @@ plotCompare <- function(...,
             facet_grid( ~ Model) +
             theme(legend.position = "bottom") +
             scale_x_discrete(expand = c(0.25, 0.25)) +
-            ylab("Average Outcome") +
-            ggtitle("Average Outcomes Among Subgroups")
+            ylab("Average Outcome")
     }
     pl.obj
 }
