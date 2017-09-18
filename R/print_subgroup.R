@@ -102,7 +102,7 @@ print.subgroup_validated <- function(x, digits = max(getOption('digits')-3, 3), 
     {
         Cf2 <- paste0(round(x$avg.results$subgroup.effects, digits),
                              " (SE = ", round(x$se.results$SE.subgroup.effects, digits),
-                      ", n = ", round(100 * colSums(x$avg.results$sample.sizes) /
+                      ", ", round(100 * colSums(x$avg.results$sample.sizes) /
                                           sum(x$avg.results$sample.sizes), digits), "%)")
     } else
     {

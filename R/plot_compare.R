@@ -106,6 +106,15 @@ plotCompare <- function(...,
     {
 
         obj.type <- class(list.obj[[l]])[1]
+
+        if (obj.type == "subgroup_fitted")
+        {
+            avg.res  <- list.obj[[l]]$subgroup.trt.effects
+        } else
+        {
+            avg.res  <- list.obj[[l]]$avg.results
+        }
+
         types.vec[l] <- obj.type
 
         avg.res.2.plot <- data.frame(Recommended = rep(colnames(avg.res$avg.outcomes),
