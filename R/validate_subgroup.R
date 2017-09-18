@@ -388,24 +388,28 @@ validate.subgroup <- function(model,
 
     # ugly way to handle cases where
     # some subgroups have no members
-    for (l in 1:length(boot.list))
-    {
-        boot.list[[l]][is.nan(boot.list[[l]])] <- 0
-    }
+    #for (l in 1:length(boot.list))
+    #{
+    #    boot.list[[l]][is.nan(boot.list[[l]])] <- 0
+    #}
 
     # compute averages and standard
     # deviations across iterations
-    summary.stats    <- list(colMeans(boot.list[[1]]),
-                             apply(boot.list[[2]], c(2, 3), mean),
-                             apply(boot.list[[3]], c(2, 3), mean),
-                             mean(boot.list[[4]]))
+    summary.stats    <- list(colMeans(boot.list[[1]], na.rm = TRUE),
+                             apply(boot.list[[2]], c(2, 3), function(x) mean(x, na.rm = TRUE)),
+                             apply(boot.list[[3]], c(2, 3), function(x) mean(x, na.rm = TRUE)),
+                             mean(boot.list[[4]], na.rm = TRUE))
 
-    summary.stats.se <- list(apply(boot.list[[1]], 2, sd),
-                             apply(boot.list[[2]], c(2, 3), sd),
-                             apply(boot.list[[3]], c(2, 3), sd),
-                             sd(boot.list[[4]]))
+    summary.stats.se <- list(apply(boot.list[[1]], 2, function(x) sd(x, na.rm = TRUE)),
+                             apply(boot.list[[2]], c(2, 3), function(x) sd(x, na.rm = TRUE)),
+                             apply(boot.list[[3]], c(2, 3), function(x) sd(x, na.rm = TRUE)),
+                             sd(boot.list[[4]], na.rm = TRUE))
 
-    names(summary.stats) <- names(boot.list) <- names(model$subgroup.trt.effects)
+    names(summary.stats) <- names(model$subgroup.trt.effects)
+    names(boot.list) <- 1:length(names(boot.list))
+    names(boot.list)[c(1:3, 5)] <- names(summary.stats)
+    names(boot.list)[4] <- "coefficients"
+
 
     names(summary.stats$subgroup.effects) <- names(model$subgroup.trt.effects$subgroup.effects)
     dimnames(summary.stats$sample.sizes)  <- dimnames(model$subgroup.trt.effects$sample.sizes)

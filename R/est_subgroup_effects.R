@@ -136,7 +136,8 @@ subgroup.effects <- function(benefit.scores, y, trt, cutpoint = 0,
     {
         for (t.receiv in 1:n.trts)
         {
-            idx.list[[t.recom]][[t.receiv]] <- (recommended.trt == unique.trts[t.recom]) & (trt == unique.trts[t.receiv])
+            idx.list[[t.recom]][[t.receiv]] <- (recommended.trt == unique.trts[t.recom]) &
+                                                           (trt == unique.trts[t.receiv])
         }
     }
 
@@ -193,10 +194,12 @@ subgroup.effects <- function(benefit.scores, y, trt, cutpoint = 0,
 
                     if (t.recom == t.receiv)
                     {
-                        idx.disagree <- Reduce("|", idx.list[[t.recom]][-t.receiv])
+                        #idx.disagree <- Reduce("|", idx.list[[t.recom]][-t.receiv])
+                        idx.disagree <- (recommended.trt == unique.trts[t.recom]) &
+                            (trt != unique.trts[t.recom])
                         if (sum(idx.disagree))
                         {
-                            survf <- survfit(y[idx.disagree] ~ 1)
+                            survf <- survfit(y[!idx.cur] ~ 1)
                             restricted.mean <- summary(survf)$table[5]
 
                             subgroup.effects[t.recom] <- res.mat[t.receiv, t.recom] - restricted.mean
@@ -225,8 +228,10 @@ subgroup.effects <- function(benefit.scores, y, trt, cutpoint = 0,
 
                 if (t.recom == t.receiv)
                 {
-                    idx.disagree <- Reduce("|", idx.list[[t.recom]][-t.receiv])
-                    subgroup.effects[t.recom] <- res.mat[t.receiv, t.recom] - mean(y[idx.disagree])
+                    #idx.disagree <- Reduce("|", idx.list[[t.recom]][-t.receiv])
+                    idx.disagree <- (recommended.trt == unique.trts[t.recom]) &
+                        (trt != unique.trts[t.recom])
+                    subgroup.effects[t.recom] <- res.mat[t.receiv, t.recom] - mean(y[!idx.cur])
                 }
 
             }
