@@ -31,7 +31,7 @@ print.subgroup_fitted <- function(x, digits = max(getOption('digits')-3, 3), ...
     print.default(Cf2, quote = FALSE, right = TRUE, na.print = "NA",
                   ...)
 
-    ncol.bs <- ncol(x$benefit.scores)
+    ncol.bs <- NCOL(x$benefit.scores)
 
     if (is.null(ncol.bs) || ncol.bs == 1)
     {
