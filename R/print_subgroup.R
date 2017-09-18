@@ -31,8 +31,20 @@ print.subgroup_fitted <- function(x, digits = max(getOption('digits')-3, 3), ...
     print.default(Cf2, quote = FALSE, right = TRUE, na.print = "NA",
                   ...)
 
-    cat("\nBenefit score quantiles: \n")
-    print(quantile(x$benefit.scores), digits = digits)
+    ncol.bs <- ncol(x$benefit.scores)
+
+    if (is.null(ncol.bs) || ncol.bs == 1)
+    {
+        cat("\nBenefit score quantiles: \n")
+        print(quantile(x$benefit.scores), digits = digits)
+    } else
+    {
+        for (cc in 1:ncol.bs)
+        {
+            cat("\nBenefit score", cc, "quantiles: \n")
+            print(quantile(x$benefit.scores[,cc]), digits = digits)
+        }
+    }
 }
 
 #' @param sample.pct boolean variable of whether to print the percent of the test sample within each subgroup. If false
