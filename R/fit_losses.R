@@ -131,7 +131,7 @@ get.coef.func <- function(fit.name, env = parent.frame())
 
 #' @import glmnet
 #' @importFrom stats coef
-fit_sq_loss_lasso <- function(x, y, trt, n.trts, wts, family, ...)
+fit_sq_loss_lasso <- function(x, y, trt, n.trts, wts, family, matching.id, ...)
 {
   # this function must return a fitted model
   # in addition to a function which takes in
@@ -164,6 +164,36 @@ fit_sq_loss_lasso <- function(x, y, trt, n.trts, wts, family, ...)
     list.dots$penalty.factor <- rep(1, ncol(x))
     list.dots$penalty.factor[zero.pen.idx] <- 0
   }
+    
+    ## Establish nfolds for cv.glmnet()
+    if ("nfolds" %in% dot.names) {
+        nfolds <- list.dots$nfolds
+        if (nfolds < 3) {
+            stop("nfolds must be bigger than 3; nfolds=10 recommended")
+        }
+    } else {
+        nfolds <- 10
+    }
+    list.dots$nfolds <- nfolds
+    
+    ## Establish foldid for cv.glmnet()
+    ## if matching.id was supplied, foldid will be structured around the clusters
+    if (!is.null(matching.id)) {
+        if ("foldid" %in% dot.names) {
+            warning("User-supplied foldid will be ignored since matching.id was detected.
+                     Folds will be randomly assigned to clusters according to matching.id.")
+        }
+        # Assign a fold ID for each cluster level
+        df.folds <- data.frame(matching.id = sample(levels(matching.id)),
+                               fold.id = 1:length(levels(matching.id)) %% nfolds) 
+        # Obtain vector of fold IDs with respect to the data
+        foldid <- sapply(matching.id, function(z) {df.folds[which(z == df.folds$matching.id),"fold.id"]} )
+    } else {
+        foldid <- ifelse("foldid" %in% dot.names,
+                         list.dots$foldid,
+                         sample(rep(seq(nfolds), length = nrow(x))))
+    }
+    list.dots$foldid <- foldid
 
   # fit a model with a lasso
   # penalty and desired loss
@@ -180,7 +210,7 @@ fit_sq_loss_lasso <- function(x, y, trt, n.trts, wts, family, ...)
 fit_logistic_loss_lasso <- fit_sq_loss_lasso
 
 #' @import survival
-fit_cox_loss_lasso <- function(x, y, trt, n.trts, wts, family, ...)
+fit_cox_loss_lasso <- function(x, y, trt, n.trts, wts, family, matching.id, ...)
 {
 
   list.dots <- list(...)
@@ -198,6 +228,36 @@ fit_cox_loss_lasso <- function(x, y, trt, n.trts, wts, family, ...)
       list.dots$penalty.factor <- rep(1, ncol(x))
       list.dots$penalty.factor[zero.pen.idx] <- 0
   }
+   
+    ## Establish nfolds for cv.glmnet()
+    if ("nfolds" %in% dot.names) {
+        nfolds <- list.dots$nfolds
+        if (nfolds < 3) {
+            stop("nfolds must be bigger than 3; nfolds=10 recommended")
+        }
+    } else {
+        nfolds <- 10
+    }
+    list.dots$nfolds <- nfolds
+    
+    ## Establish foldid for cv.glmnet()
+    ## if matching.id was supplied, foldid will be structured around the clusters
+    if (!is.null(matching.id)) {
+        if ("foldid" %in% dot.names) {
+            warning("User-supplied foldid will be ignored since matching.id was detected.
+                     Folds will be randomly assigned to clusters according to matching.id.")
+        }
+        # Assign a fold ID for each cluster level
+        df.folds <- data.frame(matching.id = sample(levels(matching.id)),
+                               fold.id = 1:length(levels(matching.id)) %% nfolds) 
+        # Obtain vector of fold IDs with respect to the data
+        foldid <- sapply(matching.id, function(z) {df.folds[which(z == df.folds$matching.id),"fold.id"]} )
+    } else {
+        foldid <- ifelse("foldid" %in% dot.names,
+                         list.dots$foldid,
+                         sample(rep(seq(nfolds), length = nrow(x))))
+    }
+    list.dots$foldid <- foldid
 
   # fit a model with a lasso
   # penalty and desired loss
@@ -212,7 +272,7 @@ fit_cox_loss_lasso <- function(x, y, trt, n.trts, wts, family, ...)
 
 #' @import mgcv
 #' @importFrom stats as.formula binomial gaussian
-fit_sq_loss_lasso_gam <- function(x, y, trt, n.trts, wts, family, ...)
+fit_sq_loss_lasso_gam <- function(x, y, trt, n.trts, wts, family, matching.id, ...)
 {
   # this function must return a fitted model
   # in addition to a function which takes in
@@ -266,16 +326,48 @@ fit_sq_loss_lasso_gam <- function(x, y, trt, n.trts, wts, family, ...)
   dots.idx.glmnet <- dots.idx.glmnet[!is.na(dots.idx.glmnet)]
   dots.idx.gam    <- dots.idx.gam[!is.na(dots.idx.gam)]
 
+    ## Establish nfolds for cv.glmnet()
+    if ("nfolds" %in% dot.names) {
+        nfolds <- list.dots$nfolds
+        if (nfolds < 3) {
+            stop("nfolds must be bigger than 3; nfolds=10 recommended")
+        }
+    } else {
+        nfolds <- 10
+    }
+    list.dots$nfolds <- nfolds
+    
+    ## Establish foldid for cv.glmnet()
+    ## if matching.id was supplied, foldid will be structured around the clusters
+    if (!is.null(matching.id)) {
+        if ("foldid" %in% dot.names) {
+            warning("User-supplied foldid will be ignored since matching.id was detected.
+                     Folds will be randomly assigned to clusters according to matching.id.")
+        }
+        # Assign a fold ID for each cluster level
+        df.folds <- data.frame(matching.id = sample(levels(matching.id)),
+                               fold.id = 1:length(levels(matching.id)) %% nfolds) 
+        # Obtain vector of fold IDs with respect to the data
+        foldid <- sapply(matching.id, function(z) {df.folds[which(z == df.folds$matching.id),"fold.id"]} )
+    } else {
+        foldid <- ifelse("foldid" %in% dot.names,
+                         list.dots$foldid,
+                         sample(rep(seq(nfolds), length = nrow(x))))
+    }
+    list.dots$foldid <- foldid
+    
   # fit a model with a lasso
   # penalty and desired loss:
   # only add in dots calls if they exist
   if (length(dots.idx.glmnet) > 0)
   {
     sel.model <- do.call(cv.glmnet, c(list(x = x, y = y, weights = wts, family = family,
+                                           nfolds = nfolds, foldid = foldid,
                                            intercept = FALSE), list.dots[dots.idx.glmnet]))
   } else
   {
     sel.model <- do.call(cv.glmnet, list(x = x, y = y, weights = wts, family = family,
+                                         nfolds = nfolds, foldid = foldid,
                                          intercept = FALSE))
   }
 
@@ -364,7 +456,7 @@ fit_cox_loss_lasso_gam      <- fit_sq_loss_lasso_gam
 
 
 
-fit_sq_loss_gam <- function(x, y, trt, n.trts, wts, family, ...)
+fit_sq_loss_gam <- function(x, y, trt, n.trts, wts, family, matching.id, ...)
 {
   # this function must return a fitted model
   # in addition to a function which takes in
@@ -472,7 +564,7 @@ fit_cox_loss_gam      <- fit_sq_loss_gam
 
 
 #' @import gbm
-fit_sq_loss_gbm <- function(x, y, trt, n.trts, wts, family, ...)
+fit_sq_loss_gbm <- function(x, y, trt, n.trts, wts, family, matching.id, ...)
 {
   # this function must return a fitted model
   # in addition to a function which takes in
@@ -530,7 +622,7 @@ fit_sq_loss_gbm <- function(x, y, trt, n.trts, wts, family, ...)
 }
 
 
-fit_abs_loss_gbm <- function(x, y, trt, n.trts, wts, family, ...)
+fit_abs_loss_gbm <- function(x, y, trt, n.trts, wts, family, matching.id, ...)
 {
   # this function must return a fitted model
   # in addition to a function which takes in
@@ -588,7 +680,7 @@ fit_abs_loss_gbm <- function(x, y, trt, n.trts, wts, family, ...)
 }
 
 
-fit_logistic_loss_gbm <- function(x, y, trt, n.trts, wts, family, ...)
+fit_logistic_loss_gbm <- function(x, y, trt, n.trts, wts, family, matching.id, ...)
 {
   # this function must return a fitted model
   # in addition to a function which takes in
@@ -646,7 +738,7 @@ fit_logistic_loss_gbm <- function(x, y, trt, n.trts, wts, family, ...)
 }
 
 
-fit_huberized_loss_gbm <- function(x, y, trt, n.trts, wts, family, ...)
+fit_huberized_loss_gbm <- function(x, y, trt, n.trts, wts, family, matching.id, ...)
 {
   # this function must return a fitted model
   # in addition to a function which takes in
@@ -705,7 +797,7 @@ fit_huberized_loss_gbm <- function(x, y, trt, n.trts, wts, family, ...)
 }
 
 
-fit_cox_loss_gbm <- function(x, y, trt, n.trts, wts, family, ...)
+fit_cox_loss_gbm <- function(x, y, trt, n.trts, wts, family, matching.id, ...)
 {
   # this function must return a fitted model
   # in addition to a function which takes in
@@ -765,5 +857,6 @@ fit_cox_loss_gbm <- function(x, y, trt, n.trts, wts, family, ...)
        model        = model,
        coefficients = get.coef.func("fit_cox_loss_gbm")(model))
 }
+
 
 
