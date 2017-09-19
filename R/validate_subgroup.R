@@ -135,9 +135,10 @@ validate.subgroup <- function(model,
 
     # save data objects because they
     # will be written over by resampled versions later
-    x   <- model$call$x
-    trt <- model$call$trt
-    y   <- model$call$y
+    x           <- model$call$x
+    trt         <- model$call$trt
+    y           <- model$call$y
+    matching.id <- model$call$matching.id
 
     ## override any internal parallelization
     ## if there is a conflict of parallelization
@@ -174,8 +175,15 @@ validate.subgroup <- function(model,
             if (method == "training_test_replication")
             {
                 # randomly split/partition data into training and testing sets
+              if (is.null(matching.id)) {
                 train.samp.size <- floor(n.obs * train.fraction)
                 samp.idx        <- sample.int(n.obs, train.samp.size, replace = FALSE)
+              } else {
+                # Draw at the cluster level (train.fraction interpreted as fraction of clusters)
+                n.levels    <- length(levels(matching.id))
+                samp.levels <- sample.int(n.levels, n.levels * train.fraction, replace = FALSE)
+                samp.idx    <- which(matching.id %in% levels(matching.id)[samp.levels])
+              }
                 model$call$x    <- x[samp.idx,]
                 model$call$trt  <- trt[samp.idx]
 
@@ -215,7 +223,17 @@ validate.subgroup <- function(model,
             {   # bootstrap bias correction
 
                 # take a bootstrap sample with replacement
+              if (is.null(matching.id)) {
                 samp.idx <- sample.int(n.obs, n.obs, replace = TRUE)
+              } else {
+                # Draw at the cluster level
+                samp.levels <- sample(levels(matching.id), replace = TRUE)
+                samp.lookup <- lapply(samp.levels, function(z) {which(matching.id == z)})
+                samp.idx    <- unlist(samp.lookup)
+                # Remap matching IDs so that each cluster draw is assigned a unique matching ID
+                samp.lengths           <- lapply(samp.lookup,length)
+                model$call$matching.id <- unlist(lapply(1:length(samp.lengths),function(z){rep(z,samp.lengths[[z]])}))
+              }
                 model$call$x   <- x[samp.idx,]
 
                 if (is.matrix(y))
@@ -254,7 +272,17 @@ validate.subgroup <- function(model,
 
                 # bootstrap is not available because it
                 # results in overly optimistic results
-                samp.idx       <- sample.int(n.obs, n.obs, replace = TRUE)
+              if (is.null(matching.id)) {
+                samp.idx <- sample.int(n.obs, n.obs, replace = TRUE)
+              } else {
+                # Draw at the cluster level
+                samp.levels <- sample(levels(matching.id), replace = TRUE)
+                samp.lookup <- lapply(samp.levels, function(z) {which(matching.id == z)})
+                samp.idx    <- unlist(samp.lookup)
+                # Remap matching IDs so that each cluster draw is assigned a unique matching ID
+                samp.lengths           <- lapply(samp.lookup,length)
+                model$call$matching.id <- unlist(lapply(1:length(samp.lengths),function(z){rep(z,samp.lengths[[z]])}))
+              }
                 model$call$x   <- x[samp.idx,]
                 model$call$y   <- y[samp.idx]
                 model$call$trt <- trt[samp.idx]
@@ -290,8 +318,15 @@ validate.subgroup <- function(model,
             if (method == "training_test_replication")
             {
                 # randomly split/partition data into training and testing sets
+              if (is.null(matching.id)) {
                 train.samp.size <- floor(n.obs * train.fraction)
                 samp.idx        <- sample.int(n.obs, train.samp.size, replace = FALSE)
+              } else {
+                # Draw at the cluster level (train.fraction interpreted as fraction of clusters)
+                n.levels    <- length(levels(matching.id))
+                samp.levels <- sample.int(n.levels, n.levels * train.fraction, replace = FALSE)
+                samp.idx    <- which(matching.id %in% levels(matching.id)[samp.levels])
+              }
                 model$call$x    <- x[samp.idx,]
                 model$call$trt  <- trt[samp.idx]
 
@@ -331,7 +366,17 @@ validate.subgroup <- function(model,
             {   # bootstrap bias correction
 
                 # take a bootstrap sample with replacement
+              if (is.null(matching.id)) {
                 samp.idx <- sample.int(n.obs, n.obs, replace = TRUE)
+              } else {
+                # Draw at the cluster level
+                samp.levels <- sample(levels(matching.id), replace = TRUE)
+                samp.lookup <- lapply(samp.levels, function(z) {which(matching.id == z)})
+                samp.idx    <- unlist(samp.lookup)
+                # Remap matching IDs so that each cluster draw is assigned a unique matching ID
+                samp.lengths           <- lapply(samp.lookup,length)
+                model$call$matching.id <- unlist(lapply(1:length(samp.lengths),function(z){rep(z,samp.lengths[[z]])}))
+              }
                 model$call$x   <- x[samp.idx,]
 
                 if (is.matrix(y))
@@ -370,7 +415,17 @@ validate.subgroup <- function(model,
 
                 # bootstrap is not available because it
                 # results in overly optimistic results
-                samp.idx       <- sample.int(n.obs, n.obs, replace = TRUE)
+                if (is.null(matching.id)) {
+                  samp.idx <- sample.int(n.obs, n.obs, replace = TRUE)
+                } else {
+                  # Draw at the cluster level
+                  samp.levels <- sample(levels(matching.id), replace = TRUE)
+                  samp.lookup <- lapply(samp.levels, function(z) {which(matching.id == z)})
+                  samp.idx    <- unlist(samp.lookup)
+                  # Remap matching IDs so that each cluster draw is assigned a unique matching ID
+                  samp.lengths           <- lapply(samp.lookup,length)
+                  model$call$matching.id <- unlist(lapply(1:length(samp.lengths),function(z){rep(z,samp.lengths[[z]])}))
+                }
                 model$call$x   <- x[samp.idx,]
                 model$call$y   <- y[samp.idx]
                 model$call$trt <- trt[samp.idx]
