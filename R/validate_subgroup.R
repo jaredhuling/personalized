@@ -203,7 +203,8 @@ validate.subgroup <- function(model,
                 # estimate subgroup treatment effects on test data
                 sbgrp.trt.eff.test  <- subgroup.effects(benefit.scores.test,
                                                         y.test, trt.test,
-                                                        model$call$cutpoint)
+                                                        model$call$cutpoint,
+                                                        model$reference.trt)
 
                 # save results
                 res  <- list(sbgrp.trt.eff.test[[1]],
@@ -237,7 +238,8 @@ validate.subgroup <- function(model,
 
                 sbgrp.trt.eff.orig  <- subgroup.effects(benefit.scores.orig,
                                                         y, trt,
-                                                        model$call$cutpoint)
+                                                        model$call$cutpoint,
+                                                        model$reference.trt)
 
                 # subtract estimated bias for current bootstrap iteration
                 res  <- list(model$subgroup.trt.effects[[1]] -
@@ -319,7 +321,8 @@ validate.subgroup <- function(model,
                 # estimate subgroup treatment effects on test data
                 sbgrp.trt.eff.test  <- subgroup.effects(benefit.scores.test,
                                                         y.test, trt.test,
-                                                        model$call$cutpoint)
+                                                        model$call$cutpoint,
+                                                        model$reference.trt)
 
                 # save results
                 boot.list[[1]][b,]  <- sbgrp.trt.eff.test[[1]]
@@ -353,7 +356,8 @@ validate.subgroup <- function(model,
 
                 sbgrp.trt.eff.orig  <- subgroup.effects(benefit.scores.orig,
                                                         y, trt,
-                                                        model$call$cutpoint)
+                                                        model$call$cutpoint,
+                                                        model$reference.trt)
 
                 # subtract estimated bias for current bootstrap iteration
                 boot.list[[1]][b,]  <- model$subgroup.trt.effects[[1]] -
