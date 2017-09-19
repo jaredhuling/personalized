@@ -204,6 +204,7 @@ validate.subgroup <- function(model,
                 sbgrp.trt.eff.test  <- subgroup.effects(benefit.scores.test,
                                                         y.test, trt.test,
                                                         model$call$cutpoint,
+                                                        model$larger.outcome.better,
                                                         model$reference.trt)
 
                 # save results
@@ -239,6 +240,7 @@ validate.subgroup <- function(model,
                 sbgrp.trt.eff.orig  <- subgroup.effects(benefit.scores.orig,
                                                         y, trt,
                                                         model$call$cutpoint,
+                                                        model$larger.outcome.better,
                                                         model$reference.trt)
 
                 # subtract estimated bias for current bootstrap iteration
@@ -322,6 +324,7 @@ validate.subgroup <- function(model,
                 sbgrp.trt.eff.test  <- subgroup.effects(benefit.scores.test,
                                                         y.test, trt.test,
                                                         model$call$cutpoint,
+                                                        model$larger.outcome.better,
                                                         model$reference.trt)
 
                 # save results
@@ -357,6 +360,7 @@ validate.subgroup <- function(model,
                 sbgrp.trt.eff.orig  <- subgroup.effects(benefit.scores.orig,
                                                         y, trt,
                                                         model$call$cutpoint,
+                                                        model$larger.outcome.better,
                                                         model$reference.trt)
 
                 # subtract estimated bias for current bootstrap iteration
