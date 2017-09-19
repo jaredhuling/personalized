@@ -183,6 +183,7 @@ validate.subgroup <- function(model,
                 n.levels    <- length(levels(matching.id))
                 samp.levels <- sample.int(n.levels, n.levels * train.fraction, replace = FALSE)
                 samp.idx    <- which(matching.id %in% levels(matching.id)[samp.levels])
+                model$call$matching.id <- matching.id[samp.idx]
               }
                 model$call$x    <- x[samp.idx,]
                 model$call$trt  <- trt[samp.idx]
@@ -326,6 +327,7 @@ validate.subgroup <- function(model,
                 n.levels    <- length(levels(matching.id))
                 samp.levels <- sample.int(n.levels, n.levels * train.fraction, replace = FALSE)
                 samp.idx    <- which(matching.id %in% levels(matching.id)[samp.levels])
+                model$call$matching.id <- matching.id[samp.idx]
               }
                 model$call$x    <- x[samp.idx,]
                 model$call$trt  <- trt[samp.idx]
