@@ -27,9 +27,9 @@ summary.subgroup_fitted <- function(object, digits = max(getOption('digits')-3, 
         ## if variables are selected print out how many are selected
         ## and their coefficient estimates
         sel.varnames <- vnames[sel.idx]
-        cat(length(sel.idx) - 1,
+        cat(length(sel.idx) - object$n.trts + 1,
             "out of",
-            length(est.coef) - 1,
+            length(est.coef) - object$n.trts + 1,
             "variables selected in total by the lasso (cross validation criterion).\n\n")
 
         if (object$n.trts == 2)
@@ -68,7 +68,7 @@ summary.subgroup_fitted <- function(object, digits = max(getOption('digits')-3, 
 
                 ## if variables are selected print out how many are selected
                 ## and their coefficient estimates
-                sel.varnames.cur <- vnames[sel.idx]
+                sel.varnames.cur <- vnames[idx.coefs.cur][sel.idx]
                 cat(length(sel.idx) - 1,
                     "out of",
                     length(coefs.cur),
