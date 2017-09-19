@@ -388,17 +388,23 @@ fit.subgroup <- function(x,
 
     # check to make sure arguments of propensity.func are correct
     propfunc.names <- sort(names(formals(propensity.func)))
-    if (length(propfunc.names) %in% 2:3)
+    if (length(propfunc.names) == 3)
     {
-        if (any(propfunc.names != c("matching.id", "trt", "x")))
-        {
-            stop("arguments of propensity.func() should be 'trt','x', and (optionally) 'matching.id'")
-        }
+      if (any(propfunc.names != c("matching.id", "trt", "x")))
+      {
+        stop("arguments of propensity.func() should be 'trt','x', and (optionally) 'matching.id'")
+      }
+    } else if (length(propfunc.names) == 2) 
+    {
+      if (any(propfunc.names != c("trt", "x")))
+      {
+        stop("arguments of propensity.func() should be 'trt','x', and (optionally) 'matching.id'")
+      }
     } else
     {
-        stop("propensity.func() should only have two or three arguments: 'trt' and 'x', or: 'trt', 'x', and 'matching.id'")
+      stop("propensity.func() should only have two or three arguments: 'trt' and 'x', or: 'trt', 'x', and 'matching.id'")
     }
-
+  
     # compute propensity scores
     pi.x <- drop(do.call(propensity.func, ifelse(is.null(matching.id),
                                              list(x = x, trt = trt),
