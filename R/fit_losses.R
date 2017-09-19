@@ -189,9 +189,11 @@ fit_sq_loss_lasso <- function(x, y, trt, n.trts, wts, family, matching.id, ...)
         # Obtain vector of fold IDs with respect to the data
         foldid <- sapply(matching.id, function(z) {df.folds[which(z == df.folds$matching.id),"fold.id"]} )
     } else {
-        foldid <- ifelse("foldid" %in% dot.names,
-                         list.dots$foldid,
-                         sample(rep(seq(nfolds), length = nrow(x))))
+        if ("foldid" %in% dot.names) {
+            foldid <- list.dots$foldid
+        } else {
+            foldid <- sample(rep(seq(nfolds), length = nrow(x)))
+        }
     }
     list.dots$foldid <- foldid
 
@@ -253,9 +255,11 @@ fit_cox_loss_lasso <- function(x, y, trt, n.trts, wts, family, matching.id, ...)
         # Obtain vector of fold IDs with respect to the data
         foldid <- sapply(matching.id, function(z) {df.folds[which(z == df.folds$matching.id),"fold.id"]} )
     } else {
-        foldid <- ifelse("foldid" %in% dot.names,
-                         list.dots$foldid,
-                         sample(rep(seq(nfolds), length = nrow(x))))
+        if ("foldid" %in% dot.names) {
+            foldid <- list.dots$foldid
+        } else {
+            foldid <- sample(rep(seq(nfolds), length = nrow(x)))
+        }
     }
     list.dots$foldid <- foldid
 
@@ -350,9 +354,12 @@ fit_sq_loss_lasso_gam <- function(x, y, trt, n.trts, wts, family, matching.id, .
         # Obtain vector of fold IDs with respect to the data
         foldid <- sapply(matching.id, function(z) {df.folds[which(z == df.folds$matching.id),"fold.id"]} )
     } else {
-        foldid <- ifelse("foldid" %in% dot.names,
-                         list.dots$foldid,
-                         sample(rep(seq(nfolds), length = nrow(x))))
+        if ("foldid" %in% dot.names) {
+            foldid <- list.dots$foldid
+        } else 
+        {
+            foldid <- sample(rep(seq(nfolds), length = nrow(x)))
+        }
     }
     list.dots$foldid <- foldid
     
