@@ -35,6 +35,15 @@
 #'     \item{\code{"cox_loss_gbm"}}{ - M corresponds to the negative partial likelihood of the cox model with gradient-boosted decision trees model}
 #' }
 #' @param method subgroup ID model type. Either the weighting or A-learning method of Chen et al, (2017)
+#' @param matching.id a vector with length equal to the number of observations in \code{x} indicating using integers or
+#' levels of a factor vector which patients are
+#' in which matched groups. Defaults to \code{NULL} and assumes the samples are not from a matched cohort. Matched
+#' case-control groups can be created using any method (propensity score matching, optimal matching, etc). If each case
+#' is matched with a control or multiple controls, this would indicate which case-control pairs or groups go together.
+#' If \code{matching.id} is supplied, then it is unecessary to specify a function via the \code{propensity.func} argument.
+#' A quick usage example: if the first patient is a case and the second and third are controls matched to it, and the
+#' fouth patient is a case and the fifth through seventh patients are matched with it, then the user should specify
+#' \code{matching.id = c(1,1,1,2,2,2,2)} or \code{matching.id = c(rep("Grp1", 3),rep("Grp2", 4)) }
 #' @param augment.func function which inputs the response \code{y}, the covariates \code{x}, and \code{trt} and outputs
 #' predicted values for the response using a model constructed with \code{x}. \code{augment.func()} can also be simply
 #' a function of \code{x} and \code{y}. This function is used for efficiency augmentation.
@@ -289,12 +298,12 @@ fit.subgroup <- function(x,
         matching.id <- tryCatch(expr=as.factor(matching.id), error = function(e) {stop("matching.id must be a factor or capable of being coerced to a factor.")})
         if (length(levels(matching.id)) < 2) {stop("matching.id must have at least 2 levels")}
     }
-  
+
     # defaults to constant propensity score within trt levels
     # the user will almost certainly want to change this
     if (is.null(propensity.func))
     {
-      if (is.null(matching.id)) 
+      if (is.null(matching.id))
       { # No propensity score supplied and no matching.id supplied
         if (n.trts == 2)
         {
@@ -394,7 +403,7 @@ fit.subgroup <- function(x,
       {
         stop("arguments of propensity.func() should be 'trt','x', and (optionally) 'matching.id'")
       }
-    } else if (length(propfunc.names) == 2) 
+    } else if (length(propfunc.names) == 2)
     {
       if (any(propfunc.names != c("trt", "x")))
       {
@@ -404,7 +413,7 @@ fit.subgroup <- function(x,
     {
       stop("propensity.func() should only have two or three arguments: 'trt' and 'x', or: 'trt', 'x', and 'matching.id'")
     }
-  
+
     # compute propensity scores
     if (is.null(matching.id)) {
       pi.x <- drop(propensity.func(x = x, trt = trt))
