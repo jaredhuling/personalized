@@ -591,6 +591,10 @@ fit_sq_loss_gbm <- function(x, y, trt, n.trts, wts, family, matching.id, ...)
   {
     list.dots$cv.folds <- 5L
   }
+    
+  if (!is.null(matching.id)) {
+      warning("Matched groups are not guaranteed to remain matched in the cross-validation procedure using GBM models.")
+  }
 
 
   df <- data.frame(y = y, x)
@@ -649,7 +653,10 @@ fit_abs_loss_gbm <- function(x, y, trt, n.trts, wts, family, matching.id, ...)
   {
     list.dots$cv.folds <- 5L
   }
-
+    
+  if (!is.null(matching.id)) {
+      warning("Matched groups are not guaranteed to remain matched in the cross-validation procedure using GBM models.")
+  }
 
   df <- data.frame(y = y, x)
 
@@ -708,6 +715,9 @@ fit_logistic_loss_gbm <- function(x, y, trt, n.trts, wts, family, matching.id, .
     list.dots$cv.folds <- 5L
   }
 
+  if (!is.null(matching.id)) {
+      warning("Matched groups are not guaranteed to remain matched in the cross-validation procedure using GBM models.")
+  }
 
   df <- data.frame(y = y, x)
 
@@ -823,6 +833,10 @@ fit_cox_loss_gbm <- function(x, y, trt, n.trts, wts, family, matching.id, ...)
   } else
   {
     list.dots$cv.folds <- 5L
+  }
+    
+  if (!is.null(matching.id)) {
+      warning("Matched groups are not guaranteed to remain matched in the cross-validation procedure using GBM models.")
   }
 
   surv.vnames <- colnames(y)
