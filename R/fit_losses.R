@@ -307,29 +307,7 @@ fit_sq_loss_lasso_gam <- function(x, y, trt, n.trts, wts, family, matching.id, .
   {
     list.dots$penalty.factor <- c(0, rep(1, ncol(x) - 1))
   }
-
-  glmnet.argnames <- union(names(formals(cv.glmnet)), names(formals(glmnet)))
-  gam.argnames    <- names(formals(gam))
-
-
-
-  # since 'method' is an argument of 'fit.subgrp',
-  # let the user change the gam 'method' arg by supplying
-  # 'method.gam' arg instead of 'method'
-  dot.names[dot.names == "method.gam"] <- "method"
-  names(list.dots)[names(list.dots) == "method.gam"] <- "method"
-
-
-
-
-  # find the arguments relevant for each
-  # possible ...-supplied function
-  dots.idx.glmnet <- match(glmnet.argnames, dot.names)
-  dots.idx.gam    <- match(gam.argnames, dot.names)
-
-  dots.idx.glmnet <- dots.idx.glmnet[!is.na(dots.idx.glmnet)]
-  dots.idx.gam    <- dots.idx.gam[!is.na(dots.idx.gam)]
-
+    
     ## Establish nfolds for cv.glmnet()
     if ("nfolds" %in% dot.names) {
         nfolds <- list.dots$nfolds
@@ -362,21 +340,29 @@ fit_sq_loss_lasso_gam <- function(x, y, trt, n.trts, wts, family, matching.id, .
         }
     }
     list.dots$foldid <- foldid
+
+  glmnet.argnames <- union(names(formals(cv.glmnet)), names(formals(glmnet)))
+  gam.argnames    <- names(formals(gam))
+
+  # since 'method' is an argument of 'fit.subgrp',
+  # let the user change the gam 'method' arg by supplying
+  # 'method.gam' arg instead of 'method'
+  dot.names[dot.names == "method.gam"] <- "method"
+  names(list.dots)[names(list.dots) == "method.gam"] <- "method"
+     
+  # find the arguments relevant for each
+  # possible ...-supplied function
+  dots.idx.glmnet <- match(glmnet.argnames, dot.names)
+  dots.idx.gam    <- match(gam.argnames, dot.names)
+
+  dots.idx.glmnet <- dots.idx.glmnet[!is.na(dots.idx.glmnet)]
+  dots.idx.gam    <- dots.idx.gam[!is.na(dots.idx.gam)]
     
   # fit a model with a lasso
   # penalty and desired loss:
-  # only add in dots calls if they exist
-  if (length(dots.idx.glmnet) > 0)
-  {
-    sel.model <- do.call(cv.glmnet, c(list(x = x, y = y, weights = wts, family = family,
-                                           nfolds = nfolds, foldid = foldid,
-                                           intercept = FALSE), list.dots[dots.idx.glmnet]))
-  } else
-  {
-    sel.model <- do.call(cv.glmnet, list(x = x, y = y, weights = wts, family = family,
-                                         nfolds = nfolds, foldid = foldid,
-                                         intercept = FALSE))
-  }
+  sel.model <- do.call(cv.glmnet, c(list(x = x, y = y, weights = wts, family = family,
+                                         intercept = FALSE), list.dots[dots.idx.glmnet]))
+
 
   vnames <- colnames(x)
 
