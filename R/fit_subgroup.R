@@ -35,15 +35,15 @@
 #'     \item{\code{"cox_loss_gbm"}}{ - M corresponds to the negative partial likelihood of the cox model with gradient-boosted decision trees model}
 #' }
 #' @param method subgroup ID model type. Either the weighting or A-learning method of Chen et al, (2017)
-#' @param matching.id a vector with length equal to the number of observations in \code{x} indicating using integers or
+#' @param match.id a vector with length equal to the number of observations in \code{x} indicating using integers or
 #' levels of a factor vector which patients are
 #' in which matched groups. Defaults to \code{NULL} and assumes the samples are not from a matched cohort. Matched
 #' case-control groups can be created using any method (propensity score matching, optimal matching, etc). If each case
 #' is matched with a control or multiple controls, this would indicate which case-control pairs or groups go together.
-#' If \code{matching.id} is supplied, then it is unecessary to specify a function via the \code{propensity.func} argument.
+#' If \code{match.id} is supplied, then it is unecessary to specify a function via the \code{propensity.func} argument.
 #' A quick usage example: if the first patient is a case and the second and third are controls matched to it, and the
 #' fouth patient is a case and the fifth through seventh patients are matched with it, then the user should specify
-#' \code{matching.id = c(1,1,1,2,2,2,2)} or \code{matching.id = c(rep("Grp1", 3),rep("Grp2", 4)) }
+#' \code{match.id = c(1,1,1,2,2,2,2)} or \code{match.id = c(rep("Grp1", 3),rep("Grp2", 4)) }
 #' @param augment.func function which inputs the response \code{y}, the covariates \code{x}, and \code{trt} and outputs
 #' predicted values for the response using a model constructed with \code{x}. \code{augment.func()} can also be simply
 #' a function of \code{x} and \code{y}. This function is used for efficiency augmentation.
@@ -174,7 +174,7 @@ fit.subgroup <- function(x,
                                         "logistic_loss_gbm",
                                         "cox_loss_gbm"),
                          method     = c("weighting", "a_learning"),
-                         matching.id = NULL,
+                         match.id = NULL,
                          augment.func = NULL,
                          cutpoint   = 0,
                          larger.outcome.better = TRUE,
@@ -293,18 +293,18 @@ fit.subgroup <- function(x,
         stop("gbm and gam based losses not supported for multiple treatments (number of total treatments > 2)")
     }
 
-    # Check matching.id validity and convert it to a factor, if supplied
-    if (!is.null(matching.id)) {
-        matching.id <- tryCatch(expr=as.factor(matching.id), error = function(e) {stop("matching.id must be a factor or capable of being coerced to a factor.")})
-        if (length(levels(matching.id)) < 2) {stop("matching.id must have at least 2 levels")}
+    # Check match.id validity and convert it to a factor, if supplied
+    if (!is.null(match.id)) {
+        match.id <- tryCatch(expr=as.factor(match.id), error = function(e) {stop("match.id must be a factor or capable of being coerced to a factor.")})
+        if (length(levels(match.id)) < 2) {stop("match.id must have at least 2 levels")}
     }
 
     # defaults to constant propensity score within trt levels
     # the user will almost certainly want to change this
     if (is.null(propensity.func))
     {
-      if (is.null(matching.id))
-      { # No propensity score supplied and no matching.id supplied
+      if (is.null(match.id))
+      { # No propensity score supplied and no match.id supplied
         if (n.trts == 2)
         {
         mean.trt <- mean(trt == unique.trts[2L])
@@ -328,11 +328,11 @@ fit.subgroup <- function(x,
           }
         }
       } else
-      { # No propensity score supplied but matching.id supplied
+      { # No propensity score supplied but match.id supplied
         if (n.trts == 2)
         {
           mean.trt <- mean(trt == unique.trts[2L])
-          propensity.func <- function(trt, x, matching.id) rep(mean.trt, length(trt))
+          propensity.func <- function(trt, x, match.id) rep(mean.trt, length(trt))
           } else
         {
           mean.trt <- numeric(n.trts)
@@ -340,7 +340,7 @@ fit.subgroup <- function(x,
           {
             mean.trt[t] <- mean(trt == unique.trts[t])
           }
-          propensity.func <- function(trt, x, matching.id)
+          propensity.func <- function(trt, x, match.id)
           {
             pi.x <- numeric(length(trt))
             for (t in 1:n.trts)
@@ -399,26 +399,26 @@ fit.subgroup <- function(x,
     propfunc.names <- sort(names(formals(propensity.func)))
     if (length(propfunc.names) == 3)
     {
-      if (any(propfunc.names != c("matching.id", "trt", "x")))
+      if (any(propfunc.names != c("match.id", "trt", "x")))
       {
-        stop("arguments of propensity.func() should be 'trt','x', and (optionally) 'matching.id'")
+        stop("arguments of propensity.func() should be 'trt','x', and (optionally) 'match.id'")
       }
     } else if (length(propfunc.names) == 2)
     {
       if (any(propfunc.names != c("trt", "x")))
       {
-        stop("arguments of propensity.func() should be 'trt','x', and (optionally) 'matching.id'")
+        stop("arguments of propensity.func() should be 'trt','x', and (optionally) 'match.id'")
       }
     } else
     {
-      stop("propensity.func() should only have two or three arguments: 'trt' and 'x', or: 'trt', 'x', and 'matching.id'")
+      stop("propensity.func() should only have two or three arguments: 'trt' and 'x', or: 'trt', 'x', and 'match.id'")
     }
 
     # compute propensity scores
-    if (is.null(matching.id)) {
+    if (is.null(match.id)) {
       pi.x <- drop(propensity.func(x = x, trt = trt))
     } else {
-      pi.x <- drop(propensity.func(x = x, trt = trt, matching.id = matching.id))
+      pi.x <- drop(propensity.func(x = x, trt = trt, match.id = match.id))
     }
 
     # make sure the resulting propensity scores are in the
@@ -502,7 +502,7 @@ fit.subgroup <- function(x,
     fit_fun      <- paste0("fit_", loss)
     fitted.model <- do.call(fit_fun, list(x = x.tilde, trt = trt, n.trts = n.trts,
                                           y = y.adj, wts = wts, family = family,
-                                          matching.id = matching.id, ...))
+                                          match.id = match.id, ...))
 
 
     # save extra results

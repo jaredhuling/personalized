@@ -8,7 +8,7 @@ fit.subgroup(x, y, trt, propensity.func = NULL, loss = c("sq_loss_lasso",
   "logistic_loss_lasso", "cox_loss_lasso", "sq_loss_lasso_gam",
   "logistic_loss_lasso_gam", "sq_loss_gam", "logistic_loss_gam", "sq_loss_gbm",
   "abs_loss_gbm", "logistic_loss_gbm", "cox_loss_gbm"),
-  method = c("weighting", "a_learning"), matching.id = NULL,
+  method = c("weighting", "a_learning"), match.id = NULL,
   augment.func = NULL, cutpoint = 0, larger.outcome.better = TRUE,
   reference.trt = NULL, retcall = TRUE, ...)
 }
@@ -51,15 +51,15 @@ is complex.
 
 \item{method}{subgroup ID model type. Either the weighting or A-learning method of Chen et al, (2017)}
 
-\item{matching.id}{a vector with length equal to the number of observations in \code{x} indicating using integers or
+\item{match.id}{a vector with length equal to the number of observations in \code{x} indicating using integers or
 levels of a factor vector which patients are
 in which matched groups. Defaults to \code{NULL} and assumes the samples are not from a matched cohort. Matched
 case-control groups can be created using any method (propensity score matching, optimal matching, etc). If each case
 is matched with a control or multiple controls, this would indicate which case-control pairs or groups go together.
-If \code{matching.id} is supplied, then it is unecessary to specify a function via the \code{propensity.func} argument.
+If \code{match.id} is supplied, then it is unecessary to specify a function via the \code{propensity.func} argument.
 A quick usage example: if the first patient is a case and the second and third are controls matched to it, and the
 fouth patient is a case and the fifth through seventh patients are matched with it, then the user should specify
-\code{matching.id = c(1,1,1,2,2,2,2)} or \code{matching.id = c(rep("Grp1", 3),rep("Grp2", 4)) }}
+\code{match.id = c(1,1,1,2,2,2,2)} or \code{match.id = c(rep("Grp1", 3),rep("Grp2", 4)) }}
 
 \item{augment.func}{function which inputs the response \code{y}, the covariates \code{x}, and \code{trt} and outputs
 predicted values for the response using a model constructed with \code{x}. \code{augment.func()} can also be simply
