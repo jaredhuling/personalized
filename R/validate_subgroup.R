@@ -165,146 +165,153 @@ validate.subgroup <- function(model,
 
     if (parallel)
     {
-        comb <- function(x, ...) {
+        comb <- function(x, ...)
+        {
             lapply(seq_along(x),
                    function(i) c(x[[i]], lapply(list(...), function(y) y[[i]])))
         }
 
         outlist <- foreach(i = seq(B), .combine = "comb", .multicombine = TRUE,
                            .init=list(list(), list(), list(), list(), list())) %dopar%
-        {
-            if (method == "training_test_replication")
-            {
-                # randomly split/partition data into training and testing sets
-              if (is.null(match.id)) {
-                train.samp.size <- floor(n.obs * train.fraction)
-                samp.idx        <- sample.int(n.obs, train.samp.size, replace = FALSE)
-              } else {
-                # Draw at the cluster level (train.fraction interpreted as fraction of clusters)
-                n.levels    <- length(levels(match.id))
-                samp.levels <- sample.int(n.levels, n.levels * train.fraction, replace = FALSE)
-                samp.idx    <- which(match.id %in% levels(match.id)[samp.levels])
-                model$call$match.id <- match.id[samp.idx]
-              }
-                model$call$x    <- x[samp.idx,]
-                model$call$trt  <- trt[samp.idx]
+                           {
+                               if (method == "training_test_replication")
+                               {
+                                   # randomly split/partition data into training and testing sets
+                                   if (is.null(match.id))
+                                   {
+                                       train.samp.size <- floor(n.obs * train.fraction)
+                                       samp.idx        <- sample.int(n.obs, train.samp.size, replace = FALSE)
+                                   } else
+                                   {
+                                       # Draw at the cluster level (train.fraction interpreted as fraction of clusters)
+                                       n.levels    <- length(levels(match.id))
+                                       samp.levels <- sample.int(n.levels, n.levels * train.fraction, replace = FALSE)
+                                       samp.idx    <- which(match.id %in% levels(match.id)[samp.levels])
+                                       model$call$match.id <- match.id[samp.idx]
+                                   }
+                                   model$call$x    <- x[samp.idx,]
+                                   model$call$trt  <- trt[samp.idx]
 
-                x.test          <- x[-samp.idx,]
+                                   x.test          <- x[-samp.idx,]
 
-                # need to handle differently if outcome is a matrix
-                if (is.matrix(y))
-                {
-                    model$call$y <- y[samp.idx,]
-                    y.test       <- y[-samp.idx,]
-                } else
-                {
-                    model$call$y <- y[samp.idx]
-                    y.test       <- y[-samp.idx]
-                }
-                trt.test <- trt[-samp.idx]
+                                   # need to handle differently if outcome is a matrix
+                                   if (is.matrix(y))
+                                   {
+                                       model$call$y <- y[samp.idx,]
+                                       y.test       <- y[-samp.idx,]
+                                   } else
+                                   {
+                                       model$call$y <- y[samp.idx]
+                                       y.test       <- y[-samp.idx]
+                                   }
+                                   trt.test <- trt[-samp.idx]
 
-                # fit subgroup model on training data
-                mod.b    <- do.call(fit.subgroup, model$call)
+                                   # fit subgroup model on training data
+                                   mod.b    <- do.call(fit.subgroup, model$call)
 
-                # compute benefit scores on testing data
-                benefit.scores.test <- mod.b$predict(x.test)
+                                   # compute benefit scores on testing data
+                                   benefit.scores.test <- mod.b$predict(x.test)
 
-                # estimate subgroup treatment effects on test data
-                sbgrp.trt.eff.test  <- subgroup.effects(benefit.scores.test,
-                                                        y.test, trt.test,
-                                                        model$call$cutpoint,
-                                                        model$larger.outcome.better,
-                                                        model$reference.trt)
+                                   # estimate subgroup treatment effects on test data
+                                   sbgrp.trt.eff.test  <- subgroup.effects(benefit.scores.test,
+                                                                           y.test, trt.test,
+                                                                           model$call$cutpoint,
+                                                                           model$larger.outcome.better,
+                                                                           model$reference.trt)
 
-                # save results
-                res  <- list(sbgrp.trt.eff.test[[1]],
-                             sbgrp.trt.eff.test[[2]],
-                             sbgrp.trt.eff.test[[3]],
-                             as.vector(mod.b$coefficients),
-                             sbgrp.trt.eff.test[[4]])
+                                   # save results
+                                   res  <- list(sbgrp.trt.eff.test[[1]],
+                                                sbgrp.trt.eff.test[[2]],
+                                                sbgrp.trt.eff.test[[3]],
+                                                as.vector(mod.b$coefficients),
+                                                sbgrp.trt.eff.test[[4]])
 
-            } else if (method == "boot_bias_correction")
-            {   # bootstrap bias correction
+                               } else if (method == "boot_bias_correction")
+                               {   # bootstrap bias correction
 
-                # take a bootstrap sample with replacement
-              if (is.null(match.id)) {
-                samp.idx <- sample.int(n.obs, n.obs, replace = TRUE)
-              } else {
-                # Draw at the cluster level
-                samp.levels <- sample(levels(match.id), replace = TRUE)
-                samp.lookup <- lapply(samp.levels, function(z) {which(match.id == z)})
-                samp.idx    <- unlist(samp.lookup)
-                # Remap matching IDs so that each cluster draw is assigned a unique matching ID
-                samp.lengths           <- lapply(samp.lookup,length)
-                model$call$match.id <- unlist(lapply(1:length(samp.lengths),function(z){rep(z,samp.lengths[[z]])}))
-              }
-                model$call$x   <- x[samp.idx,]
+                                   # take a bootstrap sample with replacement
+                                   if (is.null(match.id))
+                                   {
+                                       samp.idx <- sample.int(n.obs, n.obs, replace = TRUE)
+                                   } else
+                                   {
+                                       # Draw at the cluster level
+                                       samp.levels <- sample(levels(match.id), replace = TRUE)
+                                       samp.lookup <- lapply(samp.levels, function(z) {which(match.id == z)})
+                                       samp.idx    <- unlist(samp.lookup)
+                                       # Remap matching IDs so that each cluster draw is assigned a unique matching ID
+                                       samp.lengths           <- lapply(samp.lookup,length)
+                                       model$call$match.id <- unlist(lapply(1:length(samp.lengths),function(z){rep(z,samp.lengths[[z]])}))
+                                   }
+                                   model$call$x   <- x[samp.idx,]
 
-                if (is.matrix(y))
-                {
-                    model$call$y   <- y[samp.idx,]
-                } else
-                {
-                    model$call$y   <- y[samp.idx]
-                }
-                model$call$trt <- trt[samp.idx]
+                                   if (is.matrix(y))
+                                   {
+                                       model$call$y   <- y[samp.idx,]
+                                   } else
+                                   {
+                                       model$call$y   <- y[samp.idx]
+                                   }
+                                   model$call$trt <- trt[samp.idx]
 
-                # fit subgroup model on resampled data
-                mod.b    <- do.call(fit.subgroup, model$call)
+                                   # fit subgroup model on resampled data
+                                   mod.b    <- do.call(fit.subgroup, model$call)
 
-                # calculate benefit scores and resulting
-                # subgroup treatment effects on the original data
-                benefit.scores.orig <- mod.b$predict(x)
+                                   # calculate benefit scores and resulting
+                                   # subgroup treatment effects on the original data
+                                   benefit.scores.orig <- mod.b$predict(x)
 
-                sbgrp.trt.eff.orig  <- subgroup.effects(benefit.scores.orig,
-                                                        y, trt,
-                                                        model$call$cutpoint,
-                                                        model$larger.outcome.better,
-                                                        model$reference.trt)
+                                   sbgrp.trt.eff.orig  <- subgroup.effects(benefit.scores.orig,
+                                                                           y, trt,
+                                                                           model$call$cutpoint,
+                                                                           model$larger.outcome.better,
+                                                                           model$reference.trt)
 
-                # subtract estimated bias for current bootstrap iteration
-                res  <- list(model$subgroup.trt.effects[[1]] -
-                                (mod.b$subgroup.trt.effects[[1]] - sbgrp.trt.eff.orig[[1]]), # bias estimate portion
-                             model$subgroup.trt.effects[[2]] -
-                                (mod.b$subgroup.trt.effects[[2]] - sbgrp.trt.eff.orig[[2]]), # bias estimate portion
-                             model$subgroup.trt.effects[[3]] -
-                                (mod.b$subgroup.trt.effects[[3]] - sbgrp.trt.eff.orig[[3]]), # bias estimate portion
-                             as.vector(mod.b$coefficients),
-                             model$subgroup.trt.effects[[4]] -
-                                (mod.b$subgroup.trt.effects[[4]] - sbgrp.trt.eff.orig[[4]])) # bias estimate portion
+                                   # subtract estimated bias for current bootstrap iteration
+                                   res  <- list(model$subgroup.trt.effects[[1]] -
+                                                    (mod.b$subgroup.trt.effects[[1]] - sbgrp.trt.eff.orig[[1]]), # bias estimate portion
+                                                model$subgroup.trt.effects[[2]] -
+                                                    (mod.b$subgroup.trt.effects[[2]] - sbgrp.trt.eff.orig[[2]]), # bias estimate portion
+                                                model$subgroup.trt.effects[[3]] -
+                                                    (mod.b$subgroup.trt.effects[[3]] - sbgrp.trt.eff.orig[[3]]), # bias estimate portion
+                                                as.vector(mod.b$coefficients),
+                                                model$subgroup.trt.effects[[4]] -
+                                                    (mod.b$subgroup.trt.effects[[4]] - sbgrp.trt.eff.orig[[4]])) # bias estimate portion
 
-            } else
-            {   # bootstrap
+                               } else
+                               {   # bootstrap
 
-                # bootstrap is not available because it
-                # results in overly optimistic results
-              if (is.null(match.id)) {
-                samp.idx <- sample.int(n.obs, n.obs, replace = TRUE)
-              } else {
-                # Draw at the cluster level
-                samp.levels <- sample(levels(match.id), replace = TRUE)
-                samp.lookup <- lapply(samp.levels, function(z) {which(match.id == z)})
-                samp.idx    <- unlist(samp.lookup)
-                # Remap matching IDs so that each cluster draw is assigned a unique matching ID
-                samp.lengths           <- lapply(samp.lookup,length)
-                model$call$match.id <- unlist(lapply(1:length(samp.lengths),function(z){rep(z,samp.lengths[[z]])}))
-              }
-                model$call$x   <- x[samp.idx,]
-                model$call$y   <- y[samp.idx]
-                model$call$trt <- trt[samp.idx]
+                                   # bootstrap is not available because it
+                                   # results in overly optimistic results
+                                   if (is.null(match.id))
+                                   {
+                                       samp.idx <- sample.int(n.obs, n.obs, replace = TRUE)
+                                   } else
+                                   {
+                                       # Draw at the cluster level
+                                       samp.levels <- sample(levels(match.id), replace = TRUE)
+                                       samp.lookup <- lapply(samp.levels, function(z) {which(match.id == z)})
+                                       samp.idx    <- unlist(samp.lookup)
+                                       # Remap matching IDs so that each cluster draw is assigned a unique matching ID
+                                       samp.lengths           <- lapply(samp.lookup,length)
+                                       model$call$match.id <- unlist(lapply(1:length(samp.lengths),function(z){rep(z,samp.lengths[[z]])}))
+                                   }
+                                   model$call$x   <- x[samp.idx,]
+                                   model$call$y   <- y[samp.idx]
+                                   model$call$trt <- trt[samp.idx]
 
-                mod.b               <- do.call(fit.subgroup, model$call)
+                                   mod.b               <- do.call(fit.subgroup, model$call)
 
-                res <- list(mod.b$subgroup.trt.effects[[1]], # subgroup-specific trt effects
-                            mod.b$subgroup.trt.effects[[2]], # mean of outcome for KxK table (trt received vs recommended)
-                            mod.b$subgroup.trt.effects[[3]], # sample sizes for KxK table
-                            as.vector(mod.b$coefficients),
-                            mod.b$subgroup.trt.effects[[4]]) # overall subgroup effect
+                                   res <- list(mod.b$subgroup.trt.effects[[1]], # subgroup-specific trt effects
+                                               mod.b$subgroup.trt.effects[[2]], # mean of outcome for KxK table (trt received vs recommended)
+                                               mod.b$subgroup.trt.effects[[3]], # sample sizes for KxK table
+                                               as.vector(mod.b$coefficients),
+                                               mod.b$subgroup.trt.effects[[4]]) # overall subgroup effect
 
-            }
+                               }
 
-            res
-        } # end parallel foreach loop
+                               res
+                           } # end parallel foreach loop
 
         ## collect results as they are collected for non-parallel loop
         boot.list[[1]] <- unname(Reduce('rbind', outlist[[1]]))
@@ -324,16 +331,18 @@ validate.subgroup <- function(model,
             if (method == "training_test_replication")
             {
                 # randomly split/partition data into training and testing sets
-              if (is.null(match.id)) {
-                train.samp.size <- floor(n.obs * train.fraction)
-                samp.idx        <- sample.int(n.obs, train.samp.size, replace = FALSE)
-              } else {
-                # Draw at the cluster level (train.fraction interpreted as fraction of clusters)
-                n.levels    <- length(levels(match.id))
-                samp.levels <- sample.int(n.levels, n.levels * train.fraction, replace = FALSE)
-                samp.idx    <- which(match.id %in% levels(match.id)[samp.levels])
-                model$call$match.id <- match.id[samp.idx]
-              }
+                if (is.null(match.id))
+                {
+                    train.samp.size <- floor(n.obs * train.fraction)
+                    samp.idx        <- sample.int(n.obs, train.samp.size, replace = FALSE)
+                } else
+                {
+                    # Draw at the cluster level (train.fraction interpreted as fraction of clusters)
+                    n.levels    <- length(levels(match.id))
+                    samp.levels <- sample.int(n.levels, n.levels * train.fraction, replace = FALSE)
+                    samp.idx    <- which(match.id %in% levels(match.id)[samp.levels])
+                    model$call$match.id <- match.id[samp.idx]
+                }
                 model$call$x    <- x[samp.idx,]
                 model$call$trt  <- trt[samp.idx]
 
@@ -375,17 +384,19 @@ validate.subgroup <- function(model,
             {   # bootstrap bias correction
 
                 # take a bootstrap sample with replacement
-              if (is.null(match.id)) {
-                samp.idx <- sample.int(n.obs, n.obs, replace = TRUE)
-              } else {
-                # Draw at the cluster level
-                samp.levels <- sample(levels(match.id), replace = TRUE)
-                samp.lookup <- lapply(samp.levels, function(z) {which(match.id == z)})
-                samp.idx    <- unlist(samp.lookup)
-                # Remap matching IDs so that each cluster draw is assigned a unique matching ID
-                samp.lengths           <- lapply(samp.lookup,length)
-                model$call$match.id <- unlist(lapply(1:length(samp.lengths),function(z){rep(z,samp.lengths[[z]])}))
-              }
+                if (is.null(match.id))
+                {
+                    samp.idx <- sample.int(n.obs, n.obs, replace = TRUE)
+                } else
+                {
+                    # Draw at the cluster level
+                    samp.levels <- sample(levels(match.id), replace = TRUE)
+                    samp.lookup <- lapply(samp.levels, function(z) {which(match.id == z)})
+                    samp.idx    <- unlist(samp.lookup)
+                    # Remap matching IDs so that each cluster draw is assigned a unique matching ID
+                    samp.lengths           <- lapply(samp.lookup,length)
+                    model$call$match.id <- unlist(lapply(1:length(samp.lengths),function(z){rep(z,samp.lengths[[z]])}))
+                }
                 model$call$x   <- x[samp.idx,]
 
                 if (is.matrix(y))
@@ -426,16 +437,18 @@ validate.subgroup <- function(model,
 
                 # bootstrap is not available because it
                 # results in overly optimistic results
-                if (is.null(match.id)) {
-                  samp.idx <- sample.int(n.obs, n.obs, replace = TRUE)
-                } else {
-                  # Draw at the cluster level
-                  samp.levels <- sample(levels(match.id), replace = TRUE)
-                  samp.lookup <- lapply(samp.levels, function(z) {which(match.id == z)})
-                  samp.idx    <- unlist(samp.lookup)
-                  # Remap matching IDs so that each cluster draw is assigned a unique matching ID
-                  samp.lengths           <- lapply(samp.lookup,length)
-                  model$call$match.id <- unlist(lapply(1:length(samp.lengths),function(z){rep(z,samp.lengths[[z]])}))
+                if (is.null(match.id))
+                {
+                    samp.idx <- sample.int(n.obs, n.obs, replace = TRUE)
+                } else
+                {
+                    # Draw at the cluster level
+                    samp.levels <- sample(levels(match.id), replace = TRUE)
+                    samp.lookup <- lapply(samp.levels, function(z) {which(match.id == z)})
+                    samp.idx    <- unlist(samp.lookup)
+                    # Remap matching IDs so that each cluster draw is assigned a unique matching ID
+                    samp.lengths           <- lapply(samp.lookup,length)
+                    model$call$match.id <- unlist(lapply(1:length(samp.lengths),function(z){rep(z,samp.lengths[[z]])}))
                 }
                 model$call$x   <- x[samp.idx,]
                 model$call$y   <- y[samp.idx]
