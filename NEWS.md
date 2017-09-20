@@ -11,3 +11,4 @@
 
 * Updated check.overlap() to handle multiple treatments
 
+* Aaron added match.id argument to allow proper analysis of matched case-control datasets
