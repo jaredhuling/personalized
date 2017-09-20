@@ -133,43 +133,45 @@ get.coef.func <- function(fit.name, env = parent.frame())
 #' @importFrom stats coef
 fit_sq_loss_lasso <- function(x, y, trt, n.trts, wts, family, match.id, ...)
 {
-  # this function must return a fitted model
-  # in addition to a function which takes in
-  # a design matrix and outputs estimated benefit scores
+    # this function must return a fitted model
+    # in addition to a function which takes in
+    # a design matrix and outputs estimated benefit scores
 
-  ###################################################################
-  ##
-  ## IMPORTANT NOTE: the name of this function *must*
-  ##                 begin with "fit_" and end with
-  ##                 the text string to associated with
-  ##                 this function in the options for the
-  ##                 'loss' argument of the fit.subgrp()
-  ##                 function
-  ##
-  ###################################################################
+    ###################################################################
+    ##
+    ## IMPORTANT NOTE: the name of this function *must*
+    ##                 begin with "fit_" and end with
+    ##                 the text string to associated with
+    ##                 this function in the options for the
+    ##                 'loss' argument of the fit.subgrp()
+    ##                 function
+    ##
+    ###################################################################
 
 
-  list.dots <- list(...)
-  dot.names <- names(list.dots)
+    list.dots <- list(...)
+    dot.names <- names(list.dots)
 
-  n.unique.vars <- ncol(x) / (n.trts - 1)
-  zero.pen.idx  <- ((1:(n.trts - 1) ) - 1) * n.unique.vars + 1
+    n.unique.vars <- ncol(x) / (n.trts - 1)
+    zero.pen.idx  <- ((1:(n.trts - 1) ) - 1) * n.unique.vars + 1
 
-  if ("penalty.factor" %in% dot.names)
-  {
-    ## ensure treatment is not penalized
-    list.dots$penalty.factor[zero.pen.idx] <- 0
-  } else
-  {
-    list.dots$penalty.factor <- rep(1, ncol(x))
-    list.dots$penalty.factor[zero.pen.idx] <- 0
-  }
+    if ("penalty.factor" %in% dot.names)
+    {
+        ## ensure treatment is not penalized
+        list.dots$penalty.factor[zero.pen.idx] <- 0
+    } else
+    {
+        list.dots$penalty.factor <- rep(1, ncol(x))
+        list.dots$penalty.factor[zero.pen.idx] <- 0
+    }
 
     ## Establish nfolds for cv.glmnet()
-    if ("nfolds" %in% dot.names) {
+    if ("nfolds" %in% dot.names)
+    {
         nfolds <- list.dots$nfolds
-        if (nfolds < 3) {
-            stop("nfolds must be bigger than 3; nfolds=10 recommended")
+        if (nfolds < 3)
+        {
+            stop("nfolds must be bigger than 3; nfolds = 10 recommended")
         }
     } else {
         nfolds <- 10
@@ -178,34 +180,39 @@ fit_sq_loss_lasso <- function(x, y, trt, n.trts, wts, family, match.id, ...)
 
     ## Establish foldid for cv.glmnet()
     ## if match.id was supplied, foldid will be structured around the clusters
-    if (!is.null(match.id)) {
-        if ("foldid" %in% dot.names) {
+    if (!is.null(match.id))
+    {
+        if ("foldid" %in% dot.names)
+        {
             warning("User-supplied foldid will be ignored since match.id was detected.
-                     Folds will be randomly assigned to clusters according to match.id.")
+                    Folds will be randomly assigned to clusters according to match.id.")
         }
         # Assign a fold ID for each cluster level
         df.folds <- data.frame(match.id = sample(levels(match.id)),
                                fold.id = 1:length(levels(match.id)) %% nfolds)
         # Obtain vector of fold IDs with respect to the data
         foldid <- sapply(match.id, function(z) {df.folds[which(z == df.folds$match.id),"fold.id"]}) +1
-    } else {
-        if ("foldid" %in% dot.names) {
-            foldid <- list.dots$foldid
-        } else {
-            foldid <- sample(rep(seq(nfolds), length = nrow(x)))
+        } else
+        {
+            if ("foldid" %in% dot.names)
+            {
+                foldid <- list.dots$foldid
+            } else
+            {
+                foldid <- sample(rep(seq(nfolds), length = nrow(x)))
+            }
         }
-    }
     list.dots$foldid <- foldid
 
-  # fit a model with a lasso
-  # penalty and desired loss
-  model <- do.call(cv.glmnet, c(list(x = x, y = y, weights = wts, family = family,
-                                     intercept = FALSE), list.dots))
+    # fit a model with a lasso
+    # penalty and desired loss
+    model <- do.call(cv.glmnet, c(list(x = x, y = y, weights = wts, family = family,
+                                       intercept = FALSE), list.dots))
 
-  # Return fitted model and extraction methods
-  list(predict      = get.pred.func("fit_sq_loss_lasso", model),
-       model        = model,
-       coefficients = get.coef.func("fit_sq_loss_lasso")(model))
+    # Return fitted model and extraction methods
+    list(predict      = get.pred.func("fit_sq_loss_lasso", model),
+         model        = model,
+         coefficients = get.coef.func("fit_sq_loss_lasso")(model))
 }
 
 
@@ -215,62 +222,70 @@ fit_logistic_loss_lasso <- fit_sq_loss_lasso
 fit_cox_loss_lasso <- function(x, y, trt, n.trts, wts, family, match.id, ...)
 {
 
-  list.dots <- list(...)
-  dot.names <- names(list.dots)
+    list.dots <- list(...)
+    dot.names <- names(list.dots)
 
-  n.unique.vars <- ncol(x) / (n.trts - 1)
-  zero.pen.idx  <- ((1:(n.trts - 1) ) - 1) * n.unique.vars + 1
+    n.unique.vars <- ncol(x) / (n.trts - 1)
+    zero.pen.idx  <- ((1:(n.trts - 1) ) - 1) * n.unique.vars + 1
 
-  if ("penalty.factor" %in% dot.names)
-  {
-      ## ensure treatment is not penalized
-      list.dots$penalty.factor[zero.pen.idx] <- 0
-  } else
-  {
-      list.dots$penalty.factor <- rep(1, ncol(x))
-      list.dots$penalty.factor[zero.pen.idx] <- 0
-  }
+    if ("penalty.factor" %in% dot.names)
+    {
+        ## ensure treatment is not penalized
+        list.dots$penalty.factor[zero.pen.idx] <- 0
+    } else
+    {
+        list.dots$penalty.factor <- rep(1, ncol(x))
+        list.dots$penalty.factor[zero.pen.idx] <- 0
+    }
 
     ## Establish nfolds for cv.glmnet()
-    if ("nfolds" %in% dot.names) {
+    if ("nfolds" %in% dot.names)
+    {
         nfolds <- list.dots$nfolds
-        if (nfolds < 3) {
-            stop("nfolds must be bigger than 3; nfolds=10 recommended")
+        if (nfolds < 3)
+        {
+            stop("nfolds must be bigger than 3; nfolds = 10 recommended")
         }
-    } else {
+    } else
+    {
         nfolds <- 10
     }
     list.dots$nfolds <- nfolds
 
     ## Establish foldid for cv.glmnet()
     ## if match.id was supplied, foldid will be structured around the clusters
-    if (!is.null(match.id)) {
-        if ("foldid" %in% dot.names) {
+    if (!is.null(match.id))
+    {
+        if ("foldid" %in% dot.names)
+        {
             warning("User-supplied foldid will be ignored since match.id was detected.
-                     Folds will be randomly assigned to clusters according to match.id.")
+                    Folds will be randomly assigned to clusters according to match.id.")
         }
         # Assign a fold ID for each cluster level
         df.folds <- data.frame(match.id = sample(levels(match.id)),
                                fold.id = 1:length(levels(match.id)) %% nfolds)
         # Obtain vector of fold IDs with respect to the data
         foldid <- sapply(match.id, function(z) {df.folds[which(z == df.folds$match.id),"fold.id"]}) +1
-    } else {
-        if ("foldid" %in% dot.names) {
-            foldid <- list.dots$foldid
-        } else {
-            foldid <- sample(rep(seq(nfolds), length = nrow(x)))
+        } else
+        {
+            if ("foldid" %in% dot.names)
+            {
+                foldid <- list.dots$foldid
+            } else
+            {
+                foldid <- sample(rep(seq(nfolds), length = nrow(x)))
+            }
         }
-    }
     list.dots$foldid <- foldid
 
-  # fit a model with a lasso
-  # penalty and desired loss
-  model <- do.call(cv.glmnet, c(list(x = x, y = y, weights = wts, family = "cox"), list.dots))
+    # fit a model with a lasso
+    # penalty and desired loss
+    model <- do.call(cv.glmnet, c(list(x = x, y = y, weights = wts, family = "cox"), list.dots))
 
-  # Return fitted model and extraction methods
-  list(predict      = get.pred.func("fit_cox_loss_lasso", model),
-       model        = model,
-       coefficients = get.coef.func("fit_cox_loss_lasso")(model))
+    # Return fitted model and extraction methods
+    list(predict      = get.pred.func("fit_cox_loss_lasso", model),
+         model        = model,
+         coefficients = get.coef.func("fit_cox_loss_lasso")(model))
 }
 
 
@@ -278,170 +293,177 @@ fit_cox_loss_lasso <- function(x, y, trt, n.trts, wts, family, match.id, ...)
 #' @importFrom stats as.formula binomial gaussian
 fit_sq_loss_lasso_gam <- function(x, y, trt, n.trts, wts, family, match.id, ...)
 {
-  # this function must return a fitted model
-  # in addition to a function which takes in
-  # a design matrix and outputs estimated benefit scores
+    # this function must return a fitted model
+    # in addition to a function which takes in
+    # a design matrix and outputs estimated benefit scores
 
-  ###################################################################
-  ##
-  ## IMPORTANT NOTE: the name of this function *must*
-  ##                 begin with "fit_" and end with
-  ##                 the text string to associated with
-  ##                 this function in the options for the
-  ##                 'loss' argument of the fit.subgrp()
-  ##                 function
-  ##
-  ###################################################################
+    ###################################################################
+    ##
+    ## IMPORTANT NOTE: the name of this function *must*
+    ##                 begin with "fit_" and end with
+    ##                 the text string to associated with
+    ##                 this function in the options for the
+    ##                 'loss' argument of the fit.subgrp()
+    ##                 function
+    ##
+    ###################################################################
 
-  # need to inspect the dots to extract
-  # the arguments supplied to cv.glmnet
-  # and those supplied to gam
-  list.dots <- list(...)
-  dot.names <- names(list.dots)
+    # need to inspect the dots to extract
+    # the arguments supplied to cv.glmnet
+    # and those supplied to gam
+    list.dots <- list(...)
+    dot.names <- names(list.dots)
 
-  if ("penalty.factor" %in% dot.names)
-  {
-    ## ensure treatment is not penalized
-    list.dots$penalty.factor[1] <- 0
-  } else
-  {
-    list.dots$penalty.factor <- c(0, rep(1, ncol(x) - 1))
-  }
+    if ("penalty.factor" %in% dot.names)
+    {
+        ## ensure treatment is not penalized
+        list.dots$penalty.factor[1] <- 0
+    } else
+    {
+        list.dots$penalty.factor <- c(0, rep(1, ncol(x) - 1))
+    }
 
     ## Establish nfolds for cv.glmnet()
-    if ("nfolds" %in% dot.names) {
+    if ("nfolds" %in% dot.names)
+    {
         nfolds <- list.dots$nfolds
-        if (nfolds < 3) {
-            stop("nfolds must be bigger than 3; nfolds=10 recommended")
+        if (nfolds < 3)
+        {
+            stop("nfolds must be bigger than 3; nfolds = 10 recommended")
         }
-    } else {
+    } else
+    {
         nfolds <- 10
     }
     list.dots$nfolds <- nfolds
 
     ## Establish foldid for cv.glmnet()
     ## if match.id was supplied, foldid will be structured around the clusters
-    if (!is.null(match.id)) {
-        if ("foldid" %in% dot.names) {
+    if (!is.null(match.id))
+    {
+        if ("foldid" %in% dot.names)
+        {
             warning("User-supplied foldid will be ignored since match.id was detected.
-                     Folds will be randomly assigned to clusters according to match.id.")
+                    Folds will be randomly assigned to clusters according to match.id.")
         }
         # Assign a fold ID for each cluster level
         df.folds <- data.frame(match.id = sample(levels(match.id)),
                                fold.id = 1:length(levels(match.id)) %% nfolds)
         # Obtain vector of fold IDs with respect to the data
         foldid <- sapply(match.id, function(z) {df.folds[which(z == df.folds$match.id),"fold.id"]}) +1
-    } else {
-        if ("foldid" %in% dot.names) {
-            foldid <- list.dots$foldid
         } else
         {
-            foldid <- sample(rep(seq(nfolds), length = nrow(x)))
+            if ("foldid" %in% dot.names)
+            {
+                foldid <- list.dots$foldid
+            } else
+            {
+                foldid <- sample(rep(seq(nfolds), length = nrow(x)))
+            }
         }
-    }
     list.dots$foldid <- foldid
 
-  glmnet.argnames <- union(names(formals(cv.glmnet)), names(formals(glmnet)))
-  gam.argnames    <- names(formals(gam))
+    glmnet.argnames <- union(names(formals(cv.glmnet)), names(formals(glmnet)))
+    gam.argnames    <- names(formals(gam))
 
-  # since 'method' is an argument of 'fit.subgrp',
-  # let the user change the gam 'method' arg by supplying
-  # 'method.gam' arg instead of 'method'
-  dot.names[dot.names == "method.gam"] <- "method"
-  names(list.dots)[names(list.dots) == "method.gam"] <- "method"
+    # since 'method' is an argument of 'fit.subgrp',
+    # let the user change the gam 'method' arg by supplying
+    # 'method.gam' arg instead of 'method'
+    dot.names[dot.names == "method.gam"] <- "method"
+    names(list.dots)[names(list.dots) == "method.gam"] <- "method"
 
-  # find the arguments relevant for each
-  # possible ...-supplied function
-  dots.idx.glmnet <- match(glmnet.argnames, dot.names)
-  dots.idx.gam    <- match(gam.argnames, dot.names)
+    # find the arguments relevant for each
+    # possible ...-supplied function
+    dots.idx.glmnet <- match(glmnet.argnames, dot.names)
+    dots.idx.gam    <- match(gam.argnames, dot.names)
 
-  dots.idx.glmnet <- dots.idx.glmnet[!is.na(dots.idx.glmnet)]
-  dots.idx.gam    <- dots.idx.gam[!is.na(dots.idx.gam)]
+    dots.idx.glmnet <- dots.idx.glmnet[!is.na(dots.idx.glmnet)]
+    dots.idx.gam    <- dots.idx.gam[!is.na(dots.idx.gam)]
 
-  # fit a model with a lasso
-  # penalty and desired loss:
-  sel.model <- do.call(cv.glmnet, c(list(x = x, y = y, weights = wts, family = family,
-                                         intercept = FALSE), list.dots[dots.idx.glmnet]))
+    # fit a model with a lasso
+    # penalty and desired loss:
+    sel.model <- do.call(cv.glmnet, c(list(x = x, y = y, weights = wts, family = family,
+                                           intercept = FALSE), list.dots[dots.idx.glmnet]))
 
 
-  vnames <- colnames(x)
+    vnames <- colnames(x)
 
-  sel.idx <- drop(predict(sel.model, type = "nonzero", s = "lambda.min")[[1]])
+    sel.idx <- drop(predict(sel.model, type = "nonzero", s = "lambda.min")[[1]])
 
-  # always include treatment main effect
-  sel.idx <- union(1L, sel.idx)
+    # always include treatment main effect
+    sel.idx <- union(1L, sel.idx)
 
-  # names of selected variables
-  sel.vnames <- vnames[sel.idx]
+    # names of selected variables
+    sel.vnames <- vnames[sel.idx]
 
-  # find which variables are binary
-  var.levels <- numeric(length(sel.idx))
-  for (v in 1:length(sel.idx))
-  {
-    var.levels[v] <- length(unique(x[,sel.idx[v]]))
-  }
-
-  contin.vars <- sel.vnames[var.levels > 2]
-  binary.vars <- sel.vnames[var.levels == 2]
-
-  # create formula for gam
-  contin.formula <- binary.formula <- NULL
-
-  # don't create smoother for binary vars
-  if (length(binary.vars) > 0)
-  {
-    binary.formula <- paste(binary.vars, collapse = "+")
-  }
-
-  # create smoother for each continuous var
-  if (length(contin.vars) > 0)
-  {
-    form.cur <- paste0("s(", contin.vars, ")")
-    contin.formula <- paste(form.cur, collapse = "+")
-  }
-
-  family.func <- gaussian()
-
-  if (family == "cox")
-  {
-    rhs.formula <- paste(c(binary.formula, contin.formula), collapse = "+")
-    family.func <- cox.ph()
-  } else
-  {
-    rhs.formula <- paste("-1 +", paste(c(binary.formula, contin.formula), collapse = "+"))
-    if (family == "binomial")
+    # find which variables are binary
+    var.levels <- numeric(length(sel.idx))
+    for (v in 1:length(sel.idx))
     {
-      family.func <- binomial()
-      y <- as.integer(y)
+        var.levels[v] <- length(unique(x[,sel.idx[v]]))
     }
-  }
-  gam.formula <- as.formula(paste("y ~", rhs.formula))
 
-  # create data frame
-  df <- data.frame(y = y, x = x[,sel.idx])
-  colnames(df) <- c("y", sel.vnames)
+    contin.vars <- sel.vnames[var.levels > 2]
+    binary.vars <- sel.vnames[var.levels == 2]
 
-  vnames <- sel.vnames
+    # create formula for gam
+    contin.formula <- binary.formula <- NULL
 
-  # fit gam model:
-  # only add in dots calls if they exist
-  if (length(dots.idx.glmnet) > 0)
-  {
-    model <- do.call(gam, c(list(formula = gam.formula, data = df,
-                                 weights = wts, family = family.func,
-                                 drop.intercept = TRUE),
-                            list.dots[dots.idx.gam]))
-  } else
-  {
-    model <- do.call(gam, list(formula = gam.formula, data = df,
-                               weights = wts, family = family.func,
-                               drop.intercept = TRUE))
-  }
+    # don't create smoother for binary vars
+    if (length(binary.vars) > 0)
+    {
+        binary.formula <- paste(binary.vars, collapse = "+")
+    }
 
-  # Return fitted model and extraction methods
-  list(predict      = get.pred.func("fit_sq_loss_lasso_gam", model),
-       model        = model,
-       coefficients = get.coef.func("fit_sq_loss_lasso_gam")(model))
+    # create smoother for each continuous var
+    if (length(contin.vars) > 0)
+    {
+        form.cur <- paste0("s(", contin.vars, ")")
+        contin.formula <- paste(form.cur, collapse = "+")
+    }
+
+    family.func <- gaussian()
+
+    if (family == "cox")
+    {
+        rhs.formula <- paste(c(binary.formula, contin.formula), collapse = "+")
+        family.func <- cox.ph()
+    } else
+    {
+        rhs.formula <- paste("-1 +", paste(c(binary.formula, contin.formula), collapse = "+"))
+        if (family == "binomial")
+        {
+            family.func <- binomial()
+            y <- as.integer(y)
+        }
+    }
+    gam.formula <- as.formula(paste("y ~", rhs.formula))
+
+    # create data frame
+    df <- data.frame(y = y, x = x[,sel.idx])
+    colnames(df) <- c("y", sel.vnames)
+
+    vnames <- sel.vnames
+
+    # fit gam model:
+    # only add in dots calls if they exist
+    if (length(dots.idx.glmnet) > 0)
+    {
+        model <- do.call(gam, c(list(formula = gam.formula, data = df,
+                                     weights = wts, family = family.func,
+                                     drop.intercept = TRUE),
+                                list.dots[dots.idx.gam]))
+    } else
+    {
+        model <- do.call(gam, list(formula = gam.formula, data = df,
+                                   weights = wts, family = family.func,
+                                   drop.intercept = TRUE))
+    }
+
+    # Return fitted model and extraction methods
+    list(predict      = get.pred.func("fit_sq_loss_lasso_gam", model),
+         model        = model,
+         coefficients = get.coef.func("fit_sq_loss_lasso_gam")(model))
 }
 
 fit_logistic_loss_lasso_gam <- fit_sq_loss_lasso_gam
@@ -451,104 +473,104 @@ fit_cox_loss_lasso_gam      <- fit_sq_loss_lasso_gam
 
 fit_sq_loss_gam <- function(x, y, trt, n.trts, wts, family, match.id, ...)
 {
-  # this function must return a fitted model
-  # in addition to a function which takes in
-  # a design matrix and outputs estimated benefit scores
+    # this function must return a fitted model
+    # in addition to a function which takes in
+    # a design matrix and outputs estimated benefit scores
 
-  ###################################################################
-  ##
-  ## IMPORTANT NOTE: the name of this function *must*
-  ##                 begin with "fit_" and end with
-  ##                 the text string to associated with
-  ##                 this function in the options for the
-  ##                 'loss' argument of the fit.subgrp()
-  ##                 function
-  ##
-  ###################################################################
+    ###################################################################
+    ##
+    ## IMPORTANT NOTE: the name of this function *must*
+    ##                 begin with "fit_" and end with
+    ##                 the text string to associated with
+    ##                 this function in the options for the
+    ##                 'loss' argument of the fit.subgrp()
+    ##                 function
+    ##
+    ###################################################################
 
 
-  list.dots <- list(...)
+    list.dots <- list(...)
 
-  # since 'method' is an argument of 'fit.subgrp',
-  # let the user change the gam 'method' arg by supplying
-  # 'method.gam' arg instead of 'method'
-  names(list.dots)[names(list.dots) == "method.gam"] <- "method"
+    # since 'method' is an argument of 'fit.subgrp',
+    # let the user change the gam 'method' arg by supplying
+    # 'method.gam' arg instead of 'method'
+    names(list.dots)[names(list.dots) == "method.gam"] <- "method"
 
-  vnames  <- colnames(x)
-  sel.idx <- seq_len(ncol(x))
+    vnames  <- colnames(x)
+    sel.idx <- seq_len(ncol(x))
 
-  # names of selected variables
-  sel.vnames <- vnames[sel.idx]
+    # names of selected variables
+    sel.vnames <- vnames[sel.idx]
 
-  # find which variables are binary
-  var.levels <- numeric(length(sel.idx))
-  for (v in 1:length(sel.idx))
-  {
-    var.levels[v] <- length(unique(x[,sel.idx[v]]))
-  }
-
-  contin.vars <- sel.vnames[var.levels > 2]
-  binary.vars <- sel.vnames[var.levels == 2]
-
-  # create formula for gam
-  contin.formula <- binary.formula <- NULL
-
-  # don't create smoother for binary vars
-  if (length(binary.vars) > 0)
-  {
-    binary.formula <- paste(binary.vars, collapse = "+")
-  }
-
-  # create smoother for each continuous var
-  if (length(contin.vars) > 0)
-  {
-    form.cur <- paste0("s(", contin.vars, ")")
-    contin.formula <- paste(form.cur, collapse = "+")
-  }
-
-  family.func <- gaussian()
-
-  if (family == "cox")
-  {
-    rhs.formula <- paste(c(binary.formula, contin.formula), collapse = "+")
-    family.func <- cox.ph()
-  } else
-  {
-    rhs.formula <- paste("-1 +", paste(c(binary.formula, contin.formula), collapse = "+"))
-    if (family == "binomial")
+    # find which variables are binary
+    var.levels <- numeric(length(sel.idx))
+    for (v in 1:length(sel.idx))
     {
-      family.func <- binomial()
-      y <- as.integer(y)
+        var.levels[v] <- length(unique(x[,sel.idx[v]]))
     }
-  }
-  gam.formula <- as.formula(paste("y ~", rhs.formula))
 
-  # create data frame
-  df <- data.frame(y = y, x = x[,sel.idx])
-  colnames(df) <- c("y", sel.vnames)
+    contin.vars <- sel.vnames[var.levels > 2]
+    binary.vars <- sel.vnames[var.levels == 2]
 
-  vnames <- sel.vnames
+    # create formula for gam
+    contin.formula <- binary.formula <- NULL
 
-  # fit gam model:
-  # only add in dots calls if they exist
-  if (length(list.dots) > 0)
-  {
-    model <- do.call(gam, c(list(formula = gam.formula, data = df,
-                                 weights = wts, family = family.func,
-                                 drop.intercept = TRUE),
-                            list.dots))
-  } else
-  {
-    model <- do.call(gam, list(formula = gam.formula, data = df,
-                               weights = wts, family = family.func,
-                               drop.intercept = TRUE))
-  }
+    # don't create smoother for binary vars
+    if (length(binary.vars) > 0)
+    {
+        binary.formula <- paste(binary.vars, collapse = "+")
+    }
+
+    # create smoother for each continuous var
+    if (length(contin.vars) > 0)
+    {
+        form.cur <- paste0("s(", contin.vars, ")")
+        contin.formula <- paste(form.cur, collapse = "+")
+    }
+
+    family.func <- gaussian()
+
+    if (family == "cox")
+    {
+        rhs.formula <- paste(c(binary.formula, contin.formula), collapse = "+")
+        family.func <- cox.ph()
+    } else
+    {
+        rhs.formula <- paste("-1 +", paste(c(binary.formula, contin.formula), collapse = "+"))
+        if (family == "binomial")
+        {
+            family.func <- binomial()
+            y <- as.integer(y)
+        }
+    }
+    gam.formula <- as.formula(paste("y ~", rhs.formula))
+
+    # create data frame
+    df <- data.frame(y = y, x = x[,sel.idx])
+    colnames(df) <- c("y", sel.vnames)
+
+    vnames <- sel.vnames
+
+    # fit gam model:
+    # only add in dots calls if they exist
+    if (length(list.dots) > 0)
+    {
+        model <- do.call(gam, c(list(formula = gam.formula, data = df,
+                                     weights = wts, family = family.func,
+                                     drop.intercept = TRUE),
+                                list.dots))
+    } else
+    {
+        model <- do.call(gam, list(formula = gam.formula, data = df,
+                                   weights = wts, family = family.func,
+                                   drop.intercept = TRUE))
+    }
 
 
-  # Return fitted model and extraction methods
-  list(predict      = get.pred.func("fit_sq_loss_gam", model),
-       model        = model,
-       coefficients = get.coef.func("fit_sq_loss_gam")(model))
+    # Return fitted model and extraction methods
+    list(predict      = get.pred.func("fit_sq_loss_gam", model),
+         model        = model,
+         coefficients = get.coef.func("fit_sq_loss_gam")(model))
 }
 
 fit_logistic_loss_gam <- fit_sq_loss_gam
@@ -559,310 +581,313 @@ fit_cox_loss_gam      <- fit_sq_loss_gam
 #' @import gbm
 fit_sq_loss_gbm <- function(x, y, trt, n.trts, wts, family, match.id, ...)
 {
-  # this function must return a fitted model
-  # in addition to a function which takes in
-  # a design matrix and outputs estimated benefit scores
+    # this function must return a fitted model
+    # in addition to a function which takes in
+    # a design matrix and outputs estimated benefit scores
 
-  ###################################################################
-  ##
-  ## IMPORTANT NOTE: the name of this function *must*
-  ##                 begin with "fit_" and end with
-  ##                 the text string to associated with
-  ##                 this function in the options for the
-  ##                 'loss' argument of the fit.subgrp()
-  ##                 function
-  ##
-  ###################################################################
+    ###################################################################
+    ##
+    ## IMPORTANT NOTE: the name of this function *must*
+    ##                 begin with "fit_" and end with
+    ##                 the text string to associated with
+    ##                 this function in the options for the
+    ##                 'loss' argument of the fit.subgrp()
+    ##                 function
+    ##
+    ###################################################################
 
-  list.dots <- list(...)
+    list.dots <- list(...)
 
-  dot.names <- names(list.dots)
-  if ("cv.folds" %in% dot.names)
-  {
-    cv.folds <- list.dots["cv.folds"]
-    if (cv.folds < 2)
+    dot.names <- names(list.dots)
+    if ("cv.folds" %in% dot.names)
     {
-      cv.folds <- 2L
-      list.dots$cv.folds <- cv.folds
-      warning("cv.folds must be at least 2")
+        cv.folds <- list.dots["cv.folds"]
+        if (cv.folds < 2)
+        {
+            cv.folds <- 2L
+            list.dots$cv.folds <- cv.folds
+            warning("cv.folds must be at least 2")
+        }
+
+    } else
+    {
+        list.dots$cv.folds <- 5L
     }
 
-  } else
-  {
-    list.dots$cv.folds <- 5L
-  }
-
-  if (!is.null(match.id)) {
-      warning("Matched groups are not guaranteed to remain matched in the cross-validation procedure using GBM models.")
-  }
+    if (!is.null(match.id)) {
+        warning("Matched groups are not guaranteed to remain matched in the cross-validation procedure using GBM models.")
+    }
 
 
-  df <- data.frame(y = y, x)
+    df <- data.frame(y = y, x)
 
-  formula.gbm <- as.formula("y ~ . - 1")
+    formula.gbm <- as.formula("y ~ . - 1")
 
-  # fit a model with a lasso
-  # penalty and desired loss
-  model <- do.call(gbm, c(list(formula.gbm, data = df,
-                               weights = wts,
-                               distribution = "gaussian"),
-                          list.dots))
+    # fit a model with a lasso
+    # penalty and desired loss
+    model <- do.call(gbm, c(list(formula.gbm, data = df,
+                                 weights = wts,
+                                 distribution = "gaussian"),
+                            list.dots))
 
-  best.iter <- gbm.perf(model, method = "cv")
+    best.iter <- gbm.perf(model, method = "cv")
 
-  vnames <- colnames(df)[-1]
+    vnames <- colnames(df)[-1]
 
-  # Return fitted model and extraction methods
-  list(predict      = get.pred.func("fit_sq_loss_gbm", model),
-       model        = model,
-       coefficients = get.coef.func("fit_sq_loss_gbm")(model))
+    # Return fitted model and extraction methods
+    list(predict      = get.pred.func("fit_sq_loss_gbm", model),
+         model        = model,
+         coefficients = get.coef.func("fit_sq_loss_gbm")(model))
 }
 
 
 fit_abs_loss_gbm <- function(x, y, trt, n.trts, wts, family, match.id, ...)
 {
-  # this function must return a fitted model
-  # in addition to a function which takes in
-  # a design matrix and outputs estimated benefit scores
+    # this function must return a fitted model
+    # in addition to a function which takes in
+    # a design matrix and outputs estimated benefit scores
 
-  ###################################################################
-  ##
-  ## IMPORTANT NOTE: the name of this function *must*
-  ##                 begin with "fit_" and end with
-  ##                 the text string to associated with
-  ##                 this function in the options for the
-  ##                 'loss' argument of the fit.subgrp()
-  ##                 function
-  ##
-  ###################################################################
+    ###################################################################
+    ##
+    ## IMPORTANT NOTE: the name of this function *must*
+    ##                 begin with "fit_" and end with
+    ##                 the text string to associated with
+    ##                 this function in the options for the
+    ##                 'loss' argument of the fit.subgrp()
+    ##                 function
+    ##
+    ###################################################################
 
-  list.dots <- list(...)
+    list.dots <- list(...)
 
-  dot.names <- names(list.dots)
-  if ("cv.folds" %in% dot.names)
-  {
-    cv.folds <- list.dots["cv.folds"]
-    if (cv.folds < 2)
+    dot.names <- names(list.dots)
+    if ("cv.folds" %in% dot.names)
     {
-      cv.folds <- 2L
-      list.dots$cv.folds <- cv.folds
-      warning("cv.folds must be at least 2")
+        cv.folds <- list.dots["cv.folds"]
+        if (cv.folds < 2)
+        {
+            cv.folds <- 2L
+            list.dots$cv.folds <- cv.folds
+            warning("cv.folds must be at least 2")
+        }
+
+    } else
+    {
+        list.dots$cv.folds <- 5L
     }
 
-  } else
-  {
-    list.dots$cv.folds <- 5L
-  }
+    if (!is.null(match.id))
+    {
+        warning("Matched groups are not guaranteed to remain matched in the cross-validation procedure using GBM models.")
+    }
 
-  if (!is.null(match.id)) {
-      warning("Matched groups are not guaranteed to remain matched in the cross-validation procedure using GBM models.")
-  }
+    df <- data.frame(y = y, x)
 
-  df <- data.frame(y = y, x)
+    formula.gbm <- as.formula("y ~ . - 1")
 
-  formula.gbm <- as.formula("y ~ . - 1")
+    # fit a model with a lasso
+    # penalty and desired loss
+    model <- do.call(gbm, c(list(formula.gbm, data = df,
+                                 weights = wts,
+                                 distribution = "laplace"),
+                            list.dots))
 
-  # fit a model with a lasso
-  # penalty and desired loss
-  model <- do.call(gbm, c(list(formula.gbm, data = df,
-                               weights = wts,
-                               distribution = "laplace"),
-                          list.dots))
+    best.iter <- gbm.perf(model, method = "cv")
 
-  best.iter <- gbm.perf(model, method = "cv")
+    vnames <- colnames(df)[-1]
 
-  vnames <- colnames(df)[-1]
-
-  # Return fitted model and extraction methods
-  list(predict      = get.pred.func("fit_abs_loss_gbm", model),
-       model        = model,
-       coefficients = get.coef.func("fit_abs_loss_gbm")(model))
+    # Return fitted model and extraction methods
+    list(predict      = get.pred.func("fit_abs_loss_gbm", model),
+         model        = model,
+         coefficients = get.coef.func("fit_abs_loss_gbm")(model))
 }
 
 
 fit_logistic_loss_gbm <- function(x, y, trt, n.trts, wts, family, match.id, ...)
 {
-  # this function must return a fitted model
-  # in addition to a function which takes in
-  # a design matrix and outputs estimated benefit scores
+    # this function must return a fitted model
+    # in addition to a function which takes in
+    # a design matrix and outputs estimated benefit scores
 
-  ###################################################################
-  ##
-  ## IMPORTANT NOTE: the name of this function *must*
-  ##                 begin with "fit_" and end with
-  ##                 the text string to associated with
-  ##                 this function in the options for the
-  ##                 'loss' argument of the fit.subgrp()
-  ##                 function
-  ##
-  ###################################################################
+    ###################################################################
+    ##
+    ## IMPORTANT NOTE: the name of this function *must*
+    ##                 begin with "fit_" and end with
+    ##                 the text string to associated with
+    ##                 this function in the options for the
+    ##                 'loss' argument of the fit.subgrp()
+    ##                 function
+    ##
+    ###################################################################
 
-  list.dots <- list(...)
+    list.dots <- list(...)
 
-  dot.names <- names(list.dots)
-  if ("cv.folds" %in% dot.names)
-  {
-    cv.folds <- list.dots["cv.folds"]
-    if (cv.folds < 2)
+    dot.names <- names(list.dots)
+    if ("cv.folds" %in% dot.names)
     {
-      cv.folds <- 2L
-      list.dots$cv.folds <- cv.folds
-      warning("cv.folds must be at least 2")
+        cv.folds <- list.dots["cv.folds"]
+        if (cv.folds < 2)
+        {
+            cv.folds <- 2L
+            list.dots$cv.folds <- cv.folds
+            warning("cv.folds must be at least 2")
+        }
+
+    } else
+    {
+        list.dots$cv.folds <- 5L
     }
 
-  } else
-  {
-    list.dots$cv.folds <- 5L
-  }
+    if (!is.null(match.id))
+    {
+        warning("Matched groups are not guaranteed to remain matched in the cross-validation procedure using GBM models.")
+    }
 
-  if (!is.null(match.id)) {
-      warning("Matched groups are not guaranteed to remain matched in the cross-validation procedure using GBM models.")
-  }
+    df <- data.frame(y = y, x)
 
-  df <- data.frame(y = y, x)
+    formula.gbm <- as.formula("y ~ . - 1")
 
-  formula.gbm <- as.formula("y ~ . - 1")
+    # fit a model with a lasso
+    # penalty and desired loss
+    model <- do.call(gbm, c(list(formula.gbm, data = df,
+                                 weights = wts,
+                                 distribution = "bernoulli"),
+                            list.dots))
 
-  # fit a model with a lasso
-  # penalty and desired loss
-  model <- do.call(gbm, c(list(formula.gbm, data = df,
-                               weights = wts,
-                               distribution = "bernoulli"),
-                          list.dots))
+    best.iter <- gbm.perf(model, method = "cv")
 
-  best.iter <- gbm.perf(model, method = "cv")
+    vnames <- colnames(df)[-1]
 
-  vnames <- colnames(df)[-1]
-
-  # Return fitted model and extraction methods
-  list(predict      = get.pred.func("fit_logistic_loss_gbm", model),
-       model        = model,
-       coefficients = get.coef.func("fit_logistic_loss_gbm")(model))
+    # Return fitted model and extraction methods
+    list(predict      = get.pred.func("fit_logistic_loss_gbm", model),
+         model        = model,
+         coefficients = get.coef.func("fit_logistic_loss_gbm")(model))
 }
 
 
 fit_huberized_loss_gbm <- function(x, y, trt, n.trts, wts, family, match.id, ...)
 {
-  # this function must return a fitted model
-  # in addition to a function which takes in
-  # a design matrix and outputs estimated benefit scores
+    # this function must return a fitted model
+    # in addition to a function which takes in
+    # a design matrix and outputs estimated benefit scores
 
-  ###################################################################
-  ##
-  ## IMPORTANT NOTE: the name of this function *must*
-  ##                 begin with "fit_" and end with
-  ##                 the text string to associated with
-  ##                 this function in the options for the
-  ##                 'loss' argument of the fit.subgrp()
-  ##                 function
-  ##
-  ###################################################################
+    ###################################################################
+    ##
+    ## IMPORTANT NOTE: the name of this function *must*
+    ##                 begin with "fit_" and end with
+    ##                 the text string to associated with
+    ##                 this function in the options for the
+    ##                 'loss' argument of the fit.subgrp()
+    ##                 function
+    ##
+    ###################################################################
 
-  list.dots <- list(...)
+    list.dots <- list(...)
 
-  dot.names <- names(list.dots)
-  if ("cv.folds" %in% dot.names)
-  {
-    cv.folds <- list.dots["cv.folds"]
-    if (cv.folds < 2)
+    dot.names <- names(list.dots)
+    if ("cv.folds" %in% dot.names)
     {
-      cv.folds <- 2L
-      list.dots$cv.folds <- cv.folds
-      warning("cv.folds must be at least 2")
+        cv.folds <- list.dots["cv.folds"]
+        if (cv.folds < 2)
+        {
+            cv.folds <- 2L
+            list.dots$cv.folds <- cv.folds
+            warning("cv.folds must be at least 2")
 
+        }
+
+    } else
+    {
+        list.dots$cv.folds <- 5L
     }
 
-  } else
-  {
-    list.dots$cv.folds <- 5L
-  }
 
+    df <- data.frame(y = y, x)
 
-  df <- data.frame(y = y, x)
+    formula.gbm <- as.formula("y ~ . - 1")
 
-  formula.gbm <- as.formula("y ~ . - 1")
+    # fit a model with a lasso
+    # penalty and desired loss
+    model <- do.call(gbm, c(list(formula.gbm, data = df,
+                                 weights = wts,
+                                 distribution = "huberized"),
+                            list.dots))
 
-  # fit a model with a lasso
-  # penalty and desired loss
-  model <- do.call(gbm, c(list(formula.gbm, data = df,
-                               weights = wts,
-                               distribution = "huberized"),
-                          list.dots))
+    best.iter <- gbm.perf(model, method = "cv")
 
-  best.iter <- gbm.perf(model, method = "cv")
+    vnames <- colnames(df)[-1]
 
-  vnames <- colnames(df)[-1]
-
-  # Return fitted model and extraction methods
-  list(predict      = get.pred.func("fit_huberized_loss_gbm", model),
-       model        = model,
-       coefficients = get.coef.func("fit_huberized_loss_gbm")(model))
+    # Return fitted model and extraction methods
+    list(predict      = get.pred.func("fit_huberized_loss_gbm", model),
+         model        = model,
+         coefficients = get.coef.func("fit_huberized_loss_gbm")(model))
 }
 
 
 fit_cox_loss_gbm <- function(x, y, trt, n.trts, wts, family, match.id, ...)
 {
-  # this function must return a fitted model
-  # in addition to a function which takes in
-  # a design matrix and outputs estimated benefit scores
+    # this function must return a fitted model
+    # in addition to a function which takes in
+    # a design matrix and outputs estimated benefit scores
 
-  ###################################################################
-  ##
-  ## IMPORTANT NOTE: the name of this function *must*
-  ##                 begin with "fit_" and end with
-  ##                 the text string to associated with
-  ##                 this function in the options for the
-  ##                 'loss' argument of the fit.subgrp()
-  ##                 function
-  ##
-  ###################################################################
+    ###################################################################
+    ##
+    ## IMPORTANT NOTE: the name of this function *must*
+    ##                 begin with "fit_" and end with
+    ##                 the text string to associated with
+    ##                 this function in the options for the
+    ##                 'loss' argument of the fit.subgrp()
+    ##                 function
+    ##
+    ###################################################################
 
-  list.dots <- list(...)
+    list.dots <- list(...)
 
-  dot.names <- names(list.dots)
-  if ("cv.folds" %in% dot.names)
-  {
-    cv.folds <- list.dots["cv.folds"]
-    if (cv.folds < 2)
+    dot.names <- names(list.dots)
+    if ("cv.folds" %in% dot.names)
     {
-      cv.folds <- 2L
-      list.dots$cv.folds <- cv.folds
-      warning("cv.folds must be at least 2")
+        cv.folds <- list.dots["cv.folds"]
+        if (cv.folds < 2)
+        {
+            cv.folds <- 2L
+            list.dots$cv.folds <- cv.folds
+            warning("cv.folds must be at least 2")
+        }
+
+    } else
+    {
+        list.dots$cv.folds <- 5L
     }
 
-  } else
-  {
-    list.dots$cv.folds <- 5L
-  }
+    if (!is.null(match.id))
+    {
+        warning("Matched groups are not guaranteed to remain matched in the cross-validation procedure using GBM models.")
+    }
 
-  if (!is.null(match.id)) {
-      warning("Matched groups are not guaranteed to remain matched in the cross-validation procedure using GBM models.")
-  }
+    surv.vnames <- colnames(y)
 
-  surv.vnames <- colnames(y)
+    time.idx   <- which(surv.vnames == "time")
+    status.idx <- which(surv.vnames == "status")
 
-  time.idx   <- which(surv.vnames == "time")
-  status.idx <- which(surv.vnames == "status")
+    df <- data.frame(cox_gbm_time = y[,time.idx], cox_gbm_status = y[,status.idx], x)
 
-  df <- data.frame(cox_gbm_time = y[,time.idx], cox_gbm_status = y[,status.idx], x)
+    formula.gbm <- as.formula("Surv(cox_gbm_time, cox_gbm_status) ~ . - 1")
 
-  formula.gbm <- as.formula("Surv(cox_gbm_time, cox_gbm_status) ~ . - 1")
+    # fit a model with a lasso
+    # penalty and desired loss
+    model <- do.call(gbm, c(list(formula.gbm, data = df,
+                                 weights = wts,
+                                 distribution = "coxph"),
+                            list.dots))
 
-  # fit a model with a lasso
-  # penalty and desired loss
-  model <- do.call(gbm, c(list(formula.gbm, data = df,
-                               weights = wts,
-                               distribution = "coxph"),
-                          list.dots))
+    best.iter <- gbm.perf(model, method = "cv")
 
-  best.iter <- gbm.perf(model, method = "cv")
+    vnames <- colnames(df)[-c(1,2)]
 
-  vnames <- colnames(df)[-c(1,2)]
-
-  # Return fitted model and extraction methods
-  list(predict      = get.pred.func("fit_cox_loss_gbm", model),
-       model        = model,
-       coefficients = get.coef.func("fit_cox_loss_gbm")(model))
+    # Return fitted model and extraction methods
+    list(predict      = get.pred.func("fit_cox_loss_gbm", model),
+         model        = model,
+         coefficients = get.coef.func("fit_cox_loss_gbm")(model))
 }
 
 
