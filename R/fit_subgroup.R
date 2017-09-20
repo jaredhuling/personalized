@@ -165,6 +165,7 @@ fit.subgroup <- function(x,
                                         "logistic_loss_gbm",
                                         "cox_loss_gbm"),
                          method     = c("weighting", "a_learning"),
+                         matching.id = NULL,
                          augment.func = NULL,
                          cutpoint   = 0,
                          larger.outcome.better = TRUE,
@@ -283,34 +284,66 @@ fit.subgroup <- function(x,
         stop("gbm and gam based losses not supported for multiple treatments (number of total treatments > 2)")
     }
 
+    # Check matching.id validity and convert it to a factor, if supplied
+    if (!is.null(matching.id)) {
+        matching.id <- tryCatch(expr=as.factor(matching.id), error = function(e) {stop("matching.id must be a factor or capable of being coerced to a factor.")})
+        if (length(levels(matching.id)) < 2) {stop("matching.id must have at least 2 levels")}
+    }
+  
     # defaults to constant propensity score within trt levels
     # the user will almost certainly want to change this
     if (is.null(propensity.func))
     {
+      if (is.null(matching.id)) 
+      { # No propensity score supplied and no matching.id supplied
         if (n.trts == 2)
         {
-            mean.trt <- mean(trt == unique.trts[2L])
-            propensity.func <- function(trt, x) rep(mean.trt, length(trt))
-        } else
+        mean.trt <- mean(trt == unique.trts[2L])
+        propensity.func <- function(trt, x) rep(mean.trt, length(trt))
+          } else
         {
-            mean.trt <- numeric(n.trts)
+          mean.trt <- numeric(n.trts)
+          for (t in 1:n.trts)
+          {
+            mean.trt[t] <- mean(trt == unique.trts[t])
+          }
+          propensity.func <- function(trt, x)
+          {
+            pi.x <- numeric(length(trt))
             for (t in 1:n.trts)
             {
-                mean.trt[t] <- mean(trt == unique.trts[t])
+              which.t       <- trt == unique.trts[t]
+              pi.x[which.t] <- mean(which.t)
             }
-            propensity.func <- function(trt, x)
-            {
-                pi.x <- numeric(length(trt))
-                for (t in 1:n.trts)
-                {
-                    which.t       <- trt == unique.trts[t]
-                    pi.x[which.t] <- mean(which.t)
-                }
-
-                pi.x
-            }
+            pi.x
+          }
         }
+      } else
+      { # No propensity score supplied but matching.id supplied
+        if (n.trts == 2)
+        {
+          mean.trt <- mean(trt == unique.trts[2L])
+          propensity.func <- function(trt, x, matching.id) rep(mean.trt, length(trt))
+          } else
+        {
+          mean.trt <- numeric(n.trts)
+          for (t in 1:n.trts)
+          {
+            mean.trt[t] <- mean(trt == unique.trts[t])
+          }
+          propensity.func <- function(trt, x, matching.id)
+          {
+            pi.x <- numeric(length(trt))
+            for (t in 1:n.trts)
+            {
+              which.t       <- trt == unique.trts[t]
+              pi.x[which.t] <- mean(which.t)
+            }
+            pi.x
+        }
+      }
     }
+  }
 
 
     # check to make sure arguments of augment.func are correct
@@ -355,19 +388,29 @@ fit.subgroup <- function(x,
 
     # check to make sure arguments of propensity.func are correct
     propfunc.names <- sort(names(formals(propensity.func)))
-    if (length(propfunc.names) == 2)
+    if (length(propfunc.names) == 3)
     {
-        if (any(propfunc.names != c("trt", "x")))
-        {
-            stop("arguments of propensity.func() should be 'x' and 'trt'")
-        }
+      if (any(propfunc.names != c("matching.id", "trt", "x")))
+      {
+        stop("arguments of propensity.func() should be 'trt','x', and (optionally) 'matching.id'")
+      }
+    } else if (length(propfunc.names) == 2) 
+    {
+      if (any(propfunc.names != c("trt", "x")))
+      {
+        stop("arguments of propensity.func() should be 'trt','x', and (optionally) 'matching.id'")
+      }
     } else
     {
-        stop("propensity.func() should only have two arguments: 'trt' and 'x'")
+      stop("propensity.func() should only have two or three arguments: 'trt' and 'x', or: 'trt', 'x', and 'matching.id'")
     }
-
+  
     # compute propensity scores
-    pi.x   <- drop(propensity.func(x = x, trt = trt))
+    if (is.null(matching.id)) {
+      pi.x <- drop(propensity.func(x = x, trt = trt))
+    } else {
+      pi.x <- drop(propensity.func(x = x, trt = trt, matching.id = matching.id))
+    }
 
     # make sure the resulting propensity scores are in the
     # acceptable range (ie 0-1)
@@ -449,7 +492,8 @@ fit.subgroup <- function(x,
     # identify correct fitting function and call it
     fit_fun      <- paste0("fit_", loss)
     fitted.model <- do.call(fit_fun, list(x = x.tilde, trt = trt, n.trts = n.trts,
-                                          y = y.adj, wts = wts, family = family, ...))
+                                          y = y.adj, wts = wts, family = family,
+                                          matching.id = matching.id, ...))
 
 
     # save extra results
