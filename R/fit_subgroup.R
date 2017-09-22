@@ -332,7 +332,7 @@ fit.subgroup <- function(x,
             if (n.trts == 2)
             {
                 mean.trt <- mean(trt == unique.trts[2L])
-                pf <- function(trt, x, match.id) rep(mean.trt, length(trt))
+                pf <- function(trt, x, match.id) rep(mean.trt, NROW(trt))
                 propensity.func <- pf
             } else
             {

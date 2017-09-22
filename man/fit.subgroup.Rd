@@ -51,7 +51,7 @@ is complex.
 
 \item{method}{subgroup ID model type. Either the weighting or A-learning method of Chen et al, (2017)}
 
-\item{match.id}{a vector with length equal to the number of observations in \code{x} indicating using integers or
+\item{match.id}{a (character, factor, or integer) vector with length equal to the number of observations in \code{x} indicating using integers or
 levels of a factor vector which patients are
 in which matched groups. Defaults to \code{NULL} and assumes the samples are not from a matched cohort. Matched
 case-control groups can be created using any method (propensity score matching, optimal matching, etc). If each case
