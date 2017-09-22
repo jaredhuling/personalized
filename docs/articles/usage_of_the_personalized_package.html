@@ -50,7 +50,7 @@
       <h1>Usage of the Personalized Package</h1>
                         <h4 class="author">Jared Huling</h4>
             
-            <h4 class="date">2017-09-19</h4>
+            <h4 class="date">2017-09-22</h4>
           </div>
 
     
@@ -371,41 +371,35 @@ validation</code></pre></div>
 ## 
 ## Average Outcomes:
 ##                 Recommended 0      Recommended 1
-## Received 0 -10.2554 (n = 228) -16.2938 (n = 182)
-## Received 1 -20.3298 (n = 297)   -6.014 (n = 293)
+## Received 0 -10.0544 (n = 196) -15.5749 (n = 214)
+## Received 1   -19.01 (n = 287)  -7.7367 (n = 303)
 ## 
 ## 0 effect among recommended 0 1 effect among recommended 1 
-##            10.0745 (n = 525)            10.2798 (n = 475) 
+##             8.9555 (n = 483)             7.8382 (n = 517) 
 ## 
 ## Benefit score quantiles: 
 ##       0%      25%      50%      75%     100% 
-## -25.6081  -5.0799  -0.4172   4.1884  26.8141</code></pre>
+## -22.7092  -3.7699   0.3613   4.3515  25.8226</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
 ## 
 ## Formula:
-## y ~ -1 + 1 + s(V1) + s(V2) + s(V3) + s(V6) + s(V8) + s(V11) + 
-##     s(V13) + s(V17) + s(V21) + s(V37) + s(V40)
+## y ~ -1 + 1 + s(V2) + s(V3) + s(V11) + s(V13) + s(V17) + s(V37)
 ## 
 ## Approximate significance of smooth terms:
-##          edf Ref.df     F p-value   
-## s(V1)  2.413  3.080 2.041 0.11493   
-## s(V2)  2.783  3.557 4.681 0.00151 **
-## s(V3)  1.000  1.000 9.207 0.00247 **
-## s(V6)  1.000  1.000 1.749 0.18637   
-## s(V8)  1.000  1.000 2.290 0.13056   
-## s(V11) 6.303  7.492 1.858 0.05940 . 
-## s(V13) 1.000  1.000 5.130 0.02373 * 
-## s(V17) 1.000  1.000 2.359 0.12487   
-## s(V21) 1.000  1.000 5.279 0.02179 * 
-## s(V37) 1.000  1.000 2.857 0.09129 . 
-## s(V40) 1.000  1.000 1.329 0.24932   
+##          edf Ref.df     F  p-value    
+## s(V2)  3.080  3.923 5.051 0.000501 ***
+## s(V3)  1.000  1.000 8.807 0.003072 ** 
+## s(V11) 6.615  7.777 1.945 0.044006 *  
+## s(V13) 1.000  1.000 5.134 0.023671 *  
+## s(V17) 1.000  1.000 2.146 0.143285    
+## s(V37) 1.000  1.000 3.321 0.068718 .  
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## R-sq.(adj) =  0.0557   Deviance explained = 7.67%
-## GCV = 1510.8  Scale est. = 1481.4    n = 1000</code></pre>
+## R-sq.(adj) =  0.0491   Deviance explained = 6.01%
+## GCV =   1520  Scale est. = 1499.2    n = 1000</code></pre>
 </div>
 <div id="binary-outcomes" class="section level3">
 <h3 class="hasAnchor">
@@ -443,15 +437,15 @@ y.binary &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op
 ## 
 ## Average Outcomes:
 ##               Recommended 0    Recommended 1
-## Received 0 0.4939 (n = 164) 0.1748 (n = 246)
-## Received 1 0.2128 (n = 235) 0.4197 (n = 355)
+## Received 0  0.442 (n = 181) 0.2271 (n = 229)
+## Received 1 0.2259 (n = 270) 0.4312 (n = 320)
 ## 
 ## 0 effect among recommended 0 1 effect among recommended 1 
-##             0.2811 (n = 399)             0.2449 (n = 601) 
+##             0.2161 (n = 451)             0.2042 (n = 549) 
 ## 
 ## Benefit score quantiles: 
-##      0%     25%     50%     75%    100% 
-## -1.2895 -0.1737  0.1229  0.4114  1.3207</code></pre>
+##       0%      25%      50%      75%     100% 
+## -1.31720 -0.24199  0.06729  0.38384  1.48203</code></pre>
 </div>
 <div id="time-to-event-outcomes" class="section level3">
 <h3 class="hasAnchor">
@@ -483,30 +477,29 @@ subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 ## method:  weighting 
 ## 
 ## Average Outcomes:
-##                 Recommended 0      Recommended 1
-## Received 0 693.2677 (n = 252)  40.3061 (n = 158)
-## Received 1 166.9972 (n = 371) 214.7994 (n = 219)
+##                 Recommended 0     Recommended 1
+## Received 0 494.7518 (n = 260) 47.2701 (n = 150)
+## Received 1 159.1706 (n = 369) 181.626 (n = 221)
 ## 
 ## 0 effect among recommended 0 1 effect among recommended 1 
-##           526.2705 (n = 623)           174.4933 (n = 377) 
+##           335.5812 (n = 629)           134.3559 (n = 371) 
 ## 
 ## Benefit score quantiles: 
 ##       0%      25%      50%      75%     100% 
-## -0.60418 -0.20325 -0.07104  0.07303  0.74891 
+## -0.56536 -0.17097 -0.05576  0.06300  0.63843 
 ## 
-## 9 out of 50 variables selected in total by the lasso (cross validation criterion).
+## 8 out of 50 variables selected in total by the lasso (cross validation criterion).
 ## 
 ##     Estimate
-## 1     0.0574
-## V1    0.0147
-## V2    0.0500
-## V3   -0.0193
-## V11  -0.0256
-## V13   0.0059
-## V16  -0.0029
-## V17   0.0032
-## V47  -0.0032
-## V50   0.0223</code></pre>
+## 1     0.0490
+## V2    0.0496
+## V3   -0.0070
+## V8   -0.0034
+## V11  -0.0228
+## V13   0.0075
+## V17   0.0014
+## V47  -0.0015
+## V50   0.0113</code></pre>
 </div>
 <div id="efficiency-augmentation" class="section level3">
 <h3 class="hasAnchor">

@@ -8,7 +8,7 @@
 [![Build Status](https://travis-ci.org/jaredhuling/personalized.svg?branch=master)](https://travis-ci.org/jaredhuling/personalized)
 
 
-## Overview of 'personalized'
+# Overview of 'personalized'
 
 The 'personalized' package is designed for the analysis of data where the effect of a treatment or intervention may vary for different patients. It can be used for either data from randomized controlled trials or observational studies and is not limited specifically to the analysis of medical data.
 
@@ -26,7 +26,7 @@ The personalized package provides estimation methods for subgroup identification
 - [Function help files](http://jaredhuling.org/personalized/reference/index.html)
 
 
-## Installing the 'personalized' package
+# Installing the 'personalized' package
 
 
 Install from CRAN using:
@@ -43,7 +43,7 @@ devtools::install_github("jaredhuling/personalized")
 
 or by cloning and building using `R CMD INSTALL`
 
-## Quick Usage Overview
+# Quick Usage Overview
 
 Load the package:
 

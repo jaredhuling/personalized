@@ -83,9 +83,9 @@
   <span class='st'>"logistic_loss_lasso"</span>, <span class='st'>"cox_loss_lasso"</span>, <span class='st'>"sq_loss_lasso_gam"</span>,
   <span class='st'>"logistic_loss_lasso_gam"</span>, <span class='st'>"sq_loss_gam"</span>, <span class='st'>"logistic_loss_gam"</span>, <span class='st'>"sq_loss_gbm"</span>,
   <span class='st'>"abs_loss_gbm"</span>, <span class='st'>"logistic_loss_gbm"</span>, <span class='st'>"cox_loss_gbm"</span>),
-  <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"weighting"</span>, <span class='st'>"a_learning"</span>), <span class='kw'>augment.func</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>cutpoint</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>larger.outcome.better</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>reference.trt</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>retcall</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"weighting"</span>, <span class='st'>"a_learning"</span>), <span class='kw'>match.id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>augment.func</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>cutpoint</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>larger.outcome.better</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>reference.trt</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>retcall</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -138,6 +138,18 @@ is complex.</p><ul>
     <tr>
       <th>method</th>
       <td><p>subgroup ID model type. Either the weighting or A-learning method of Chen et al, (2017)</p></td>
+    </tr>
+    <tr>
+      <th>match.id</th>
+      <td><p>a (character, factor, or integer) vector with length equal to the number of observations in <code>x</code> indicating using integers or
+levels of a factor vector which patients are
+in which matched groups. Defaults to <code>NULL</code> and assumes the samples are not from a matched cohort. Matched
+case-control groups can be created using any method (propensity score matching, optimal matching, etc). If each case
+is matched with a control or multiple controls, this would indicate which case-control pairs or groups go together.
+If <code>match.id</code> is supplied, then it is unecessary to specify a function via the <code>propensity.func</code> argument.
+A quick usage example: if the first patient is a case and the second and third are controls matched to it, and the
+fouth patient is a case and the fifth through seventh patients are matched with it, then the user should specify
+<code>match.id = c(1,1,1,2,2,2,2)</code> or <code>match.id = c(rep("Grp1", 3),rep("Grp2", 4)) </code></p></td>
     </tr>
     <tr>
       <th>augment.func</th>
@@ -290,16 +302,16 @@ from <code>fit.subgroup</code>.</p>
 #&gt; method:  weighting 
 #&gt; 
 #&gt; Average Outcomes:
-#&gt;                 Recommended 0     Recommended 1
-#&gt; Received 0 -22.1433 (n = 175) -7.5312 (n = 248)
-#&gt; Received 1 -35.2978 (n = 231)  0.9697 (n = 346)
+#&gt;                 Recommended 0      Recommended 1
+#&gt; Received 0  -5.6877 (n = 204) -20.9247 (n = 219)
+#&gt; Received 1 -23.9911 (n = 286)   -3.288 (n = 291)
 #&gt; 
 #&gt; 0 effect among recommended 0 1 effect among recommended 1 
-#&gt;            13.1546 (n = 406)             8.5009 (n = 594) 
+#&gt;            18.3034 (n = 490)            17.6367 (n = 510) 
 #&gt; 
 #&gt; Benefit score quantiles: 
 #&gt;       0%      25%      50%      75%     100% 
-#&gt; -140.510  -10.494    4.637   16.636   46.873 </div><div class='input'>
+#&gt; -50.1202  -8.0074   0.5552   8.9908  38.3923 </div><div class='input'>
 <span class='no'>subgrp.model.bin</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y.binary</span>,
                            <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
                            <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>,
@@ -313,15 +325,15 @@ from <code>fit.subgroup</code>.</p>
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;               Recommended 0    Recommended 1
-#&gt; Received 0 0.4863 (n = 183) 0.2292 (n = 240)
-#&gt; Received 1 0.1502 (n = 253) 0.5309 (n = 324)
+#&gt; Received 0 0.4948 (n = 194) 0.2096 (n = 229)
+#&gt; Received 1 0.1585 (n = 265) 0.5385 (n = 312)
 #&gt; 
 #&gt; 0 effect among recommended 0 1 effect among recommended 1 
-#&gt;             0.3361 (n = 436)             0.3017 (n = 564) 
+#&gt;             0.3364 (n = 459)             0.3289 (n = 541) 
 #&gt; 
 #&gt; Benefit score quantiles: 
 #&gt;       0%      25%      50%      75%     100% 
-#&gt; -1.49663 -0.24413  0.07284  0.43341  1.49749 </div><div class='input'>
+#&gt; -2.14177 -0.37845  0.07226  0.56881  2.05083 </div><div class='input'>
 <span class='fu'>library</span>(<span class='no'>survival</span>)
 <span class='no'>subgrp.model.cox</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/survival/topics/Surv'>Surv</a></span>(<span class='no'>y.time.to.event</span>, <span class='no'>status</span>),
                            <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
@@ -335,15 +347,15 @@ from <code>fit.subgroup</code>.</p>
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;                 Recommended 0     Recommended 1
-#&gt; Received 0 193.8419 (n = 229) 19.9534 (n = 194)
-#&gt; Received 1 152.5531 (n = 312) 68.8973 (n = 265)
+#&gt; Received 0 192.6051 (n = 233) 19.8181 (n = 190)
+#&gt; Received 1 145.5314 (n = 318)  71.327 (n = 259)
 #&gt; 
 #&gt; 0 effect among recommended 0 1 effect among recommended 1 
-#&gt;            41.2888 (n = 541)            48.9438 (n = 459) 
+#&gt;            47.0737 (n = 551)            51.5089 (n = 449) 
 #&gt; 
 #&gt; Benefit score quantiles: 
 #&gt;       0%      25%      50%      75%     100% 
-#&gt; -1.26474 -0.38744 -0.05997  0.27320  1.47516 </div><div class='input'>
+#&gt; -1.13810 -0.32754 -0.05532  0.22997  1.34716 </div><div class='input'>
 
 </div></pre>
   </div>
