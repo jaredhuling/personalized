@@ -10,16 +10,100 @@ output:
 
 ```{r setup, include=FALSE}
 library(knitr)
-opts_chunk$set(message = FALSE)
+opts_chunk$set(message = FALSE, warning=FALSE)
 ```
 
 [![version](http://www.r-pkg.org/badges/version/personalized)](https://cran.r-project.org/package=personalized)
 [![Build Status](https://travis-ci.org/jaredhuling/personalized.svg?branch=master)](https://travis-ci.org/jaredhuling/personalized)
 
 
+## Overview of 'personalized'
+
+The 'personalized' package is designed for the analysis of data where the effect of a treatment or intervention may vary for different patients. It can be used for either data from randomized controlled trials or observational studies and is not limited specifically to the analysis of medical data.
+
+The personalized package provides estimation methods for subgroup identification under the framework of [Chen et al (2017)](http://onlinelibrary.wiley.com/doi/10.1111/biom.12676/abstract). It also provides routines for valid estimation of the subgroup-specific treatment effects.
+
+
+```{r usage_overview, echo = FALSE, out.width= "100%", fig.width = 14, fig.height=7, fig.path="vignettes/"}
+library(diagram)
+library(scales)
+par(mai = c(0.01, 0, 0.01, 0))
+openplotmat(xlim = c(0, 1), ylim = c(0, 0.5))
+elpos <- coordinates (c(3,3))
+elpos[c(2:3, 5:6),1] <- elpos[c(2:3, 5:6),1] - 0.075
+elpos[1:3,2] <- elpos[1:3,2] - 0.01
+elpos[4:6,2] <- elpos[4:6,2] + 0.01
+arrpos <- matrix(ncol = 2, nrow = 3)
+
+arrpos[1,] <- straightarrow (to   = elpos[2,] - c(0.12, 0),
+                             from = elpos[1,] + c(0.1, 0),
+                              lwd = 2, arr.pos = 0.8, arr.length = 0.5, endhead = TRUE)
+arrpos[2,] <- straightarrow (to   = elpos[3,] - c(0.16, 0),
+                             from = elpos[2,] + c(0.12, 0),
+                              lwd = 2, arr.pos = 0.8, arr.length = 0.5, endhead = TRUE)
+
+arrpos[3,] <- straightarrow (to   = elpos[6,] - c(0.16, 0),
+                             from = elpos[5,] + c(0.12, 0),
+                              lwd = 2, arr.pos = 0.8, arr.length = 0.5, endhead = TRUE)
+
+textrect(elpos[1,], lab = expression(X~","~Y~","~Treatment), 
+         box.col = alpha("deepskyblue3", 0.85),
+         lcol = alpha("deepskyblue3", 1),
+         shadow.size = 0, lwd = 0.001,
+         radx = 0.1,
+         rady = 0.065,
+         adj = (0.495),
+         cex = 2)
+
+textrect(elpos[2,], lab = "Estimate \n Subgroups", 
+         box.col = alpha("chartreuse3", 0.85),
+         lcol = alpha("deepskyblue3", 1),
+         shadow.size = 0, lwd = 0.001,
+         radx = 0.12,
+         rady = 0.065,
+         adj = (0.5),
+         cex = 2)
+
+textrect(elpos[3,], lab = "Estimate Treatment Effects \n within Subgroups", 
+         box.col = alpha("red", 0.85),
+         lcol = alpha("deepskyblue3", 1),
+         shadow.size = 0, lwd = 0.001,
+         radx = 0.16,
+         rady = 0.065,
+         adj = (0.5),
+         cex = 2)
+
+textrect(elpos[5,], lab = "model <- \n fit.subgroup(x, y, trt)", 
+         box.col = alpha("chartreuse3", 0.85),
+         lcol = alpha("deepskyblue3", 1),
+         shadow.size = 0, lwd = 0.001,
+         radx = 0.12,
+         rady = 0.065,
+         adj = (0.5),
+         cex = 2)
+
+textrect(elpos[6,], lab = "validate.subgroup(model)", 
+         box.col = alpha("red", 0.85),
+         lcol = alpha("deepskyblue3", 1),
+         shadow.size = 0, lwd = 0.001,
+         radx = 0.16,
+         rady = 0.065,
+         adj = (0.5),
+         cex = 2)
+
+```
+
+## Documentation
+
+[Documentation](http://jaredhuling.org/personalized/)
+
+- [Tutorial / Vignette](http://jaredhuling.org/personalized/articles/usage_of_the_personalized_package.html) - tutorial of statistical methodology and usage of the package
+
+- [Function help files](http://jaredhuling.org/personalized/reference/index.html)
+
+
 ## Installing the 'personalized' package
 
-The personalized package provides estimation methods for subgroup identification under the framework of [Chen et al (2017)](http://onlinelibrary.wiley.com/doi/10.1111/biom.12676/abstract)
 
 Install from CRAN using:
 ```{r, eval = FALSE}
@@ -33,16 +117,98 @@ devtools::install_github("jaredhuling/personalized")
 
 or by cloning and building using `R CMD INSTALL`
 
-## Main Functions of `personalized`
+## Quick Usage Overview
 
 Load the package:
 ```{r, message = FALSE, warning = FALSE}
 library(personalized)
 ```
 
+```{r gen_data, echo = FALSE}
+set.seed(123)
+n.obs  <- 500
+n.vars <- 50
+x <- matrix(rnorm(n.obs * n.vars, sd = 3), n.obs, n.vars)
+
+
+# simulate non-randomized treatment
+xbetat   <- 0.5 + 0.5 * x[,21] - 0.5 * x[,41]
+trt.prob <- exp(xbetat) / (1 + exp(xbetat))
+trt01    <- rbinom(n.obs, 1, prob = trt.prob)
+
+trt      <- ifelse(trt01 == 1, "Trt", "Ctrl")
+
+# simulate response
+delta <- 2 * (0.5 + x[,2] - x[,3] - x[,11])
+xbeta <- x[,1] + x[,11] - 2 * x[,12]^2 + x[,13] + 0.5 * x[,15] ^ 2
+xbeta <- xbeta + delta * (2 * trt01 - 1)
+
+# continuous outcomes
+y <- drop(xbeta) + rnorm(n.obs, sd = 2)
+
+```
+
+### Create a propensity score model 
+(it should be a function which inputs covariates and treatments and returns propensity score):
+```{r propens}
+prop.func <- function(x, trt)
+{
+    # fit propensity score model
+    propens.model <- cv.glmnet(y = trt,
+                               x = x, family = "binomial")
+    pi.x <- predict(propens.model, s = "lambda.min",
+                    newx = x, type = "response")[,1]
+    pi.x
+}
+
+```
+
+### Fit a model to estimate subgroup:
+```{r fit_contin}
+subgrp.model <- fit.subgroup(x = x, y = y,
+                             trt = trt,
+                             propensity.func = prop.func,
+                             loss   = "sq_loss_lasso",
+                             nfolds = 5)              # option for cv.glmnet
+```
+
+### Display estimated subgroups and variables selected which determine the subgroups:
+```{r summarize}
+summary(subgrp.model)
+```
+
+### Use repeated train and test splitting to estimate subgroup treatment effects:
+```{r validate}
+val.model <- validate.subgroup(subgrp.model, B = 100,
+                               method = "training_test",
+                               train.fraction = 0.75)
+```
+
+### Display estimated subgroup treatment effects:
+```{r vieweffects}
+print(val.model, digits = 2, sample.pct = TRUE)
+```
+
+Visualize subgroup-specific treatment effect estimates across training/testing iterations:
+```{r vis_val, out.width="75%", fig.path="vignettes/", fig.align="center"}
+plot(val.model)
+```
+
+### Investigate the marginal characteristics of the two estimated subgroups
+
+Here we only display covariates with a significantly different mean value (at level 0.05)
+```{r summarize_characteristics}
+summarize.subgroups(subgrp.model, p.value = 0.05)
+```
+
+## Accessing Help Files for Main Functions of `personalized`
 
 Access help files for the main functions of the `personalized` package:
 ```{r, eval = FALSE}
 ?fit.subgroup
 ?validate.subgroup
 ```
+
+
+.
+
