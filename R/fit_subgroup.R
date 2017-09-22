@@ -218,6 +218,11 @@ fit.subgroup <- function(x,
     y      <- drop(y)
     vnames <- colnames(x)
 
+    if (!is.null(match.id))
+    {
+        if (length(match.id) != dims[1L]) stop("match.id must be same length as number of observations.")
+    }
+
     # set variable names if they are not set
     if (is.null(vnames)) vnames <- paste0("V", 1:dims[2])
 
@@ -225,6 +230,7 @@ fit.subgroup <- function(x,
     ## I decide to make outcome-weighted learning
     ## (ie flipping loss) an option
     outcome.weighted <- FALSE
+
 
 
 
