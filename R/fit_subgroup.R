@@ -331,6 +331,7 @@ fit.subgroup <- function(x,
         { # No propensity score supplied but match.id supplied
             if (n.trts == 2)
             {
+                # default to mean of treatment group
                 mean.trt <- mean(trt == unique.trts[2L])
                 pf <- function(trt, x, match.id) rep(mean.trt, NROW(trt))
                 propensity.func <- pf
