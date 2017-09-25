@@ -3,7 +3,8 @@
 #' Plot a comparison results for fitted or validated subgroup identification models
 #'
 #' @description Plots comparison of results for estimated subgroup treatment effects
-#' @param ... the objects to be saved. Must be either objects returned from \code{fit.subgroup()} or \code{validate.subgroup()}
+#' @param ... the fitted (model or validation) objects to be plotted. Must be either
+#' objects returned from \code{fit.subgroup()} or \code{validate.subgroup()}
 #' @param type type of plot. \code{"density"} results in a density plot for the results
 #' across all observations (if \code{x} is from \code{fit.subgroup()}) or if \code{x} is from \code{validate.subgroup()}
 #' across iterations of either the bootstrap or training/test re-fitting. For the latter

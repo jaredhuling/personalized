@@ -8,7 +8,8 @@ plotCompare(..., type = c("boxplot", "density", "interaction"),
   avg.line = TRUE)
 }
 \arguments{
-\item{...}{the objects to be saved. Must be either objects returned from \code{fit.subgroup()} or \code{validate.subgroup()}}
+\item{...}{the fitted (model or validation) objects to be plotted. Must be either
+objects returned from \code{fit.subgroup()} or \code{validate.subgroup()}}
 
 \item{type}{type of plot. \code{"density"} results in a density plot for the results
 across all observations (if \code{x} is from \code{fit.subgroup()}) or if \code{x} is from \code{validate.subgroup()}
