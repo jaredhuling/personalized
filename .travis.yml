@@ -16,4 +16,3 @@ notifications:
 
 os:
   - linux
-  - osx
