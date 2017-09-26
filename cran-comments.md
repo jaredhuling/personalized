@@ -3,8 +3,10 @@
 
 ## Test environments
 
-* local Windows 7 x64 install, (R 3.4.0, latest R-devel)
-* Ubuntu / OSX 12.04.5 LTS (on travis-ci), (R 3.4.0)
+* local Windows 7 x64 install, (R 3.4.1)
+* Windows 2008 Server (R-devel r73238)
+* local Mac OSX Sierra (R 3.4.1)
+* Ubuntu (on travis-ci), (R 3.4.1)
 
 ## R CMD check results
 
