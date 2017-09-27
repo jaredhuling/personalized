@@ -623,6 +623,32 @@ test_that("test fit.subgroup for continuous outcomes and match.id provided", {
 
     expect_is(subgrp.model.m, "subgroup_fitted")
 
+    subgrp.val <- validate.subgroup(subgrp.model.m, B = 10,
+                                    method = "train")
+
+    expect_is(subgrp.val, "subgroup_validated")
+
+    invisible(capture.output(print(subgrp.val, digits = 2)))
+
+    subgrp.val <- validate.subgroup(subgrp.model.m, B = 10,
+                                    method = "boot")
+
+    expect_is(subgrp.val, "subgroup_validated")
+
+    invisible(capture.output(print(subgrp.val, digits = 2)))
+
+
+
+    ## parallel
+
+    subgrp.val <- validate.subgroup(subgrp.model.m, B = 10,
+                                    parallel = TRUE,
+                                    method = "training")
+
+
+    subgrp.val <- validate.subgroup(subgrp.model.m, B = 10,
+                                    parallel = TRUE,
+                                    method = "boot")
 
 })
 
