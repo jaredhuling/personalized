@@ -2,7 +2,7 @@
 
 context("plot.subgroup_fitted and plotCompare and plot.subgroup_validated")
 
-test_that("test validate.subgroup for continuous outcomes with various options", {
+test_that("test plotting for continuous outcomes with various options", {
     set.seed(123)
     n.obs  <- 100
     n.vars <- 5
@@ -59,9 +59,6 @@ test_that("test validate.subgroup for continuous outcomes with various options",
                                  nfolds = 5)              # option for cv.glmnet
 
     expect_is(subgrp.model2, "subgroup_fitted")
-
-
-    invisible(capture.output(print(summ, digits = 2, p.value = 0.25)))
 
     subgrp.val <- validate.subgroup(subgrp.model, B = 10,
                                     method = "training")
