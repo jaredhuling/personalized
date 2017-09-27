@@ -278,36 +278,6 @@ validate.subgroup <- function(model,
                                                 model$subgroup.trt.effects[[4]] -
                                                     (mod.b$subgroup.trt.effects[[4]] - sbgrp.trt.eff.orig[[4]])) # bias estimate portion
 
-                               } else
-                               {   # bootstrap
-
-                                   # bootstrap is not available because it
-                                   # results in overly optimistic results
-                                   if (is.null(match.id))
-                                   {
-                                       samp.idx <- sample.int(n.obs, n.obs, replace = TRUE)
-                                   } else
-                                   {
-                                       # Draw at the cluster level
-                                       samp.levels <- sample(levels(match.id), replace = TRUE)
-                                       samp.lookup <- lapply(samp.levels, function(z) {which(match.id == z)})
-                                       samp.idx    <- unlist(samp.lookup)
-                                       # Remap matching IDs so that each cluster draw is assigned a unique matching ID
-                                       samp.lengths           <- lapply(samp.lookup,length)
-                                       model$call$match.id <- unlist(lapply(1:length(samp.lengths),function(z){rep(z,samp.lengths[[z]])}))
-                                   }
-                                   model$call$x   <- x[samp.idx,]
-                                   model$call$y   <- y[samp.idx]
-                                   model$call$trt <- trt[samp.idx]
-
-                                   mod.b               <- do.call(fit.subgroup, model$call)
-
-                                   res <- list(mod.b$subgroup.trt.effects[[1]], # subgroup-specific trt effects
-                                               mod.b$subgroup.trt.effects[[2]], # mean of outcome for KxK table (trt received vs recommended)
-                                               mod.b$subgroup.trt.effects[[3]], # sample sizes for KxK table
-                                               as.vector(mod.b$coefficients),
-                                               mod.b$subgroup.trt.effects[[4]]) # overall subgroup effect
-
                                }
 
                                res
@@ -431,35 +401,6 @@ validate.subgroup <- function(model,
                 boot.list[[4]][,b]  <- as.vector(mod.b$coefficients)
                 boot.list[[5]][b]   <- model$subgroup.trt.effects[[4]] -
                     (mod.b$subgroup.trt.effects[[4]] - sbgrp.trt.eff.orig[[4]]) # bias estimate portion
-
-            } else
-            {   # bootstrap
-
-                # bootstrap is not available because it
-                # results in overly optimistic results
-                if (is.null(match.id))
-                {
-                    samp.idx <- sample.int(n.obs, n.obs, replace = TRUE)
-                } else
-                {
-                    # Draw at the cluster level
-                    samp.levels <- sample(levels(match.id), replace = TRUE)
-                    samp.lookup <- lapply(samp.levels, function(z) {which(match.id == z)})
-                    samp.idx    <- unlist(samp.lookup)
-                    # Remap matching IDs so that each cluster draw is assigned a unique matching ID
-                    samp.lengths           <- lapply(samp.lookup,length)
-                    model$call$match.id <- unlist(lapply(1:length(samp.lengths),function(z){rep(z,samp.lengths[[z]])}))
-                }
-                model$call$x   <- x[samp.idx,]
-                model$call$y   <- y[samp.idx]
-                model$call$trt <- trt[samp.idx]
-
-                mod.b               <- do.call(fit.subgroup, model$call)
-                boot.list[[1]][b,]  <- mod.b$subgroup.trt.effects[[1]] # subgroup-specific trt effects
-                boot.list[[2]][b,,] <- mod.b$subgroup.trt.effects[[2]] # mean of outcome for KxK table (trt received vs recommended)
-                boot.list[[3]][b,,] <- mod.b$subgroup.trt.effects[[3]] # sample sizes for KxK table
-                boot.list[[4]][,b]  <- as.vector(mod.b$coefficients)
-                boot.list[[5]][b]   <- mod.b$subgroup.trt.effects[[4]] # overall subgroup effect
 
             }
         } ## end resampling loop
