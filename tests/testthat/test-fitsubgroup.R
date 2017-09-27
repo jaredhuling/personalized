@@ -44,6 +44,16 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
         pi.x
     }
 
+    prop.func2 <- function(x, trt)
+    {
+        # fit propensity score model
+        propens.model <- cv.glmnet(y = trt,
+                                   x = x, family = "binomial")
+        pi.x <- predict(propens.model, s = "lambda.min",
+                        newx = x, type = "response")
+        pi.x
+    }
+
     subgrp.model <- fit.subgroup(x = x, y = y,
                                  trt = trt01,
                                  propensity.func = prop.func,
@@ -69,6 +79,15 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
                                  trt = trt01,
                                  larger.outcome.better = FALSE,
                                  propensity.func = prop.func,
+                                 loss   = "sq_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+    # test if pi.x is a matrix with 1 column
+    subgrp.model <- fit.subgroup(x = x, y = y,
+                                 trt = trt01,
+                                 propensity.func = prop.func2,
                                  loss   = "sq_loss_lasso",
                                  nfolds = 5)              # option for cv.glmnet
 
@@ -634,8 +653,8 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
     }
 
     subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = trt01,
-                                 propensity.func = prop.func,
+                                 trt = trt,
+                                 propensity.func = propensity.multinom.lasso,
                                  loss   = "sq_loss_lasso",
                                  nfolds = 5)              # option for cv.glmnet
 
@@ -645,14 +664,53 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
 
     invisible(capture.output(summary(subgrp.model)))
 
-    # test for factor trt
+    summ <- summarize.subgroups(subgrp.model)
+
+    expect_is(summ, "data.frame")
+
+    invisible(capture.output(print(summ, digits = 2, p.value = 0.25)))
+
+
     subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = as.factor(trt),
-                                 propensity.func = prop.func,
+                                 trt = trt,
+                                 propensity.func = propensity.multinom.lasso,
+                                 reference.trt = 3,
                                  loss   = "sq_loss_lasso",
                                  nfolds = 5)              # option for cv.glmnet
 
     expect_is(subgrp.model, "subgroup_fitted")
+
+
+    subgrp.model <- fit.subgroup(x = x, y = y,
+                                 trt = as.factor(trt),
+                                 propensity.func = propensity.multinom.lasso,
+                                 loss   = "sq_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+
+    subgrp.model <- fit.subgroup(x = x, y = y,
+                                 trt = as.factor(trt),
+                                 reference.trt = "2",
+                                 propensity.func = propensity.multinom.lasso,
+                                 loss   = "sq_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+
+    subgrp.model <- fit.subgroup(x = x, y = y,
+                                 trt = as.factor(trt),
+                                 reference.trt = "2",
+                                 larger.outcome.better = FALSE,
+                                 propensity.func = propensity.multinom.lasso,
+                                 loss   = "sq_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+
 
 
     expect_error(fit.subgroup(x = x, y = y,
