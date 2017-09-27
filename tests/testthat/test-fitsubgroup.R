@@ -6,7 +6,8 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
     set.seed(123)
     n.obs  <- 100
     n.vars <- 5
-    x <- matrix(rnorm(n.obs * n.vars, sd = 3), n.obs, n.vars)
+    x <- cbind(matrix(rnorm(n.obs * n.vars, sd = 3), n.obs, n.vars),
+               rbinom(n.obs, 1, 0.25))
 
 
     # simulate non-randomized treatment
