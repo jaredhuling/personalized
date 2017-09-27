@@ -83,4 +83,30 @@ test_that("test plot is returned for hist/density/both", {
                         propensity.func = propensity.multinom.lasso)
 
     expect_is(pl, "ggplot")
+
+
+    # use multinomial logistic regression model with lasso penalty for propensity
+    propensity.multinom.lasso <- function(x, trt)
+    {
+        if (!is.factor(trt)) trt <- as.factor(trt)
+        gfit <- cv.glmnet(y = trt, x = x, family = "multinomial")
+
+        # predict returns a matrix of probabilities:
+        # one column for each treatment level
+        propens <- drop(predict(gfit, newx = x, type = "response", s = "lambda.min",
+                                nfolds = 5, alpha = 0))
+
+        # return the probability corresponding to the
+        # treatment that was observed
+        probs <- propens[cbind(1:nrow(propens), match(levels(trt), colnames(propens)))]
+
+        probs
+    }
+
+    pl <- check.overlap(x = x,
+                        trt = trt,
+                        type = "histogram",
+                        propensity.func = propensity.multinom.lasso)
+
+    expect_is(pl, "ggplot")
 })
