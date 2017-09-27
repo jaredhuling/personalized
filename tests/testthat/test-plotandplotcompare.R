@@ -101,6 +101,9 @@ test_that("test plotting for continuous outcomes with various options", {
 
     expect_is(pl, "ggplot")
 
+    pl <- plot(subgrp.val, type = "stability")
+
+    expect_is(pl, "plotly")
 
     # plot compare
 
