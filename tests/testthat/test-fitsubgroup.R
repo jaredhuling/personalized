@@ -635,6 +635,13 @@ test_that("test fit.subgroup for continuous outcomes and match.id provided", {
 
     subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
                                    trt = trt.m,
+                                   match.id = as.factor(match.id),
+                                   loss   = "sq_loss_lasso_gam")
+
+    expect_is(subgrp.model.m, "subgroup_fitted")
+
+    subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
+                                   trt = trt.m,
                                    propensity.func = prop.func,
                                    match.id = as.factor(match.id),
                                    loss   = "sq_loss_lasso",
