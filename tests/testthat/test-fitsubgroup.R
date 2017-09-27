@@ -52,9 +52,9 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
 
     expect_is(subgrp.model, "subgroup_fitted")
 
-    print(subgrp.model, digits = 2)
+    invisible(capture.output(print(subgrp.model, digits = 2)))
 
-    summary(subgrp.model)
+    invisible(capture.output(summary(subgrp.model)))
 
     subgrp.model <- fit.subgroup(x = x, y = y,
                                  trt = trt01,
@@ -62,8 +62,8 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
                                  loss   = "sq_loss_gam")
 
     expect_is(subgrp.model, "subgroup_fitted")
-    print(subgrp.model)
-    summary(subgrp.model)
+    invisible(capture.output(print(subgrp.model)))
+    invisible(capture.output(summary(subgrp.model)))
 
     subgrp.model <- fit.subgroup(x = x, y = y,
                                  trt = trt01,
@@ -73,8 +73,8 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
 
     expect_is(subgrp.model, "subgroup_fitted")
 
-    print(subgrp.model)
-    summary(subgrp.model)
+    invisible(capture.output(print(subgrp.model)))
+    invisible(capture.output(summary(subgrp.model)))
 
     subgrp.model <- fit.subgroup(x = x, y = y,
                                  trt = trt01,
@@ -83,8 +83,8 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
                                  n.trees = 5,
                                  n.cores = NULL)
 
-    print(subgrp.model)
-    summary(subgrp.model)
+    invisible(capture.output(print(subgrp.model)))
+    invisible(capture.output(summary(subgrp.model)))
     expect_is(subgrp.model, "subgroup_fitted")
 
     subgrp.model <- fit.subgroup(x = x, y = y,
@@ -94,8 +94,8 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
                                  n.trees = 5,
                                  n.cores = NULL)
 
-    print(subgrp.model)
-    summary(subgrp.model)
+    invisible(capture.output(print(subgrp.model)))
+    invisible(capture.output(summary(subgrp.model)))
     expect_is(subgrp.model, "subgroup_fitted")
 })
 
@@ -151,9 +151,9 @@ test_that("test fit.subgroup for binary outcomes and various losses", {
 
     expect_is(subgrp.model, "subgroup_fitted")
 
-    print(subgrp.model, digits = 2)
+    invisible(capture.output(print(subgrp.model, digits = 2)))
 
-    summary(subgrp.model)
+    invisible(capture.output(summary(subgrp.model)))
 
     subgrp.model <- fit.subgroup(x = x, y = y.binary,
                                  trt = trt01,
@@ -163,9 +163,9 @@ test_that("test fit.subgroup for binary outcomes and various losses", {
 
     expect_is(subgrp.model, "subgroup_fitted")
 
-    print(subgrp.model, digits = 2)
+    invisible(capture.output(print(subgrp.model, digits = 2)))
 
-    summary(subgrp.model)
+    invisible(capture.output(summary(subgrp.model)))
 
     subgrp.model <- fit.subgroup(x = x, y = y.binary,
                                  trt = trt01,
@@ -174,9 +174,9 @@ test_that("test fit.subgroup for binary outcomes and various losses", {
 
     expect_is(subgrp.model, "subgroup_fitted")
 
-    print(subgrp.model, digits = 2)
+    invisible(capture.output(print(subgrp.model, digits = 2)))
 
-    summary(subgrp.model)
+    invisible(capture.output(summary(subgrp.model)))
 
     subgrp.model <- fit.subgroup(x = x, y = y.binary,
                                  trt = trt01,
@@ -186,7 +186,7 @@ test_that("test fit.subgroup for binary outcomes and various losses", {
 
     expect_is(subgrp.model, "subgroup_fitted")
 
-    print(subgrp.model, digits = 2)
+    invisible(capture.output(print(subgrp.model, digits = 2)))
 
-    summary(subgrp.model)
+    invisible(capture.output(summary(subgrp.model)))
 })
