@@ -138,6 +138,105 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
 
 
 
+test_that("test fit.subgroup for time-to-event outcomes and various losses", {
+    set.seed(123)
+    n.obs  <- 100
+    n.vars <- 5
+    x <- matrix(rnorm(n.obs * n.vars, sd = 3), n.obs, n.vars)
+
+
+    # simulate non-randomized treatment
+    xbetat   <- 0.5 + 0.5 * x[,1] - 0.5 * x[,5]
+    trt.prob <- exp(xbetat) / (1 + exp(xbetat))
+    trt01    <- rbinom(n.obs, 1, prob = trt.prob)
+
+    trt      <- 2 * trt01 - 1
+
+    # simulate response
+    delta <- 2 * (0.5 + x[,2] - x[,3]  )
+    xbeta <- x[,1]
+    xbeta <- xbeta + delta * trt
+
+    # continuous outcomes
+    y <- drop(xbeta) + rnorm(n.obs, sd = 2)
+
+    # binary outcomes
+    y.binary <- 1 * (xbeta + rnorm(n.obs, sd = 2) > 0 )
+
+    # time-to-event outcomes
+    surv.time <- exp(-20 - xbeta + rnorm(n.obs, sd = 1))
+    cens.time <- exp(rnorm(n.obs, sd = 3))
+    y.time.to.event  <- pmin(surv.time, cens.time)
+    status           <- 1 * (surv.time <= cens.time)
+
+    # create function for fitting propensity score model
+    prop.func <- function(x, trt)
+    {
+        # fit propensity score model
+        propens.model <- cv.glmnet(y = trt,
+                                   x = x, family = "binomial")
+        pi.x <- predict(propens.model, s = "lambda.min",
+                        newx = x, type = "response")[,1]
+        pi.x
+    }
+
+    prop.func2 <- function(x, trt)
+    {
+        # fit propensity score model
+        propens.model <- cv.glmnet(y = trt,
+                                   x = x, family = "binomial")
+        pi.x <- predict(propens.model, s = "lambda.min",
+                        newx = x, type = "response")
+        pi.x
+    }
+
+    subgrp.model <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
+                                 trt = trt01,
+                                 propensity.func = prop.func,
+                                 loss   = "cox_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+    invisible(capture.output(print(subgrp.model, digits = 2)))
+
+    invisible(capture.output(summary(subgrp.model)))
+
+    # test for factor trt
+    subgrp.model <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
+                                 trt = as.factor(trt01),
+                                 propensity.func = prop.func,
+                                 loss   = "cox_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+    subgrp.model <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
+                                 trt = trt01,
+                                 larger.outcome.better = FALSE,
+                                 propensity.func = prop.func,
+                                 loss   = "cox_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+    # test if pi.x is a matrix with 1 column
+    subgrp.model <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
+                                 trt = trt01,
+                                 propensity.func = prop.func2,
+                                 loss   = "cox_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+})
+
+
+
+
+
+
+
 test_that("test fit.subgroup with augment.func for continuous outcomes and various losses", {
     set.seed(123)
     n.obs  <- 100
