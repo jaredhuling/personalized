@@ -848,7 +848,7 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
 
         # return the probability corresponding to the
         # treatment that was observed
-        probs <- propens[cbind(1:nrow(propens), match(levels(trt), colnames(propens)))]
+        probs <- propens[cbind(1:nrow(propens), match(levels(trt)[trt], colnames(propens)))]
 
         probs
     }
@@ -925,7 +925,7 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
 
     subgrp.model <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
                                  trt = as.factor(trt),
-                                 propensity.func = prop.func,
+                                 propensity.func = propensity.multinom.lasso,
                                  loss   = "cox_loss_lasso",
                                  nfolds = 5)              # option for cv.glmnet
 
@@ -933,7 +933,7 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
 
     subgrp.model <- fit.subgroup(x = x, y = y.binary,
                                  trt = as.factor(trt),
-                                 propensity.func = prop.func,
+                                 propensity.func = propensity.multinom.lasso,
                                  loss   = "cox_loss_lasso",
                                  nfolds = 5)              # option for cv.glmnet
 
@@ -941,13 +941,13 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
 
     expect_error(fit.subgroup(x = x, y = Surv(y.time.to.event, status),
                               trt = as.factor(trt),
-                              propensity.func = prop.func,
+                              propensity.func = propensity.multinom.lasso,
                               loss   = "sq_loss_lasso",
                               nfolds = 5) )
 
     expect_error(fit.subgroup(x = x, y = y,
                               trt = as.factor(trt),
-                              propensity.func = prop.func,
+                              propensity.func = propensity.multinom.lasso,
                               loss   = "cox_loss_lasso",
                               nfolds = 5) )
 
