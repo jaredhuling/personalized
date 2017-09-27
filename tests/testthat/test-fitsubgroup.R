@@ -682,6 +682,24 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
         probs
     }
 
+    # use multinomial logistic regression model with lasso penalty for propensity
+    propensity.multinom.lasso.bad <- function(x, trt)
+    {
+        if (!is.factor(trt)) trt <- as.factor(trt)
+        gfit <- cv.glmnet(y = trt, x = x, family = "multinomial")
+
+        # predict returns a matrix of probabilities:
+        # one column for each treatment level
+        propens <- drop(predict(gfit, newx = x, type = "response", s = "lambda.min",
+                                nfolds = 5, alpha = 0))
+
+        # return the probability corresponding to the
+        # treatment that was observed
+        probs <- propens[,match(levels(trt), colnames(propens))][,1:2]
+
+        probs
+    }
+
     subgrp.model <- fit.subgroup(x = x, y = y,
                                  trt = trt,
                                  propensity.func = propensity.multinom.lasso,
@@ -709,6 +727,13 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
                                  nfolds = 5)              # option for cv.glmnet
 
     expect_is(subgrp.model, "subgroup_fitted")
+
+    expect_error(fit.subgroup(x = x, y = y,
+                              trt = trt,
+                              propensity.func = propensity.multinom.lasso.bad,
+                              reference.trt = 3,
+                              loss   = "sq_loss_lasso",
+                              nfolds = 5) )
 
     # no prop func
     subgrp.model <- fit.subgroup(x = x, y = y,
