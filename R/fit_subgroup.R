@@ -424,9 +424,11 @@ fit.subgroup <- function(x,
     }
 
     # compute propensity scores
-    if (is.null(match.id)) {
+    if (is.null(match.id) | length(propfunc.names) == 2)
+    {
         pi.x <- drop(propensity.func(x = x, trt = trt))
-    } else {
+    } else
+    {
         pi.x <- drop(propensity.func(x = x, trt = trt, match.id = match.id))
     }
 
