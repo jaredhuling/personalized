@@ -76,6 +76,23 @@ test_that("test validate.subgroup for continuous outcomes with various options",
     expect_is(subgrp.val, "subgroup_validated")
 
     invisible(capture.output(print(subgrp.val, digits = 2)))
+
+
+
+    ## parallel
+
+    subgrp.val <- validate.subgroup(subgrp.model, B = 10,
+                                    parallel = TRUE,
+                                    method = "training")
+
+    expect_is(subgrp.val, "subgroup_validated")
+
+
+    subgrp.val <- validate.subgroup(subgrp.model, B = 10,
+                                    parallel = TRUE,
+                                    method = "boot")
+
+    expect_is(subgrp.val, "subgroup_validated")
 })
 
 
