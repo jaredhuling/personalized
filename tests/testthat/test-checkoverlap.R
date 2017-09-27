@@ -50,8 +50,8 @@ test_that("test plot is returned for hist/density/both", {
 
 
     # simulated non-randomized treatment with multiple levels
-    xbetat_1   <- 0.15 + 0.5 * x[,21] - 0.25 * x[,25]
-    xbetat_2   <- 0.15 - 0.5 * x[,11] + 0.25 * x[,15]
+    xbetat_1   <- 0.15 + 0.5 * x[,1] - 0.25 * x[,5]
+    xbetat_2   <- 0.15 - 0.5 * x[,2] + 0.25 * x[,3]
     trt.1.prob <- exp(xbetat_1) / (1 + exp(xbetat_1) + exp(xbetat_2))
     trt.2.prob <- exp(xbetat_2) / (1 + exp(xbetat_1) + exp(xbetat_2))
     trt.3.prob <- 1 - (trt.1.prob + trt.2.prob)
