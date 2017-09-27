@@ -939,6 +939,18 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
 
     expect_is(subgrp.model, "subgroup_fitted")
 
+    expect_error(fit.subgroup(x = x, y = Surv(y.time.to.event, status),
+                              trt = as.factor(trt),
+                              propensity.func = prop.func,
+                              loss   = "sq_loss_lasso",
+                              nfolds = 5) )
+
+    expect_error(fit.subgroup(x = x, y = y,
+                              trt = as.factor(trt),
+                              propensity.func = prop.func,
+                              loss   = "cox_loss_lasso",
+                              nfolds = 5) )
+
 
 })
 
