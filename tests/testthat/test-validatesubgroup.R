@@ -139,7 +139,7 @@ test_that("test validate.subgroup for binary outcomes and various losses", {
 
     expect_is(summ, "data.frame")
 
-    invisible(capture.output(print(summ, digits = 2, p.value = 0.25)))
+    invisible(capture.output(print(summarize.subgroups(subgrp.model), digits = 2, p.value = 0.25)))
 
     subgrp.val <- validate.subgroup(subgrp.model, B = 10,
                                     method = "training")
