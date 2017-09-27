@@ -19,7 +19,8 @@ Encoding: UTF-8
 LazyData: true
 Suggests:
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat
 Imports:
     survival,
     methods,
