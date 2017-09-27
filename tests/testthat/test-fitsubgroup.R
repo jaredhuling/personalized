@@ -93,6 +93,14 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
 
     expect_is(subgrp.model, "subgroup_fitted")
 
+    # no prop func
+    subgrp.model <- fit.subgroup(x = x, y = y,
+                                 trt = trt01,
+                                 loss   = "sq_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
     subgrp.model <- fit.subgroup(x = x, y = y,
                                  trt = trt01,
                                  propensity.func = prop.func,
@@ -702,6 +710,14 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
 
     expect_is(subgrp.model, "subgroup_fitted")
 
+    # no prop func
+    subgrp.model <- fit.subgroup(x = x, y = y,
+                                 trt = trt,
+                                 reference.trt = 3,
+                                 loss   = "sq_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
 
     subgrp.model <- fit.subgroup(x = x, y = y,
                                  trt = as.factor(trt),
