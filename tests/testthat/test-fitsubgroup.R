@@ -56,6 +56,24 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
 
     invisible(capture.output(summary(subgrp.model)))
 
+    # test for factor trt
+    subgrp.model <- fit.subgroup(x = x, y = y,
+                                 trt = as.factor(trt01),
+                                 propensity.func = prop.func,
+                                 loss   = "sq_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+    subgrp.model <- fit.subgroup(x = x, y = y,
+                                 trt = trt01,
+                                 larger.outcome.better = FALSE,
+                                 propensity.func = prop.func,
+                                 loss   = "sq_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
     subgrp.model <- fit.subgroup(x = x, y = y,
                                  trt = trt01,
                                  propensity.func = prop.func,
@@ -478,6 +496,170 @@ test_that("test fit.subgroup for continuous outcomes and match.id provided", {
                                    nfolds = 5)              # option for cv.glmnet
 
     expect_is(subgrp.model.m, "subgroup_fitted")
+
+
+})
+
+
+
+
+
+
+
+
+
+
+
+
+test_that("test fit.subgroup for continuous outcomes and various losses", {
+    set.seed(123)
+    n.obs  <- 100
+    n.vars <- 5
+    x <- matrix(rnorm(n.obs * n.vars, sd = 3), n.obs, n.vars)
+
+    # simulated non-randomized treatment with multiple levels
+    xbetat_1   <- 0.15 + 0.5 * x[,1] - 0.25 * x[,5]
+    xbetat_2   <- 0.15 - 0.5 * x[,2] + 0.25 * x[,3]
+    trt.1.prob <- exp(xbetat_1) / (1 + exp(xbetat_1) + exp(xbetat_2))
+    trt.2.prob <- exp(xbetat_2) / (1 + exp(xbetat_1) + exp(xbetat_2))
+    trt.3.prob <- 1 - (trt.1.prob + trt.2.prob)
+    prob.mat <- cbind(trt.1.prob, trt.2.prob, trt.3.prob)
+    trt    <- apply(prob.mat, 1, function(rr) rmultinom(1, 1, prob = rr))
+    trt    <- apply(trt, 2, function(rr) which(rr == 1))
+
+
+    # simulate response
+    delta1 <- 8 * (0.5 + x[,2] - x[,3]  )
+    delta2 <- 4 * (-0.5 + x[,1] - x[,5] + x[,4]  )
+    xbeta <- x[,1] - 2 * x[,2] - 3 * x[,5]
+    xbeta <- xbeta + delta1 * ((trt == 1) - (trt == 3) ) + delta2 * ((trt == 2) - (trt == 3) )
+
+
+    # continuous outcomes
+    y <- drop(xbeta) + rnorm(n.obs, sd = 2)
+
+    # use multinomial logistic regression model with lasso penalty for propensity
+    propensity.multinom.lasso <- function(x, trt)
+    {
+        if (!is.factor(trt)) trt <- as.factor(trt)
+        gfit <- cv.glmnet(y = trt, x = x, family = "multinomial")
+
+        # predict returns a matrix of probabilities:
+        # one column for each treatment level
+        propens <- drop(predict(gfit, newx = x, type = "response", s = "lambda.min",
+                                nfolds = 5, alpha = 0))
+
+        # return the probability corresponding to the
+        # treatment that was observed
+        probs <- propens[,match(levels(trt), colnames(propens))]
+
+        probs
+    }
+
+    subgrp.model <- fit.subgroup(x = x, y = y,
+                                 trt = trt,
+                                 propensity.func = propensity.multinom.lasso,
+                                 loss   = "sq_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+    invisible(capture.output(print(subgrp.model, digits = 2)))
+
+    invisible(capture.output(summary(subgrp.model)))
+
+    summ <- summarize.subgroups(subgrp.model)
+
+    expect_is(summ, "data.frame")
+
+    invisible(capture.output(print(summ, digits = 2, p.value = 0.25)))
+
+
+    subgrp.model <- fit.subgroup(x = x, y = y,
+                                 trt = trt,
+                                 propensity.func = propensity.multinom.lasso,
+                                 reference.trt = 3,
+                                 loss   = "sq_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+
+    subgrp.model <- fit.subgroup(x = x, y = y,
+                                 trt = as.factor(trt),
+                                 propensity.func = propensity.multinom.lasso,
+                                 loss   = "sq_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+
+    subgrp.model <- fit.subgroup(x = x, y = y,
+                                 trt = as.factor(trt),
+                                 reference.trt = "2",
+                                 propensity.func = propensity.multinom.lasso,
+                                 loss   = "sq_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+
+    subgrp.model <- fit.subgroup(x = x, y = y,
+                                 trt = as.factor(trt),
+                                 reference.trt = "2",
+                                 larger.outcome.better = FALSE,
+                                 propensity.func = propensity.multinom.lasso,
+                                 loss   = "sq_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+
+    # use multinomial logistic regression model with lasso penalty for propensity
+    propensity.multinom.lasso <- function(x, trt)
+    {
+        if (!is.factor(trt)) trt <- as.factor(trt)
+        gfit <- cv.glmnet(y = trt, x = x, family = "multinomial")
+
+        # predict returns a matrix of probabilities:
+        # one column for each treatment level
+        propens <- drop(predict(gfit, newx = x, type = "response", s = "lambda.min",
+                                nfolds = 5, alpha = 0))
+
+        # return the probability corresponding to the
+        # treatment that was observed
+        probs <- propens[cbind(1:nrow(propens), match(levels(trt), colnames(propens)))]
+
+        probs
+    }
+
+    subgrp.model <- fit.subgroup(x = x, y = y,
+                                 trt = trt01,
+                                 propensity.func = prop.func,
+                                 loss   = "sq_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+    invisible(capture.output(print(subgrp.model, digits = 2)))
+
+    invisible(capture.output(summary(subgrp.model)))
+
+    # test for factor trt
+    subgrp.model <- fit.subgroup(x = x, y = y,
+                                 trt = as.factor(trt),
+                                 propensity.func = prop.func,
+                                 loss   = "sq_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+
+    expect_error(fit.subgroup(x = x, y = y,
+                                 trt = trt,
+                                 propensity.func = prop.func,
+                                 loss   = "sq_loss_lasso_gam",
+                                 nfolds = 5))
 
 
 })
