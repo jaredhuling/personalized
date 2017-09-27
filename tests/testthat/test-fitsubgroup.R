@@ -511,7 +511,7 @@ test_that("test fit.subgroup for continuous outcomes and match.id provided", {
 
 
 
-test_that("test fit.subgroup for continuous outcomes and various losses", {
+test_that("test fit.subgroup for continuous outcomes and multiple trts and various losses", {
     set.seed(123)
     n.obs  <- 100
     n.vars <- 5
