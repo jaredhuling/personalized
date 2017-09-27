@@ -745,7 +745,7 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
         probs
     }
 
-    subgrp.model <- fit.subgroup(x = cbind(x, rbinom(n.obs, 1, 0.25)), y = y,
+    subgrp.model <- fit.subgroup(x = x, y = y,
                                  trt = trt,
                                  propensity.func = propensity.multinom.lasso,
                                  loss   = "sq_loss_lasso",

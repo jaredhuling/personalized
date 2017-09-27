@@ -44,7 +44,7 @@ test_that("test validate.subgroup for continuous outcomes with various options",
         pi.x
     }
 
-    subgrp.model <- fit.subgroup(x = x, y = y,
+    subgrp.model <- fit.subgroup(x = cbind(x, rbinom(n.obs, 1, 0.25)), y = y,
                                  trt = trt01,
                                  propensity.func = prop.func,
                                  loss   = "sq_loss_lasso",
