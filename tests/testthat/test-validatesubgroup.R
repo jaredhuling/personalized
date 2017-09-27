@@ -17,7 +17,7 @@ test_that("test validate.subgroup for continuous outcomes with various options",
     trt      <- 2 * trt01 - 1
 
     # simulate response
-    delta <- 4 * (0.5 + x[,2] - x[,3]  )
+    delta <- 5 * (0.5 + x[,2] - x[,3]  )
     xbeta <- x[,1]
     xbeta <- xbeta + delta * trt
 
@@ -60,7 +60,8 @@ test_that("test validate.subgroup for continuous outcomes with various options",
 
     expect_is(summ, "data.frame")
 
-    invisible(capture.output(print(summ, digits = 2, p.value = 0.25)))
+    invisible(capture.output(print(summarize.subgroups(subgrp.model),
+                                   digits = 2, p.value = 0.25)))
 
     subgrp.val <- validate.subgroup(subgrp.model, B = 10,
                                     method = "training")
