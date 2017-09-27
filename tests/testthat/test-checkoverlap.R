@@ -37,7 +37,7 @@ test_that("test plot is returned for hist/density/both", {
     pl <- check.overlap(x = x,
                         trt = trt01,
                         propensity.func = prop.func,
-                        type = "densitys")
+                        type = "density")
 
     expect_is(pl, "ggplot")
 
