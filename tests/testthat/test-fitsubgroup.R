@@ -80,7 +80,8 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
                                  trt = trt01,
                                  propensity.func = prop.func,
                                  loss   = "sq_loss_gbm",
-                                 n.trees = 5)
+                                 n.trees = 5,
+                                 n.cores = NULL)
 
     print(subgrp.model)
     summary(subgrp.model)
@@ -90,7 +91,8 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
                                  trt = trt01,
                                  propensity.func = prop.func,
                                  loss   = "abs_loss_gbm",
-                                 n.trees = 5)
+                                 n.trees = 5,
+                                 n.cores = NULL)
 
     print(subgrp.model)
     summary(subgrp.model)
@@ -179,7 +181,8 @@ test_that("test fit.subgroup for binary outcomes and various losses", {
     subgrp.model <- fit.subgroup(x = x, y = y.binary,
                                  trt = trt01,
                                  propensity.func = prop.func,
-                                 loss   = "logistic_loss_gbm", n.trees = 5)
+                                 loss   = "logistic_loss_gbm", n.trees = 5,
+                                 n.cores = NULL)
 
     expect_is(subgrp.model, "subgroup_fitted")
 
