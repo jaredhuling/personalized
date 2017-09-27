@@ -143,6 +143,26 @@ test_that("test validate.subgroup for binary outcomes and various losses", {
     subgrp.val <- validate.subgroup(subgrp.model, B = 10,
                                     method = "training")
 
+    expect_error(validate.subgroup(subgrp.val, B = 10, method = "training"))
+
+    expect_error(validate.subgroup(subgrp.model, B = 10, train.fraction = -1,
+                                   method = "training"))
+
+    expect_error(validate.subgroup(subgrp.model, B = 10, train.fraction = 2,
+                                   method = "training"))
+
+
+    subgrp.model2 <- fit.subgroup(x = x, y = y.binary,
+                                 trt = trt01,
+                                 propensity.func = prop.func,
+                                 loss   = "logistic_loss_lasso",
+                                 retcall = FALSE,
+                                 nfolds = 5)
+
+    # retcall must be true
+    expect_error(validate.subgroup(subgrp.model2, B = 10,
+                                   method = "training"))
+
     expect_is(subgrp.val, "subgroup_validated")
 
     invisible(capture.output(print(subgrp.val, digits = 2)))
