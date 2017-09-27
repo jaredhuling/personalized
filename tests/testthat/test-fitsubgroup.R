@@ -355,3 +355,121 @@ test_that("test fit.subgroup for binary outcomes and various losses", {
     #
     # invisible(capture.output(summary(subgrp.model)))
 })
+
+
+
+
+
+test_that("test fit.subgroup for continuous outcomes and match.id provided", {
+    set.seed(123)
+    n.obs  <- 1000
+    n.vars <- 5
+    x <- matrix(rnorm(n.obs * n.vars, sd = 3), n.obs, n.vars)
+
+
+    # simulate non-randomized treatment
+    xbetat   <- -3 + 0.5 * x[,1] - 0.5 * x[,5]
+    trt.prob <- exp(xbetat) / (1 + exp(xbetat))
+    trt01    <- rbinom(n.obs, 1, prob = trt.prob)
+
+    trt      <- 2 * trt01 - 1
+
+    # simulate response
+    delta <- 2 * (0.5 + x[,2] - x[,3]  )
+    xbeta <- x[,1]
+    xbeta <- xbeta + delta * trt
+
+    # continuous outcomes
+    y <- drop(xbeta) + rnorm(n.obs, sd = 2)
+
+    # binary outcomes
+    y.binary <- 1 * (xbeta + rnorm(n.obs, sd = 2) > 0 )
+
+    # time-to-event outcomes
+    surv.time <- exp(-20 - xbeta + rnorm(n.obs, sd = 1))
+    cens.time <- exp(rnorm(n.obs, sd = 3))
+    y.time.to.event  <- pmin(surv.time, cens.time)
+    status           <- 1 * (surv.time <= cens.time)
+
+    # create function for fitting propensity score model
+    prop.func <- function(x, trt)
+    {
+        # fit propensity score model
+        propens.model <- cv.glmnet(y = trt,
+                                   x = x, family = "binomial",
+                                   type.measure = "auc")
+        pi.x <- predict(propens.model, s = "lambda.min",
+                        newx = x, type = "response")[,1]
+        pi.x
+    }
+
+    n.matches <- 2
+    pscore <- prop.func(x, trt)
+
+    match.mat <- array(NA, dim = c(sum(trt01), n.matches) )
+
+    trt.idx <- which(trt01 == 1)
+    ctrl.idx <- which(trt01 == 0)
+
+
+    for (m in 1:n.matches)
+    {
+        for (i in 1:length(trt.idx))
+        {
+            best.match <- which.min(abs(pscore[trt.idx[i]] - pscore[ctrl.idx]))
+
+            # remove match from pool
+            ctrl.idx <- ctrl.idx[ctrl.idx != ctrl.idx[best.match]]
+
+            match.mat[i,m] <- ctrl.idx[best.match]
+        }
+    }
+
+
+
+
+    n.total <- nrow(match.mat) * (ncol(match.mat) + 1)
+
+
+
+    match.id.mat <- matrix(nrow = nrow(match.mat), ncol = ncol(match.mat))
+
+
+    for (cc in 1:ncol(match.mat))
+    {
+        match.id.mat[,cc] <- 1:nrow(match.mat)
+    }
+
+
+    match.id  <- c(1:nrow(match.mat), as.vector(match.id.mat))
+    match.idx <- c(trt.idx, as.vector(match.mat))
+
+    x.m <- x[match.idx,]
+    y.m <- y[match.idx]
+    trt.m <- trt01[match.idx]
+
+
+
+    subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
+                                   trt = trt.m,
+                                   match.id = as.factor(match.id),
+                                   loss   = "sq_loss_lasso",
+                                   nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model.m, "subgroup_fitted")
+
+    invisible(capture.output(print(subgrp.model.m, digits = 2)))
+
+    invisible(capture.output(summary(subgrp.model.m)))
+
+    subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
+                                   trt = trt.m,
+                                   match.id = match.id,
+                                   loss   = "sq_loss_lasso",
+                                   nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model.m, "subgroup_fitted")
+
+
+})
+
