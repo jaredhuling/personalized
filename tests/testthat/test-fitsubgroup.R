@@ -152,4 +152,38 @@ test_that("test fit.subgroup for binary outcomes and various losses", {
     print(subgrp.model, digits = 2)
 
     summary(subgrp.model)
+
+    subgrp.model <- fit.subgroup(x = x, y = y.binary,
+                                 trt = trt01,
+                                 propensity.func = prop.func,
+                                 loss   = "logistic_loss_lasso_gam",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+    print(subgrp.model, digits = 2)
+
+    summary(subgrp.model)
+
+    subgrp.model <- fit.subgroup(x = x, y = y.binary,
+                                 trt = trt01,
+                                 propensity.func = prop.func,
+                                 loss   = "logistic_loss_gam")
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+    print(subgrp.model, digits = 2)
+
+    summary(subgrp.model)
+
+    subgrp.model <- fit.subgroup(x = x, y = y.binary,
+                                 trt = trt01,
+                                 propensity.func = prop.func,
+                                 loss   = "logistic_loss_gbm", n.trees = 5)
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+    print(subgrp.model, digits = 2)
+
+    summary(subgrp.model)
 })
