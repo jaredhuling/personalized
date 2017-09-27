@@ -709,6 +709,15 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
     # continuous outcomes
     y <- drop(xbeta) + rnorm(n.obs, sd = 2)
 
+    # binary outcomes
+    y.binary <- 1 * (xbeta + rnorm(n.obs, sd = 2) > 0 )
+
+    # time-to-event outcomes
+    surv.time <- exp(-20 - xbeta + rnorm(n.obs, sd = 1))
+    cens.time <- exp(rnorm(n.obs, sd = 3))
+    y.time.to.event  <- pmin(surv.time, cens.time)
+    status           <- 1 * (surv.time <= cens.time)
+
     # use multinomial logistic regression model with lasso penalty for propensity
     propensity.multinom.lasso <- function(x, trt)
     {
@@ -903,6 +912,25 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
                                  propensity.func = prop.func,
                                  loss   = "sq_loss_lasso_gam",
                                  nfolds = 5))
+
+
+    # different outcomes
+
+    subgrp.model <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
+                                 trt = as.factor(trt),
+                                 propensity.func = prop.func,
+                                 loss   = "cox_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+    subgrp.model <- fit.subgroup(x = x, y = y.binary,
+                                 trt = as.factor(trt),
+                                 propensity.func = prop.func,
+                                 loss   = "cox_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
 
 
 })
