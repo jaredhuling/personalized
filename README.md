@@ -6,6 +6,8 @@
 
 [![version](http://www.r-pkg.org/badges/version/personalized)](https://cran.r-project.org/package=personalized)
 [![Build Status](https://travis-ci.org/jaredhuling/personalized.svg?branch=master)](https://travis-ci.org/jaredhuling/personalized)
+[![codecov](https://codecov.io/gh/jaredhuling/personalized/branch/master/graph/badge.svg)](https://codecov.io/gh/jaredhuling/personalized)
+[![](http://cranlogs.r-pkg.org/badges/personalized)](http://cran.rstudio.com/web/packages/personalized/index.html)
 
 
 # Overview of 'personalized'
