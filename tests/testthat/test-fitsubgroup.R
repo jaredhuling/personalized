@@ -6,8 +6,7 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
     set.seed(123)
     n.obs  <- 100
     n.vars <- 5
-    x <- cbind(matrix(rnorm(n.obs * n.vars, sd = 3), n.obs, n.vars),
-               rbinom(n.obs, 1, 0.25))
+    x <- matrix(rnorm(n.obs * n.vars, sd = 3), n.obs, n.vars)
 
 
     # simulate non-randomized treatment
@@ -746,7 +745,7 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
         probs
     }
 
-    subgrp.model <- fit.subgroup(x = x, y = y,
+    subgrp.model <- fit.subgroup(x = cbind(x, rbinom(n.obs, 1, 0.25)), y = y,
                                  trt = trt,
                                  propensity.func = propensity.multinom.lasso,
                                  loss   = "sq_loss_lasso",
