@@ -934,7 +934,7 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
     subgrp.model <- fit.subgroup(x = x, y = y.binary,
                                  trt = as.factor(trt),
                                  propensity.func = propensity.multinom.lasso,
-                                 loss   = "cox_loss_lasso",
+                                 loss   = "logistic_loss_lasso",
                                  nfolds = 5)              # option for cv.glmnet
 
     expect_is(subgrp.model, "subgroup_fitted")
