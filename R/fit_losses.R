@@ -765,64 +765,6 @@ fit_logistic_loss_gbm <- function(x, y, trt, n.trts, wts, family, match.id, ...)
 }
 
 
-fit_huberized_loss_gbm <- function(x, y, trt, n.trts, wts, family, match.id, ...)
-{
-    # this function must return a fitted model
-    # in addition to a function which takes in
-    # a design matrix and outputs estimated benefit scores
-
-    ###################################################################
-    ##
-    ## IMPORTANT NOTE: the name of this function *must*
-    ##                 begin with "fit_" and end with
-    ##                 the text string to associated with
-    ##                 this function in the options for the
-    ##                 'loss' argument of the fit.subgrp()
-    ##                 function
-    ##
-    ###################################################################
-
-    list.dots <- list(...)
-
-    dot.names <- names(list.dots)
-    if ("cv.folds" %in% dot.names)
-    {
-        cv.folds <- list.dots["cv.folds"]
-        if (cv.folds < 2)
-        {
-            cv.folds <- 2L
-            list.dots$cv.folds <- cv.folds
-            warning("cv.folds must be at least 2")
-
-        }
-
-    } else
-    {
-        list.dots$cv.folds <- 5L
-    }
-
-
-    df <- data.frame(y = y, x)
-
-    formula.gbm <- as.formula("y ~ . - 1")
-
-    # fit a model with a lasso
-    # penalty and desired loss
-    model <- do.call(gbm, c(list(formula.gbm, data = df,
-                                 weights = wts,
-                                 distribution = "huberized"),
-                            list.dots))
-
-    best.iter <- gbm.perf(model, method = "cv")
-
-    vnames <- colnames(df)[-1]
-
-    # Return fitted model and extraction methods
-    list(predict      = get.pred.func("fit_huberized_loss_gbm", model),
-         model        = model,
-         coefficients = get.coef.func("fit_huberized_loss_gbm")(model))
-}
-
 
 fit_cox_loss_gbm <- function(x, y, trt, n.trts, wts, family, match.id, ...)
 {
