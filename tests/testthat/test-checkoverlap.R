@@ -118,7 +118,7 @@ test_that("test plot is returned for hist/density/both", {
 
         # return the probability corresponding to the
         # treatment that was observed
-        probs <- propens[cbind(1:nrow(propens), match(levels(trt), colnames(propens)))]
+        probs <- propens[cbind(1:nrow(propens), match(levels(trt)[trt], colnames(propens)))]
 
         probs
     }
@@ -152,19 +152,34 @@ test_that("test plot is returned for hist/density/both", {
     pl <- check.overlap(x = x,
                         trt = trt,
                         type = "histogram",
-                        propensity.func = propensity.multinom.lasso)
+                        propensity.func = propensity.multinom.lasso.nonames)
 
     expect_is(pl, "ggplot")
 
     pl <- check.overlap(x = x,
                         trt = as.factor(trt),
                         type = "histogram",
-                        propensity.func = propensity.multinom.lasso)
+                        propensity.func = propensity.multinom.lasso.nonames)
 
     expect_is(pl, "ggplot")
 
+    propensity.multinom.lasso.array <- function(x, trt)
+    {
+        if (!is.factor(trt)) trt <- as.factor(trt)
+        gfit <- cv.glmnet(y = trt, x = x, family = "multinomial")
+
+        # predict returns a matrix of probabilities:
+        # one column for each treatment level
+        propens <- drop(predict(gfit, newx = x, type = "response", s = "lambda.min",
+                                nfolds = 5, alpha = 0))
+
+        # return the probability corresponding to the
+        # treatment that was observed
+        probs <- array(dim = c(dim(propens), 2))
+    }
+
     expect_error(check.overlap(x = x,
-                               trt = trt01,
+                               trt = trt,
                                type = "histogram",
-                               propensity.func = propensity.multinom.lasso))
+                               propensity.func = propensity.multinom.lasso.array))
 })
