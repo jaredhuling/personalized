@@ -121,6 +121,40 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
     invisible(capture.output(print(subgrp.model)))
     invisible(capture.output(summary(subgrp.model)))
 
+
+    ## tests for gam argument specification
+    subgrp.model <- fit.subgroup(x = x, y = y,
+                                 trt = trt01,
+                                 propensity.func = prop.func,
+                                 method.gam = "REML",
+                                 loss   = "sq_loss_gam")
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+    subgrp.model <- fit.subgroup(x = x, y = y,
+                                 trt = trt01,
+                                 propensity.func = prop.func,
+                                 method.gam = "REML",
+                                 loss   = "sq_loss_lasso_gam")
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+    subgrp.model <- fit.subgroup(x = x, y = y,
+                                 trt = trt01,
+                                 propensity.func = prop.func,
+                                 optimizer = "nlm",
+                                 loss   = "sq_loss_gam")
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+    subgrp.model <- fit.subgroup(x = x, y = y,
+                                 trt = trt01,
+                                 propensity.func = prop.func,
+                                 optimizer = "nlm",
+                                 loss   = "sq_loss_lasso_gam")
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
     # subgrp.model <- fit.subgroup(x = x, y = y,
     #                              trt = trt01,
     #                              propensity.func = prop.func,
