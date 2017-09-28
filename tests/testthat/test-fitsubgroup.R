@@ -142,7 +142,7 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
     subgrp.model <- fit.subgroup(x = x, y = y,
                                  trt = trt01,
                                  propensity.func = prop.func,
-                                 optimizer = "nlm",
+                                 control = gam.control(epsilon = 1e-10),
                                  loss   = "sq_loss_gam")
 
     expect_is(subgrp.model, "subgroup_fitted")
@@ -150,7 +150,7 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
     subgrp.model <- fit.subgroup(x = x, y = y,
                                  trt = trt01,
                                  propensity.func = prop.func,
-                                 optimizer = "nlm",
+                                 optimizer = "bfgs",
                                  loss   = "sq_loss_lasso_gam")
 
     expect_is(subgrp.model, "subgroup_fitted")
