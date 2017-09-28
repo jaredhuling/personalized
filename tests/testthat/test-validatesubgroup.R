@@ -70,6 +70,8 @@ test_that("test validate.subgroup for continuous outcomes with various options",
 
     invisible(capture.output(print(subgrp.val, digits = 2)))
 
+    invisible(capture.output(print(subgrp.val, digits = 2, sample.pct = TRUE)))
+
     subgrp.val <- validate.subgroup(subgrp.model, B = 10,
                                     method = "boot")
 

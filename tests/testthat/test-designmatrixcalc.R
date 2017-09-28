@@ -60,6 +60,8 @@ test_that("test create.design.matrix for multi trt works - weighting", {
     xm[3,] <- rep(-x2[3,], 2)
 
     expect_equivalent(xtilde, xm )
+
+    expect_error(xtilde <- create.design.matrix(x, pi.x, trt, y, "a_learning", reference.trt = "2"))
 })
 
 test_that("test design matrix for binary trt works - a learning", {
