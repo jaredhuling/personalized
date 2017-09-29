@@ -41,6 +41,11 @@ test_that("test design matrix for multi trt works - weighting", {
     xm[3,] <- rep(-x[3,], 2)
 
     expect_equivalent(xtilde, xm )
+
+
+    xtilde <- create.design.matrix.mult.trt(x, pi.x, trt, "weighting")
+
+    expect_is(xtilde, "matrix")
 })
 
 

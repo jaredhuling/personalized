@@ -73,7 +73,7 @@ create.design.matrix.mult.trt <- function(x, pi.x, trt, y, reference.trt = NULL,
             stop("A-learning not available for multiple treatments")
             # A-learning method
 
-            x.return[trt.idx[[t]], idx.vars.cur] <- (1 - pi.x[trt.idx[[t]]]) * x[trt.idx[[t]],]
+            #x.return[trt.idx[[t]], idx.vars.cur] <- (1 - pi.x[trt.idx[[t]]]) * x[trt.idx[[t]],]
         }
 
 
@@ -93,12 +93,12 @@ create.design.matrix.mult.trt <- function(x, pi.x, trt, y, reference.trt = NULL,
         if (method == "weighting")
         {
             x.return[trt.idx[[t]], idx.vars.cur] <- -x[trt.idx[[t]],]
-        } else
-        {
-            stop("A-learning not available for multiple treatments")
+        }# else
+        #{
+            #stop("A-learning not available for multiple treatments")
             # A-learning method
-            x.return[trt.idx[[t]], idx.vars.cur] <- -(1 - pi.x[trt.idx[[t]]]) * x[trt.idx[[t]],]
-        }
+            #x.return[trt.idx[[t]], idx.vars.cur] <- -(1 - pi.x[trt.idx[[t]]]) * x[trt.idx[[t]],]
+        #}
 
         #if (r == 1)
         #{
