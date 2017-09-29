@@ -80,6 +80,8 @@ test_that("test validate.subgroup for continuous outcomes with various options",
     invisible(capture.output(print(subgrp.val, digits = 2)))
 
 
+    expect_error(validate.subgroup(x, B = 10,
+                                   method = "training"))
 
     ## parallel
 
@@ -187,12 +189,41 @@ test_that("test validate.subgroup for binary outcomes and various losses", {
 
     invisible(capture.output(print(subgrp.val, digits = 2)))
 
+
+    subgrp.val <- validate.subgroup(subgrp.model, B = 10,
+                                    method = "train")
+
+    expect_is(subgrp.val, "subgroup_validated")
+
     subgrp.val <- validate.subgroup(subgrp.model, B = 10,
                                     method = "boot")
 
     expect_is(subgrp.val, "subgroup_validated")
 
     invisible(capture.output(print(subgrp.val, digits = 2)))
+
+
+
+
+    subgrp.model <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
+                                 trt = trt01,
+                                 propensity.func = prop.func,
+                                 loss   = "cox_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+    subgrp.val <- validate.subgroup(subgrp.model, B = 10,
+                                    method = "train")
+
+    expect_is(subgrp.val, "subgroup_validated")
+
+
+    subgrp.val <- validate.subgroup(subgrp.model, B = 10,
+                                    method = "boot")
+
+    expect_is(subgrp.val, "subgroup_validated")
+
 
 
 })

@@ -176,6 +176,7 @@ test_that("test plot is returned for hist/density/both", {
         # return the probability corresponding to the
         # treatment that was observed
         probs <- array(dim = c(dim(propens), 2, 4))
+        probs
     }
 
     expect_error(check.overlap(x = x,
