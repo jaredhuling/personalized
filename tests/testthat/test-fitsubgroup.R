@@ -698,6 +698,37 @@ test_that("test fit.subgroup for continuous outcomes and match.id provided", {
     invisible(capture.output(print(subgrp.val, digits = 2)))
 
 
+    expect_warning(subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
+                                   trt = trt.m,
+                                   match.id = as.factor(match.id),
+                                   loss   = "sq_loss_lasso",
+                                   foldid = sample(1:5, nrow(x.m), replace = TRUE)))
+
+    expect_is(subgrp.model.m, "subgroup_fitted")
+
+    expect_error(fit.subgroup(x = x.m, y = y.m,
+                                   trt = trt.m,
+                                   match.id = as.factor(match.id),
+                                   loss   = "sq_loss_lasso",
+                              nfolds = 2,
+                                   nfolds = 5) )
+
+    subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
+                                                  trt = trt.m,
+                                                  match.id = as.factor(match.id),
+                                                  loss   = "sq_loss_lasso")
+
+    expect_is(subgrp.model.m, "subgroup_fitted")
+
+    subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
+                                   trt = trt.m,
+                                   match.id = as.factor(match.id),
+                                   penalty.factor = rep(1, ncol(x.m)),
+                                   loss   = "sq_loss_lasso")
+
+    expect_is(subgrp.model.m, "subgroup_fitted")
+
+
 
     ## parallel
 
