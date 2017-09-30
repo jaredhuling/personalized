@@ -644,7 +644,8 @@ test_that("test fit.subgroup for continuous outcomes and match.id provided", {
     x.m <- x[match.idx,]
     y.m <- y[match.idx]
     trt.m <- trt01[match.idx]
-
+    y.time.to.event.m <- y.time.to.event[match.idx]
+    status.m <- status[match.idx]
 
 
     subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
@@ -706,12 +707,29 @@ test_that("test fit.subgroup for continuous outcomes and match.id provided", {
 
     expect_is(subgrp.model.m, "subgroup_fitted")
 
+
+    expect_warning(subgrp.model.m <- fit.subgroup(x = x.m, y = Surv(y.time.to.event.m, status.m),
+                                                  trt = trt.m,
+                                                  match.id = as.factor(match.id),
+                                                  loss   = "cox_loss_lasso",
+                                                  foldid = sample(1:5, nrow(x.m), replace = TRUE)))
+
+    expect_is(subgrp.model.m, "subgroup_fitted")
+
+
+
+
     expect_error(fit.subgroup(x = x.m, y = y.m,
                                    trt = trt.m,
                                    match.id = as.factor(match.id),
                                    loss   = "sq_loss_lasso",
-                              nfolds = 2,
-                                   nfolds = 5) )
+                              nfolds = 2) )
+
+    expect_error(fit.subgroup(x = x.m, y = Surv(y.time.to.event.m, status.m),
+                              trt = trt.m,
+                              match.id = as.factor(match.id),
+                              loss   = "cox_loss_lasso",
+                              nfolds = 2) )
 
     subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
                                                   trt = trt.m,
@@ -723,10 +741,26 @@ test_that("test fit.subgroup for continuous outcomes and match.id provided", {
     subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
                                    trt = trt.m,
                                    match.id = as.factor(match.id),
-                                   penalty.factor = rep(1, ncol(x.m)),
+                                   penalty.factor = rep(1, ncol(x.m) + 1),
                                    loss   = "sq_loss_lasso")
 
     expect_is(subgrp.model.m, "subgroup_fitted")
+
+    subgrp.model.m <- fit.subgroup(x = x.m, y = Surv(y.time.to.event.m, status.m),
+                                   trt = trt.m,
+                                   match.id = as.factor(match.id),
+                                   loss   = "cox_loss_lasso")
+
+    expect_is(subgrp.model.m, "subgroup_fitted")
+
+    subgrp.model.m <- fit.subgroup(x = x.m, y = Surv(y.time.to.event.m, status.m),
+                                   trt = trt.m,
+                                   match.id = as.factor(match.id),
+                                   penalty.factor = rep(1, ncol(x.m) + 1),
+                                   loss   = "cox_loss_lasso")
+
+    expect_is(subgrp.model.m, "subgroup_fitted")
+
 
 
 
