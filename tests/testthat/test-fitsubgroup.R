@@ -346,6 +346,7 @@ test_that("test fit.subgroup with augment.func for continuous outcomes and vario
     augment.func.bad <- function(x, y, something) {lmod <- lm(y ~ x); return(fitted(lmod))}
     augment.func.bad2 <- function(x, y, something, else) {lmod <- lm(y ~ x); return(fitted(lmod))}
     augment.func.bad3 <- function(x, something) {lmod <- lm(y ~ x); return(fitted(lmod))}
+    augment.func.badf4 <- function(x, y) {lmod <- lm(y ~ x); return(fitted(lmod)[1:10])}
 
     subgrp.model <- fit.subgroup(x = x, y = y,
                                  trt = trt01,
@@ -387,6 +388,13 @@ test_that("test fit.subgroup with augment.func for continuous outcomes and vario
     expect_error(fit.subgroup(x = x, y = y,
                               trt = trt01,
                               augment.func = augment.func.bad3,
+                              propensity.func = prop.func,
+                              loss   = "sq_loss_lasso",
+                              nfolds = 5))
+
+    expect_error(fit.subgroup(x = x, y = y,
+                              trt = trt01,
+                              augment.func = augment.func.bad4,
                               propensity.func = prop.func,
                               loss   = "sq_loss_lasso",
                               nfolds = 5))
@@ -760,6 +768,13 @@ test_that("test fit.subgroup for continuous outcomes and match.id provided", {
                                    match.id = as.factor(match.id),
                                    loss   = "sq_loss_lasso",
                               nfolds = 2) )
+
+    expect_error(fit.subgroup(x = x.m, y = y.m,
+                              trt = trt.m,
+                              propensity.func = prop.func,
+                              match.id = rep(1, length(y.m)), # provide bad match.id (only 1 level)
+                              loss   = "sq_loss_lasso",
+                              nfolds = 5) )
 
     expect_error(fit.subgroup(x = x.m, y = Surv(y.time.to.event.m, status.m),
                               trt = trt.m,
