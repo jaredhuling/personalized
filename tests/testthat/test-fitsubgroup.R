@@ -344,7 +344,7 @@ test_that("test fit.subgroup with augment.func for continuous outcomes and vario
     augment.func <- function(x, y) {lmod <- lm(y ~ x); return(fitted(lmod))}
     augment.func2 <- function(x, y, trt) {lmod <- lm(y ~ x + trt); return(fitted(lmod))}
     augment.func.bad <- function(x, y, something) {lmod <- lm(y ~ x); return(fitted(lmod))}
-    augment.func.bad2 <- function(x, y, something, else) {lmod <- lm(y ~ x); return(fitted(lmod))}
+    augment.func.bad2 <- function(x, y, something, somethingelse) {lmod <- lm(y ~ x); return(fitted(lmod))}
     augment.func.bad3 <- function(x, something) {lmod <- lm(y ~ x); return(fitted(lmod))}
     augment.func.badf4 <- function(x, y) {lmod <- lm(y ~ x); return(fitted(lmod)[1:10])}
 
