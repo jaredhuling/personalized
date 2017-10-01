@@ -65,6 +65,37 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
         pi.x
     }
 
+    prop.func.bad <- function(x, trt, something)
+    {
+        return(numeric(NROW(trt)))
+    }
+
+    prop.func.bad2 <- function(x, trt, something, somethingelse)
+    {
+        return(numeric(NROW(trt)))
+    }
+
+    prop.func.bad3 <- function(x, something)
+    {
+        return(numeric(NROW(x)))
+    }
+
+    expect_error(fit.subgroup(x = x, y = y,
+                              trt = trt01,
+                              propensity.func = prop.func.bad,
+                              loss   = "sq_loss_lasso",
+                              nfolds = 5))
+    expect_error(fit.subgroup(x = x, y = y,
+                              trt = trt01,
+                              propensity.func = prop.func.bad2,
+                              loss   = "sq_loss_lasso",
+                              nfolds = 5))
+    expect_error(fit.subgroup(x = x, y = y,
+                              trt = trt01,
+                              propensity.func = prop.func.bad3,
+                              loss   = "sq_loss_lasso",
+                              nfolds = 5))
+
     subgrp.model <- fit.subgroup(x = x, y = y,
                                  trt = trt01,
                                  propensity.func = prop.func,
@@ -346,7 +377,7 @@ test_that("test fit.subgroup with augment.func for continuous outcomes and vario
     augment.func.bad <- function(x, y, something) {lmod <- lm(y ~ x); return(fitted(lmod))}
     augment.func.bad2 <- function(x, y, something, somethingelse) {lmod <- lm(y ~ x); return(fitted(lmod))}
     augment.func.bad3 <- function(x, something) {lmod <- lm(y ~ x); return(fitted(lmod))}
-    augment.func.badf4 <- function(x, y) {lmod <- lm(y ~ x); return(fitted(lmod)[1:10])}
+    augment.func.bad4 <- function(x, y) {lmod <- lm(y ~ x); return(fitted(lmod)[1:10])}
 
     subgrp.model <- fit.subgroup(x = x, y = y,
                                  trt = trt01,
@@ -397,6 +428,13 @@ test_that("test fit.subgroup with augment.func for continuous outcomes and vario
                               augment.func = augment.func.bad4,
                               propensity.func = prop.func,
                               loss   = "sq_loss_lasso",
+                              nfolds = 5))
+
+    expect_error(fit.subgroup(x = x, y = y.binary,
+                              trt = trt01,
+                              augment.func = augment.func.bad4,
+                              propensity.func = prop.func,
+                              loss   = "logistic_loss_lasso",
                               nfolds = 5))
 
     subgrp.model <- fit.subgroup(x = x, y = y,
@@ -1152,6 +1190,30 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
     expect_error(fit.subgroup(x = x, y = y,
                               trt = as.factor(trt),
                               propensity.func = propensity.multinom.lasso,
+                              loss   = "cox_loss_lasso",
+                              nfolds = 5) )
+
+
+    propensity.multinom.lasso.array <- function(x, trt)
+    {
+        if (!is.factor(trt)) trt <- as.factor(trt)
+        gfit <- cv.glmnet(y = trt, x = x, family = "multinomial")
+
+        # predict returns a matrix of probabilities:
+        # one column for each treatment level
+        propens <- drop(predict(gfit, newx = x, type = "response", s = "lambda.min",
+                                nfolds = 5, alpha = 0))
+
+        # return the probability corresponding to the
+        # treatment that was observed
+        probs <- array(dim = c(dim(propens), 2, 4))
+        probs[is.na(probs)] <- 0.5
+        probs
+    }
+
+    expect_error(fit.subgroup(x = x, y = y,
+                              trt = as.factor(trt),
+                              propensity.func = propensity.multinom.lasso.array,
                               loss   = "cox_loss_lasso",
                               nfolds = 5) )
 
