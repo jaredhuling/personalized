@@ -782,6 +782,7 @@ test_that("test fit.subgroup for continuous outcomes and match.id provided", {
     trt.m <- trt01[match.idx]
     y.time.to.event.m <- y.time.to.event[match.idx]
     status.m <- status[match.idx]
+    y.binary.m <- y.binary[match.idx]
 
 
     subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
@@ -801,6 +802,27 @@ test_that("test fit.subgroup for continuous outcomes and match.id provided", {
                                    match.id = match.id,
                                    loss   = "sq_loss_lasso",
                                    nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model.m, "subgroup_fitted")
+
+    subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
+                                   trt = trt.m,
+                                   match.id = match.id,
+                                   loss   = "sq_loss_gbm")
+
+    expect_is(subgrp.model.m, "subgroup_fitted")
+
+    subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
+                                   trt = trt.m,
+                                   match.id = match.id,
+                                   loss   = "abs_loss_gbm", n.trees = 5)
+
+    expect_is(subgrp.model.m, "subgroup_fitted")
+
+    subgrp.model.m <- fit.subgroup(x = x.m, y = y.binary.m,
+                                   trt = trt.m,
+                                   match.id = match.id,
+                                   loss   = "logistic_loss_gbm", n.trees = 5)
 
     expect_is(subgrp.model.m, "subgroup_fitted")
 
@@ -893,6 +915,13 @@ test_that("test fit.subgroup for continuous outcomes and match.id provided", {
                                    trt = trt.m,
                                    match.id = as.factor(match.id),
                                    loss   = "cox_loss_lasso")
+
+    expect_is(subgrp.model.m, "subgroup_fitted")
+
+    subgrp.model.m <- fit.subgroup(x = x.m, y = Surv(y.time.to.event.m, status.m),
+                                   trt = trt.m,
+                                   match.id = as.factor(match.id),
+                                   loss   = "cox_loss_gbm", n.trees = 5)
 
     expect_is(subgrp.model.m, "subgroup_fitted")
 
