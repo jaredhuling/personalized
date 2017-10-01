@@ -443,6 +443,14 @@ test_that("test fit.subgroup with augment.func for continuous outcomes and vario
     invisible(capture.output(summary(subgrp.model)))
     expect_is(subgrp.model, "subgroup_fitted")
 
+    expect_error(fit.subgroup(x = x, y = y,
+                              trt = trt01,
+                              propensity.func = prop.func,
+                              loss   = "abs_loss_gbm",
+                              n.trees = 5,
+                              cv.folds = 1,
+                              n.cores = 1))
+
     subgrp.model <- fit.subgroup(x = x, y = y.binary,
                                  trt = trt01,
                                  propensity.func = prop.func,
@@ -454,6 +462,14 @@ test_that("test fit.subgroup with augment.func for continuous outcomes and vario
     invisible(capture.output(summary(subgrp.model)))
     expect_is(subgrp.model, "subgroup_fitted")
 
+    expect_error(fit.subgroup(x = x, y = y.binary,
+                              trt = trt01,
+                              propensity.func = prop.func,
+                              loss   = "logistic_loss_gbm",
+                              n.trees = 5,
+                              cv.folds = 1,
+                              n.cores = 1))
+
     subgrp.model <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
                                  trt = trt01,
                                  propensity.func = prop.func,
@@ -464,6 +480,14 @@ test_that("test fit.subgroup with augment.func for continuous outcomes and vario
     invisible(capture.output(print(subgrp.model)))
     invisible(capture.output(summary(subgrp.model)))
     expect_is(subgrp.model, "subgroup_fitted")
+
+    expect_error(fit.subgroup(x = x, y = Surv(y.time.to.event, status),
+                              trt = trt01,
+                              propensity.func = prop.func,
+                              loss   = "cox_loss_gbm",
+                              n.trees = 5,
+                              cv.folds = 1,
+                              n.cores = 1))
 })
 
 
