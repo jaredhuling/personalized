@@ -606,7 +606,7 @@ fit_sq_loss_gbm <- function(x, y, trt, n.trts, wts, family, match.id, ...)
         {
             cv.folds <- 2L
             list.dots$cv.folds <- cv.folds
-            warning("cv.folds must be at least 2")
+            warning("cv.folds must be at least 2, setting cv.folds to 2.")
         }
 
     } else
@@ -668,7 +668,7 @@ fit_abs_loss_gbm <- function(x, y, trt, n.trts, wts, family, match.id, ...)
         {
             cv.folds <- 2L
             list.dots$cv.folds <- cv.folds
-            warning("cv.folds must be at least 2")
+            warning("cv.folds must be at least 2, setting cv.folds to 2.")
         }
 
     } else
@@ -730,7 +730,7 @@ fit_logistic_loss_gbm <- function(x, y, trt, n.trts, wts, family, match.id, ...)
         {
             cv.folds <- 2L
             list.dots$cv.folds <- cv.folds
-            warning("cv.folds must be at least 2")
+            warning("cv.folds must be at least 2, setting cv.folds to 2.")
         }
 
     } else
