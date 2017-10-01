@@ -502,6 +502,12 @@ fit_sq_loss_gam <- function(x, y, trt, n.trts, wts, family, match.id, ...)
     # names of selected variables
     sel.vnames <- vnames[sel.idx]
 
+    # if (sel.vnames[1] == "1")
+    # {
+    #     sel.vnames[1]  <- "Trt1"
+    #     colnames(x)[1] <- sel.vnames[1]
+    # }
+
     # find which variables are binary
     var.levels <- numeric(length(sel.idx))
     for (v in 1:length(sel.idx))

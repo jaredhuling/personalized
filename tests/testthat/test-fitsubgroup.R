@@ -708,7 +708,7 @@ test_that("test fit.subgroup for continuous outcomes and match.id provided", {
     trt      <- 2 * trt01 - 1
 
     # simulate response
-    delta <- 2 * (0.5 + x[,2] - x[,3]  )
+    delta <- 2 * (0.5 + 5 * sin(x[,2] ^ 2) - x[,3]  )
     xbeta <- x[,1]
     xbeta <- xbeta + delta * trt
 
