@@ -54,6 +54,17 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
         pi.x
     }
 
+    prop.func3 <- function(x, trt)
+    {
+        # fit propensity score model
+        propens.model <- cv.glmnet(y = trt,
+                                   x = x, family = "binomial")
+        pi.x <- predict(propens.model, s = "lambda.min",
+                        newx = x, type = "response")[,1]
+        dim(pi.x) <- NROW(pi.x)
+        pi.x
+    }
+
     subgrp.model <- fit.subgroup(x = x, y = y,
                                  trt = trt01,
                                  propensity.func = prop.func,
@@ -88,6 +99,15 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
     subgrp.model <- fit.subgroup(x = x, y = y,
                                  trt = trt01,
                                  propensity.func = prop.func2,
+                                 loss   = "sq_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+    # test if pi.x is a matrix with 1 column
+    subgrp.model <- fit.subgroup(x = x, y = y,
+                                 trt = trt01,
+                                 propensity.func = prop.func3,
                                  loss   = "sq_loss_lasso",
                                  nfolds = 5)              # option for cv.glmnet
 

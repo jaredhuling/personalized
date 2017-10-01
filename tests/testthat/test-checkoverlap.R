@@ -38,6 +38,16 @@ test_that("test plot is returned for hist/density/both", {
         pi.x
     }
 
+    prop.func3 <- function(x, trt)
+    {
+        # fit propensity score model
+        propens.model <- cv.glmnet(y = trt,
+                                   x = x, family = "binomial")
+        pi.x <- predict(propens.model, s = "lambda.min",
+                        newx = x, type = "response")[,1]
+        dim(pi.x) <- NROW(pi.x)
+        pi.x
+    }
 
     pl <- check.overlap(x = x,
                         trt = trt01,
@@ -50,6 +60,13 @@ test_that("test plot is returned for hist/density/both", {
     pl <- check.overlap(x = x,
                         trt = trt01,
                         propensity.func = prop.func2,
+                        type = "hist")
+
+    expect_is(pl, "ggplot")
+
+    pl <- check.overlap(x = x,
+                        trt = trt01,
+                        propensity.func = prop.func3,
                         type = "hist")
 
     expect_is(pl, "ggplot")
