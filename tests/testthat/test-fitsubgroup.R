@@ -344,6 +344,8 @@ test_that("test fit.subgroup with augment.func for continuous outcomes and vario
     augment.func <- function(x, y) {lmod <- lm(y ~ x); return(fitted(lmod))}
     augment.func2 <- function(x, y, trt) {lmod <- lm(y ~ x + trt); return(fitted(lmod))}
     augment.func.bad <- function(x, y, something) {lmod <- lm(y ~ x); return(fitted(lmod))}
+    augment.func.bad2 <- function(x, y, something, else) {lmod <- lm(y ~ x); return(fitted(lmod))}
+    augment.func.bad3 <- function(x, something) {lmod <- lm(y ~ x); return(fitted(lmod))}
 
     subgrp.model <- fit.subgroup(x = x, y = y,
                                  trt = trt01,
@@ -371,6 +373,20 @@ test_that("test fit.subgroup with augment.func for continuous outcomes and vario
     expect_error(fit.subgroup(x = x, y = y,
                               trt = trt01,
                               augment.func = augment.func.bad,
+                              propensity.func = prop.func,
+                              loss   = "sq_loss_lasso",
+                              nfolds = 5))
+
+    expect_error(fit.subgroup(x = x, y = y,
+                              trt = trt01,
+                              augment.func = augment.func.bad2,
+                              propensity.func = prop.func,
+                              loss   = "sq_loss_lasso",
+                              nfolds = 5))
+
+    expect_error(fit.subgroup(x = x, y = y,
+                              trt = trt01,
+                              augment.func = augment.func.bad3,
                               propensity.func = prop.func,
                               loss   = "sq_loss_lasso",
                               nfolds = 5))
@@ -912,6 +928,14 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
                               trt = trt,
                               propensity.func = propensity.multinom.lasso.bad,
                               reference.trt = 3,
+                              loss   = "sq_loss_lasso",
+                              nfolds = 5) )
+
+    # provide incorrect reference trt
+    expect_error(fit.subgroup(x = x, y = y,
+                              trt = trt,
+                              propensity.func = propensity.multinom.lasso,
+                              reference.trt = "something_wrong",
                               loss   = "sq_loss_lasso",
                               nfolds = 5) )
 
