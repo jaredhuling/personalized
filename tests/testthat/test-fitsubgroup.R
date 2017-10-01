@@ -808,6 +808,27 @@ test_that("test fit.subgroup for continuous outcomes and match.id provided", {
     subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
                                    trt = trt.m,
                                    match.id = match.id,
+                                   penlty.factor = rep(1, ncol(x.m) + 1),
+                                   loss   = "sq_loss_lasso_gam",
+                                   nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model.m, "subgroup_fitted")
+
+    expect_error(fit.subgroup(x = x.m, y = y.m,
+                              trt = trt.m,
+                              match.id = match.id,
+                              loss   = "sq_loss_lasso_gam",
+                              nfolds = 2))
+
+    expect_warning(fit.subgroup(x = x.m, y = y.m,
+                                trt = trt.m,
+                                match.id = match.id,
+                                loss   = "sq_loss_lasso_gam",
+                                foldid = sample(1:5, nrow(x.m), replace = TRUE)))
+
+    subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
+                                   trt = trt.m,
+                                   match.id = match.id,
                                    loss   = "sq_loss_gbm", n.trees = 5, n.cores = 1)
 
     expect_is(subgrp.model.m, "subgroup_fitted")

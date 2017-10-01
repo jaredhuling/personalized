@@ -25,4 +25,7 @@ test_that("test that subgroup effect calculations are correct", {
 
     expect_equal(overall, sub.eff$overall.subgroup.effect)
 
+    expect_error(subgroup.effects(benefit.scores = bene.score,
+                                  y = y, trt = c(rep(1, 4), rep(0, 3), rep(2, 3))))
+
 })
