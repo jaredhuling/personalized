@@ -193,6 +193,7 @@ test_that("test plot is returned for hist/density/both", {
         # return the probability corresponding to the
         # treatment that was observed
         probs <- array(dim = c(dim(propens), 2, 4))
+        probs[is.na(probs)] <- 0.5
         probs
     }
 
