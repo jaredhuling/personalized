@@ -808,21 +808,21 @@ test_that("test fit.subgroup for continuous outcomes and match.id provided", {
     subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
                                    trt = trt.m,
                                    match.id = match.id,
-                                   loss   = "sq_loss_gbm")
+                                   loss   = "sq_loss_gbm", n.trees = 5, n.cores = 1)
 
     expect_is(subgrp.model.m, "subgroup_fitted")
 
     subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
                                    trt = trt.m,
                                    match.id = match.id,
-                                   loss   = "abs_loss_gbm", n.trees = 5)
+                                   loss   = "abs_loss_gbm", n.trees = 5, n.cores = 1)
 
     expect_is(subgrp.model.m, "subgroup_fitted")
 
     subgrp.model.m <- fit.subgroup(x = x.m, y = y.binary.m,
                                    trt = trt.m,
                                    match.id = match.id,
-                                   loss   = "logistic_loss_gbm", n.trees = 5)
+                                   loss   = "logistic_loss_gbm", n.trees = 5, n.cores = 1)
 
     expect_is(subgrp.model.m, "subgroup_fitted")
 
@@ -921,7 +921,7 @@ test_that("test fit.subgroup for continuous outcomes and match.id provided", {
     subgrp.model.m <- fit.subgroup(x = x.m, y = Surv(y.time.to.event.m, status.m),
                                    trt = trt.m,
                                    match.id = as.factor(match.id),
-                                   loss   = "cox_loss_gbm", n.trees = 5)
+                                   loss   = "cox_loss_gbm", n.trees = 5, n.cores = 1)
 
     expect_is(subgrp.model.m, "subgroup_fitted")
 
