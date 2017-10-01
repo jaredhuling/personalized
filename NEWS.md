@@ -1,3 +1,6 @@
+# personalized version 0.1.1
+
+* Fixed minor bugs regarding multiple treatment options, match.id
 
 # personalized version 0.1.0
 
