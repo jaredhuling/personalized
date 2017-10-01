@@ -140,7 +140,7 @@ check.overlap <- function(x,
 
         }
 
-        prop.scores <- data.frame(Treatment_Received = as.factor(rep(trt, ncol(pi.x))),
+        prop.scores <- data.frame(Treatment_Received = as.factor(rep(trt, NCOL(pi.x))),
                                   Treatment = rep(trt.names, NROW(trt)),
                                   prop.score = as.vector(t(pi.x)))
 
