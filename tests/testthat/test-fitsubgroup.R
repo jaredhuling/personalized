@@ -430,9 +430,9 @@ test_that("test fit.subgroup with augment.func for continuous outcomes and vario
                               loss   = "sq_loss_lasso",
                               nfolds = 5))
 
-    expect_error(fit.subgroup(x = x, y = y.binary,
+    expect_warning(fit.subgroup(x = x, y = y.binary,
                               trt = trt01,
-                              augment.func = augment.func.bad4,
+                              augment.func = augment.func,
                               propensity.func = prop.func,
                               loss   = "logistic_loss_lasso",
                               nfolds = 5))
