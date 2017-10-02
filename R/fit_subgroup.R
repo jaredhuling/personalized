@@ -498,12 +498,26 @@ fit.subgroup <- function(x,
         for (tr in 1:(n.trts - 1))
         {
             idx.cur <- ((len.names * (tr - 1)) + 1):(len.names * tr)
-            all.cnames[idx.cur] <- c( comparison.trts[tr],
+            if (comparison.trts[tr] != 1 & comparison.trts[tr] != "1")
+            {
+                trt.name.cur <- comparison.trts[tr]
+            } else
+            {
+                trt.name.cur <- "Trt1"
+            }
+            all.cnames[idx.cur] <- c( trt.name.cur,
                                       paste(vnames, 1:(n.trts - 1), sep = ".") )
         }
     } else
     {
-        all.cnames <- c( comparison.trts,
+        if (comparison.trts != 1 & comparison.trts != "1")
+        {
+            trt.name.cur <- comparison.trts
+        } else
+        {
+            trt.name.cur <- "Trt1"
+        }
+        all.cnames <- c( trt.name.cur,
                          vnames )
     }
 
