@@ -1061,6 +1061,16 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
 
     expect_is(subgrp.model, "subgroup_fitted")
 
+
+    ## test matching without prop score
+
+    subgrp.model <- fit.subgroup(x = x, y = y,
+                                 trt = trt,
+                                 match.id = rep(1:10, each = 10),
+                                 loss   = "sq_loss_lasso",
+                                 nfolds = 5)
+    expect_is(subgrp.model, "subgroup_fitted")
+
     invisible(capture.output(print(subgrp.model, digits = 2)))
 
     invisible(capture.output(summary(subgrp.model)))
