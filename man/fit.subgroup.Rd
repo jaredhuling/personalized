@@ -5,7 +5,8 @@
 \title{Fitting subgroup identification models}
 \usage{
 fit.subgroup(x, y, trt, propensity.func = NULL, loss = c("sq_loss_lasso",
-  "logistic_loss_lasso", "cox_loss_lasso", "sq_loss_lasso_gam",
+  "logistic_loss_lasso", "cox_loss_lasso", "owl_logistic_loss_lasso",
+  "owl_logistic_flip_loss_lasso", "sq_loss_lasso_gam",
   "logistic_loss_lasso_gam", "sq_loss_gam", "logistic_loss_gam", "sq_loss_gbm",
   "abs_loss_gbm", "logistic_loss_gbm", "cox_loss_gbm"),
   method = c("weighting", "a_learning"), match.id = NULL,
@@ -39,6 +40,8 @@ is complex.
     \item{\code{"sq_loss_lasso"}}{ - M(y, v) = (v - y) ^ 2 with linear model and lasso penalty}
     \item{\code{"logistic_loss_lasso"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with with linear model and lasso penalty}
     \item{\code{"cox_loss_lasso"}}{ - M corresponds to the negative partial likelihood of the cox model with linear model and additionally a lasso penalty}
+    \item{\code{"owl_logistic_loss_lasso"}} { - (method of Regularized Outcome Weighted Subgroup Identification)}
+    \item{\code{"owl_logistic_flip_loss_lasso"}} { - }
     \item{\code{"sq_loss_lasso_gam"}}{ - M(y, v) = (v - y) ^ 2 with variables selected by lasso penalty and generalized additive model fit on the selected variables}
     \item{\code{"logistic_loss_lasso_gam"}}{ - M(y, v) = y * log(1 + exp\{-v\}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
     \item{\code{"sq_loss_gam"}}{ - M(y, v) = (v - y) ^ 2 with generalized additive model fit on all variables}

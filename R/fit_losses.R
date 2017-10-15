@@ -131,7 +131,7 @@ get.coef.func <- function(fit.name, env = parent.frame())
 
 #' @import glmnet
 #' @importFrom stats coef
-fit_sq_loss_lasso <- function(x, y, trt, n.trts, wts, family, match.id, ...)
+fit_sq_loss_lasso <- function(x, y, trt, n.trts, wts, family, match.id, intercept = FALSE, ...)
 {
     # this function must return a fitted model
     # in addition to a function which takes in
@@ -154,6 +154,8 @@ fit_sq_loss_lasso <- function(x, y, trt, n.trts, wts, family, match.id, ...)
 
     n.unique.vars <- ncol(x) / (n.trts - 1)
     zero.pen.idx  <- ((1:(n.trts - 1) ) - 1) * n.unique.vars + 1
+
+    list.dots$intercept <- intercept
 
     if ("penalty.factor" %in% dot.names)
     {
@@ -192,22 +194,30 @@ fit_sq_loss_lasso <- function(x, y, trt, n.trts, wts, family, match.id, ...)
                                fold.id = 1:length(levels(match.id)) %% nfolds)
         # Obtain vector of fold IDs with respect to the data
         foldid <- sapply(match.id, function(z) {df.folds[which(z == df.folds$match.id),"fold.id"]}) +1
+    } else
+    {
+        if ("foldid" %in% dot.names)
+        {
+            foldid <- list.dots$foldid
         } else
         {
-            if ("foldid" %in% dot.names)
-            {
-                foldid <- list.dots$foldid
-            } else
-            {
-                foldid <- sample(rep(seq(nfolds), length = nrow(x)))
-            }
+            foldid <- sample(rep(seq(nfolds), length = nrow(x)))
         }
+    }
     list.dots$foldid <- foldid
 
     # fit a model with a lasso
     # penalty and desired loss
-    model <- do.call(cv.glmnet, c(list(x = x, y = y, weights = wts, family = family,
-                                       intercept = FALSE), list.dots))
+    model <- do.call(cv.glmnet, c(list(x = x, y = y, weights = wts, family = family), list.dots))
+
+    # this is needed for OWL losses, as glmnet
+    # no longer allows constant columns (ie an intercept)
+    # to have estimated coefficients
+    if (intercept)
+    {
+        model$glmnet.fit$beta[1,] <- unname(model$glmnet.fit$a0)
+        model$glmnet.fit$a0       <- rep(0, length(model$glmnet.fit$a0))
+    }
 
     # Return fitted model and extraction methods
     list(predict      = get.pred.func("fit_sq_loss_lasso", model),

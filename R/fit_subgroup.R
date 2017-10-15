@@ -25,6 +25,8 @@
 #'     \item{\code{"sq_loss_lasso"}}{ - M(y, v) = (v - y) ^ 2 with linear model and lasso penalty}
 #'     \item{\code{"logistic_loss_lasso"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with with linear model and lasso penalty}
 #'     \item{\code{"cox_loss_lasso"}}{ - M corresponds to the negative partial likelihood of the cox model with linear model and additionally a lasso penalty}
+#'     \item{\code{"owl_logistic_loss_lasso"}} { - (method of Regularized Outcome Weighted Subgroup Identification)}
+#'     \item{\code{"owl_logistic_flip_loss_lasso"}} { - }
 #'     \item{\code{"sq_loss_lasso_gam"}}{ - M(y, v) = (v - y) ^ 2 with variables selected by lasso penalty and generalized additive model fit on the selected variables}
 #'     \item{\code{"logistic_loss_lasso_gam"}}{ - M(y, v) = y * log(1 + exp\{-v\}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
 #'     \item{\code{"sq_loss_gam"}}{ - M(y, v) = (v - y) ^ 2 with generalized additive model fit on all variables}
@@ -165,6 +167,8 @@ fit.subgroup <- function(x,
                          loss       = c("sq_loss_lasso",
                                         "logistic_loss_lasso",
                                         "cox_loss_lasso",
+                                        "owl_logistic_loss_lasso",
+                                        "owl_logistic_flip_loss_lasso",
                                         "sq_loss_lasso_gam",
                                         "logistic_loss_lasso_gam",
                                         "sq_loss_gam",
@@ -479,12 +483,18 @@ fit.subgroup <- function(x,
             }
     }
 
-    # construct design matrix to be passed to fitting function
-    x.tilde <- create.design.matrix(x             = x,
-                                    pi.x          = pi.x,
-                                    trt           = trt,
-                                    method        = method,
-                                    reference.trt = reference.trt)
+    if (grepl("owl_", loss))
+    {
+        x.tilde <- cbind(1, x)
+    } else
+    {
+        # construct design matrix to be passed to fitting function
+        x.tilde <- create.design.matrix(x             = x,
+                                        pi.x          = pi.x,
+                                        trt           = trt,
+                                        method        = method,
+                                        reference.trt = reference.trt)
+    }
 
     # construct observation weight vector
     wts     <- create.weights(pi.x   = pi.x,
@@ -523,11 +533,61 @@ fit.subgroup <- function(x,
 
     colnames(x.tilde) <- all.cnames
 
-    # identify correct fitting function and call it
-    fit_fun      <- paste0("fit_", loss)
-    fitted.model <- do.call(fit_fun, list(x = x.tilde, trt = trt, n.trts = n.trts,
-                                          y = y.adj, wts = wts, family = family,
-                                          match.id = match.id, ...))
+    if (grepl("owl_", loss))
+    {
+        fit_fun <- "fit_logistic_loss_lasso"
+
+        if (method != "weighting")
+        {
+            warning("Only method = 'weighting' available for OWL-type losses; defaulting
+                     to 'weighting' method.")
+        }
+
+        if (n.trts == 2)
+        {
+            family <- "binomial"
+        } else
+        {
+            family <- "multinomial"
+        }
+
+        if (grepl("flip_loss_", loss))
+        {
+            if (n.trts == 2)
+            {
+                trt.y <- trt
+                y.wt  <- abs(y.adj)
+
+                # flip the trtmnt for negative response values
+                idx.flip.1 <- y.adj < 0 & trt == unique.trts[1]
+                idx.flip.2 <- y.adj < 0 & trt == unique.trts[2]
+                trt.y[idx.flip.1] <- unique.trts[2]
+                trt.y[idx.flip.2] <- unique.trts[1]
+            } else
+            {
+                stop("Flipping loss not available for multiple treatments scenarios.")
+            }
+        } else
+        {
+            trt.y <- trt
+            y.wt  <- y.adj - min(y.adj)
+        }
+
+        fitted.model <- do.call(fit_fun, list(x = x.tilde, trt = trt, n.trts = n.trts,
+                                              y = trt.y, wts = drop(wts) * drop(y.wt),
+                                              family = family, intercept = TRUE,
+                                              match.id = match.id, ...))
+    } else
+    {
+        # identify correct fitting function and call it
+        fit_fun      <- paste0("fit_", loss)
+
+        fitted.model <- do.call(fit_fun, list(x = x.tilde, trt = trt, n.trts = n.trts,
+                                              y = y.adj, wts = wts, family = family,
+                                              match.id = match.id, ...))
+    }
+
+
 
 
     # save extra results
