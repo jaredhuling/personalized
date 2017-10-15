@@ -25,8 +25,8 @@
 #'     \item{\code{"sq_loss_lasso"}}{ - M(y, v) = (v - y) ^ 2 with linear model and lasso penalty}
 #'     \item{\code{"logistic_loss_lasso"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with with linear model and lasso penalty}
 #'     \item{\code{"cox_loss_lasso"}}{ - M corresponds to the negative partial likelihood of the cox model with linear model and additionally a lasso penalty}
-#'     \item{\code{"owl_logistic_loss_lasso"}} { - (method of Regularized Outcome Weighted Subgroup Identification)}
-#'     \item{\code{"owl_logistic_flip_loss_lasso"}} { - }
+#'     \item{\code{"owl_logistic_loss_lasso"}} { - M(y, v) = ylog(1 + exp\{-v\}) (method of Regularized Outcome Weighted Subgroup Identification)}
+#'     \item{\code{"owl_logistic_flip_loss_lasso"}} { - M(y, v) = |y|log(1 + exp\{-sign(y)v\})}
 #'     \item{\code{"sq_loss_lasso_gam"}}{ - M(y, v) = (v - y) ^ 2 with variables selected by lasso penalty and generalized additive model fit on the selected variables}
 #'     \item{\code{"logistic_loss_lasso_gam"}}{ - M(y, v) = y * log(1 + exp\{-v\}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
 #'     \item{\code{"sq_loss_gam"}}{ - M(y, v) = (v - y) ^ 2 with generalized additive model fit on all variables}
