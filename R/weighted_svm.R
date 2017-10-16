@@ -45,8 +45,6 @@ weighted.ksvm <- function(y,
                           ...)
 {
 
-    kernel <- match.arg(kernel)
-
     nfolds <- as.integer(nfolds[1])
     if (nfolds < 1)
     {
