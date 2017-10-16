@@ -31,6 +31,10 @@
 #'     \item{\code{"logistic_loss_lasso_gam"}}{ - M(y, v) = y * log(1 + exp\{-v\}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
 #'     \item{\code{"sq_loss_gam"}}{ - M(y, v) = (v - y) ^ 2 with generalized additive model fit on all variables}
 #'     \item{\code{"logistic_loss_gam"}}{ - M(y, v) = y * log(1 + exp\{-v\}) with generalized additive model fit on all variables}
+#'     \item{\code{"owl_logistic_loss_gam"}} { - M(y, v) = ylog(1 + exp\{-v\}) with generalized additive model fit on all variables}
+#'     \item{\code{"owl_logistic_flip_loss_gam"}} { - M(y, v) = |y|log(1 + exp\{-sign(y)v\}) with generalized additive model fit on all variables}
+#'     \item{\code{"owl_logistic_loss_lasso_gam"}} { - M(y, v) = ylog(1 + exp\{-v\}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
+#'     \item{\code{"owl_logistic_flip_loss_lasso_gam"}} { - M(y, v) = |y|log(1 + exp\{-sign(y)v\}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
 #'     \item{\code{"sq_loss_gbm"}}{ - M(y, v) = (v - y) ^ 2 with gradient-boosted decision trees model}
 #'     \item{\code{"abs_loss_gbm"}}{ - M(y, v) = |v - y| with gradient-boosted decision trees model}
 #'     \item{\code{"logistic_loss_gbm"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with gradient-boosted decision trees model}
@@ -173,6 +177,10 @@ fit.subgroup <- function(x,
                                         "logistic_loss_lasso_gam",
                                         "sq_loss_gam",
                                         "logistic_loss_gam",
+                                        "owl_logistic_loss_gam",
+                                        "owl_logistic_flip_loss_gam",
+                                        "owl_logistic_loss_lasso_gam",
+                                        "owl_logistic_flip_loss_lasso_gam",
                                         "sq_loss_gbm",
                                         "abs_loss_gbm",
                                         "logistic_loss_gbm",
@@ -553,16 +561,28 @@ fit.subgroup <- function(x,
 
     if (grepl("owl_", loss))
     {
-        if (grepl("logistic_", loss) | grepl("multinomial_", loss))
+        intercept <- FALSE
+        if (n.trts == 2)
+        {
+            family <- "binomial"
+        } else
+        {
+            family <- "multinomial"
+        }
+
+        if (grepl("logistic_", loss) & grepl("lasso", loss) & !grepl("gam$", loss))
         {
             fit_fun <- "fit_logistic_loss_lasso"
 
-            if (n.trts == 2)
+            intercept <- TRUE
+        } else if (grepl("logistic_", loss) & grepl("gam$", loss))
+        {
+            if (grepl("lasso", loss))
             {
-                family <- "binomial"
+                fit_fun <- "fit_logistic_loss_lasso_gam"
             } else
             {
-                family <- "multinomial"
+                fit_fun <- "fit_logistic_loss_gam"
             }
         }
 
@@ -597,7 +617,7 @@ fit.subgroup <- function(x,
 
         fitted.model <- do.call(fit_fun, list(x = x.tilde, trt = trt, n.trts = n.trts,
                                               y = trt.y, wts = drop(wts) * drop(y.wt),
-                                              family = family, intercept = TRUE,
+                                              family = family, intercept = intercept,
                                               match.id = match.id, ...))
     } else
     {

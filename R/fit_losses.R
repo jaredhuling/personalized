@@ -322,7 +322,7 @@ fit_cox_loss_lasso <- function(x, y, trt, n.trts, wts, family, match.id, ...)
 
 #' @import mgcv
 #' @importFrom stats as.formula binomial gaussian
-fit_sq_loss_lasso_gam <- function(x, y, trt, n.trts, wts, family, match.id, ...)
+fit_sq_loss_lasso_gam <- function(x, y, trt, n.trts, wts, family, match.id, intercept = FALSE, ...)
 {
     # this function must return a fitted model
     # in addition to a function which takes in
@@ -353,6 +353,8 @@ fit_sq_loss_lasso_gam <- function(x, y, trt, n.trts, wts, family, match.id, ...)
     {
         list.dots$penalty.factor <- c(0, rep(1, ncol(x) - 1))
     }
+
+    list.dots$intercept <- intercept
 
     ## Establish nfolds for cv.glmnet()
     if ("nfolds" %in% dot.names)
@@ -413,8 +415,8 @@ fit_sq_loss_lasso_gam <- function(x, y, trt, n.trts, wts, family, match.id, ...)
 
     # fit a model with a lasso
     # penalty and desired loss:
-    sel.model <- do.call(cv.glmnet, c(list(x = x, y = y, weights = wts, family = family,
-                                           intercept = FALSE), list.dots[dots.idx.glmnet]))
+    sel.model <- do.call(cv.glmnet, c(list(x = x, y = y, weights = wts, family = family),
+                                      list.dots[dots.idx.glmnet]))
 
 
     vnames <- colnames(x)

@@ -7,8 +7,10 @@
 fit.subgroup(x, y, trt, propensity.func = NULL, loss = c("sq_loss_lasso",
   "logistic_loss_lasso", "cox_loss_lasso", "owl_logistic_loss_lasso",
   "owl_logistic_flip_loss_lasso", "sq_loss_lasso_gam",
-  "logistic_loss_lasso_gam", "sq_loss_gam", "logistic_loss_gam", "sq_loss_gbm",
-  "abs_loss_gbm", "logistic_loss_gbm", "cox_loss_gbm"),
+  "logistic_loss_lasso_gam", "sq_loss_gam", "logistic_loss_gam",
+  "owl_logistic_loss_gam", "owl_logistic_flip_loss_gam",
+  "owl_logistic_loss_lasso_gam", "owl_logistic_flip_loss_lasso_gam",
+  "sq_loss_gbm", "abs_loss_gbm", "logistic_loss_gbm", "cox_loss_gbm"),
   method = c("weighting", "a_learning"), match.id = NULL,
   augment.func = NULL, cutpoint = 0, larger.outcome.better = TRUE,
   reference.trt = NULL, retcall = TRUE, ...)
@@ -46,6 +48,10 @@ is complex.
     \item{\code{"logistic_loss_lasso_gam"}}{ - M(y, v) = y * log(1 + exp\{-v\}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
     \item{\code{"sq_loss_gam"}}{ - M(y, v) = (v - y) ^ 2 with generalized additive model fit on all variables}
     \item{\code{"logistic_loss_gam"}}{ - M(y, v) = y * log(1 + exp\{-v\}) with generalized additive model fit on all variables}
+    \item{\code{"owl_logistic_loss_gam"}} { - M(y, v) = ylog(1 + exp\{-v\}) with generalized additive model fit on all variables}
+    \item{\code{"owl_logistic_flip_loss_gam"}} { - M(y, v) = |y|log(1 + exp\{-sign(y)v\}) with generalized additive model fit on all variables}
+    \item{\code{"owl_logistic_loss_lasso_gam"}} { - M(y, v) = ylog(1 + exp\{-v\}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
+    \item{\code{"owl_logistic_flip_loss_lasso_gam"}} { - M(y, v) = |y|log(1 + exp\{-sign(y)v\}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
     \item{\code{"sq_loss_gbm"}}{ - M(y, v) = (v - y) ^ 2 with gradient-boosted decision trees model}
     \item{\code{"abs_loss_gbm"}}{ - M(y, v) = |v - y| with gradient-boosted decision trees model}
     \item{\code{"logistic_loss_gbm"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with gradient-boosted decision trees model}
