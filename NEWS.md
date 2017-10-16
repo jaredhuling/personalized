@@ -2,6 +2,10 @@
 
 * Fixed minor bugs regarding multiple treatment options, match.id
 
+* Added OWL-type losses: logistic and hinge surrogates (multiple treatment available for logistic surrogate)
+
+* Added outcome flipping OWL-type losses: logistic and hinge surrogates
+
 # personalized version 0.1.0
 
 * Added estimation functionality for multiple treatments
