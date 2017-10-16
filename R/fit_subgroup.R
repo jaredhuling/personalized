@@ -553,7 +553,18 @@ fit.subgroup <- function(x,
 
     if (grepl("owl_", loss))
     {
-        fit_fun <- "fit_logistic_loss_lasso"
+        if (grepl("logistic_", loss) | grepl("multinomial_", loss))
+        {
+            fit_fun <- "fit_logistic_loss_lasso"
+
+            if (n.trts == 2)
+            {
+                family <- "binomial"
+            } else
+            {
+                family <- "multinomial"
+            }
+        }
 
         if (method != "weighting")
         {
@@ -561,13 +572,6 @@ fit.subgroup <- function(x,
                      to 'weighting' method.")
         }
 
-        if (n.trts == 2)
-        {
-            family <- "binomial"
-        } else
-        {
-            family <- "multinomial"
-        }
 
         if (grepl("flip_", loss))
         {

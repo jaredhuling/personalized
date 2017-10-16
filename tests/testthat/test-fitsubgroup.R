@@ -118,6 +118,22 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
     expect_is(subgrp.model, "subgroup_fitted")
 
     subgrp.model <- fit.subgroup(x = x, y = y,
+                                 trt = as.factor(trt01),
+                                 propensity.func = prop.func,
+                                 loss   = "owl_logistic_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+    subgrp.model <- fit.subgroup(x = x, y = y,
+                                 trt = as.factor(trt01),
+                                 propensity.func = prop.func,
+                                 loss   = "owl_logistic_flip_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+    subgrp.model <- fit.subgroup(x = x, y = y,
                                  trt = trt01,
                                  larger.outcome.better = FALSE,
                                  propensity.func = prop.func,
@@ -1060,6 +1076,31 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
                                  nfolds = 5)              # option for cv.glmnet
 
     expect_is(subgrp.model, "subgroup_fitted")
+
+    subgrp.model <- fit.subgroup(x = x, y = y,
+                                 trt = trt,
+                                 propensity.func = propensity.multinom.lasso,
+                                 loss   = "owl_logistic_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+    invisible(capture.output(print(subgrp.model, digits = 2)))
+
+    invisible(capture.output(summary(subgrp.model)))
+
+    expect_warning(fit.subgroup(x = x, y = y,
+                                trt = trt,
+                                propensity.func = propensity.multinom.lasso,
+                                loss   = "owl_logistic_loss_lasso",
+                                method = "a_learning",
+                                nfolds = 5))
+
+    expect_error(fit.subgroup(x = x, y = y,
+                              trt = trt,
+                              propensity.func = propensity.multinom.lasso,
+                              loss   = "owl_logistic_flip_loss_lasso",
+                              nfolds = 5))
 
 
     ## test matching without prop score
