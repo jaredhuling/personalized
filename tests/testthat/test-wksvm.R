@@ -5,6 +5,7 @@ context("weighted.ksvm")
 
 test_that("weighted.ksvm fitting", {
 
+    library(kernlab)
 
     set.seed(123)
 
