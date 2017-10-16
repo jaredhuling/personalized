@@ -873,3 +873,28 @@ fit_cox_loss_gbm <- function(x, y, trt, n.trts, wts, family, match.id, ...)
 
 
 
+
+
+
+
+
+fit_hinge_loss <- function(x, y, trt, n.trts, wts, family, match.id, ...)
+{
+    # we need to solve based on the dual problem of svm
+    # in order to minimize the *weighted* hinge loss
+
+    # primal: min ||beta||^2 + C\sum_i w_i * max(0, 1 - T_i * f(x_i, beta))
+
+    # T_i in {-1, 1}
+
+    # dual:       max (alpha_i >= 0) sum_i alpha_i - 0.5 * sum_{jk}alpha_j * alpha_k * T_j * T_k K(x_j,x_k)
+    # subject to: 0 <= alpha_i <= C * w_i and sum_i alpha_i * T_i = 0
+
+    # which is equivalent to:
+    # min (alpha_i >= 0) -sum_i alpha_i + 0.5 * sum_{jk}alpha_j * alpha_k * T_j * T_k K(x_j,x_k)
+    # subject to the same constraints
+
+    # which can be solved with ipop() function from kernlab
+
+
+}

@@ -23,6 +23,7 @@ Suggests:
     testthat
 Imports:
     survival,
+    kernlab,
     methods,
     foreach
 Depends:

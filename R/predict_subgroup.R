@@ -3,10 +3,15 @@
 #'
 #' @description Predicts benefit score based on a fitted subgroup identification model
 #'
-#' @param object fitted object returned by \code{validate.subgrp()} function
+#' @param object fitted object returned by \code{validate.subgrp()} function.
+#'
+#' For \code{predict.wksvm()}, this should be a fitted \code{wksvm} object from the \code{weighted.ksvm()} function
 #' @param newx new design matrix for which predictions will be made
-#' @param type type of prediction. \code{"benefit.score"} results in predicted benefit scores and
-#' \code{"trt.group"} results in prediction of recommended treatment group
+#' @param type type of prediction. \code{type = "benefit.score"} results in predicted benefit scores and
+#' \code{type = "trt.group"} results in prediction of recommended treatment group.
+#'
+#' For \code{predict.wksvm()}, \code{type = 'class'} yields predicted
+#' class and \code{type = 'linear.predictor'} yields estimated function (the sign of which is the estimated class)
 #' @param cutpoint numeric value for patients with benefit scores above which
 #' (or below which if \code{larger.outcome.better = FALSE})
 #' will be recommended to be in the treatment group
