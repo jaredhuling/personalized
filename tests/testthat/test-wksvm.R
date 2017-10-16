@@ -34,7 +34,7 @@ test_that("weighted.ksvm fitting", {
                                weights = weights[1:101]))
 
 
-    foldid <- sample(rep(seq(5), length = NROW(y)))
+    foldid <- sample(rep(seq(5), length = 100))
 
     wk <- weighted.ksvm(x = x[1:100,], y = y[1:100], C = c(1, 3),
                         foldid = foldid,
