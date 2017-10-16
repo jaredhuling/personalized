@@ -70,7 +70,13 @@ predict.subgroup_fitted <- function(object,
 
     # simply call prediction function
     # defined by the loss function used
-    retval <- drop(object$predict(newx))
+    if (grepl("owl_", object$loss) & object$n.trts > 2 & type == "trt.group")
+    {
+        retval <- drop(object$predict(newx, type = "class"))
+    } else
+    {
+        retval <- drop(object$predict(newx))
+    }
 
     # need to make predicted (ie recommended)
     # treatment behavior different if larger
@@ -79,23 +85,29 @@ predict.subgroup_fitted <- function(object,
     {
         if (object$n.trts > 2)
         {
-            # meaning of larger vs smaller benefit score
-            # is different depending on whether larger means
-            # better or not for the outcome
-            if (object$larger.outcome.better)
+            if (grepl("owl_", object$loss))
             {
-                best.comp.idx   <- apply(retval, 1, which.max)
-                recommended.trt <- 1 * (retval > cutpoint)
-                rec.ref         <- rowSums(recommended.trt) == 0
-
-                retval <- ifelse(rec.ref, object$reference.trt, object$comparison.trts[best.comp.idx])
+                # nothing to be done
             } else
             {
-                best.comp.idx   <- apply(retval, 1, which.min)
-                recommended.trt <- 1 * (retval < cutpoint)
-                rec.ref         <- rowSums(recommended.trt) == 0
+                # meaning of larger vs smaller benefit score
+                # is different depending on whether larger means
+                # better or not for the outcome
+                if (object$larger.outcome.better)
+                {
+                    best.comp.idx   <- apply(retval, 1, which.max)
+                    recommended.trt <- 1 * (retval > cutpoint)
+                    rec.ref         <- rowSums(recommended.trt) == 0
 
-                retval <- ifelse(rec.ref, object$reference.trt, object$comparison.trts[best.comp.idx])
+                    retval <- ifelse(rec.ref, object$reference.trt, object$comparison.trts[best.comp.idx])
+                } else
+                {
+                    best.comp.idx   <- apply(retval, 1, which.min)
+                    recommended.trt <- 1 * (retval < cutpoint)
+                    rec.ref         <- rowSums(recommended.trt) == 0
+
+                    retval <- ifelse(rec.ref, object$reference.trt, object$comparison.trts[best.comp.idx])
+                }
             }
 
         } else

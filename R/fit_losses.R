@@ -5,12 +5,13 @@ get.pred.func <- function(fit.name, model, env = parent.frame())
     vnames    <- env$vnames
     sel.idx   <- env$sel.idx
     best.iter <- env$best.iter
+    family    <- env$family
     # GAM models
     if (grepl("_gam$",fit.name))
     {
         if (grepl("_cox", fit.name))
         {
-            pred.func <- function(x)
+            pred.func <- function(x, type = c("link", "class"))
             {
                 df.pred <- data.frame(cbind(1, x[,sel.idx[-1] - 1]))
                 colnames(df.pred) <- vnames
@@ -18,7 +19,7 @@ get.pred.func <- function(fit.name, model, env = parent.frame())
             }
         } else
         {
-            pred.func <- function(x)
+            pred.func <- function(x, type = c("link", "class"))
             {
                 df.pred <- data.frame(cbind(1, x[,sel.idx[-1] - 1]))
                 colnames(df.pred) <- vnames
@@ -28,7 +29,8 @@ get.pred.func <- function(fit.name, model, env = parent.frame())
         # GBM models
     } else if (grepl("_gbm$",fit.name))
     {
-        pred.func <- function(x) {
+        pred.func <- function(x, type = c("link", "class"))
+        {
             df.x <- data.frame(cbind(1, x))
             colnames(df.x) <- vnames
             drop(predict(model, newdata = df.x, n.trees = best.iter, type = "link"))
@@ -38,7 +40,7 @@ get.pred.func <- function(fit.name, model, env = parent.frame())
     {
         if (grepl("_cox", fit.name))
         {
-            pred.func <- function(x)
+            pred.func <- function(x, type = c("link", "class"))
             {
                 if (n.trts == 2)
                 {
@@ -62,12 +64,14 @@ get.pred.func <- function(fit.name, model, env = parent.frame())
                         pred.mat[,t]  <- drop(cbind(1, x) %*% coefs.cur)
                     }
                     -pred.mat
+
                 }
             }
         } else
         {
-            pred.func <- function(x)
+            pred.func <- function(x, type = c("link", "class"))
             {
+                type <- match.arg(type)
                 if (n.trts == 2)
                 {
                     drop(predict(model, newx = cbind(1, x), type = "link", s = "lambda.min"))
@@ -75,21 +79,28 @@ get.pred.func <- function(fit.name, model, env = parent.frame())
                 {
                     ## need to handle cases with multiple treatments specially
                     ## because we don't want to sum up over all the estimated deltas.
-                    ## for K-trtments we estimate K-1 delta functions and thus need
-                    ## to extract each one individually.
-                    all.coefs <- as.vector(predict(model, type = "coefficients", s = "lambda.min"))[-1]
-                    n.coefs.per.trt <- length(all.coefs) / (n.trts - 1)
 
-                    n.preds  <- NROW(x)
-                    pred.mat <- array(NA, dim = c(n.preds, n.trts - 1))
-                    for (t in 1:(n.trts - 1))
+                    if (family == "multinomial")
                     {
-                        idx.coefs.cur <- (n.coefs.per.trt * (t - 1) + 1):(n.coefs.per.trt * t)
-                        coefs.cur     <- all.coefs[idx.coefs.cur]
+                        drop(predict(model, cbind(1, x), type = type, s = "lambda.min"))
+                    } else
+                    {
+                        ## for K-trtments we estimate K-1 delta functions and thus need
+                        ## to extract each one individually.
+                        all.coefs <- as.vector(predict(model, type = "coefficients", s = "lambda.min"))[-1]
+                        n.coefs.per.trt <- length(all.coefs) / (n.trts - 1)
 
-                        pred.mat[,t]  <- drop(cbind(1, x) %*% coefs.cur)
+                        n.preds  <- NROW(x)
+                        pred.mat <- array(NA, dim = c(n.preds, n.trts - 1))
+                        for (t in 1:(n.trts - 1))
+                        {
+                            idx.coefs.cur <- (n.coefs.per.trt * (t - 1) + 1):(n.coefs.per.trt * t)
+                            coefs.cur     <- all.coefs[idx.coefs.cur]
+
+                            pred.mat[,t]  <- drop(cbind(1, x) %*% coefs.cur)
+                        }
+                        pred.mat
                     }
-                    pred.mat
                 }
             }
         }
@@ -215,8 +226,18 @@ fit_sq_loss_lasso <- function(x, y, trt, n.trts, wts, family, match.id, intercep
     # to have estimated coefficients
     if (intercept)
     {
-        model$glmnet.fit$beta[1,] <- unname(model$glmnet.fit$a0)
-        model$glmnet.fit$a0       <- rep(0, length(model$glmnet.fit$a0))
+        if (family != "multinomial")
+        {
+            model$glmnet.fit$beta[1,] <- unname(model$glmnet.fit$a0)
+            model$glmnet.fit$a0       <- rep(0, length(model$glmnet.fit$a0))
+        } else
+        {
+            for (cl in 1:nrow(model$glmnet.fit$a0))
+            {
+                model$glmnet.fit$beta[[cl]][1,] <- unname(model$glmnet.fit$a0[cl,])
+                model$glmnet.fit$a0[cl,]        <- rep(0, length(model$glmnet.fit$a0[cl,]))
+            }
+        }
     }
 
     # Return fitted model and extraction methods

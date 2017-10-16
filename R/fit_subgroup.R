@@ -281,15 +281,24 @@ fit.subgroup <- function(x,
 
     if (!is.null(reference.trt))
     {
-        if (!(reference.trt %in% unique.trts))
+        if (grepl("owl_", loss))
         {
-            stop("reference.trt must be one of the treatment levels")
+            warning("reference.trt specification not applicable for owl losses.")
+            reference.idx   <- 1L
+            comparison.idx  <- (1:n.trts)[-reference.idx]
+            comparison.trts <- unique.trts[-reference.idx]
+            reference.trt   <- unique.trts[reference.idx]
+        } else
+        {
+            if (!(reference.trt %in% unique.trts))
+            {
+                stop("reference.trt must be one of the treatment levels")
+            }
+
+            reference.idx   <- which(unique.trts == reference.trt)
+            comparison.idx  <- (1:n.trts)[-reference.idx]
+            comparison.trts <- unique.trts[-reference.idx]
         }
-
-        reference.idx   <- which(unique.trts == reference.trt)
-        comparison.idx  <- (1:n.trts)[-reference.idx]
-        comparison.trts <- unique.trts[-reference.idx]
-
     } else
     {
         reference.idx   <- 1L
@@ -436,6 +445,7 @@ fit.subgroup <- function(x,
         pi.x <- drop(propensity.func(x = x, trt = trt, match.id = match.id))
     }
 
+
     # make sure the resulting propensity scores are in the
     # acceptable range (ie 0-1)
     rng.pi <- range(pi.x)
@@ -501,7 +511,8 @@ fit.subgroup <- function(x,
                               trt    = trt,
                               method = method)
 
-    if (n.trts > 2)
+
+    if (n.trts > 2 & !grepl("owl_", loss))
     {
         all.cnames <- numeric(ncol(x.tilde))
         len.names  <- length(vnames) + 1
@@ -520,18 +531,25 @@ fit.subgroup <- function(x,
         }
     } else
     {
-        if (comparison.trts != 1 & comparison.trts != "1")
+        if (comparison.trts[1] != 1 & comparison.trts[1] != "1")
         {
-            trt.name.cur <- comparison.trts
+            trt.name.cur <- comparison.trts[1]
         } else
         {
             trt.name.cur <- "Trt1"
         }
-        all.cnames <- c( trt.name.cur,
+        all.cnames <- c( trt.name.cur[1],
                          vnames )
+
+        if (grepl("owl_", loss) & n.trts > 2)
+        {
+            all.cnames[1] <- "Trt"
+        }
     }
 
+
     colnames(x.tilde) <- all.cnames
+
 
     if (grepl("owl_", loss))
     {
@@ -551,7 +569,7 @@ fit.subgroup <- function(x,
             family <- "multinomial"
         }
 
-        if (grepl("flip_loss_", loss))
+        if (grepl("flip_", loss))
         {
             if (n.trts == 2)
             {
@@ -600,6 +618,7 @@ fit.subgroup <- function(x,
     fitted.model$n.trts                <- n.trts
     fitted.model$comparison.trts       <- comparison.trts
     fitted.model$reference.trt         <- reference.trt
+    fitted.model$trts                  <- unique.trts
 
     fitted.model$benefit.scores        <- fitted.model$predict(x)
 
