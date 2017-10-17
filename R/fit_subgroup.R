@@ -298,7 +298,28 @@ fit.subgroup <- function(x,
             stop("augment.func() should only have either two arguments: 'x' and 'y', or three arguments:
                  'trt', 'x', and 'y'")
         }
-        }
+    }
+
+    augment.method <- switch(loss,
+                             "sq_loss_lasso"                    = "offset",
+                             "logistic_loss_lasso"              = "offset",
+                             "cox_loss_lasso"                   = "offset",
+                             "owl_logistic_loss_lasso"          = "adj",
+                             "owl_logistic_flip_loss_lasso"     = "adj",
+                             "owl_hinge_loss"                   = "adj",
+                             "owl_hinge_flip_loss"              = "adj",
+                             "sq_loss_lasso_gam"                = "offset",
+                             "logistic_loss_lasso_gam"          = "offset",
+                             "sq_loss_gam"                      = "offset",
+                             "logistic_loss_gam"                = "offset",
+                             "owl_logistic_loss_gam"            = "adj",
+                             "owl_logistic_flip_loss_gam"       = "adj",
+                             "owl_logistic_loss_lasso_gam"      = "adj",
+                             "owl_logistic_flip_loss_lasso_gam" = "adj",
+                             "sq_loss_gbm"                      = "offset",
+                             "abs_loss_gbm"                     = "offset",
+                             "logistic_loss_gbm"                = "offset",
+                             "cox_loss_gbm"                     = "offset")
 
     if (is.factor(trt))
     {
