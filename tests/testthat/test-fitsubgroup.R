@@ -136,7 +136,7 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
     subgrp.model <- fit.subgroup(x = x, y = y,
                                  trt = trt01,
                                  propensity.func = prop.func,
-                                 loss   = "owl_hinge_flip_loss_lasso",
+                                 loss   = "owl_hinge_flip_loss",
                                  nfolds = 5)              # option for cv.glmnet
 
     expect_is(subgrp.model, "subgroup_fitted")
@@ -148,7 +148,7 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
     subgrp.model <- fit.subgroup(x = x, y = y,
                                  trt = trt01,
                                  propensity.func = prop.func,
-                                 loss   = "owl_hinge_loss_lasso",
+                                 loss   = "owl_hinge_loss",
                                  nfolds = 5)              # option for cv.glmnet
 
     expect_is(subgrp.model, "subgroup_fitted")

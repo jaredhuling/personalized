@@ -79,11 +79,16 @@
 #' @param retcall boolean value. if \code{TRUE} then the passed arguments will be saved. Do not set to \code{FALSE}
 #' if the \code{validate.subgroup()} function will later be used for your fitted subgroup model. Only set to \code{FALSE}
 #' if memory is limited as setting to \code{TRUE} saves the design matrix to the fitted object
-#' @param ... options to be passed to underlying fitting function. For all \code{loss} options with \code{lasso},
-#' this will be passed to \code{cv.glmnet} and for all \code{loss} options with \code{mcp} this will be passed
-#' to \code{cv.ncvreg}. Note that for all \code{loss} options that use \code{gam()} from the \code{mgcv} package,
+#' @param ... options to be passed to underlying fitting function. For all \code{loss} options with 'lasso',
+#' this will be passed to \code{\link[glmnet]{cv.glmnet}}. For all \code{loss} options with 'gam', this will
+#' be passed to \code{\link[mgcv]{gam}} from the \pkg{mgcv} package
+#' Note that for all \code{loss} options that use \code{gam()}
+#' from the \pkg{mgcv} package,
 #' the user cannot supply the \code{gam} argument \code{method} because it is also an argument of \code{fit.subgroup}, so
 #' instead, to change the \code{gam method} argument, supply \code{method.gam}, ie \code{method.gam = "REML"}.
+#'
+#' For all \code{loss} options with 'hinge', this will be passed to both \code{\code{\link[personalized]{weighted.ksvm}}} and
+#' \code{\link[kernlab]{ipop}} from the \pkg{kernlab} package
 #' @seealso \code{\link[personalized]{validate.subgroup}} for function which creates validation results for subgroup
 #' identification models, \code{\link[personalized]{predict.subgroup_fitted}} for a prediction function for fitted models
 #' from \code{fit.subgroup}, \code{\link[personalized]{plot.subgroup_fitted}} for a function which plots
