@@ -39,25 +39,35 @@ with nonparametric additive terms for each selected variable. \code{sq_loss_gam}
 allows for flexible estimation using machine learning and can be useful when the underlying treatment-covariate interaction
 is complex.
 \itemize{
-    \item{\code{"sq_loss_lasso"}}{ - M(y, v) = (v - y) ^ 2 with linear model and lasso penalty}
-    \item{\code{"logistic_loss_lasso"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with with linear model and lasso penalty}
-    \item{\code{"cox_loss_lasso"}}{ - M corresponds to the negative partial likelihood of the cox model with linear model and additionally a lasso penalty}
-    \item{\code{"owl_logistic_loss_lasso"}} { - M(y, v) = ylog(1 + exp\{-v\}) (method of Regularized Outcome Weighted Subgroup Identification)}
-    \item{\code{"owl_logistic_flip_loss_lasso"}} { - M(y, v) = |y|log(1 + exp\{-sign(y)v\})}
-    \item{\code{"owl_hinge_loss"}} { - M(y, v) = ymax(0, 1 - v) (method of Estimating individualized treatment rules using outcome weighted learning)}
-    \item{\code{"owl_hinge_flip_loss"}} { - M(y, v) = |y|max(0, 1 - sign(y)v) }
-    \item{\code{"sq_loss_lasso_gam"}}{ - M(y, v) = (v - y) ^ 2 with variables selected by lasso penalty and generalized additive model fit on the selected variables}
-    \item{\code{"logistic_loss_lasso_gam"}}{ - M(y, v) = y * log(1 + exp\{-v\}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
-    \item{\code{"sq_loss_gam"}}{ - M(y, v) = (v - y) ^ 2 with generalized additive model fit on all variables}
-    \item{\code{"logistic_loss_gam"}}{ - M(y, v) = y * log(1 + exp\{-v\}) with generalized additive model fit on all variables}
-    \item{\code{"owl_logistic_loss_gam"}} { - M(y, v) = ylog(1 + exp\{-v\}) with generalized additive model fit on all variables}
-    \item{\code{"owl_logistic_flip_loss_gam"}} { - M(y, v) = |y|log(1 + exp\{-sign(y)v\}) with generalized additive model fit on all variables}
-    \item{\code{"owl_logistic_loss_lasso_gam"}} { - M(y, v) = ylog(1 + exp\{-v\}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
-    \item{\code{"owl_logistic_flip_loss_lasso_gam"}} { - M(y, v) = |y|log(1 + exp\{-sign(y)v\}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
-    \item{\code{"sq_loss_gbm"}}{ - M(y, v) = (v - y) ^ 2 with gradient-boosted decision trees model}
-    \item{\code{"abs_loss_gbm"}}{ - M(y, v) = |v - y| with gradient-boosted decision trees model}
-    \item{\code{"logistic_loss_gbm"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with gradient-boosted decision trees model}
-    \item{\code{"cox_loss_gbm"}}{ - M corresponds to the negative partial likelihood of the cox model with gradient-boosted decision trees model}
+    \item{Continuous Outcomes}
+    \itemize{
+        \item{\code{"sq_loss_lasso"}}{ - M(y, v) = (v - y) ^ 2 with linear model and lasso penalty}
+        \item{\code{"owl_logistic_loss_lasso"}} { - M(y, v) = ylog(1 + exp\{-v\}) (method of Regularized Outcome Weighted Subgroup Identification)}
+        \item{\code{"owl_logistic_flip_loss_lasso"}} { - M(y, v) = |y|log(1 + exp\{-sign(y)v\})}
+        \item{\code{"owl_hinge_loss"}} { - M(y, v) = ymax(0, 1 - v) (method of Estimating individualized treatment rules using outcome weighted learning)}
+        \item{\code{"owl_hinge_flip_loss"}} { - M(y, v) = |y|max(0, 1 - sign(y)v) }
+        \item{\code{"sq_loss_lasso_gam"}}{ - M(y, v) = (v - y) ^ 2 with variables selected by lasso penalty and generalized additive model fit on the selected variables}
+        \item{\code{"sq_loss_gam"}}{ - M(y, v) = (v - y) ^ 2 with generalized additive model fit on all variables}
+        \item{\code{"owl_logistic_loss_gam"}} { - M(y, v) = ylog(1 + exp\{-v\}) with generalized additive model fit on all variables}
+        \item{\code{"owl_logistic_flip_loss_gam"}} { - M(y, v) = |y|log(1 + exp\{-sign(y)v\}) with generalized additive model fit on all variables}
+        \item{\code{"owl_logistic_loss_lasso_gam"}} { - M(y, v) = ylog(1 + exp\{-v\}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
+        \item{\code{"owl_logistic_flip_loss_lasso_gam"}} { - M(y, v) = |y|log(1 + exp\{-sign(y)v\}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
+        \item{\code{"sq_loss_gbm"}}{ - M(y, v) = (v - y) ^ 2 with gradient-boosted decision trees model}
+        \item{\code{"abs_loss_gbm"}}{ - M(y, v) = |v - y| with gradient-boosted decision trees model}
+    }
+    \item{Binary Outcomes}
+    \itemize{
+        \item{All losses for continuous outcomes can be used plus the following:}
+        \item{\code{"logistic_loss_lasso"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with with linear model and lasso penalty}
+        \item{\code{"logistic_loss_lasso_gam"}}{ - M(y, v) = y * log(1 + exp\{-v\}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
+        \item{\code{"logistic_loss_gam"}}{ - M(y, v) = y * log(1 + exp\{-v\}) with generalized additive model fit on all variables}
+        \item{\code{"logistic_loss_gbm"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with gradient-boosted decision trees model}
+    }
+    \item{Time-to-Event Outcomes}
+    \itemize{
+        \item{\code{"cox_loss_lasso"}}{ - M corresponds to the negative partial likelihood of the cox model with linear model and additionally a lasso penalty}
+        \item{\code{"cox_loss_gbm"}}{ - M corresponds to the negative partial likelihood of the cox model with gradient-boosted decision trees model}
+    }
 }}
 
 \item{method}{subgroup ID model type. Either the weighting or A-learning method of Chen et al, (2017)}
