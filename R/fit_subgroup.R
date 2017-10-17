@@ -87,7 +87,7 @@
 #' the user cannot supply the \code{gam} argument \code{method} because it is also an argument of \code{fit.subgroup}, so
 #' instead, to change the \code{gam method} argument, supply \code{method.gam}, ie \code{method.gam = "REML"}.
 #'
-#' For all \code{loss} options with 'hinge', this will be passed to both \code{\code{\link[personalized]{weighted.ksvm}}} and
+#' For all \code{loss} options with 'hinge', this will be passed to both \code{\link[personalized]{weighted.ksvm}} and
 #' \code{\link[kernlab]{ipop}} from the \pkg{kernlab} package
 #' @seealso \code{\link[personalized]{validate.subgroup}} for function which creates validation results for subgroup
 #' identification models, \code{\link[personalized]{predict.subgroup_fitted}} for a prediction function for fitted models
