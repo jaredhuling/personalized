@@ -63,6 +63,10 @@ test_that("weighted.ksvm fitting", {
 
     expect_is(wk, "wksvm")
 
+    expect_warning(weighted.ksvm(x = x[1:100,], y = as.character(y[1:100]), C = c(1, 3),
+                                 nfolds = -5,
+                                 weights = weights[1:100]))
+
     expect_error(weighted.ksvm(x = x[1:100,], y = y[1:100]/2 + 0.5, C = c(0.1),
                                weights = weights[1:100]))
 
