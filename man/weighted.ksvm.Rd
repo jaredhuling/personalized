@@ -4,8 +4,8 @@
 \alias{weighted.ksvm}
 \title{Fit weighted kernel svm model.}
 \usage{
-weighted.ksvm(y, x, weights, C = 1, kernel = "rbfdot", kpar = "automatic",
-  nfolds = 10, foldid = NULL, ...)
+weighted.ksvm(y, x, weights, C = c(0.1, 0.5, 1, 5, 10), kernel = "rbfdot",
+  kpar = "automatic", nfolds = 10, foldid = NULL, ...)
 }
 \arguments{
 \item{y}{The response vector (either a character vector, factor vector, or numeric vector with values in {-1, 1})}
@@ -16,7 +16,7 @@ weighted.ksvm(y, x, weights, C = 1, kernel = "rbfdot", kpar = "automatic",
 
 \item{C}{cost of constraints violation, see \code{\link[kernlab]{ksvm}}}
 
-\item{kernel}{kernel function used for training and prediction. See \code{\link[kernlab]{ksvm}} abd \code{\link[kernlab]{kernels}}}
+\item{kernel}{kernel function used for training and prediction. See \code{\link[kernlab]{ksvm}} and \code{\link[kernlab]{kernels}}}
 
 \item{kpar}{list of hyperparameters for the kernel function. See \code{\link[kernlab]{ksvm}}}
 
@@ -36,7 +36,7 @@ library(kernlab)
 
 x <- matrix(rnorm(200 * 2), ncol = 2)
 
-y <- 2 * (sin(x[,2]) ^ 2 * exp(-x[,2]) > rnorm(200, sd = 0.1)) - 1
+y <- 2 * (sin(x[,2]) ^ 2 * exp(-x[,2]) - 0.2 > rnorm(200, sd = 0.1)) - 1
 
 weights <- runif(100, max = 1.5, min = 0.5)
 

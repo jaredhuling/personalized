@@ -7,14 +7,14 @@
 #' @param x The design matrix (not including intercept term)
 #' @param weights vector of sample weights for weighted SVM
 #' @param C cost of constraints violation, see \code{\link[kernlab]{ksvm}}
-#' @param kernel kernel function used for training and prediction. See \code{\link[kernlab]{ksvm}} abd \code{\link[kernlab]{kernels}}
+#' @param kernel kernel function used for training and prediction. See \code{\link[kernlab]{ksvm}} and \code{\link[kernlab]{kernels}}
 #' @param kpar list of hyperparameters for the kernel function. See \code{\link[kernlab]{ksvm}}
 #' @param nfolds number of cross validation folds for selecting value of C
 #' @param foldid optional vector of values between 1 and nfolds specifying which fold each observation is in. If specified, it will
 #' override the \code{nfolds} argument.
 #' @param ... extra arguments to be passed to \code{\link[kernlab]{ipop}} from the kernlab package
 #' @seealso \code{\link[personalized]{predict.wksvm}} for predicting from fitted \code{weighted.ksvm} objects
-#' @importFrom kernlab ipop primal dual kernelMatrix sigest
+#' @importFrom kernlab ipop primal dual kernelMatrix sigest kpar
 #'
 #' @export
 #' @examples
@@ -23,7 +23,7 @@
 #'
 #' x <- matrix(rnorm(200 * 2), ncol = 2)
 #'
-#' y <- 2 * (sin(x[,2]) ^ 2 * exp(-x[,2]) > rnorm(200, sd = 0.1)) - 1
+#' y <- 2 * (sin(x[,2]) ^ 2 * exp(-x[,2]) - 0.2 > rnorm(200, sd = 0.1)) - 1
 #'
 #' weights <- runif(100, max = 1.5, min = 0.5)
 #'
@@ -37,7 +37,7 @@
 weighted.ksvm <- function(y,
                           x,
                           weights,
-                          C = 1,
+                          C = c(0.1, 0.5, 1, 5, 10),
                           kernel = "rbfdot",
                           kpar = "automatic",
                           nfolds = 10,
@@ -319,4 +319,32 @@ predict.wksvm <- function(object, newx, type = c("class", "linear.predictor"), .
         pred <- sign(pred)
     }
     pred
+}
+
+#' Summary of results for weighted ksvm
+#'
+#' @description Prints summary of results for estimated weighted ksvm
+#' @rdname summary
+#' @export
+summary.wksvm <- function(object, digits = max(getOption('digits')-3, 3), ...)
+{
+    cat("\n")
+    # taken from kernlab
+    switch(class(object$kernel),
+           "rbfkernel" = cat(paste("Gaussian Radial Basis kernel function.", "\n","Hyperparameter :" ,"sigma = ", kpar(object$kernel)$sigma,"\n")),
+           "laplacekernel" = cat(paste("Laplace kernel function.", "\n","Hyperparameter :" ,"sigma = ", kpar(object$kernel)$sigma,"\n")),
+           "besselkernel" = cat(paste("Bessel kernel function.", "\n","Hyperparameter :" ,"sigma = ", kpar(object$kernel)$sigma,"order = ",kpar(object$kernel)$order, "degree = ", kpar(object$kernel)$degree,"\n")),
+           "anovakernel" = cat(paste("Anova RBF kernel function.", "\n","Hyperparameter :" ,"sigma = ", kpar(object$kernel)$sigma, "degree = ", kpar(object$kernel)$degree,"\n")),
+           "tanhkernel" = cat(paste("Hyperbolic Tangent kernel function.", "\n","Hyperparameters :","scale = ", kpar(object$kernel)$scale," offset = ", kpar(object$kernel)$offset,"\n")),
+           "polykernel" = cat(paste("Polynomial kernel function.", "\n","Hyperparameters :","degree = ",kpar(object$kernel)$degree," scale = ", kpar(object$kernel)$scale," offset = ", kpar(object$kernel)$offset,"\n")),
+           "vanillakernel" = cat(paste("Linear (vanilla) kernel function.", "\n")),
+           "splinekernel" = cat(paste("Spline kernel function.", "\n"))
+    )
+    cat("\n")
+    pmat <- rbind(object$C,
+                  object$cv.res)
+    rownames(pmat) <- c("C", "CV weighted accuracy")
+    colnames(pmat) <- c("", "")
+
+    print.default(round(pmat, digits), quote = FALSE, right = TRUE, na.print = "NA", ...)
 }

@@ -104,6 +104,12 @@ get.pred.func <- function(fit.name, model, env = parent.frame())
                 }
             }
         }
+    } else if (grepl("hinge_loss$", fit.name))
+    {
+        pred.func <- function(x, type = c("link", "class"))
+        {
+            drop(predict(model, newx = cbind(1, x), type = "linear.predictor"))
+        }
     } else
     {
         stop(paste0("No prediction method found for loss: ", fit.name))
@@ -878,23 +884,73 @@ fit_cox_loss_gbm <- function(x, y, trt, n.trts, wts, family, match.id, ...)
 
 
 
-fit_hinge_loss <- function(x, y, trt, n.trts, wts, family, match.id, ...)
+fit_owl_hinge_loss <- function(x, y, trt, n.trts, wts, family, match.id, ...)
 {
-    # we need to solve based on the dual problem of svm
-    # in order to minimize the *weighted* hinge loss
 
-    # primal: min ||beta||^2 + C\sum_i w_i * max(0, 1 - T_i * f(x_i, beta))
+    list.dots <- list(...)
+    dot.names <- names(list.dots)
 
-    # T_i in {-1, 1}
+    ipop.argnames  <- names(formals(ipop))
+    wksvm.argnames <- names(formals(weighted.ksvm))
 
-    # dual:       max (alpha_i >= 0) sum_i alpha_i - 0.5 * sum_{jk}alpha_j * alpha_k * T_j * T_k K(x_j,x_k)
-    # subject to: 0 <= alpha_i <= C * w_i and sum_i alpha_i * T_i = 0
+    # find the arguments relevant for each
+    # possible ...-supplied function
+    dots.idx.wksvm <- match(wksvm.argnames, dot.names)
+    dots.idx.ipop  <- match(ipop.argnames, dot.names)
 
-    # which is equivalent to:
-    # min (alpha_i >= 0) -sum_i alpha_i + 0.5 * sum_{jk}alpha_j * alpha_k * T_j * T_k K(x_j,x_k)
-    # subject to the same constraints
+    dots.idx.wksvm <- dots.idx.wksvm[!is.na(dots.idx.wksvm)]
+    dots.idx.ipop  <- dots.idx.ipop[!is.na(dots.idx.ipop)]
 
-    # which can be solved with ipop() function from kernlab
+    list.dots <- list.dots[c(dots.idx.wksvm, dots.idx.ipop)]
+    dot.names <- dot.names[c(dots.idx.wksvm, dots.idx.ipop)]
 
+    ## Establish nfolds for cv.glmnet()
+    if ("nfolds" %in% dot.names)
+    {
+        nfolds <- list.dots$nfolds
+        if (nfolds < 2)
+        {
+            stop("nfolds must be bigger than 2; nfolds = 10 recommended")
+        }
+    } else
+    {
+        nfolds <- 10
+    }
+    list.dots$nfolds <- nfolds
+
+    ## Establish foldid for cv.glmnet()
+    ## if match.id was supplied, foldid will be structured around the clusters
+    if (!is.null(match.id))
+    {
+        if ("foldid" %in% dot.names)
+        {
+            warning("User-supplied foldid will be ignored since match.id was detected.
+                    Folds will be randomly assigned to clusters according to match.id.")
+        }
+        # Assign a fold ID for each cluster level
+        df.folds <- data.frame(match.id = sample(levels(match.id)),
+                               fold.id = 1:length(levels(match.id)) %% nfolds)
+        # Obtain vector of fold IDs with respect to the data
+        foldid <- sapply(match.id, function(z) {df.folds[which(z == df.folds$match.id),"fold.id"]}) +1
+    } else
+    {
+        if ("foldid" %in% dot.names)
+        {
+            foldid <- list.dots$foldid
+        } else
+        {
+            foldid <- sample(rep(seq(nfolds), length = nrow(x)))
+        }
+    }
+    list.dots$foldid <- foldid
+
+    # fit a model with a lasso
+    # penalty and desired loss
+    model <- do.call(weighted.ksvm, c(list(x = x, y = as.character(y), weights = wts), list.dots))
+
+    # Return fitted model and extraction methods
+    list(predict      = get.pred.func("fit_hinge_loss", model),
+         model        = model,
+         coefficients = get.coef.func("fit_hinge_loss")(model))
 
 }

@@ -27,6 +27,8 @@
 #'     \item{\code{"cox_loss_lasso"}}{ - M corresponds to the negative partial likelihood of the cox model with linear model and additionally a lasso penalty}
 #'     \item{\code{"owl_logistic_loss_lasso"}} { - M(y, v) = ylog(1 + exp\{-v\}) (method of Regularized Outcome Weighted Subgroup Identification)}
 #'     \item{\code{"owl_logistic_flip_loss_lasso"}} { - M(y, v) = |y|log(1 + exp\{-sign(y)v\})}
+#'     \item{\code{"owl_hinge_loss"}} { - M(y, v) = ymax(0, 1 - v) (method of Estimating individualized treatment rules using outcome weighted learning)}
+#'     \item{\code{"owl_hinge_flip_loss"}} { - M(y, v) = |y|max(0, 1 - sign(y)v) }
 #'     \item{\code{"sq_loss_lasso_gam"}}{ - M(y, v) = (v - y) ^ 2 with variables selected by lasso penalty and generalized additive model fit on the selected variables}
 #'     \item{\code{"logistic_loss_lasso_gam"}}{ - M(y, v) = y * log(1 + exp\{-v\}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
 #'     \item{\code{"sq_loss_gam"}}{ - M(y, v) = (v - y) ^ 2 with generalized additive model fit on all variables}
@@ -182,6 +184,8 @@ fit.subgroup <- function(x,
                                         "cox_loss_lasso",
                                         "owl_logistic_loss_lasso",
                                         "owl_logistic_flip_loss_lasso",
+                                        "owl_hinge_loss",
+                                        "owl_hinge_flip_loss",
                                         "sq_loss_lasso_gam",
                                         "logistic_loss_lasso_gam",
                                         "sq_loss_gam",
@@ -291,6 +295,21 @@ fit.subgroup <- function(x,
     {
         unique.trts <- sort(unique(trt))
         n.trts      <- length(unique.trts)
+    }
+
+    if (n.trts > 2 & grepl("owl_", loss) & grepl("hinge_", loss))
+    {
+        stop("OWL hinge loss not available for multiple treatments.")
+    }
+
+    if (grepl("owl_", loss))
+    {
+        if (method != "weighting")
+        {
+            warning("Only method = 'weighting' available for OWL-type losses; defaulting
+                    to 'weighting' method.")
+            method <- "weighting"
+        }
     }
 
     if (n.trts < 2)           stop("trt must have at least 2 distinct levels")
@@ -568,6 +587,7 @@ fit.subgroup <- function(x,
     colnames(x.tilde) <- all.cnames
 
 
+    # extra preparation needed for OWL-type losses
     if (grepl("owl_", loss))
     {
         intercept <- FALSE
@@ -593,12 +613,9 @@ fit.subgroup <- function(x,
             {
                 fit_fun <- "fit_logistic_loss_gam"
             }
-        }
-
-        if (method != "weighting")
+        } else if (grepl("hinge_", loss))
         {
-            warning("Only method = 'weighting' available for OWL-type losses; defaulting
-                     to 'weighting' method.")
+            fit_fun <- "fit_owl_hinge_loss"
         }
 
 
