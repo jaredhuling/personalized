@@ -3,6 +3,8 @@
 context("fit.subgroup")
 
 test_that("test fit.subgroup for continuous outcomes and various losses", {
+
+    library(kernlab)
     set.seed(123)
     n.obs  <- 100
     n.vars <- 5

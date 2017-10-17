@@ -344,7 +344,7 @@ summary.wksvm <- function(object, digits = max(getOption('digits')-3, 3), ...)
     pmat <- rbind(object$C,
                   object$cv.res)
     rownames(pmat) <- c("C", "CV weighted accuracy")
-    colnames(pmat) <- c("", "")
+    colnames(pmat) <- c(rep("", length(object$C)))
 
     print.default(round(pmat, digits), quote = FALSE, right = TRUE, na.print = "NA", ...)
 }
