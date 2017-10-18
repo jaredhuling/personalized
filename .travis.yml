@@ -24,4 +24,4 @@ r_packages:
 after_success:
   - Rscript -e 'library(covr); codecov()'
 
-cache: apt
+cache: packages
