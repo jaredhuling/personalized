@@ -32,6 +32,7 @@ get.pred.func <- function(fit.name, model, env = parent.frame())
         pred.func <- function(x, type = c("link", "class"))
         {
             df.x <- data.frame(cbind(1, x))
+            df.x$offset <- rep(0, NROW(x))
             colnames(df.x) <- vnames
             drop(predict(model, newdata = df.x, n.trees = best.iter, type = "link"))
         }
@@ -130,14 +131,14 @@ get.coef.func <- function(fit.name, env = parent.frame())
 {
     n.trts <- env$n.trts
     # GAM or LASSO_GAM models (using cv.glmnet())
-    if ( grepl("_lasso$", fit.name) | grepl("lasso_gam$", fit.name) )
+    if ( grepl("_lasso$", fit.name) )
     {
         coef.func <- function(mod)
         {
             coef(mod, s = "lambda.min")
         }
         # LOSS_GAM models (using gam() )
-    } else if ( grepl("_loss_gam$",fit.name) )
+    } else if ( grepl("_loss_gam$",fit.name) & !grepl("lasso_gam$", fit.name))
     {
         coef.func <- function(mod)
         {
@@ -672,9 +673,18 @@ fit_sq_loss_gbm <- function(x, y, trt, n.trts, wts, family, match.id, ...)
     }
 
 
-    df <- data.frame(y = y, x)
 
-    formula.gbm <- as.formula("y ~ . - 1")
+
+    if ("offset" %in% dot.names)
+    {
+        df <- data.frame(y = y, x, offset = list.dots$offset)
+        list.dots$offset <- NULL
+    } else
+    {
+        df <- data.frame(y = y, x, offset = rep(0,NROW(x)))
+    }
+
+    formula.gbm <- as.formula("y ~ . - 1 + offset(offset)")
 
     # fit a model with a lasso
     # penalty and desired loss
@@ -734,9 +744,16 @@ fit_abs_loss_gbm <- function(x, y, trt, n.trts, wts, family, match.id, ...)
         warning("Matched groups are not guaranteed to remain matched in the cross-validation procedure using GBM models.")
     }
 
-    df <- data.frame(y = y, x)
+    if ("offset" %in% dot.names)
+    {
+        df <- data.frame(y = y, x, offset = list.dots$offset)
+        list.dots$offset <- NULL
+    } else
+    {
+        df <- data.frame(y = y, x, offset = rep(0,NROW(x)))
+    }
 
-    formula.gbm <- as.formula("y ~ . - 1")
+    formula.gbm <- as.formula("y ~ . - 1 + offset(offset)")
 
     # fit a model with a lasso
     # penalty and desired loss
@@ -796,9 +813,16 @@ fit_logistic_loss_gbm <- function(x, y, trt, n.trts, wts, family, match.id, ...)
         warning("Matched groups are not guaranteed to remain matched in the cross-validation procedure using GBM models.")
     }
 
-    df <- data.frame(y = y, x)
+    if ("offset" %in% dot.names)
+    {
+        df <- data.frame(y = y, x, offset = list.dots$offset)
+        list.dots$offset <- NULL
+    } else
+    {
+        df <- data.frame(y = y, x, offset = rep(0,NROW(x)))
+    }
 
-    formula.gbm <- as.formula("y ~ . - 1")
+    formula.gbm <- as.formula("y ~ . - 1 + offset(offset)")
 
     # fit a model with a lasso
     # penalty and desired loss
@@ -864,9 +888,20 @@ fit_cox_loss_gbm <- function(x, y, trt, n.trts, wts, family, match.id, ...)
     time.idx   <- which(surv.vnames == "time")
     status.idx <- which(surv.vnames == "status")
 
-    df <- data.frame(cox_gbm_time = y[,time.idx], cox_gbm_status = y[,status.idx], x)
+    if ("offset" %in% dot.names)
+    {
+        df <- data.frame(cox_gbm_time = y[,time.idx],
+                         cox_gbm_status = y[,status.idx], x,
+                         offset = list.dots$offset)
+        list.dots$offset <- NULL
+    } else
+    {
+        df <- data.frame(cox_gbm_time = y[,time.idx],
+                         cox_gbm_status = y[,status.idx], x,
+                         offset = rep(0,NROW(x)))
+    }
 
-    formula.gbm <- as.formula("Surv(cox_gbm_time, cox_gbm_status) ~ . - 1")
+    formula.gbm <- as.formula("Surv(cox_gbm_time, cox_gbm_status) ~ . - 1 + offset(offset)")
 
     # fit a model with a lasso
     # penalty and desired loss

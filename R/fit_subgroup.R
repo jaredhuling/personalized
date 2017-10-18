@@ -383,12 +383,14 @@ fit.subgroup <- function(x,
             comparison.idx  <- (1:n.trts)[-reference.idx]
             comparison.trts <- unique.trts[-reference.idx]
         }
+        refnull <- FALSE
     } else
     {
         reference.idx   <- 1L
         comparison.idx  <- (1:n.trts)[-reference.idx]
         comparison.trts <- unique.trts[-reference.idx]
         reference.trt   <- unique.trts[reference.idx]
+        refnull <- TRUE
     }
 
     if (n.trts > 2 & (grepl("_gbm", loss) | grepl("_gam", loss)) )
@@ -713,6 +715,7 @@ fit.subgroup <- function(x,
     }
 
 
+    if (refnull) this.call$reference.trt <- NULL
 
 
     # save extra results

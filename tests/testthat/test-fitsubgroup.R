@@ -724,7 +724,7 @@ test_that("test fit.subgroup for binary outcomes and various losses", {
 
     # simulate response
     delta <- 2 * (0.5 + x[,2] - x[,3]  )
-    xbeta <- x[,1]
+    xbeta <- x[,1] + x[,5]
     xbeta <- xbeta + delta * trt
 
     # continuous outcomes
@@ -763,24 +763,53 @@ test_that("test fit.subgroup for binary outcomes and various losses", {
     invisible(capture.output(summary(subgrp.model)))
 
 
-    augment.func <- function(x, y) {lmod <- lm(y ~ x); return(fitted(lmod))}
+    augment.func <- function(x, y) {
+        lmod <- glm(y ~ x, family = binomial());
+        return(predict(lmod, type = "link"))
+    }
+
+    subgrp.modela <- fit.subgroup(x = x, y = y.binary,
+                                 trt = trt01,
+                                 propensity.func = prop.func,
+                                 augment.func = augment.func,
+                                 loss   = "logistic_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.modela, "subgroup_fitted")
+
+    invisible(capture.output(print(subgrp.modela, digits = 2)))
+
+    invisible(capture.output(summary(subgrp.modela)))
 
 
 
 
-
-
-    subgrp.model <- fit.subgroup(x = x, y = y.binary,
+    subgrp.modelg <- fit.subgroup(x = x, y = y.binary,
                                  trt = trt01,
                                  propensity.func = prop.func,
                                  loss   = "logistic_loss_lasso_gam",
                                  nfolds = 5)              # option for cv.glmnet
 
-    expect_is(subgrp.model, "subgroup_fitted")
+    expect_is(subgrp.modelg, "subgroup_fitted")
 
-    invisible(capture.output(print(subgrp.model, digits = 2)))
+    invisible(capture.output(print(subgrp.modelg, digits = 2)))
 
-    invisible(capture.output(summary(subgrp.model)))
+    invisible(capture.output(summary(subgrp.modelg)))
+
+
+    subgrp.modelga <- fit.subgroup(x = x, y = y.binary,
+                                  trt = trt01,
+                                  propensity.func = prop.func,
+                                  augment.func = augment.func,
+                                  loss   = "logistic_loss_lasso_gam",
+                                  nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.modelga, "subgroup_fitted")
+
+    invisible(capture.output(print(subgrp.modelga, digits = 2)))
+
+    invisible(capture.output(summary(subgrp.modelga)))
+
 
     subgrp.model <- fit.subgroup(x = x, y = y.binary,
                                  trt = trt01,

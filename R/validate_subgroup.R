@@ -136,10 +136,10 @@ validate.subgroup <- function(model,
 
     # save data objects because they
     # will be written over by resampled versions later
-    x           <- model$call$x
-    trt         <- model$call$trt
-    y           <- model$call$y
-    match.id <- model$call$match.id
+    x             <- model$call$x
+    trt           <- model$call$trt
+    y             <- model$call$y
+    match.id      <- model$call$match.id
 
     ## override any internal parallelization
     ## if there is a conflict of parallelization
