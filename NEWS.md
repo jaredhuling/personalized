@@ -6,6 +6,8 @@
 
 * Added outcome flipping OWL-type losses: logistic and hinge surrogates
 
+* Added augmentation option for non-continuos outcomes via offset
+
 # personalized version 0.1.0
 
 * Added estimation functionality for multiple treatments
