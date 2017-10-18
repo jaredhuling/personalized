@@ -723,6 +723,8 @@ fit.subgroup <- function(x,
     fitted.model$family                <- family
     fitted.model$loss                  <- loss
     fitted.model$method                <- method
+    fitted.model$propensity.func       <- propensity.func
+    fitted.model$augment.func          <- augment.func
     fitted.model$larger.outcome.better <- larger.outcome.better
     fitted.model$var.names             <- vnames
     fitted.model$n.trts                <- n.trts

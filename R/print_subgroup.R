@@ -14,7 +14,27 @@ print.subgroup_fitted <- function(x, digits = max(getOption('digits')-3, 3), ...
 {
     cat("family: ", x$family, "\n")
     cat("loss:   ", x$loss, "\n")
-    cat("method: ", x$method, "\n\n")
+    cat("method: ", x$method, "\n")
+
+    if (!is.null(x$augment.func))
+    {
+        func.name <- as.character(substitute(x$augment.func))
+        func.name <- func.name[length(func.name)]
+        cat("augmentation \nfunction:",
+            func.name,
+            "\n")
+    }
+    if (!is.null(x$propensity.func))
+    {
+        func.name <- as.character(substitute(x$propensity.func))
+        func.name <- func.name[length(func.name)]
+        cat("propensity \nfunction:",
+            func.name,
+            "\n")
+    }
+
+    cat("\n")
+
     Cf <- matrix(paste0(round(x$subgroup.trt.effects$avg.outcomes, digits),
                         " (n = ", x$subgroup.trt.effects$sample.sizes, ")"), ncol = ncol(x$subgroup.trt.effects$avg.outcomes))
     dimnames(Cf) <- dimnames(x$subgroup.trt.effects$avg.outcomes)
