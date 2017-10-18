@@ -63,12 +63,21 @@
 #' fouth patient is a case and the fifth through seventh patients are matched with it, then the user should specify
 #' \code{match.id = c(1,1,1,2,2,2,2)} or \code{match.id = c(rep("Grp1", 3),rep("Grp2", 4)) }
 #' @param augment.func function which inputs the response \code{y}, the covariates \code{x}, and \code{trt} and outputs
-#' predicted values for the response using a model constructed with \code{x}. \code{augment.func()} can also be simply
+#' predicted values (on the link scale) for the response using a model constructed with \code{x}. \code{augment.func()} can also be simply
 #' a function of \code{x} and \code{y}. This function is used for efficiency augmentation.
 #' When the form of the augmentation function is correct, it can provide efficient estimation of the subgroups
 #' Example 1: \code{augment.func <- function(x, y) {lmod <- lm(y ~ x); return(fitted(lmod))}}
 #'
 #' Example 2: \code{augment.func <- function(x, y, trt) {lmod <- lm(y ~ x + trt); return(fitted(lmod))}}
+#'
+#' For binary and time-to-event outcomes, make sure that predictions are returned on the scale of the predictors
+#'
+#' Example 3:
+#'
+#' \code{augment.func <- function(x, y) {
+#'     bmod <- glm(y ~ x, family = binomial());
+#'     return(predict(bmod, type = "link"))}
+#'  }
 #' @param cutpoint numeric value for patients with benefit scores above which
 #' (or below which if \code{larger.outcome.better = FALSE})
 #' will be recommended to be in the treatment group
