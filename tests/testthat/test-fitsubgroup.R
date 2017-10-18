@@ -560,12 +560,6 @@ test_that("test fit.subgroup with augment.func for continuous outcomes and vario
                               loss   = "sq_loss_lasso",
                               nfolds = 5))
 
-    expect_warning(fit.subgroup(x = x, y = y.binary,
-                              trt = trt01,
-                              augment.func = augment.func,
-                              propensity.func = prop.func,
-                              loss   = "logistic_loss_lasso",
-                              nfolds = 5))
 
     subgrp.model <- fit.subgroup(x = x, y = y,
                                  trt = trt01,
@@ -770,13 +764,6 @@ test_that("test fit.subgroup for binary outcomes and various losses", {
 
 
     augment.func <- function(x, y) {lmod <- lm(y ~ x); return(fitted(lmod))}
-
-    expect_warning(subgrp.model <- fit.subgroup(x = x, y = y.binary,
-                                 trt = trt01,
-                                 propensity.func = prop.func,
-                                 augment.func = augment.func,
-                                 loss   = "logistic_loss_lasso",
-                                 nfolds = 5) )
 
 
 

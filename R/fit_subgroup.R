@@ -300,6 +300,9 @@ fit.subgroup <- function(x,
         }
     }
 
+    ## this can be done with 'grepl("owl_", loss)' easily
+    ## but is left as below in case there are more loss options
+    ## in the future
     augment.method <- switch(loss,
                              "sq_loss_lasso"                    = "offset",
                              "logistic_loss_lasso"              = "offset",
@@ -449,8 +452,9 @@ fit.subgroup <- function(x,
     }
 
 
+    extra.args <- NULL
     # check to make sure arguments of augment.func are correct
-    if (family == "gaussian" & !is.null(augment.func))
+    if (!is.null(augment.func))
     {
         B.x   <- unname(drop(augment.func(trt = trt, x = x, y = y)))
 
@@ -459,7 +463,15 @@ fit.subgroup <- function(x,
             stop("augment.func() should return the same number of predictions as observations in y")
         }
 
-        y.adj <- y - B.x
+        if (augment.method == "adj")
+        {
+            y.adj <- y - B.x
+        } else
+        {
+            y.adj      <- y
+            extra.args <- list(offset = B.x)
+        }
+
     } else
     {
         y.adj <- y
@@ -468,10 +480,10 @@ fit.subgroup <- function(x,
     # stop if augmentation function provided
     # for non-gaussian outcomes.
     # has not been developed yet
-    if (!is.null(augment.func) & family != "gaussian")
-    {
-        warning("Efficiency augmentation not available for non-continuous outcomes yet. No augmentation applied.")
-    }
+    #if (!is.null(augment.func) & family != "gaussian")
+    #{
+    #    warning("Efficiency augmentation not available for non-continuous outcomes yet. No augmentation applied.")
+    #}
 
     larger.outcome.better <- as.logical(larger.outcome.better[1])
     retcall               <- as.logical(retcall[1])
@@ -677,18 +689,18 @@ fit.subgroup <- function(x,
             y.wt  <- y.adj - min(y.adj)
         }
 
-        fitted.model <- do.call(fit_fun, list(x = x.tilde, trt = trt, n.trts = n.trts,
-                                              y = trt.y, wts = drop(wts) * drop(y.wt),
-                                              family = family, intercept = intercept,
-                                              match.id = match.id, ...))
+        fitted.model <- do.call(fit_fun, c(list(x = x.tilde, trt = trt, n.trts = n.trts,
+                                                y = trt.y, wts = drop(wts) * drop(y.wt),
+                                                family = family, intercept = intercept,
+                                                match.id = match.id, ...), extra.args) )
     } else
     {
         # identify correct fitting function and call it
         fit_fun      <- paste0("fit_", loss)
 
-        fitted.model <- do.call(fit_fun, list(x = x.tilde, trt = trt, n.trts = n.trts,
-                                              y = y.adj, wts = wts, family = family,
-                                              match.id = match.id, ...))
+        fitted.model <- do.call(fit_fun, c(list(x = x.tilde, trt = trt, n.trts = n.trts,
+                                                y = y.adj, wts = wts, family = family,
+                                                match.id = match.id, ...), extra.args)  )
     }
 
 

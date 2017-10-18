@@ -44,7 +44,10 @@ get.pred.func <- function(fit.name, model, env = parent.frame())
             {
                 if (n.trts == 2)
                 {
-                    -drop(predict(model, newx = cbind(1, x), type = "link", s = "lambda.min"))
+                    -drop(predict(model, newx = cbind(1, x),
+                                  type = "link",
+                                  s = "lambda.min",
+                                  newoffset = rep(0, NROW(x)) ))
                 } else
                 {
                     ## need to handle cases with multiple treatments specially
@@ -74,7 +77,10 @@ get.pred.func <- function(fit.name, model, env = parent.frame())
                 type <- match.arg(type)
                 if (n.trts == 2)
                 {
-                    drop(predict(model, newx = cbind(1, x), type = "link", s = "lambda.min"))
+                    drop(predict(model, newx = cbind(1, x),
+                                 type = "link",
+                                 s = "lambda.min",
+                                 newoffset = rep(0, NROW(x)) ))
                 } else
                 {
                     ## need to handle cases with multiple treatments specially
@@ -82,7 +88,9 @@ get.pred.func <- function(fit.name, model, env = parent.frame())
 
                     if (family == "multinomial")
                     {
-                        drop(predict(model, cbind(1, x), type = type, s = "lambda.min"))
+                        drop(predict(model, cbind(1, x),
+                                     type = type,
+                                     s = "lambda.min"))
                     } else
                     {
                         ## for K-trtments we estimate K-1 delta functions and thus need
