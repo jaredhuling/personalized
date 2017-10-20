@@ -201,7 +201,8 @@ fit_sq_loss_lasso <- function(x, y, trt, n.trts, wts, family, match.id, intercep
         {
             stop("nfolds must be bigger than 3; nfolds = 10 recommended")
         }
-    } else {
+    } else
+    {
         nfolds <- 10
     }
     list.dots$nfolds <- nfolds
