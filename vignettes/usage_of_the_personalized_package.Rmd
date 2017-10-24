@@ -45,6 +45,21 @@ $$L_A(f) = \frac{1}{n}\sum_{i = 1}^n M(Y_i, {\{(T_i+1)/2 -\pi(x_i)\} } {\times f
 ### Choice of $M$ function
 The `personalized` package offers a flexible range of choices both for the form of $f(X)$ and also for the loss function $M(y, v)$. Every choice of $f$ and $M$ can be used for either the weighting method or for the A-learning method. In this package, we limit the use of $M$ to natural choices corresponding to the type of outcome. For example, the squared error loss $M(y, v) = (v - y) ^ 2$ corresponds to continuous responses; the logistic loss $M(y, v) = y \cdot log(1 + \exp\{-v\})$ corresponds to binary outcomes, and the loss associated with the negative partial likelihood of the Cox proportional hazards model corresponds to time-to-event outcomes.
 
+| Name          | Outcomes      | Loss          |
+| ------------- | ------------- |:--------------|
+| Squared Error           | C/B           | $M(y, v) = (v - y) ^ 2$ |
+| OWL Logistic           | C/B           | $M(y, v) = y\log(1 + \exp\{-v\})$ |
+| OWL Logistic Flip          | C/B           | $M(y, v) = \vert y\vert \log(1 + \exp\{-\mbox{sign}(y)v\})$ |
+| OWL Hinge           | C/B           | $M(y, v) = y\max(0, 1 - v)$ |
+| OWL Hinge Flip           | C/B           | $M(y, v) = \vert y\vert\max(0, 1 - \mbox{sign}(y)v)$ |
+| Logistic             | B           | $M(y, v) = -(yv - \log(1 + \mbox{exp}\{-v\}))$ |
+| Cox             | TTE           | $M(y, v) = -\left\{ \int_0^\tau\left(  v - \log[E\{ e^vI(X \geq u) \}]  \right)\mathrm{d} N(u) \right\}$ |       
+
+where for the last loss $y = (X, \delta) = \{ \widetilde{X} \wedge C, I(\widetilde{X} \leq t) \}$, $\widetilde{X}$ is the survival time, 
+ & $C$ is the censoring time, $N(t) = I(\widetilde{X} \leq t)\delta$, and $\tau$ 
+ & is fixed time point where $P(X \geq \tau) > 0$.
+
+
 ### Choice of $f$ 
 The choices of $f$ offered in the `personalized` package are varied. A familiar, interpretable choice of $f(X)$ is $X^T\beta$. Also offered is an additive model, i.e. $f(X) = \sum_{j = 1}^pf_j(X_j)$; this option is accessed through use of the `mgcv` package, which provides estimation procedures for generalized additive models (GAMs). Another flexible, but less interpretable choice offered here is related to gradient boosted decision trees, which model $f$ as $f(X) = \sum_{k = 1}^Kf_k(X)$, where each $f_k$ is a decision tree model.
 
@@ -280,8 +295,14 @@ The argument `...` is used to pass arguments to the underlying modeling function
 The `loss` argument options that are available for continuous outcomes are:
 
 - `'sq_loss_lasso'`
+- `'owl_logistic_loss_lasso'`
+- `'owl_logistic_flip_loss_lasso'`
+- `'owl_hinge_loss'`
+- `'owl_hinge_flip_loss'`
 - `'sq_loss_lasso_gam'`
+- `'owl_logistic_loss_lasso_gam'`
 - `'sq_loss_gam'`
+- `'owl_logistic_loss_gam'`
 - `'sq_loss_gbm'`
 - `'abs_loss_gbm'`
 
@@ -298,12 +319,11 @@ summary(subgrp.model2)
 
 ### Binary Outcomes
 
-The `loss` argument options that are available for binary outcomes are:
+The `loss` argument options that are available for binary outcomes are all of the losses for continuous outcomes plus:
 
 - `'logistic_loss_lasso'`
 - `'logistic_loss_lasso_gam'`
 - `'logistic_loss_gam'`
-- `'huberized_loss_gbm'`
 - `'logistic_loss_gbm'`
 
 Note that all options that are available for continuous options can also potentially be used for binary outcomes. 
@@ -496,7 +516,7 @@ The second method is a bootstrap-based method which seeks to estimate the bias i
 	
 - The bootstrap estimate of the amount of bias with regards to the statistic $d$ is
 $$
-{bias}(X) = \frac{1}{B}\sum_{b = 1}^B d_b(X_b) - d_b(X)
+{bias}(X) = \frac{1}{B}\sum_{b = 1}^B [d_b(X_b) - d_b(X) ]
 $$
 
 
@@ -526,7 +546,7 @@ plot(validation, type = "density")
 
 Multiple validated models can be visually compared using the `plotCompare()` function, which offers the same plotting options as the `plot.subgroup_validated()` function. Here we compare the model fitted using `sq_loss_lasso` to the one fitted using `sq_loss_lasso` and efficiency augmentation:
 
-```{r plot_compare_ex3}
+```{r plot_compare_ex3, eval = FALSE}
 plotCompare(validation, validation.eff)
 ```
 
