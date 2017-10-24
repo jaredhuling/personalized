@@ -16,6 +16,7 @@
 #' group, a density (\code{type = "density"}) for each treatment group, or to plot both a density and histogram
 #' (\code{type = "code"})
 #' @param bins integer number of bins for histograms when \code{type = "histogram"}
+#' @importFrom ggplot2 guides guide_legend
 #' @examples
 #' library(personalized)
 #'
