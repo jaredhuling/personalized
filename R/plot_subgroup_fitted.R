@@ -129,14 +129,28 @@ plot.subgroup_fitted <- function(x,
         }
     } else if (type == "boxplot")
     {
-        pl.obj <- ggplot(res.2.plot,
-                         aes(x = Received, y = Value)) +
-            geom_boxplot(aes(fill = Received)) +
-            geom_rug(aes(colour = Received), alpha = 0.85) +
-            facet_grid( ~ Recommended) +
-            theme(legend.position = "bottom") +
-            ylab(outcome.lab) +
-            ggtitle("Individual Observations Among Subgroups")
+        if (x$family == "binomial")
+        {
+            res.2.plot$Value <- as.factor(res.2.plot$Value)
+            pl.obj <- ggplot(res.2.plot,
+                             aes(x = Received, fill = factor(Value) )) +
+                geom_bar(position = "fill") +
+                facet_grid(~ Recommended) +
+                theme(legend.position = "bottom") +
+                ylab(outcome.lab) +
+                ggtitle("Individual Observations Among Subgroups") +
+                guides(fill = guide_legend(title = "Observed Response"))
+        } else
+        {
+            pl.obj <- ggplot(res.2.plot,
+                             aes(x = Received, y = Value)) +
+                geom_boxplot(aes(fill = Received)) +
+                geom_rug(aes(colour = Received), alpha = 0.85) +
+                facet_grid( ~ Recommended) +
+                theme(legend.position = "bottom") +
+                ylab(outcome.lab) +
+                ggtitle("Individual Observations Among Subgroups")
+        }
     } else
     {
         pl.obj <- ggplot(avg.res.2.plot,
