@@ -26,13 +26,14 @@ summary.subgroup_fitted <- function(object, digits = max(getOption('digits')-3, 
         {
             for (cl in 1:length(est.coef))
             {
-                nsel <- nsel + sum(est.coef[[cl]] != 0)
-                ntot <- ntot + length(as.vector(est.coef[[cl]]))
+                nsel <- nsel + sum(est.coef[[cl]][-1] != 0)
+                ntot <- ntot + length(as.vector(est.coef[[cl]][-1]))
             }
         } else
         {
-            nsel <- sum(as.vector(est.coef) != 0)
-            ntot <- length(as.vector(est.coef))
+            # drop unused intercept
+            nsel <- sum(as.vector(est.coef)[-1] != 0)
+            ntot <- length(as.vector(est.coef)[-1])
         }
 
 
@@ -41,9 +42,9 @@ summary.subgroup_fitted <- function(object, digits = max(getOption('digits')-3, 
         ## if variables are selected print out how many are selected
         ## and their coefficient estimates
 
-        cat(nsel - object$n.trts + 1 * (!grep("owl_", object$loss)),
+        cat(nsel - object$n.trts + 1 - 1 * (grepl("owl_", object$loss) & object$n.trts > 2),
             "out of",
-            ntot - object$n.trts + 1 * (!grep("owl_", object$loss)),
+            ntot - object$n.trts + 1 - 1 * (grepl("owl_", object$loss) & object$n.trts > 2),
             "variables selected in total by the lasso (cross validation criterion).\n\n")
 
         if (object$n.trts == 2)
@@ -126,7 +127,7 @@ summary.subgroup_fitted <- function(object, digits = max(getOption('digits')-3, 
                     sel.varnames.cur <- vnames[sel.idx]
                     cat(length(sel.idx) - 1,
                         "out of",
-                        length(coefs.cur),
+                        length(coefs.cur) - 1,
                         "variables selected for delta", t, "by the lasso (cross validation criterion).\n\n")
 
                     coefmat <- matrix(coefs.cur[sel.idx], ncol = 1)

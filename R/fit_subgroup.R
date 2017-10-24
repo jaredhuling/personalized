@@ -658,6 +658,7 @@ fit.subgroup <- function(x,
             family <- "multinomial"
         }
 
+
         if (grepl("logistic_", loss) & grepl("lasso", loss) & !grepl("gam$", loss))
         {
             fit_fun <- "fit_logistic_loss_lasso"
