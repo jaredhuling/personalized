@@ -37,8 +37,8 @@ Plots validation results for estimated subgroup treatment effects
 library(personalized)
 
 set.seed(123)
-n.obs  <- 1000
-n.vars <- 20
+n.obs  <- 500
+n.vars <- 15
 x <- matrix(rnorm(n.obs * n.vars, sd = 3), n.obs, n.vars)
 
 
@@ -82,14 +82,13 @@ plot(subgrp.model, type = "boxplot")
 
 plot(subgrp.model, type = "interaction")
 
-valmod <- validate.subgroup(subgrp.model, B = 5,
+valmod <- validate.subgroup(subgrp.model, B = 3,
                           method = "training_test",
                           train.fraction = 0.75)
 valmod$avg.results
 
 plot(valmod)
 
-plot(valmod, type = "boxplot")
 
 plot(valmod, type = "interaction")
 

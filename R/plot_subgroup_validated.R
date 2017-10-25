@@ -23,14 +23,13 @@
 #'
 #' @examples
 #'
-#' valmod <- validate.subgroup(subgrp.model, B = 5,
+#' valmod <- validate.subgroup(subgrp.model, B = 3,
 #'                           method = "training_test",
 #'                           train.fraction = 0.75)
 #' valmod$avg.results
 #'
 #' plot(valmod)
 #'
-#' plot(valmod, type = "boxplot")
 #'
 #' plot(valmod, type = "interaction")
 #'

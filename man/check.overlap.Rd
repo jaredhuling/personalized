@@ -32,8 +32,8 @@ Results in a plot to check whether the propensity score has adequate overlap bet
 library(personalized)
 
 set.seed(123)
-n.obs  <- 500
-n.vars <- 25
+n.obs  <- 250
+n.vars <- 15
 x <- matrix(rnorm(n.obs * n.vars, sd = 3), n.obs, n.vars)
 
 
