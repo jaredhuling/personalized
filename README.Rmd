@@ -212,5 +212,3 @@ Access help files for the main functions of the `personalized` package:
 ```
 
 
-.
-
