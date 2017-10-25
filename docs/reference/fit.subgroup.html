@@ -80,9 +80,12 @@
     
 
     <pre class="usage"><span class='fu'>fit.subgroup</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>trt</span>, <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>loss</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"sq_loss_lasso"</span>,
-  <span class='st'>"logistic_loss_lasso"</span>, <span class='st'>"cox_loss_lasso"</span>, <span class='st'>"sq_loss_lasso_gam"</span>,
-  <span class='st'>"logistic_loss_lasso_gam"</span>, <span class='st'>"sq_loss_gam"</span>, <span class='st'>"logistic_loss_gam"</span>, <span class='st'>"sq_loss_gbm"</span>,
-  <span class='st'>"abs_loss_gbm"</span>, <span class='st'>"logistic_loss_gbm"</span>, <span class='st'>"cox_loss_gbm"</span>),
+  <span class='st'>"logistic_loss_lasso"</span>, <span class='st'>"cox_loss_lasso"</span>, <span class='st'>"owl_logistic_loss_lasso"</span>,
+  <span class='st'>"owl_logistic_flip_loss_lasso"</span>, <span class='st'>"owl_hinge_loss"</span>, <span class='st'>"owl_hinge_flip_loss"</span>,
+  <span class='st'>"sq_loss_lasso_gam"</span>, <span class='st'>"logistic_loss_lasso_gam"</span>, <span class='st'>"sq_loss_gam"</span>,
+  <span class='st'>"logistic_loss_gam"</span>, <span class='st'>"owl_logistic_loss_gam"</span>, <span class='st'>"owl_logistic_flip_loss_gam"</span>,
+  <span class='st'>"owl_logistic_loss_lasso_gam"</span>, <span class='st'>"owl_logistic_flip_loss_lasso_gam"</span>,
+  <span class='st'>"sq_loss_gbm"</span>, <span class='st'>"abs_loss_gbm"</span>, <span class='st'>"logistic_loss_gbm"</span>, <span class='st'>"cox_loss_gbm"</span>),
   <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"weighting"</span>, <span class='st'>"a_learning"</span>), <span class='kw'>match.id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>augment.func</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>cutpoint</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>larger.outcome.better</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>reference.trt</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>retcall</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
@@ -122,17 +125,32 @@ with nonparametric additive terms for each selected variable. <code>sq_loss_gam<
 <code>sq_loss_gbm</code> involves a squared error loss with a gradient-boosted decision trees model for the benefit score; this
 allows for flexible estimation using machine learning and can be useful when the underlying treatment-covariate interaction
 is complex.</p><ul>
+<li><p>Continuous Outcomes</p><ul>
 <li><p><code>"sq_loss_lasso"</code> - M(y, v) = (v - y) ^ 2 with linear model and lasso penalty</p></li>
-<li><p><code>"logistic_loss_lasso"</code> - M(y, v) = -[yv - log(1 + exp{-v})] with with linear model and lasso penalty</p></li>
-<li><p><code>"cox_loss_lasso"</code> - M corresponds to the negative partial likelihood of the cox model with linear model and additionally a lasso penalty</p></li>
+<li><p><code>"owl_logistic_loss_lasso"</code>  - M(y, v) = ylog(1 + exp{-v}) (method of Regularized Outcome Weighted Subgroup Identification)</p></li>
+<li><p><code>"owl_logistic_flip_loss_lasso"</code>  - M(y, v) = |y|log(1 + exp{-sign(y)v})</p></li>
+<li><p><code>"owl_hinge_loss"</code>  - M(y, v) = ymax(0, 1 - v) (method of Estimating individualized treatment rules using outcome weighted learning)</p></li>
+<li><p><code>"owl_hinge_flip_loss"</code>  - M(y, v) = |y|max(0, 1 - sign(y)v)</p></li>
 <li><p><code>"sq_loss_lasso_gam"</code> - M(y, v) = (v - y) ^ 2 with variables selected by lasso penalty and generalized additive model fit on the selected variables</p></li>
-<li><p><code>"logistic_loss_lasso_gam"</code> - M(y, v) = y * log(1 + exp{-v}) with variables selected by lasso penalty and generalized additive model fit on the selected variables</p></li>
 <li><p><code>"sq_loss_gam"</code> - M(y, v) = (v - y) ^ 2 with generalized additive model fit on all variables</p></li>
-<li><p><code>"logistic_loss_gam"</code> - M(y, v) = y * log(1 + exp{-v}) with generalized additive model fit on all variables</p></li>
+<li><p><code>"owl_logistic_loss_gam"</code>  - M(y, v) = ylog(1 + exp{-v}) with generalized additive model fit on all variables</p></li>
+<li><p><code>"owl_logistic_flip_loss_gam"</code>  - M(y, v) = |y|log(1 + exp{-sign(y)v}) with generalized additive model fit on all variables</p></li>
+<li><p><code>"owl_logistic_loss_lasso_gam"</code>  - M(y, v) = ylog(1 + exp{-v}) with variables selected by lasso penalty and generalized additive model fit on the selected variables</p></li>
+<li><p><code>"owl_logistic_flip_loss_lasso_gam"</code>  - M(y, v) = |y|log(1 + exp{-sign(y)v}) with variables selected by lasso penalty and generalized additive model fit on the selected variables</p></li>
 <li><p><code>"sq_loss_gbm"</code> - M(y, v) = (v - y) ^ 2 with gradient-boosted decision trees model</p></li>
 <li><p><code>"abs_loss_gbm"</code> - M(y, v) = |v - y| with gradient-boosted decision trees model</p></li>
+</ul></li>
+<li><p>Binary Outcomes</p><ul>
+<li><p>All losses for continuous outcomes can be used plus the following:</p></li>
+<li><p><code>"logistic_loss_lasso"</code> - M(y, v) = -[yv - log(1 + exp{-v})] with with linear model and lasso penalty</p></li>
+<li><p><code>"logistic_loss_lasso_gam"</code> - M(y, v) = y * log(1 + exp{-v}) with variables selected by lasso penalty and generalized additive model fit on the selected variables</p></li>
+<li><p><code>"logistic_loss_gam"</code> - M(y, v) = y * log(1 + exp{-v}) with generalized additive model fit on all variables</p></li>
 <li><p><code>"logistic_loss_gbm"</code> - M(y, v) = -[yv - log(1 + exp{-v})] with gradient-boosted decision trees model</p></li>
+</ul></li>
+<li><p>Time-to-Event Outcomes</p><ul>
+<li><p><code>"cox_loss_lasso"</code> - M corresponds to the negative partial likelihood of the cox model with linear model and additionally a lasso penalty</p></li>
 <li><p><code>"cox_loss_gbm"</code> - M corresponds to the negative partial likelihood of the cox model with gradient-boosted decision trees model</p></li>
+</ul></li>
 </ul></td>
     </tr>
     <tr>
@@ -154,11 +172,18 @@ fouth patient is a case and the fifth through seventh patients are matched with 
     <tr>
       <th>augment.func</th>
       <td><p>function which inputs the response <code>y</code>, the covariates <code>x</code>, and <code>trt</code> and outputs
-predicted values for the response using a model constructed with <code>x</code>. <code>augment.func()</code> can also be simply
+predicted values (on the link scale) for the response using a model constructed with <code>x</code>. <code>augment.func()</code> can also be simply
 a function of <code>x</code> and <code>y</code>. This function is used for efficiency augmentation.
 When the form of the augmentation function is correct, it can provide efficient estimation of the subgroups
 Example 1: <code>augment.func &lt;- function(x, y) {lmod &lt;- lm(y ~ x); return(fitted(lmod))}</code></p>
-<p>Example 2: <code>augment.func &lt;- function(x, y, trt) {lmod &lt;- lm(y ~ x + trt); return(fitted(lmod))}</code></p></td>
+<p>Example 2: <code>augment.func &lt;- function(x, y, trt) {lmod &lt;- lm(y ~ x + trt); return(fitted(lmod))}</code></p>
+<p>For binary and time-to-event outcomes, make sure that predictions are returned on the scale of the predictors</p>
+<p>Example 3:
+
+<code>augment.func &lt;- function(x, y) {
+    bmod &lt;- glm(y ~ x, family = binomial());
+    return(predict(bmod, type = "link"))}
+ </code></p></td>
     </tr>
     <tr>
       <th>cutpoint</th>
@@ -184,11 +209,15 @@ if memory is limited as setting to <code>TRUE</code> saves the design matrix to 
     </tr>
     <tr>
       <th>...</th>
-      <td><p>options to be passed to underlying fitting function. For all <code>loss</code> options with <code>lasso</code>,
-this will be passed to <code>cv.glmnet</code> and for all <code>loss</code> options with <code>mcp</code> this will be passed
-to <code>cv.ncvreg</code>. Note that for all <code>loss</code> options that use <code>gam()</code> from the <code>mgcv</code> package,
+      <td><p>options to be passed to underlying fitting function. For all <code>loss</code> options with 'lasso',
+this will be passed to <code><a href='http://www.rdocumentation.org/packages/glmnet/topics/cv.glmnet'>cv.glmnet</a></code>. For all <code>loss</code> options with 'gam', this will
+be passed to <code><a href='http://www.rdocumentation.org/packages/mgcv/topics/gam'>gam</a></code> from the <span class="pkg">mgcv</span> package
+Note that for all <code>loss</code> options that use <code>gam()</code>
+from the <span class="pkg">mgcv</span> package,
 the user cannot supply the <code>gam</code> argument <code>method</code> because it is also an argument of <code>fit.subgroup</code>, so
-instead, to change the <code>gam method</code> argument, supply <code>method.gam</code>, ie <code>method.gam = "REML"</code>.</p></td>
+instead, to change the <code>gam method</code> argument, supply <code>method.gam</code>, ie <code>method.gam = "REML"</code>.</p>
+<p>For all <code>loss</code> options with 'hinge', this will be passed to both <code><a href='weighted.ksvm.html'>weighted.ksvm</a></code> and
+<code><a href='http://www.rdocumentation.org/packages/kernlab/topics/ipop'>ipop</a></code> from the <span class="pkg">kernlab</span> package</p></td>
     </tr>
     </table>
     
@@ -196,6 +225,13 @@ instead, to change the <code>gam method</code> argument, supply <code>method.gam
 
     <p>Chen, S., Tian, L., Cai, T. and Yu, M. (2017), A general statistical framework for subgroup identification
 and comparative treatment scoring. Biometrics. doi:10.1111/biom.12676 <a href='http://onlinelibrary.wiley.com/doi/10.1111/biom.12676/abstract'>http://onlinelibrary.wiley.com/doi/10.1111/biom.12676/abstract</a></p>
+<p>Xu, Y., Yu, M., Zhao, Y. Q., Li, Q., Wang, S., &amp; Shao, J. (2015),
+ Regularized outcome weighted subgroup identification for differential treatment effects. Biometrics, 71(3), 645-653.
+ doi: 10.1111/biom.12322 <a href='http://onlinelibrary.wiley.com/doi/10.1111/biom.12322/full'>http://onlinelibrary.wiley.com/doi/10.1111/biom.12322/full</a></p>
+<p>Zhao, Y., Zeng, D., Rush, A. J., &amp; Kosorok, M. R. (2012),
+  Estimating individualized treatment rules using outcome weighted learning.
+  Journal of the American Statistical Association, 107(499), 1106-1118. doi: 10.1080/01621459.2012.695674
+  <a href='http://dx.doi.org/10.1080/01621459.2012.695674'>http://dx.doi.org/10.1080/01621459.2012.695674</a></p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -211,13 +247,13 @@ from <code>fit.subgroup</code>.</p>
     <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>personalized</span>)
 
 <span class='fu'>set.seed</span>(<span class='fl'>123</span>)
-<span class='no'>n.obs</span>  <span class='kw'>&lt;-</span> <span class='fl'>1000</span>
-<span class='no'>n.vars</span> <span class='kw'>&lt;-</span> <span class='fl'>50</span>
+<span class='no'>n.obs</span>  <span class='kw'>&lt;-</span> <span class='fl'>500</span>
+<span class='no'>n.vars</span> <span class='kw'>&lt;-</span> <span class='fl'>15</span>
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>matrix</span>(<span class='fu'>rnorm</span>(<span class='no'>n.obs</span> * <span class='no'>n.vars</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>3</span>), <span class='no'>n.obs</span>, <span class='no'>n.vars</span>)
 
 
 <span class='co'># simulate non-randomized treatment</span>
-<span class='no'>xbetat</span>   <span class='kw'>&lt;-</span> <span class='fl'>0.5</span> + <span class='fl'>0.5</span> * <span class='no'>x</span>[,<span class='fl'>21</span>] - <span class='fl'>0.5</span> * <span class='no'>x</span>[,<span class='fl'>41</span>]
+<span class='no'>xbetat</span>   <span class='kw'>&lt;-</span> <span class='fl'>0.5</span> + <span class='fl'>0.5</span> * <span class='no'>x</span>[,<span class='fl'>7</span>] - <span class='fl'>0.5</span> * <span class='no'>x</span>[,<span class='fl'>9</span>]
 <span class='no'>trt.prob</span> <span class='kw'>&lt;-</span> <span class='fu'>exp</span>(<span class='no'>xbetat</span>) / (<span class='fl'>1</span> + <span class='fu'>exp</span>(<span class='no'>xbetat</span>))
 <span class='no'>trt01</span>    <span class='kw'>&lt;-</span> <span class='fu'>rbinom</span>(<span class='no'>n.obs</span>, <span class='fl'>1</span>, <span class='kw'>prob</span> <span class='kw'>=</span> <span class='no'>trt.prob</span>)
 
@@ -255,39 +291,42 @@ from <code>fit.subgroup</code>.</p>
                            <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
                            <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>,
                            <span class='kw'>loss</span>   <span class='kw'>=</span> <span class='st'>"sq_loss_lasso"</span>,
-                           <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>5</span>)              <span class='co'># option for cv.glmnet</span>
+                           <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>10</span>)              <span class='co'># option for cv.glmnet</span>
 
 <span class='fu'>summary</span>(<span class='no'>subgrp.model</span>)</div><div class='output co'>#&gt; family:  gaussian 
 #&gt; loss:    sq_loss_lasso 
 #&gt; method:  weighting 
+#&gt; propensity 
+#&gt; function: propensity.func 
 #&gt; 
 #&gt; Average Outcomes:
-#&gt;                Recommended 0      Recommended 1
-#&gt; Received 0 -6.6962 (n = 224) -21.3209 (n = 199)
-#&gt; Received 1 -22.144 (n = 321)  -2.7736 (n = 256)
+#&gt;                 Recommended 0      Recommended 1
+#&gt; Received 0   -6.8955 (n = 82) -20.5168 (n = 119)
+#&gt; Received 1 -21.0156 (n = 128)  -4.0916 (n = 171)
 #&gt; 
 #&gt; 0 effect among recommended 0 1 effect among recommended 1 
-#&gt;            15.4479 (n = 545)            18.5473 (n = 455) 
+#&gt;              14.12 (n = 210)            16.4252 (n = 290) 
 #&gt; 
 #&gt; Benefit score quantiles: 
 #&gt;      0%     25%     50%     75%    100% 
-#&gt; -26.984  -6.531  -1.056   4.878  22.578 
+#&gt; -36.451  -6.808   2.337  10.538  37.786 
 #&gt; 
-#&gt; 11 out of 51 variables selected in total by the lasso (cross validation criterion).
+#&gt; 12 out of 15 variables selected in total by the lasso (cross validation criterion).
 #&gt; 
-#&gt;     Estimate
-#&gt; 1    -0.8824
-#&gt; V1    0.2072
-#&gt; V2    1.8824
-#&gt; V3   -1.9520
-#&gt; V11  -0.4108
-#&gt; V12  -0.1054
-#&gt; V13   0.5645
-#&gt; V21  -0.1077
-#&gt; V22  -0.1024
-#&gt; V41   0.0660
-#&gt; V42  -0.2235
-#&gt; V47  -0.0421</div><div class='input'>
+#&gt;      Estimate
+#&gt; Trt1   2.4460
+#&gt; V1     0.1780
+#&gt; V2     2.5630
+#&gt; V3    -2.5829
+#&gt; V4    -0.1536
+#&gt; V5    -0.2795
+#&gt; V6     0.7616
+#&gt; V7    -0.3729
+#&gt; V8     0.7436
+#&gt; V10    0.8779
+#&gt; V11   -1.1277
+#&gt; V13    1.6186
+#&gt; V15    0.7653</div><div class='input'>
 <span class='co'># fit lasso + gam model with REML option for gam</span>
 
 <span class='no'>subgrp.modelg</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>,
@@ -300,18 +339,20 @@ from <code>fit.subgroup</code>.</p>
 <span class='no'>subgrp.modelg</span></div><div class='output co'>#&gt; family:  gaussian 
 #&gt; loss:    sq_loss_lasso_gam 
 #&gt; method:  weighting 
+#&gt; propensity 
+#&gt; function: propensity.func 
 #&gt; 
 #&gt; Average Outcomes:
-#&gt;                 Recommended 0      Recommended 1
-#&gt; Received 0  -5.6877 (n = 204) -20.9247 (n = 219)
-#&gt; Received 1 -23.9911 (n = 286)   -3.288 (n = 291)
+#&gt;                 Recommended 0     Recommended 1
+#&gt; Received 0 -12.4266 (n = 131) -19.7006 (n = 70)
+#&gt; Received 1 -17.9533 (n = 141) -5.4318 (n = 158)
 #&gt; 
 #&gt; 0 effect among recommended 0 1 effect among recommended 1 
-#&gt;            18.3034 (n = 490)            17.6367 (n = 510) 
+#&gt;             5.5267 (n = 272)            14.2688 (n = 228) 
 #&gt; 
 #&gt; Benefit score quantiles: 
-#&gt;       0%      25%      50%      75%     100% 
-#&gt; -50.1202  -8.0074   0.5552   8.9908  38.3923 </div><div class='input'>
+#&gt;      0%     25%     50%     75%    100% 
+#&gt; -57.584 -11.433  -1.937   8.934  44.564 </div><div class='input'>
 <span class='no'>subgrp.model.bin</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y.binary</span>,
                            <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
                            <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>,
@@ -322,18 +363,20 @@ from <code>fit.subgroup</code>.</p>
 <span class='no'>subgrp.model.bin</span></div><div class='output co'>#&gt; family:  binomial 
 #&gt; loss:    logistic_loss_lasso 
 #&gt; method:  weighting 
+#&gt; propensity 
+#&gt; function: propensity.func 
 #&gt; 
 #&gt; Average Outcomes:
-#&gt;               Recommended 0    Recommended 1
-#&gt; Received 0 0.4948 (n = 194) 0.2096 (n = 229)
-#&gt; Received 1 0.1585 (n = 265) 0.5385 (n = 312)
+#&gt;              Recommended 0    Recommended 1
+#&gt; Received 0 0.5059 (n = 85) 0.2759 (n = 116)
+#&gt; Received 1   0.2 (n = 130) 0.5266 (n = 169)
 #&gt; 
 #&gt; 0 effect among recommended 0 1 effect among recommended 1 
-#&gt;             0.3364 (n = 459)             0.3289 (n = 541) 
+#&gt;             0.3059 (n = 215)             0.2508 (n = 285) 
 #&gt; 
 #&gt; Benefit score quantiles: 
-#&gt;       0%      25%      50%      75%     100% 
-#&gt; -2.14177 -0.37845  0.07226  0.56881  2.05083 </div><div class='input'>
+#&gt;      0%     25%     50%     75%    100% 
+#&gt; -2.0266 -0.3695  0.1284  0.6247  2.2427 </div><div class='input'>
 <span class='fu'>library</span>(<span class='no'>survival</span>)
 <span class='no'>subgrp.model.cox</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/survival/topics/Surv'>Surv</a></span>(<span class='no'>y.time.to.event</span>, <span class='no'>status</span>),
                            <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
@@ -344,18 +387,20 @@ from <code>fit.subgroup</code>.</p>
 <span class='no'>subgrp.model.cox</span></div><div class='output co'>#&gt; family:  cox 
 #&gt; loss:    cox_loss_lasso 
 #&gt; method:  weighting 
+#&gt; propensity 
+#&gt; function: propensity.func 
 #&gt; 
 #&gt; Average Outcomes:
-#&gt;                 Recommended 0     Recommended 1
-#&gt; Received 0 192.6051 (n = 233) 19.8181 (n = 190)
-#&gt; Received 1 145.5314 (n = 318)  71.327 (n = 259)
+#&gt;                Recommended 0     Recommended 1
+#&gt; Received 0 95.9592 (n = 137)   2.4098 (n = 64)
+#&gt; Received 1 85.5292 (n = 196) 42.1713 (n = 103)
 #&gt; 
 #&gt; 0 effect among recommended 0 1 effect among recommended 1 
-#&gt;            47.0737 (n = 551)            51.5089 (n = 449) 
+#&gt;              10.43 (n = 333)            39.7614 (n = 167) 
 #&gt; 
 #&gt; Benefit score quantiles: 
-#&gt;       0%      25%      50%      75%     100% 
-#&gt; -1.13810 -0.32754 -0.05532  0.22997  1.34716 </div><div class='input'>
+#&gt;      0%     25%     50%     75%    100% 
+#&gt; -1.0584 -0.4067 -0.1596  0.1056  1.0928 </div><div class='input'>
 
 </div></pre>
   </div>

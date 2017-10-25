@@ -50,7 +50,7 @@
       <h1>Usage of the Personalized Package</h1>
                         <h4 class="author">Jared Huling</h4>
             
-            <h4 class="date">2017-09-26</h4>
+            <h4 class="date">2017-10-25</h4>
           </div>
 
     
@@ -77,6 +77,56 @@
 <h3 class="hasAnchor">
 <a href="#choice-of-m-function" class="anchor"></a>Choice of <span class="math inline">\(M\)</span> function</h3>
 <p>The <code>personalized</code> package offers a flexible range of choices both for the form of <span class="math inline">\(f(X)\)</span> and also for the loss function <span class="math inline">\(M(y, v)\)</span>. Every choice of <span class="math inline">\(f\)</span> and <span class="math inline">\(M\)</span> can be used for either the weighting method or for the A-learning method. In this package, we limit the use of <span class="math inline">\(M\)</span> to natural choices corresponding to the type of outcome. For example, the squared error loss <span class="math inline">\(M(y, v) = (v - y) ^ 2\)</span> corresponds to continuous responses; the logistic loss <span class="math inline">\(M(y, v) = y \cdot log(1 + \exp\{-v\})\)</span> corresponds to binary outcomes, and the loss associated with the negative partial likelihood of the Cox proportional hazards model corresponds to time-to-event outcomes.</p>
+<table style="width:61%;" class="table">
+<colgroup>
+<col width="19%">
+<col width="19%">
+<col width="22%">
+</colgroup>
+<thead><tr class="header">
+<th>Name</th>
+<th>Outcomes</th>
+<th align="left">Loss</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Squared Error</td>
+<td>C/B</td>
+<td align="left"><span class="math inline">\(M(y, v) = (v - y) ^ 2\)</span></td>
+</tr>
+<tr class="even">
+<td>OWL Logistic</td>
+<td>C/B</td>
+<td align="left"><span class="math inline">\(M(y, v) = y\log(1 + \exp\{-v\})\)</span></td>
+</tr>
+<tr class="odd">
+<td>OWL Logistic Flip</td>
+<td>C/B</td>
+<td align="left"><span class="math inline">\(M(y, v) = \vert y\vert \log(1 + \exp\{-\mbox{sign}(y)v\})\)</span></td>
+</tr>
+<tr class="even">
+<td>OWL Hinge</td>
+<td>C/B</td>
+<td align="left"><span class="math inline">\(M(y, v) = y\max(0, 1 - v)\)</span></td>
+</tr>
+<tr class="odd">
+<td>OWL Hinge Flip</td>
+<td>C/B</td>
+<td align="left"><span class="math inline">\(M(y, v) = \vert y\vert\max(0, 1 - \mbox{sign}(y)v)\)</span></td>
+</tr>
+<tr class="even">
+<td>Logistic</td>
+<td>B</td>
+<td align="left"><span class="math inline">\(M(y, v) = -(yv - \log(1 + \mbox{exp}\{-v\}))\)</span></td>
+</tr>
+<tr class="odd">
+<td>Cox</td>
+<td>TTE</td>
+<td align="left"><span class="math inline">\(M(y, v) = -\left\{ \int_0^\tau\left( v - \log[E\{ e^vI(X \geq u) \}] \right)\mathrm{d} N(u) \right\}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>where for the last loss <span class="math inline">\(y = (X, \delta) = \{ \widetilde{X} \wedge C, I(\widetilde{X} \leq t) \}\)</span>, <span class="math inline">\(\widetilde{X}\)</span> is the survival time, &amp; <span class="math inline">\(C\)</span> is the censoring time, <span class="math inline">\(N(t) = I(\widetilde{X} \leq t)\delta\)</span>, and <span class="math inline">\(\tau\)</span> &amp; is fixed time point where <span class="math inline">\(P(X \geq \tau) &gt; 0\)</span>.</p>
 </div>
 <div id="choice-of-f" class="section level3">
 <h3 class="hasAnchor">
@@ -149,6 +199,8 @@ prop.func &lt;-<span class="st"> </span><span class="cf">function</span>(x, trt)
 <pre><code>## family:  gaussian 
 ## loss:    sq_loss_lasso 
 ## method:  weighting 
+## propensity 
+## function: propensity.func 
 ## 
 ## Average Outcomes:
 ##                 Recommended 0      Recommended 1
@@ -162,18 +214,18 @@ prop.func &lt;-<span class="st"> </span><span class="cf">function</span>(x, trt)
 ##       0%      25%      50%      75%     100% 
 ## -10.9672  -1.8897   0.3569   2.2806  10.0196 
 ## 
-## 8 out of 51 variables selected in total by the lasso (cross validation criterion).
+## 8 out of 50 variables selected in total by the lasso (cross validation criterion).
 ## 
-##     Estimate
-## 1     0.2231
-## V1    0.0577
-## V2    0.6558
-## V3   -0.4550
-## V6   -0.1070
-## V11  -0.4036
-## V13   0.3108
-## V17   0.2491
-## V37  -0.1768</code></pre>
+##      Estimate
+## Trt1   0.2231
+## V1     0.0577
+## V2     0.6558
+## V3    -0.4550
+## V6    -0.1070
+## V11   -0.4036
+## V13    0.3108
+## V17    0.2491
+## V37   -0.1768</code></pre>
 <p>We can then plot the outcomes of patients in the different subgroups:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(subgrp.model)</code></pre></div>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_model-1.png" width="672"></p>
@@ -353,8 +405,14 @@ validation</code></pre></div>
 <p>The <code>loss</code> argument options that are available for continuous outcomes are:</p>
 <ul>
 <li><code>'sq_loss_lasso'</code></li>
+<li><code>'owl_logistic_loss_lasso'</code></li>
+<li><code>'owl_logistic_flip_loss_lasso'</code></li>
+<li><code>'owl_hinge_loss'</code></li>
+<li><code>'owl_hinge_flip_loss'</code></li>
 <li><code>'sq_loss_lasso_gam'</code></li>
+<li><code>'owl_logistic_loss_lasso_gam'</code></li>
 <li><code>'sq_loss_gam'</code></li>
+<li><code>'owl_logistic_loss_gam'</code></li>
 <li><code>'sq_loss_gbm'</code></li>
 <li><code>'abs_loss_gbm'</code></li>
 </ul>
@@ -368,48 +426,52 @@ validation</code></pre></div>
 <pre><code>## family:  gaussian 
 ## loss:    sq_loss_lasso_gam 
 ## method:  weighting 
+## propensity 
+## function: propensity.func 
 ## 
 ## Average Outcomes:
 ##                 Recommended 0      Recommended 1
-## Received 0 -10.0544 (n = 196) -15.5749 (n = 214)
-## Received 1   -19.01 (n = 287)  -7.7367 (n = 303)
+## Received 0 -10.6961 (n = 201) -15.0899 (n = 209)
+## Received 1 -20.5261 (n = 288)  -6.2535 (n = 302)
 ## 
 ## 0 effect among recommended 0 1 effect among recommended 1 
-##             8.9555 (n = 483)             7.8382 (n = 517) 
+##             9.8301 (n = 489)             8.8364 (n = 511) 
 ## 
 ## Benefit score quantiles: 
 ##       0%      25%      50%      75%     100% 
-## -22.7092  -3.7699   0.3613   4.3515  25.8226</code></pre>
+## -21.2251  -4.1385   0.1479   4.4585  22.4945</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
 ## 
 ## Formula:
-## y ~ -1 + 1 + s(V2) + s(V3) + s(V11) + s(V13) + s(V17) + s(V37)
+## y ~ -1 + Trt1 + s(V1) + s(V2) + s(V3) + s(V11) + s(V13)
+## 
+## Parametric coefficients:
+##      Estimate Std. Error t value Pr(&gt;|t|)
+## Trt1  0.08914    0.89547     0.1    0.921
 ## 
 ## Approximate significance of smooth terms:
 ##          edf Ref.df     F  p-value    
-## s(V2)  3.080  3.923 5.051 0.000501 ***
-## s(V3)  1.000  1.000 8.807 0.003072 ** 
-## s(V11) 6.615  7.777 1.945 0.044006 *  
-## s(V13) 1.000  1.000 5.134 0.023671 *  
-## s(V17) 1.000  1.000 2.146 0.143285    
-## s(V37) 1.000  1.000 3.321 0.068718 .  
+## s(V1)  2.894  3.680 2.363 0.078723 .  
+## s(V2)  2.934  3.743 4.947 0.000785 ***
+## s(V3)  1.000  1.000 8.232 0.004201 ** 
+## s(V11) 6.402  7.584 1.925 0.048012 *  
+## s(V13) 1.000  1.000 5.418 0.020126 *  
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## R-sq.(adj) =  0.0491   Deviance explained = 6.01%
-## GCV =   1520  Scale est. = 1499.2    n = 1000</code></pre>
+## R-sq.(adj) =  0.051   Deviance explained =  6.3%
+## GCV =   1520  Scale est. = 1496.9    n = 1000</code></pre>
 </div>
 <div id="binary-outcomes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#binary-outcomes" class="anchor"></a>Binary Outcomes</h3>
-<p>The <code>loss</code> argument options that are available for binary outcomes are:</p>
+<p>The <code>loss</code> argument options that are available for binary outcomes are all of the losses for continuous outcomes plus:</p>
 <ul>
 <li><code>'logistic_loss_lasso'</code></li>
 <li><code>'logistic_loss_lasso_gam'</code></li>
 <li><code>'logistic_loss_gam'</code></li>
-<li><code>'huberized_loss_gbm'</code></li>
 <li><code>'logistic_loss_gbm'</code></li>
 </ul>
 <p>Note that all options that are available for continuous options can also potentially be used for binary outcomes.</p>
@@ -434,6 +496,8 @@ y.binary &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op
 <pre><code>## family:  binomial 
 ## loss:    logistic_loss_lasso 
 ## method:  weighting 
+## propensity 
+## function: propensity.func 
 ## 
 ## Average Outcomes:
 ##               Recommended 0    Recommended 1
@@ -475,6 +539,8 @@ subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 <pre><code>## family:  cox 
 ## loss:    cox_loss_lasso 
 ## method:  weighting 
+## propensity 
+## function: propensity.func 
 ## 
 ## Average Outcomes:
 ##                 Recommended 0     Recommended 1
@@ -488,18 +554,18 @@ subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 ##       0%      25%      50%      75%     100% 
 ## -0.56536 -0.17097 -0.05576  0.06300  0.63843 
 ## 
-## 8 out of 50 variables selected in total by the lasso (cross validation criterion).
+## 7 out of 49 variables selected in total by the lasso (cross validation criterion).
 ## 
-##     Estimate
-## 1     0.0490
-## V2    0.0496
-## V3   -0.0070
-## V8   -0.0034
-## V11  -0.0228
-## V13   0.0075
-## V17   0.0014
-## V47  -0.0015
-## V50   0.0113</code></pre>
+##      Estimate
+## Trt1   0.0490
+## V2     0.0496
+## V3    -0.0070
+## V8    -0.0034
+## V11   -0.0228
+## V13    0.0075
+## V17    0.0014
+## V47   -0.0015
+## V50    0.0113</code></pre>
 </div>
 <div id="efficiency-augmentation" class="section level3">
 <h3 class="hasAnchor">
@@ -531,6 +597,10 @@ subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 <pre><code>## family:  gaussian 
 ## loss:    sq_loss_lasso 
 ## method:  weighting 
+## augmentation 
+## function: augment.func 
+## propensity 
+## function: propensity.func 
 ## 
 ## Average Outcomes:
 ##                 Recommended 0      Recommended 1
@@ -544,16 +614,16 @@ subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 ##        0%       25%       50%       75%      100% 
 ## -11.70152  -2.57836   0.04442   2.53750  10.44856 
 ## 
-## 6 out of 51 variables selected in total by the lasso (cross validation criterion).
+## 6 out of 50 variables selected in total by the lasso (cross validation criterion).
 ## 
-##     Estimate
-## 1    -0.0815
-## V2    0.8629
-## V3   -0.5513
-## V11  -0.7276
-## V20  -0.0104
-## V30  -0.0367
-## V47  -0.1321</code></pre>
+##      Estimate
+## Trt1  -0.0815
+## V2     0.8629
+## V3    -0.5513
+## V11   -0.7276
+## V20   -0.0104
+## V30   -0.0367
+## V47   -0.1321</code></pre>
 </div>
 <div id="plotting-fitted-models" class="section level3">
 <h3 class="hasAnchor">
@@ -577,19 +647,16 @@ subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 <p>The user can optionally print only the covariates which have significant differences between subgroups with a p-value below a given threshold like the following:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(comp, <span class="dt">p.value =</span> <span class="fl">0.01</span>)</code></pre></div>
 <pre><code>##     Avg (recom 0) Avg (recom 1)   0 - 1 pval 0 - 1 SE (recom 0)
-## V1        -0.3561       0.39572 -0.7518  6.564e-05       0.1386
-## V2        -1.5303       1.55092 -3.0812  2.128e-66       0.1211
-## V3         1.0502      -1.01400  2.0642  1.650e-30       0.1246
-## V6         0.4025      -0.15338  0.5559  3.241e-03       0.1405
-## V11        1.2063      -0.89040  2.0967  1.095e-29       0.1300
-## V13       -0.9325       0.44922 -1.3818  2.738e-13       0.1358
-## V14       -0.1832       0.35552 -0.5387  4.690e-03       0.1399
-## V17       -0.8114       0.40915 -1.2206  1.618e-10       0.1328
-## V19        0.1809      -0.30860  0.4895  8.898e-03       0.1361
-## V27       -0.3318       0.08996 -0.4217  2.399e-02       0.1382
-## V33        0.2442      -0.22611  0.4703  1.176e-02       0.1351
-## V37        0.5381      -0.52638  1.0645  2.390e-08       0.1376
-## V45        0.1902      -0.22873  0.4189  3.011e-02       0.1415
+## V1        -0.3561        0.3957 -0.7518  6.564e-05       0.1386
+## V2        -1.5303        1.5509 -3.0812  2.128e-66       0.1211
+## V3         1.0502       -1.0140  2.0642  1.650e-30       0.1246
+## V6         0.4025       -0.1534  0.5559  3.241e-03       0.1405
+## V11        1.2063       -0.8904  2.0967  1.095e-29       0.1300
+## V13       -0.9325        0.4492 -1.3818  2.738e-13       0.1358
+## V14       -0.1832        0.3555 -0.5387  4.690e-03       0.1399
+## V17       -0.8114        0.4091 -1.2206  1.618e-10       0.1328
+## V19        0.1809       -0.3086  0.4895  8.898e-03       0.1361
+## V37        0.5381       -0.5264  1.0645  2.390e-08       0.1376
 ##     SE (recom 1)
 ## V1        0.1263
 ## V2        0.1129
@@ -600,10 +667,7 @@ subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 ## V14       0.1287
 ## V17       0.1343
 ## V19       0.1279
-## V27       0.1253
-## V33       0.1283
-## V37       0.1298
-## V45       0.1311</code></pre>
+## V37       0.1298</code></pre>
 <p>The covariate values and estimated subgroups can be directly used by the <code><a href="../reference/summarize.subgroups.html">summarize.subgroups()</a></code> function:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">comp2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/summarize.subgroups.html">summarize.subgroups</a></span>(x, <span class="dt">subgroup =</span> subgrp.model<span class="op">$</span>benefit.scores <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</code></pre></div>
 </div>
@@ -658,7 +722,7 @@ validation.eff</code></pre></div>
 <p>For a statistic <span class="math inline">\(d\)</span> let <span class="math inline">\(d_{train}(X)\)</span> be the statistic estimated with the training data and evaluated on data <span class="math inline">\(X\)</span> and <span class="math inline">\(d_{b}(X)\)</span> be the statistics estimated using a bootstrap sample <span class="math inline">\(X_b\)</span> (samples with replacement from <span class="math inline">\(X\)</span>) and evaluated on <span class="math inline">\(X\)</span></p>
 </li>
 <li><p>The bootstrap estimate of the amount of bias with regards to the statistic <span class="math inline">\(d\)</span> is <span class="math display">\[
-{bias}(X) = \frac{1}{B}\sum_{b = 1}^B d_b(X_b) - d_b(X)
+{bias}(X) = \frac{1}{B}\sum_{b = 1}^B [d_b(X_b) - d_b(X) ]
 \]</span></p></li>
 <li><p>Then a bias-corrected estimate of the statistic <span class="math inline">\(d\)</span> is <span class="math display">\[d_{train}(X) - {bias}(X)\]</span></p></li>
 </ul>
@@ -697,8 +761,6 @@ validation3</code></pre></div>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_ex_model_1b-1.png" width="672"></p>
 <p>Multiple validated models can be visually compared using the <code><a href="../reference/plotCompare.html">plotCompare()</a></code> function, which offers the same plotting options as the <code><a href="../reference/plot.html">plot.subgroup_validated()</a></code> function. Here we compare the model fitted using <code>sq_loss_lasso</code> to the one fitted using <code>sq_loss_lasso</code> and efficiency augmentation:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotCompare.html">plotCompare</a></span>(validation, validation.eff)</code></pre></div>
-<pre><code>## Warning: Removed 4 rows containing non-finite values (stat_boxplot).</code></pre>
-<p><img src="usage_of_the_personalized_package_files/figure-html/plot_compare_ex3-1.png" width="672"></p>
 <p>We can see above that the model with efficiency augmentation finds subgroups with more impactful treatment effects.</p>
 </div>
 </div>
