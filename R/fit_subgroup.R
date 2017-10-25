@@ -121,7 +121,7 @@
 #'
 #' set.seed(123)
 #' n.obs  <- 500
-#' n.vars <- 20
+#' n.vars <- 15
 #' x <- matrix(rnorm(n.obs * n.vars, sd = 3), n.obs, n.vars)
 #'
 #'
