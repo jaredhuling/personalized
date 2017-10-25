@@ -163,56 +163,6 @@ weighted.ksvm <- function(y,
     if(!is(kernel,"kernel")) stop("kernel must inherit from class `kernel'")
 
 
-    switch(is(kernel)[1],
-           "rbfkernel" =
-           {
-               sigma <- kpar(kernel)$sigma
-               ktype <- 2
-           },
-           "tanhkernel" =
-           {
-               sigma  <- kpar(kernel)$scale
-               offset <- kpar(kernel)$offset
-               ktype  <- 3
-           },
-           "polykernel" =
-           {
-               degree <- kpar(kernel)$degree
-               sigma  <- kpar(kernel)$scale
-               offset <- kpar(kernel)$offset
-               ktype  <- 1
-           },
-           "vanillakernel" =
-           {
-               ktype <- 0
-           },
-           "laplacekernel" =
-           {
-               ktype <- 5
-               sigma <- kpar(kernel)$sigma
-           },
-           "besselkernel" =
-           {
-               ktype  <- 6
-               sigma  <- kpar(kernel)$sigma
-               degree <- kpar(kernel)$order
-               offset <- kpar(kernel)$degree
-           },
-           "anovakernel" =
-           {
-               ktype  <- 7
-               sigma  <- kpar(kernel)$sigma
-               degree <- kpar(kernel)$degree
-           },
-           "splinekernel" =
-           {
-               ktype <- 8
-           },
-           {
-               ktype <- 4
-           }
-    )
-
     # primal: min ||beta||^2 + C\sum_i w_i * max(0, 1 - T_i * f(x_i, beta))
 
     # T_i in {-1, 1}
@@ -331,14 +281,26 @@ summary.wksvm <- function(object, digits = max(getOption('digits')-3, 3), ...)
     cat("\n")
     # taken from kernlab
     switch(class(object$kernel),
-           "rbfkernel" = cat(paste("Gaussian Radial Basis kernel function.", "\n","Hyperparameter :" ,"sigma = ", kpar(object$kernel)$sigma,"\n")),
-           "laplacekernel" = cat(paste("Laplace kernel function.", "\n","Hyperparameter :" ,"sigma = ", kpar(object$kernel)$sigma,"\n")),
-           "besselkernel" = cat(paste("Bessel kernel function.", "\n","Hyperparameter :" ,"sigma = ", kpar(object$kernel)$sigma,"order = ",kpar(object$kernel)$order, "degree = ", kpar(object$kernel)$degree,"\n")),
-           "anovakernel" = cat(paste("Anova RBF kernel function.", "\n","Hyperparameter :" ,"sigma = ", kpar(object$kernel)$sigma, "degree = ", kpar(object$kernel)$degree,"\n")),
-           "tanhkernel" = cat(paste("Hyperbolic Tangent kernel function.", "\n","Hyperparameters :","scale = ", kpar(object$kernel)$scale," offset = ", kpar(object$kernel)$offset,"\n")),
-           "polykernel" = cat(paste("Polynomial kernel function.", "\n","Hyperparameters :","degree = ",kpar(object$kernel)$degree," scale = ", kpar(object$kernel)$scale," offset = ", kpar(object$kernel)$offset,"\n")),
+           "rbfkernel"     = cat(paste("Gaussian Radial Basis kernel function.", "\n","Hyperparameter :" ,"sigma = ",
+                                       kpar(object$kernel)$sigma,"\n")),
+           "laplacekernel" = cat(paste("Laplace kernel function.", "\n","Hyperparameter :" ,"sigma = ",
+                                       kpar(object$kernel)$sigma,"\n")),
+           "besselkernel"  = cat(paste("Bessel kernel function.", "\n","Hyperparameter :" ,"sigma = ",
+                                       kpar(object$kernel)$sigma,"order = ",
+                                       kpar(object$kernel)$order, "degree = ",
+                                       kpar(object$kernel)$degree,"\n")),
+           "anovakernel"   = cat(paste("Anova RBF kernel function.", "\n","Hyperparameter :" ,"sigma = ",
+                                       kpar(object$kernel)$sigma, "degree = ",
+                                       kpar(object$kernel)$degree,"\n")),
+           "tanhkernel"    = cat(paste("Hyperbolic Tangent kernel function.", "\n","Hyperparameters :","scale = ",
+                                       kpar(object$kernel)$scale," offset = ",
+                                       kpar(object$kernel)$offset,"\n")),
+           "polykernel"    = cat(paste("Polynomial kernel function.", "\n","Hyperparameters :","degree = ",
+                                       kpar(object$kernel)$degree," scale = ",
+                                       kpar(object$kernel)$scale," offset = ",
+                                       kpar(object$kernel)$offset,"\n")),
            "vanillakernel" = cat(paste("Linear (vanilla) kernel function.", "\n")),
-           "splinekernel" = cat(paste("Spline kernel function.", "\n"))
+           "splinekernel"  = cat(paste("Spline kernel function.", "\n"))
     )
     cat("\n")
     pmat <- rbind(object$C,
