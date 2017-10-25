@@ -120,13 +120,13 @@
 #' library(personalized)
 #'
 #' set.seed(123)
-#' n.obs  <- 1000
-#' n.vars <- 50
+#' n.obs  <- 500
+#' n.vars <- 20
 #' x <- matrix(rnorm(n.obs * n.vars, sd = 3), n.obs, n.vars)
 #'
 #'
 #' # simulate non-randomized treatment
-#' xbetat   <- 0.5 + 0.5 * x[,21] - 0.5 * x[,41]
+#' xbetat   <- 0.5 + 0.5 * x[,7] - 0.5 * x[,9]
 #' trt.prob <- exp(xbetat) / (1 + exp(xbetat))
 #' trt01    <- rbinom(n.obs, 1, prob = trt.prob)
 #'
@@ -164,7 +164,7 @@
 #'                            trt = trt01,
 #'                            propensity.func = prop.func,
 #'                            loss   = "sq_loss_lasso",
-#'                            nfolds = 5)              # option for cv.glmnet
+#'                            nfolds = 10)              # option for cv.glmnet
 #'
 #' summary(subgrp.model)
 #'

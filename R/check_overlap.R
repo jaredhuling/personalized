@@ -27,7 +27,7 @@
 #'
 #'
 #' # simulate non-randomized treatment
-#' xbetat   <- 0.25 + 0.5 * x[,21] - 0.5 * x[,25]
+#' xbetat   <- 0.25 + 0.5 * x[,11] - 0.5 * x[,12]
 #' trt.prob <- exp(xbetat) / (1 + exp(xbetat))
 #' trt01    <- rbinom(n.obs, 1, prob = trt.prob)
 #'
@@ -54,7 +54,7 @@
 #'
 #'
 #' # simulated non-randomized treatment with multiple levels
-#' xbetat_1   <- 0.15 + 0.5 * x[,21] - 0.25 * x[,25]
+#' xbetat_1   <- 0.15 + 0.5 * x[,9] - 0.25 * x[,12]
 #' xbetat_2   <- 0.15 - 0.5 * x[,11] + 0.25 * x[,15]
 #' trt.1.prob <- exp(xbetat_1) / (1 + exp(xbetat_1) + exp(xbetat_2))
 #' trt.2.prob <- exp(xbetat_2) / (1 + exp(xbetat_1) + exp(xbetat_2))
