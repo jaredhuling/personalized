@@ -225,7 +225,7 @@ summarize.subgroups.subgroup_fitted <- function(x, ...)
 print.subgroup_summary <- function(x, p.value = 1, digits = max(getOption('digits')-3, 3), ...)
 {
     pidx <- grep("pval", colnames(x))
-    lessthan <- x[,pidx] <= p.value
+    lessthan <- x[,pidx,drop = FALSE] <= p.value
     lessthan[is.na(lessthan)] <- FALSE
     if (!is.null(dim(lessthan)))
     {

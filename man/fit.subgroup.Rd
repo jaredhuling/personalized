@@ -107,7 +107,7 @@ will be recommended to be in the treatment group}
 if a larger outcome is better/preferable and set to \code{FALSE} if a smaller outcome is better/preferable. Defaults to \code{TRUE}.}
 
 \item{reference.trt}{which treatment should be treated as the reference treatment. Defaults to the first level of \code{trt}
-if \code{trt} is a factor or the first alphabetical or numerically first treatment level.}
+if \code{trt} is a factor or the first alphabetical or numerically first treatment level. Not used for multiple treatment fitting with OWL-type losses.}
 
 \item{retcall}{boolean value. if \code{TRUE} then the passed arguments will be saved. Do not set to \code{FALSE}
 if the \code{validate.subgroup()} function will later be used for your fitted subgroup model. Only set to \code{FALSE}

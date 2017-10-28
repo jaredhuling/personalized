@@ -84,7 +84,7 @@
 #' @param larger.outcome.better boolean value of whether a larger outcome is better/preferable. Set to \code{TRUE}
 #' if a larger outcome is better/preferable and set to \code{FALSE} if a smaller outcome is better/preferable. Defaults to \code{TRUE}.
 #' @param reference.trt which treatment should be treated as the reference treatment. Defaults to the first level of \code{trt}
-#' if \code{trt} is a factor or the first alphabetical or numerically first treatment level.
+#' if \code{trt} is a factor or the first alphabetical or numerically first treatment level. Not used for multiple treatment fitting with OWL-type losses.
 #' @param retcall boolean value. if \code{TRUE} then the passed arguments will be saved. Do not set to \code{FALSE}
 #' if the \code{validate.subgroup()} function will later be used for your fitted subgroup model. Only set to \code{FALSE}
 #' if memory is limited as setting to \code{TRUE} saves the design matrix to the fitted object

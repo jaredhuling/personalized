@@ -200,7 +200,8 @@ plot(val.model)
 
 Here we only display covariates with a significantly different mean value (at level 0.05)
 ```{r summarize_characteristics}
-summarize.subgroups(subgrp.model, p.value = 0.05)
+summ <- summarize.subgroups(subgrp.model)
+print(summ, p.value = 0.05)
 ```
 
 ## Accessing Help Files for Main Functions of `personalized`

@@ -96,7 +96,7 @@ summary.subgroup_fitted <- function(object, digits = max(getOption('digits')-3, 
                     sel.varnames.cur <- vnames[idx.coefs.cur][sel.idx]
                     cat(length(sel.idx) - 1,
                         "out of",
-                        length(coefs.cur),
+                        length(coefs.cur) - 1,
                         "variables selected for delta", t, "by the lasso (cross validation criterion).\n\n")
 
                     coefmat <- matrix(coefs.cur[sel.idx], ncol = 1)
