@@ -150,7 +150,7 @@ weighted.ksvm <- function(y,
             kp <- match.arg(kpar,"automatic")
             if(kp == "automatic")
             {
-                kpar <- list(sigma=mean(sigest(x,scaled=FALSE)[c(1,3)]))
+                kpar <- list(sigma = mean(sigest(x,scaled=FALSE)[c(1,3)]))
             }
         }
     }
