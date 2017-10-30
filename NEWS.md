@@ -1,8 +1,8 @@
-# personalized version 0.1.2
+# personalized 0.1.2
 
 *
 
-# personalized version 0.1.1
+# personalized 0.1.1
 
 * Fixed minor bugs regarding multiple treatment options, match.id
 
@@ -12,7 +12,7 @@
 
 * Added augmentation option for non-continuos outcomes via offset
 
-# personalized version 0.1.0
+# personalized 0.1.0
 
 * Added estimation functionality for multiple treatments
 

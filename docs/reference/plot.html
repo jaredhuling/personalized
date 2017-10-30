@@ -52,10 +52,28 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../articles/usage_of_the_personalized_package.html">Vignette</a>
+  <a href="../index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/usage_of_the_personalized_package.html">Usage of the Personalized Package</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="../news/index.html">News</a>
 </li>
       </ul>
       
@@ -181,9 +199,9 @@ and <code><a href='fit.subgroup.html'>fit.subgroup</a></code> for function which
 #&gt; $overall.subgroup.effect
 #&gt; [1] 11.06312
 #&gt; </div><div class='input'>
-<span class='fu'>plot</span>(<span class='no'>subgrp.model</span>)</div><div class='img'><img src='plot-21.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
-<span class='fu'>plot</span>(<span class='no'>subgrp.model</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"boxplot"</span>)</div><div class='img'><img src='plot-22.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
-<span class='fu'>plot</span>(<span class='no'>subgrp.model</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"interaction"</span>)</div><div class='img'><img src='plot-23.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>subgrp.model</span>)</div><div class='img'><img src='plot-36.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>subgrp.model</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"boxplot"</span>)</div><div class='img'><img src='plot-37.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>subgrp.model</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"interaction"</span>)</div><div class='img'><img src='plot-38.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 <span class='no'>valmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='validate.subgroup.html'>validate.subgroup</a></span>(<span class='no'>subgrp.model</span>, <span class='kw'>B</span> <span class='kw'>=</span> <span class='fl'>3</span>,
                           <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"training_test"</span>,
                           <span class='kw'>train.fraction</span> <span class='kw'>=</span> <span class='fl'>0.75</span>)
@@ -204,9 +222,9 @@ and <code><a href='fit.subgroup.html'>fit.subgroup</a></code> for function which
 #&gt; $overall.subgroup.effect
 #&gt; [1] -0.02713774
 #&gt; </div><div class='input'>
-<span class='fu'>plot</span>(<span class='no'>valmod</span>)</div><div class='img'><img src='plot-24.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>valmod</span>)</div><div class='img'><img src='plot-39.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 
-<span class='fu'>plot</span>(<span class='no'>valmod</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"interaction"</span>)</div><div class='img'><img src='plot-25.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>valmod</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"interaction"</span>)</div><div class='img'><img src='plot-40.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 # visualize the frequency of particular variables
 # of being selected across the resampling iterations with
 # 'type = "stability"'
