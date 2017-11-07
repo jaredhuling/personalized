@@ -43,7 +43,7 @@ The A-learning estimator is the minimizer of
 $$L_A(f) = \frac{1}{n}\sum_{i = 1}^n M(Y_i, {\{(T_i+1)/2 -\pi(x_i)\} } {\times f(x_i))}.$$
 
 ### Choice of $M$ function
-The `personalized` package offers a flexible range of choices both for the form of $f(X)$ and also for the loss function $M(y, v)$. Every choice of $f$ and $M$ can be used for either the weighting method or for the A-learning method. In this package, we limit the use of $M$ to natural choices corresponding to the type of outcome. For example, the squared error loss $M(y, v) = (v - y) ^ 2$ corresponds to continuous responses; the logistic loss $M(y, v) = y \cdot log(1 + \exp\{-v\})$ corresponds to binary outcomes, and the loss associated with the negative partial likelihood of the Cox proportional hazards model corresponds to time-to-event outcomes.
+The `personalized` package offers a flexible range of choices both for the form of $f(X)$ and also for the loss function $M(y, v)$. Most choices of $f$ and $M$ can be used for either the weighting method or for the A-learning method. In this package, we limit the use of $M$ to natural choices corresponding to the type of outcome. The squared error loss $M(y, v) = (v - y) ^ 2$ corresponds to continuous responses but can also be used for binary outcomes, however the logistic loss $M(y, v) = y \cdot log(1 + \exp\{-v\})$ corresponds to binary outcomes and the loss associated with the negative partial likelihood of the Cox proportional hazards model corresponds to time-to-event outcomes.
 
 | Name          | Outcomes      | Loss          |
 | ------------- | ------------- |:--------------|
