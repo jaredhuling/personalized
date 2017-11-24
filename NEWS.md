@@ -1,6 +1,6 @@
 # personalized 0.1.2
 
-*
+* added requirement for latest version of glmnet. old versions throw error when efficiency augmentation used
 
 # personalized 0.1.1
 
