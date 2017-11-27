@@ -4,7 +4,7 @@
 ## Test environments
 
 * local Windows 7 x64 install, (R 3.4.2)
-* Ubuntu Linux 16.04 LTS, (R-devel r73572)
+* Ubuntu Linux 16.04 LTS, (R-devel r73780)
 * local Mac OSX Sierra (R 3.4.2)
 * Ubuntu (on travis-ci), (R 3.4.2)
 
