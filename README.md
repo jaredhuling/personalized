@@ -1,3 +1,9 @@
+---
+output:
+  html_document:
+    keep_md: yes
+    self_contained: true
+---
 
 
 

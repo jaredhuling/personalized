@@ -68,7 +68,7 @@
       <h1>Usage of the Personalized Package</h1>
                         <h4 class="author">Jared Huling</h4>
             
-            <h4 class="date">2017-10-30</h4>
+            <h4 class="date">2017-11-29</h4>
           </div>
 
     
@@ -94,7 +94,7 @@
 <div id="choice-of-m-function" class="section level3">
 <h3 class="hasAnchor">
 <a href="#choice-of-m-function" class="anchor"></a>Choice of <span class="math inline">\(M\)</span> function</h3>
-<p>The <code>personalized</code> package offers a flexible range of choices both for the form of <span class="math inline">\(f(X)\)</span> and also for the loss function <span class="math inline">\(M(y, v)\)</span>. Every choice of <span class="math inline">\(f\)</span> and <span class="math inline">\(M\)</span> can be used for either the weighting method or for the A-learning method. In this package, we limit the use of <span class="math inline">\(M\)</span> to natural choices corresponding to the type of outcome. For example, the squared error loss <span class="math inline">\(M(y, v) = (v - y) ^ 2\)</span> corresponds to continuous responses; the logistic loss <span class="math inline">\(M(y, v) = y \cdot log(1 + \exp\{-v\})\)</span> corresponds to binary outcomes, and the loss associated with the negative partial likelihood of the Cox proportional hazards model corresponds to time-to-event outcomes.</p>
+<p>The <code>personalized</code> package offers a flexible range of choices both for the form of <span class="math inline">\(f(X)\)</span> and also for the loss function <span class="math inline">\(M(y, v)\)</span>. Most choices of <span class="math inline">\(f\)</span> and <span class="math inline">\(M\)</span> can be used for either the weighting method or for the A-learning method. In this package, we limit the use of <span class="math inline">\(M\)</span> to natural choices corresponding to the type of outcome. The squared error loss <span class="math inline">\(M(y, v) = (v - y) ^ 2\)</span> corresponds to continuous responses but can also be used for binary outcomes, however the logistic loss <span class="math inline">\(M(y, v) = y \cdot log(1 + \exp\{-v\})\)</span> corresponds to binary outcomes and the loss associated with the negative partial likelihood of the Cox proportional hazards model corresponds to time-to-event outcomes.</p>
 <table style="width:61%;" class="table">
 <colgroup>
 <col width="19%">
@@ -144,7 +144,7 @@
 </tr>
 </tbody>
 </table>
-<p>where for the last loss <span class="math inline">\(y = (X, \delta) = \{ \widetilde{X} \wedge C, I(\widetilde{X} \leq t) \}\)</span>, <span class="math inline">\(\widetilde{X}\)</span> is the survival time, &amp; <span class="math inline">\(C\)</span> is the censoring time, <span class="math inline">\(N(t) = I(\widetilde{X} \leq t)\delta\)</span>, and <span class="math inline">\(\tau\)</span> &amp; is fixed time point where <span class="math inline">\(P(X \geq \tau) &gt; 0\)</span>.</p>
+<p>where “C” indicates usage for continuous outcomes, “B” indicates usage for binary outcomes, and “TTE” indicates usages for time-to-event outcomes, and for the last loss <span class="math inline">\(y = (X, \delta) = \{ \widetilde{X} \wedge C, I(\widetilde{X} \leq t) \}\)</span>, <span class="math inline">\(\widetilde{X}\)</span> is the survival time, &amp; <span class="math inline">\(C\)</span> is the censoring time, <span class="math inline">\(N(t) = I(\widetilde{X} \leq t)\delta\)</span>, and <span class="math inline">\(\tau\)</span> &amp; is fixed time point where <span class="math inline">\(P(X \geq \tau) &gt; 0\)</span>.</p>
 </div>
 <div id="choice-of-f" class="section level3">
 <h3 class="hasAnchor">
@@ -251,9 +251,9 @@ prop.func &lt;-<span class="st"> </span><span class="cf">function</span>(x, trt)
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(subgrp.model, <span class="dt">type =</span> <span class="st">"interaction"</span>)</code></pre></div>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_model_2-1.png" width="672"></p>
 </div>
-<div id="evaluating-effect-of-subgroup-identification-model" class="section level2">
+<div id="evaluating-treatment-effects-within-estimated-subgroups" class="section level2">
 <h2 class="hasAnchor">
-<a href="#evaluating-effect-of-subgroup-identification-model" class="anchor"></a>Evaluating Effect of Subgroup Identification Model</h2>
+<a href="#evaluating-treatment-effects-within-estimated-subgroups" class="anchor"></a>Evaluating Treatment Effects within Estimated Subgroups</h2>
 <p>Unfortunately, if we simply look at the average outcome within each subgroup, this will give us a biased estimate of the treatment effects within each subgroup as we have already used the data to estimate the subgroups. Instead, to get a valid estimate of the subgroup treatment effects we can use a bootstrap approach to correcting for this bias. We can alternatively repeatedly partition our data into training and testing samples. In this procedure for each replication we fit a subgroup model using the training data and then evaluate the subgroup treatment effects on the testing data. The argument <code>B</code> specifies the number of replications and the argument <code>train.fraction</code> specifies what proportion of samples are for training in the training and testing partitioning method.</p>
 <p>Both of these approaches can be carried out using the <code><a href="../reference/validate.subgroup.html">validate.subgroup()</a></code> function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">validation &lt;-<span class="st"> </span><span class="kw"><a href="../reference/validate.subgroup.html">validate.subgroup</a></span>(subgrp.model, 
@@ -796,7 +796,7 @@ validation3</code></pre></div>
 <a href="#quick-usage-reference">Quick Usage Reference</a><ul class="nav nav-pills nav-stacked">
 <li><a href="#creating-and-checking-propensity-score-model">Creating and Checking Propensity Score Model</a></li>
       <li><a href="#fitting-subgroup-identification-model">Fitting Subgroup Identification Model</a></li>
-      <li><a href="#evaluating-effect-of-subgroup-identification-model">Evaluating Effect of Subgroup Identification Model</a></li>
+      <li><a href="#evaluating-treatment-effects-within-estimated-subgroups">Evaluating Treatment Effects within Estimated Subgroups</a></li>
       </ul>
 </li>
       <li>
