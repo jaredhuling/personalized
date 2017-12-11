@@ -23,8 +23,8 @@ Suggests:
     testthat
 Imports:
     survival,
-    kernlab,
     methods,
+    kernlab,
     foreach
 Depends:
     glmnet (>= 2.0-13),

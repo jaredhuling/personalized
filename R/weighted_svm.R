@@ -15,6 +15,7 @@
 #' @param ... extra arguments to be passed to \code{\link[kernlab]{ipop}} from the kernlab package
 #' @seealso \code{\link[personalized]{predict.wksvm}} for predicting from fitted \code{weighted.ksvm} objects
 #' @importFrom kernlab ipop primal dual kernelMatrix sigest kpar
+#' @importFrom kernlab rbfdot polydot tanhdot vanilladot laplacedot besseldot anovadot splinedot
 #'
 #' @export
 #' @examples
