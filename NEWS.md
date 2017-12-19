@@ -1,8 +1,10 @@
+# personalized 0.1.3
+
+* Added NSW Study dataset
+
 # personalized 0.1.2
 
 * Added requirement for latest version of glmnet. old versions throw error when efficiency augmentation used
-
-* Added NSW Study dataset
 
 # personalized 0.1.1
 
