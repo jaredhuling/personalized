@@ -1,6 +1,8 @@
 # personalized 0.1.2
 
-* added requirement for latest version of glmnet. old versions throw error when efficiency augmentation used
+* Added requirement for latest version of glmnet. old versions throw error when efficiency augmentation used
+
+* Added NSW Study dataset
 
 # personalized 0.1.1
 
@@ -10,7 +12,7 @@
 
 * Added outcome flipping OWL-type losses: logistic and hinge surrogates
 
-* Added augmentation option for non-continuos outcomes via offset
+* Added augmentation option for non-continuous outcomes via offset
 
 # personalized 0.1.0
 
