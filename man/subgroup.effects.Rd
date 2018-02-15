@@ -17,7 +17,10 @@ treatment status is active.}
 
 \item{cutpoint}{numeric value for patients with benefit scores above which
 (or below which if \code{larger.outcome.better = FALSE})
-will be recommended to be in the treatment group}
+will be recommended to be in the treatment group. Can also set \code{cutpoint = "median"}, which will
+use the median value of the benefit scores as the cutpoint or can set specific quantile values via \code{"quantx"}
+where \code{"x"} is a number between 0 and 100 representing the quantile value; e.g. \code{cutpoint = "quant75"}
+will use the 75th perent upper quantile of the benefit scores as the quantile.}
 
 \item{larger.outcome.better}{boolean value of whether a larger outcome is better. Set to \code{TRUE}
 if a larger outcome is better and set to \code{FALSE} if a smaller outcome is better. Defaults to \code{TRUE}.}

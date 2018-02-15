@@ -1,6 +1,6 @@
 ## New version for 'personalized'
 
-* added lalonde data
+* added quantile and median cutpoints as options
 
 ## Test environments
 

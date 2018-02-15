@@ -9,7 +9,10 @@
 #'            treatment status is active.
 #' @param cutpoint numeric value for patients with benefit scores above which
 #' (or below which if \code{larger.outcome.better = FALSE})
-#' will be recommended to be in the treatment group
+#' will be recommended to be in the treatment group. Can also set \code{cutpoint = "median"}, which will
+#' use the median value of the benefit scores as the cutpoint or can set specific quantile values via \code{"quantx"}
+#' where \code{"x"} is a number between 0 and 100 representing the quantile value; e.g. \code{cutpoint = "quant75"}
+#' will use the 75th perent upper quantile of the benefit scores as the quantile.
 #' @param larger.outcome.better boolean value of whether a larger outcome is better. Set to \code{TRUE}
 #' if a larger outcome is better and set to \code{FALSE} if a smaller outcome is better. Defaults to \code{TRUE}.
 #' @param reference.trt index of which treatment is the reference (in the case of multiple treatments).
@@ -52,7 +55,7 @@ subgroup.effects <- function(benefit.scores, y, trt, cutpoint = 0,
     if (NROW(benefit.scores) != NROW(y))     stop("length of benefit.scores and y do not match")
     if (NROW(benefit.scores) != length(trt)) stop("length of benefit.scores and trt do not match")
 
-    cutpoint <- as.numeric(cutpoint[1])
+    cutpoint <- convert.cutpoint(cutpoint, benefit.scores)
 
     if (is.null(reference.trt) | n.trts == 2) # two trt options defaults to first as reference
     {
