@@ -735,6 +735,8 @@ fit.subgroup <- function(x,
     fitted.model$comparison.trts       <- comparison.trts
     fitted.model$reference.trt         <- reference.trt
     fitted.model$trts                  <- unique.trts
+    fitted.model$trt.received          <- trt
+    fitted.model$y                     <- y
 
     fitted.model$benefit.scores        <- fitted.model$predict(x)
 

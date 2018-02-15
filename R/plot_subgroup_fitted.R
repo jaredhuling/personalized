@@ -54,7 +54,7 @@
 #' plot(subgrp.model, type = "interaction")
 #' @export
 plot.subgroup_fitted <- function(x,
-                                 type = c("boxplot", "density", "interaction"),
+                                 type = c("boxplot", "density", "interaction", "conditional"),
                                  avg.line = TRUE,
                                  ...)
 {
@@ -66,12 +66,12 @@ plot.subgroup_fitted <- function(x,
 
     outcome.lab <- "Outcome"
 
+    benefit.scores <- x$benefit.scores
+    B              <- NROW(benefit.scores)
+
     if (type != "interaction")
     {
         if (is.null(x$call)) stop("retcall argument must be set to TRUE for fitted model object")
-
-        benefit.scores <- x$benefit.scores
-        B <- NROW(benefit.scores)
 
         res.2.plot <- array(NA, dim = c(B, 3))
         colnames(res.2.plot) <- c("Recommended", "Received", "Value")
@@ -149,6 +149,53 @@ plot.subgroup_fitted <- function(x,
                 facet_grid( ~ Recommended) +
                 theme(legend.position = "bottom") +
                 ylab(outcome.lab) +
+                ggtitle("Individual Observations Among Subgroups")
+        }
+    } else if (type == "conditional")
+    {
+        if (!is.null(x$trt.received))
+        {
+            trt <- x$trt.received
+        } else if (!is.null(x$call))
+        {
+            trt <- x$call$trt
+        } else
+        {
+            stop("Refit model and plot again.")
+        }
+
+        if (!is.null(x$y))
+        {
+            y <- x$trt.received
+        } else if (!is.null(x$call))
+        {
+            y <- x$call$y
+        } else
+        {
+            stop("Refit model and plot again.")
+        }
+        res.2.plot <- data.frame(bs = benefit.scores, Received = trt, Outcome = y)
+        if (x$family == "binomial")
+        {
+            res.2.plot$Value <- as.factor(res.2.plot$Value)
+            pl.obj <- ggplot(res.2.plot,
+                             aes(x = Received, fill = factor(Value) )) +
+                geom_bar(position = "fill") +
+                facet_grid(~ Recommended) +
+                theme(legend.position = "bottom") +
+                ylab(outcome.lab) +
+                ggtitle("Individual Observations Among Subgroups") +
+                guides(fill = guide_legend(title = "Observed Response"))
+        } else
+        {
+            pl.obj <- ggplot(res.2.plot,
+                             aes(x = bs, y = Outcome,
+                                 group = factor(Received),
+                                 color = factor(Received) )) +
+                geom_point() +
+                geom_smooth(method = "gam") +
+                theme(legend.position = "bottom") +
+                scale_color_discrete(name = "Received") +
                 ggtitle("Individual Observations Among Subgroups")
         }
     } else
