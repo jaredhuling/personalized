@@ -179,7 +179,6 @@ plot.subgroup_fitted <- function(x,
         res.2.plot <- data.frame(bs = benefit.scores, Received = trt, Outcome = y)
         if (x$family == "binomial")
         {
-            res.2.plot$Value <- as.factor(res.2.plot$Value)
             pl.obj <- ggplot(res.2.plot,
                              aes(x = bs, y = Outcome,
                                  group = factor(Received),
