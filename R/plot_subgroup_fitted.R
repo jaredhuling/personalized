@@ -106,7 +106,7 @@ plot.subgroup_fitted <- function(x,
                                                    ncol(avg.res$avg.outcomes)),
                                  Value       = as.vector(avg.res$avg.outcomes))
 
-    Recommended <- Received <- Value <- NULL
+    Recommended <- Received <- Value <- bs <- Outcome <- NULL
 
 
 

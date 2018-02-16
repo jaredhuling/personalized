@@ -21,7 +21,7 @@
 #' @import plotly
 #' @importFrom ggplot2 ggplot aes geom_density geom_rug coord_flip facet_grid theme xlab
 #' @importFrom ggplot2 ylab ggtitle geom_vline geom_boxplot geom_line geom_point geom_smooth
-#' @importFrom ggplot2 scale_x_discrete geom_histogram geom_rect geom_hline xlim geom_bar
+#' @importFrom ggplot2 scale_x_discrete scale_color_discrete geom_histogram geom_rect geom_hline xlim geom_bar
 #'
 #' @examples
 #'
@@ -71,7 +71,7 @@ plot.subgroup_validated <- function(x,
                                                    ncol(avg.res$avg.outcomes)),
                                  Value       = as.vector(avg.res$avg.outcomes))
 
-    Recommended <- Received <- Value <- NULL
+    Recommended <- Received <- Value <- bs <- Outcome <- NULL
 
     for (b in 1:B)
     {

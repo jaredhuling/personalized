@@ -736,6 +736,7 @@ fit.subgroup <- function(x,
     fitted.model$reference.trt         <- reference.trt
     fitted.model$trts                  <- unique.trts
     fitted.model$trt.received          <- trt
+    fitted.model$pi.x                  <- pi.x
     fitted.model$y                     <- y
 
     fitted.model$benefit.scores        <- fitted.model$predict(x)
@@ -748,7 +749,9 @@ fit.subgroup <- function(x,
     # subgroup treatment effects based on the
     # benefit scores and specified benefit score cutpoint
     fitted.model$subgroup.trt.effects <- subgroup.effects(fitted.model$benefit.scores,
-                                                          y, trt, cutpoint,
+                                                          y, trt,
+                                                          pi.x,
+                                                          cutpoint,
                                                           larger.outcome.better,
                                                           reference.trt = reference.trt)
 

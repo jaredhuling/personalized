@@ -136,10 +136,15 @@ validate.subgroup <- function(model,
 
     # save data objects because they
     # will be written over by resampled versions later
-    x             <- model$call$x
-    trt           <- model$call$trt
-    y             <- model$call$y
-    match.id      <- model$call$match.id
+    x               <- model$call$x
+    trt             <- model$call$trt
+    y               <- model$call$y
+    match.id        <- model$call$match.id
+    propensity.func <- model$call$propensity.func
+
+    if (is.null(model$pi.x)) stop("Please re-fit model and run again")
+
+    pi.x            <- model$pi.x
 
     ## override any internal parallelization
     ## if there is a conflict of parallelization
@@ -204,7 +209,8 @@ validate.subgroup <- function(model,
                                        model$call$y <- y[samp.idx]
                                        y.test       <- y[-samp.idx]
                                    }
-                                   trt.test <- trt[-samp.idx]
+                                   trt.test  <- trt[-samp.idx]
+                                   pi.x.test <- pi.x[-samp.idx]
 
                                    # fit subgroup model on training data
                                    mod.b    <- do.call(fit.subgroup, model$call)
@@ -215,6 +221,7 @@ validate.subgroup <- function(model,
                                    # estimate subgroup treatment effects on test data
                                    sbgrp.trt.eff.test  <- subgroup.effects(benefit.scores.test,
                                                                            y.test, trt.test,
+                                                                           pi.x.test,
                                                                            model$call$cutpoint,
                                                                            model$larger.outcome.better,
                                                                            model$reference.trt)
@@ -257,12 +264,14 @@ validate.subgroup <- function(model,
                                    # fit subgroup model on resampled data
                                    mod.b    <- do.call(fit.subgroup, model$call)
 
+                                   pi.x.b   <- mod.b$pi.x
+
                                    # calculate benefit scores and resulting
                                    # subgroup treatment effects on the original data
                                    benefit.scores.orig <- mod.b$predict(x)
 
                                    sbgrp.trt.eff.orig  <- subgroup.effects(benefit.scores.orig,
-                                                                           y, trt,
+                                                                           y, trt, pi.x.b,
                                                                            model$call$cutpoint,
                                                                            model$larger.outcome.better,
                                                                            model$reference.trt)
@@ -328,7 +337,8 @@ validate.subgroup <- function(model,
                     model$call$y <- y[samp.idx]
                     y.test       <- y[-samp.idx]
                 }
-                trt.test <- trt[-samp.idx]
+                trt.test  <- trt[-samp.idx]
+                pi.x.test <- pi.x[-samp.idx]
 
                 # fit subgroup model on training data
                 mod.b    <- do.call(fit.subgroup, model$call)
@@ -339,6 +349,7 @@ validate.subgroup <- function(model,
                 # estimate subgroup treatment effects on test data
                 sbgrp.trt.eff.test  <- subgroup.effects(benefit.scores.test,
                                                         y.test, trt.test,
+                                                        pi.x.test,
                                                         model$call$cutpoint,
                                                         model$larger.outcome.better,
                                                         model$reference.trt)
@@ -380,13 +391,14 @@ validate.subgroup <- function(model,
 
                 # fit subgroup model on resampled data
                 mod.b    <- do.call(fit.subgroup, model$call)
+                pi.x.b   <- mod.b$pi.x
 
                 # calculate benefit scores and resulting
                 # subgroup treatment effects on the original data
                 benefit.scores.orig <- mod.b$predict(x)
 
                 sbgrp.trt.eff.orig  <- subgroup.effects(benefit.scores.orig,
-                                                        y, trt,
+                                                        y, trt, pi.x.b,
                                                         model$call$cutpoint,
                                                         model$larger.outcome.better,
                                                         model$reference.trt)

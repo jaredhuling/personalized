@@ -78,6 +78,8 @@ plotCompare <- function(...,
 
     n.obj <- length(list.obj)
 
+    bs <- Outcome <- NULL
+
     if (n.obj == 0)
         stop("no fitted or validated model objects specified to be plotted")
 

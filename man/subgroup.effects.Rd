@@ -4,7 +4,7 @@
 \alias{subgroup.effects}
 \title{Computes treatment effects within various subgroups}
 \usage{
-subgroup.effects(benefit.scores, y, trt, cutpoint = 0,
+subgroup.effects(benefit.scores, y, trt, pi.x, cutpoint = 0,
   larger.outcome.better = TRUE, reference.trt = NULL)
 }
 \arguments{
@@ -14,6 +14,8 @@ subgroup.effects(benefit.scores, y, trt, cutpoint = 0,
 
 \item{trt}{treatment vector with each element equal to a 0 or a 1, with 1 indicating
 treatment status is active.}
+
+\item{pi.x}{The propensity score for each observation}
 
 \item{cutpoint}{numeric value for patients with benefit scores above which
 (or below which if \code{larger.outcome.better = FALSE})
