@@ -48,6 +48,7 @@ test_that("test plotting for continuous outcomes with various options", {
                                  trt = trt01,
                                  propensity.func = prop.func,
                                  loss   = "sq_loss_lasso",
+                                 cutpoint = "median",
                                  nfolds = 5)              # option for cv.glmnet
 
     expect_is(subgrp.model, "subgroup_fitted")
@@ -56,6 +57,7 @@ test_that("test plotting for continuous outcomes with various options", {
                                  trt = trt01,
                                  propensity.func = prop.func,
                                  loss   = "sq_loss_lasso_gam",
+                                 cutpoint = "quant50",
                                  nfolds = 5)              # option for cv.glmnet
 
     expect_is(subgrp.model2, "subgroup_fitted")
@@ -79,6 +81,10 @@ test_that("test plotting for continuous outcomes with various options", {
     expect_is(pl, "ggplot")
 
     pl <- plot(subgrp.model, type = "interaction")
+
+    expect_is(pl, "ggplot")
+
+    pl <- plot(subgrp.model, type = "conditional")
 
     expect_is(pl, "ggplot")
 
@@ -142,7 +148,29 @@ test_that("test plotting for continuous outcomes with various options", {
 
     expect_is(pl, "ggplot")
 
+    subgrp.model2 <- subgrp.model
+    pl <- plotCompare(subgrp.model, subgrp.model2, type = "conditional")
 
+    expect_is(pl, "ggplot")
+
+    y2 <- 1 * (y > 0)
+
+    subgrp.model <- fit.subgroup(x = x, y = y2,
+                                 trt = trt01,
+                                 propensity.func = prop.func,
+                                 loss   = "logistic_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+    pl <- plot(subgrp.model, type = "conditional")
+
+    expect_is(pl, "ggplot")
+
+    subgrp.model2 <- subgrp.model
+    pl <- plotCompare(subgrp.model, subgrp.model2, type = "conditional")
+
+    expect_is(pl, "ggplot")
 
 })
 
