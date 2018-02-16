@@ -168,7 +168,7 @@ plot.subgroup_fitted <- function(x,
 
         if (!is.null(x$y))
         {
-            y <- x$trt.received
+            y <- x$y
         } else if (!is.null(x$call))
         {
             y <- x$call$y
