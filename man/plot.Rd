@@ -7,7 +7,7 @@
 \title{Plotting results for fitted subgroup identification models}
 \usage{
 \method{plot}{subgroup_fitted}(x, type = c("boxplot", "density",
-  "interaction"), avg.line = TRUE, ...)
+  "interaction", "conditional"), avg.line = TRUE, ...)
 
 \method{plot}{subgroup_validated}(x, type = c("boxplot", "density",
   "interaction", "stability"), avg.line = TRUE, ...)
@@ -21,7 +21,9 @@ across iterations of either the bootstrap or training/test re-fitting. For the l
 case the test results will be plotted. \code{"boxplot"} results in boxplots across all observations/iterations of either
 the bootstrap or training/test re-fitting. For the latter
 case the test results will be plotted. \code{"interaction"} creates an
-interaction plot for the different subgroups (crossing lines here means a meaningful subgroup)}
+interaction plot for the different subgroups (crossing lines here means a meaningful subgroup).
+\code{"conditional"} plots smoothed (via a GAM smoother) means of the outcomes as a function of the estimated benefit score
+separately for the treated and untreated groups.}
 
 \item{avg.line}{boolean value of whether or not to plot a line for the average
 value in addition to the density (only valid for \code{type = "density"})}
@@ -81,6 +83,8 @@ plot(subgrp.model)
 plot(subgrp.model, type = "boxplot")
 
 plot(subgrp.model, type = "interaction")
+
+plot(subgrp.model, type = "conditional")
 
 valmod <- validate.subgroup(subgrp.model, B = 3,
                           method = "training_test",

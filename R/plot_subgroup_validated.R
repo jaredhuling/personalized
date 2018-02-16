@@ -9,7 +9,9 @@
 #' case the test results will be plotted. \code{"boxplot"} results in boxplots across all observations/iterations of either
 #' the bootstrap or training/test re-fitting. For the latter
 #' case the test results will be plotted. \code{"interaction"} creates an
-#' interaction plot for the different subgroups (crossing lines here means a meaningful subgroup)
+#' interaction plot for the different subgroups (crossing lines here means a meaningful subgroup).
+#' \code{"conditional"} plots smoothed (via a GAM smoother) means of the outcomes as a function of the estimated benefit score
+#' separately for the treated and untreated groups.
 #' @param avg.line boolean value of whether or not to plot a line for the average
 #' value in addition to the density (only valid for \code{type = "density"})
 #' @param ... not used
@@ -18,7 +20,7 @@
 #' @rdname plot
 #' @import plotly
 #' @importFrom ggplot2 ggplot aes geom_density geom_rug coord_flip facet_grid theme xlab
-#' @importFrom ggplot2 ylab ggtitle geom_vline geom_boxplot geom_line geom_point
+#' @importFrom ggplot2 ylab ggtitle geom_vline geom_boxplot geom_line geom_point geom_smooth
 #' @importFrom ggplot2 scale_x_discrete geom_histogram geom_rect geom_hline xlim geom_bar
 #'
 #' @examples

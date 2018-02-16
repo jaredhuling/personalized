@@ -11,7 +11,9 @@
 #' case the test results will be plotted. \code{"boxplot"} results in boxplots across all observations/iterations of either
 #' the bootstrap or training/test re-fitting. For the latter
 #' case the test results will be plotted. \code{"interaction"} creates an
-#' interaction plot for the different subgroups (crossing lines here means a meaningful subgroup)
+#' interaction plot for the different subgroups (crossing lines here means a meaningful subgroup).
+#' \code{"conditional"} plots smoothed (via a GAM smoother) means of the outcomes as a function of the estimated benefit score
+#' separately for the treated and untreated groups.
 #' @param avg.line boolean value of whether or not to plot a line for the average
 #' value in addition to the density (only valid for \code{type = "density"})
 #' @seealso \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models and
@@ -68,7 +70,7 @@
 #'
 #' @export
 plotCompare <- function(...,
-                        type = c("boxplot", "density", "interaction"),
+                        type = c("boxplot", "density", "interaction", "conditional"),
                         avg.line = TRUE)
 {
 
@@ -95,6 +97,16 @@ plotCompare <- function(...,
 
 
     type <- match.arg(type)
+
+    is_fitted_obj <- sapply(list.obj, function(lo) (class(lo)[1] == "subgroup_fitted"))
+
+    if (type == "conditional" & !all(is_fitted_obj))
+    {
+        stop("Only subgroup_fitted objects allowed for type = 'conditional'")
+    }
+
+    all_binom <- all(sapply(list.obj, function(lo) lo$family == "binomial"))
+
 
     avg.line <- as.logical(avg.line[1])
 
@@ -140,24 +152,48 @@ plotCompare <- function(...,
                 trt.rec        <- list.obj[[l]]$recommended.trts
                 B <- NROW(benefit.scores)
 
-                res.2.plot <- array(NA, dim = c(B, 3))
-                colnames(res.2.plot) <- c("Recommended", "Received", "Value")
-                res.2.plot <- data.frame(res.2.plot)
-
-                cutpoint <- list.obj[[l]]$call$cutpoint
-                lb       <- list.obj[[l]]$call$larger.outcome.better
-
-                #res.2.plot[, 1] <- ifelse(trt.rec == 1, "Recommended Trt", "Recommended Ctrl")
-                #res.2.plot[, 2] <- ifelse(x$call$trt == 1, "Received Trt", "Received Ctrl")
-                res.2.plot[, 1] <- paste("Recommended", trt.rec)
-                res.2.plot[, 2] <- paste("Received", list.obj[[l]]$call$trt)
-
-                if (class(list.obj[[l]]$call$y) == "Surv")
+                if (type != "conditional")
                 {
-                    res.2.plot[, 3] <- log(list.obj[[l]]$call$y[,1])
+                    res.2.plot <- array(NA, dim = c(B, 3))
+                    colnames(res.2.plot) <- c("Recommended", "Received", "Value")
+                    res.2.plot <- data.frame(res.2.plot)
+
+                    cutpoint <- list.obj[[l]]$call$cutpoint
+                    lb       <- list.obj[[l]]$call$larger.outcome.better
+
+                    #res.2.plot[, 1] <- ifelse(trt.rec == 1, "Recommended Trt", "Recommended Ctrl")
+                    #res.2.plot[, 2] <- ifelse(x$call$trt == 1, "Received Trt", "Received Ctrl")
+                    res.2.plot[, 1] <- paste("Recommended", trt.rec)
+                    res.2.plot[, 2] <- paste("Received", list.obj[[l]]$call$trt)
+
+                    if (class(list.obj[[l]]$call$y) == "Surv")
+                    {
+                        res.2.plot[, 3] <- log(list.obj[[l]]$call$y[,1])
+                    } else
+                    {
+                        res.2.plot[, 3] <- list.obj[[l]]$call$y
+                    }
                 } else
                 {
-                    res.2.plot[, 3] <- list.obj[[l]]$call$y
+                    res.2.plot <- array(NA, dim = c(B, 3))
+                    colnames(res.2.plot) <- c("bs", "Received", "Outcome")
+                    res.2.plot <- data.frame(res.2.plot)
+
+                    cutpoint <- list.obj[[l]]$call$cutpoint
+                    lb       <- list.obj[[l]]$call$larger.outcome.better
+
+                    #res.2.plot[, 1] <- ifelse(trt.rec == 1, "Recommended Trt", "Recommended Ctrl")
+                    #res.2.plot[, 2] <- ifelse(x$call$trt == 1, "Received Trt", "Received Ctrl")
+                    res.2.plot[, 1] <- benefit.scores
+                    res.2.plot[, 2] <- paste("Received", list.obj[[l]]$call$trt)
+
+                    if (class(list.obj[[l]]$call$y) == "Surv")
+                    {
+                        res.2.plot[, 3] <- log(list.obj[[l]]$call$y[,1])
+                    } else
+                    {
+                        res.2.plot[, 3] <- list.obj[[l]]$call$y
+                    }
                 }
             } else
             {
@@ -214,15 +250,55 @@ plotCompare <- function(...,
                 geom_vline(data = avg.res.2.plot,
                            aes(xintercept = Value, colour = Received))
         }
+    } else if (type == "conditional")
+    {
+        if (all_binom)
+        {
+            pl.obj <- ggplot(res.2.plot,
+                             aes(x = bs, y = Outcome,
+                                 group = factor(Received),
+                                 color = factor(Received) )) +
+                geom_point() +
+                geom_smooth(method = "gam", method.args = list(family = "binomial")) +
+                facet_grid( ~ Model) +
+                theme(legend.position = "bottom") +
+                scale_color_discrete(name = "Received") +
+                ggtitle("Individual Observations by Treatment Group")
+        } else
+        {
+            pl.obj <- ggplot(res.2.plot,
+                             aes(x = bs, y = Outcome,
+                                 group = factor(Received),
+                                 color = factor(Received) )) +
+                geom_point() +
+                geom_smooth(method = "gam") +
+                facet_grid( ~ Model) +
+                theme(legend.position = "bottom") +
+                scale_color_discrete(name = "Received") +
+                ggtitle("Individual Observations by Treatment Group")
+        }
     } else if (type == "boxplot")
     {
-        pl.obj <- ggplot(res.2.plot,
-                         aes(x = Received, y = Value)) +
-            geom_boxplot(aes(fill = Received)) +
-            geom_rug(aes(colour = Received), alpha = 0.85) +
-            facet_grid(Recommended ~ Model) +
-            theme(legend.position = "bottom") +
-            ylab("Outcome")
+        if (all_binom)
+        {
+            res.2.plot$Value <- as.factor(res.2.plot$Value)
+            pl.obj <- ggplot(res.2.plot,
+                             aes(x = Received, fill = factor(Value) )) +
+                geom_bar(position = "fill") +
+                facet_grid(Recommended ~ Model) +
+                theme(legend.position = "bottom") +
+                ylab("Outcome")
+                guides(fill = guide_legend(title = "Observed Response"))
+        } else
+        {
+            pl.obj <- ggplot(res.2.plot,
+                             aes(x = Received, y = Value)) +
+                geom_boxplot(aes(fill = Received)) +
+                geom_rug(aes(colour = Received), alpha = 0.85) +
+                facet_grid(Recommended ~ Model) +
+                theme(legend.position = "bottom") +
+                ylab("Outcome")
+        }
     } else
     {
         pl.obj <- ggplot(avg.res.2.plot,

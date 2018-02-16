@@ -4,7 +4,7 @@
 \alias{plotCompare}
 \title{Plot a comparison results for fitted or validated subgroup identification models}
 \usage{
-plotCompare(..., type = c("boxplot", "density", "interaction"),
+plotCompare(..., type = c("boxplot", "density", "interaction", "conditional"),
   avg.line = TRUE)
 }
 \arguments{
@@ -17,7 +17,9 @@ across iterations of either the bootstrap or training/test re-fitting. For the l
 case the test results will be plotted. \code{"boxplot"} results in boxplots across all observations/iterations of either
 the bootstrap or training/test re-fitting. For the latter
 case the test results will be plotted. \code{"interaction"} creates an
-interaction plot for the different subgroups (crossing lines here means a meaningful subgroup)}
+interaction plot for the different subgroups (crossing lines here means a meaningful subgroup).
+\code{"conditional"} plots smoothed (via a GAM smoother) means of the outcomes as a function of the estimated benefit score
+separately for the treated and untreated groups.}
 
 \item{avg.line}{boolean value of whether or not to plot a line for the average
 value in addition to the density (only valid for \code{type = "density"})}

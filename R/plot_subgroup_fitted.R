@@ -52,6 +52,8 @@
 #' plot(subgrp.model, type = "boxplot")
 #'
 #' plot(subgrp.model, type = "interaction")
+#'
+#' plot(subgrp.model, type = "conditional")
 #' @export
 plot.subgroup_fitted <- function(x,
                                  type = c("boxplot", "density", "interaction", "conditional"),
@@ -179,13 +181,14 @@ plot.subgroup_fitted <- function(x,
         {
             res.2.plot$Value <- as.factor(res.2.plot$Value)
             pl.obj <- ggplot(res.2.plot,
-                             aes(x = Received, fill = factor(Value) )) +
-                geom_bar(position = "fill") +
-                facet_grid(~ Recommended) +
+                             aes(x = bs, y = Outcome,
+                                 group = factor(Received),
+                                 color = factor(Received) )) +
+                geom_point() +
+                geom_smooth(method = "gam", method.args = list(family = "binomial")) +
                 theme(legend.position = "bottom") +
-                ylab(outcome.lab) +
-                ggtitle("Individual Observations Among Subgroups") +
-                guides(fill = guide_legend(title = "Observed Response"))
+                scale_color_discrete(name = "Received") +
+                ggtitle("Individual Observations by Treatment Group")
         } else
         {
             pl.obj <- ggplot(res.2.plot,
@@ -196,7 +199,7 @@ plot.subgroup_fitted <- function(x,
                 geom_smooth(method = "gam") +
                 theme(legend.position = "bottom") +
                 scale_color_discrete(name = "Received") +
-                ggtitle("Individual Observations Among Subgroups")
+                ggtitle("Individual Observations by Treatment Group")
         }
     } else
     {
