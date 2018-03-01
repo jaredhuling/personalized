@@ -1,6 +1,7 @@
 ## New version for 'personalized'
 
-* added quantile and median cutpoints as options
+* add quantile and median cutpoints as options
+* fixes subgroup effect calculation to account for weights
 
 ## Test environments
 
