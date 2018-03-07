@@ -1,6 +1,8 @@
 # personalized 0.1.4
 
 * Added plots of means within treatment groups as the benefit scores are varied
+* Added quantile and median cutpoints as options
+* Fixes subgroup effect calculation to account for weights
 
 # personalized 0.1.3
 
