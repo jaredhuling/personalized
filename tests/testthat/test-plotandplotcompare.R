@@ -56,13 +56,16 @@ test_that("test plotting for continuous outcomes with various options", {
     subgrp.model2 <- fit.subgroup(x = x, y = y,
                                  trt = trt01,
                                  propensity.func = prop.func,
-                                 loss   = "sq_loss_lasso_gam",
+                                 loss   = "owl_logistic_loss_lasso",
                                  cutpoint = "quant50",
                                  nfolds = 5)              # option for cv.glmnet
 
     expect_is(subgrp.model2, "subgroup_fitted")
 
     subgrp.val <- validate.subgroup(subgrp.model, B = 10,
+                                    method = "training")
+
+    subgrp.val2 <- validate.subgroup(subgrp.model2, B = 10,
                                     method = "training")
 
     expect_is(subgrp.val, "subgroup_validated")
@@ -107,6 +110,10 @@ test_that("test plotting for continuous outcomes with various options", {
 
     expect_is(pl, "ggplot")
 
+    pl <- plot(subgrp.val, type = "conditional")
+
+    expect_is(pl, "ggplot")
+
     pl <- plot(subgrp.val, type = "stability")
 
     expect_is(pl, "plotly")
@@ -121,6 +128,12 @@ test_that("test plotting for continuous outcomes with various options", {
 
     expect_is(pl, "ggplot")
 
+    pl <- plotCompare(subgrp.model, subgrp.model2, type = "conditional")
+
+    expect_is(pl, "ggplot")
+
+    expect_error(plotCompare(subgrp.model, subgrp.val, type = "conditional"))
+
     pl <- plotCompare(subgrp.model, subgrp.model2, type = "density", avg.line = FALSE)
 
     expect_is(pl, "ggplot")
@@ -132,6 +145,10 @@ test_that("test plotting for continuous outcomes with various options", {
 
 
     pl <- plotCompare(subgrp.model, subgrp.val, type = "boxplot")
+
+    expect_is(pl, "ggplot")
+
+    pl <- plotCompare(subgrp.val, subgrp.val2, type = "conditional")
 
     expect_is(pl, "ggplot")
 

@@ -318,7 +318,7 @@ plotCompare <- function(...,
                              aes(x = Received, y = Value)) +
                 geom_boxplot(aes(fill = Received)) +
                 geom_rug(aes(colour = Received), alpha = 0.85) +
-                facet_grid(Recommended + Model ~ Quantile) +
+                facet_grid(Quantile ~ Recommended + Model) +
                 theme(legend.position = "bottom") +
                 ylab("Average Outcome")
         }
