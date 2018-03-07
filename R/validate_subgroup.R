@@ -11,6 +11,10 @@
 #' @param B integer. number of bootstrap replications or refitting replications.
 #' @param train.fraction fraction (between 0 and 1) of samples to be used for training in
 #' training/test replication. Only used for \code{method = "training_test_replication"}
+#' @param benefit.score.quantiles a vector of quantiles (between 0 and 1) of the benefit score values
+#' for which to return bootstrapped information about the subgroups. ie if one of the quantile values is 0.5, the
+#' median value of the benefit scores will be used as a cutoff to determine subgroups and summary statistics
+#' will be returned about these subgroups
 #' @param parallel Should the loop over replications be parallelized? If \code{FALSE}, then no, if \code{TRUE}, then yes.
 #' If user sets \code{parallel = TRUE} and the fitted \code{fit.subgroup()} object uses the parallel version of
 #' an internal model, say for \code{cv.glmnet()}, then the internal parallelization will be overridden so as
@@ -106,6 +110,7 @@ validate.subgroup <- function(model,
                               method         = c("training_test_replication",
                                                  "boot_bias_correction"),
                               train.fraction = 0.5,
+                              benefit.score.quantiles = c(0.1666667, 0.3333333, 0.5000000, 0.6666667, 0.8333333),
                               parallel       = FALSE)
 {
     method <- match.arg(method)
@@ -153,6 +158,26 @@ validate.subgroup <- function(model,
         model$call$parallel <- FALSE
     }
 
+    if (!all(benefit.score.quantiles < 1) || !all(benefit.score.quantiles > 0) )
+    {
+        stop("all quantile values must be strictly between 0 and 1")
+    }
+
+    if (is.null(benefit.score.quantiles))
+    {
+        benefit.score.quantiles <- seq(0, 1, length.out = 7)[-c(1,7)]
+    }
+
+    if (!is.vector(benefit.score.quantiles)) stop("benefit.score.quantiles must be a vector")
+
+    n.quantiles <- length(benefit.score.quantiles)
+
+    if (n.quantiles < 1)
+    {
+        benefit.score.quantiles <- seq(0, 1, length.out = 7)[-c(1,7)]
+        n.quantiles <- length(benefit.score.quantiles)
+    }
+
     n.obs <- NROW(x)
 
     # create objects to store results
@@ -168,6 +193,24 @@ validate.subgroup <- function(model,
     dimnames(boot.list[[2]]) <- dimnames(boot.list[[3]]) <-
         c(list(NULL), dimnames(model$subgroup.trt.effects$avg.outcomes))
 
+    boot.list.quantiles <- rep(list(boot.list), n.quantiles)
+
+    sbgrp.trt.eff.mod.orig <- vector(mode = "list", length = n.quantiles)
+    for (q in 1:n.quantiles)
+    {
+        cutpt     <- round(100 * benefit.score.quantiles[q])
+        cutpt.txt <- paste0("quant", cutpt)
+
+        # estimate subgroup treatment effects on original data with original model
+        sbgrp.trt.eff.mod.orig[[q]]  <- subgroup.effects(model$benefit.scores,
+                                                         y,
+                                                         trt,
+                                                         model$pi.x,
+                                                         cutpt.txt,
+                                                         model$larger.outcome.better,
+                                                         model$reference.trt)
+    }
+
     if (parallel)
     {
         comb <- function(x, ...)
@@ -176,8 +219,7 @@ validate.subgroup <- function(model,
                    function(i) c(x[[i]], lapply(list(...), function(y) y[[i]])))
         }
 
-        outlist <- foreach(i = seq(B), .combine = "comb", .multicombine = TRUE,
-                           .init=list(list(), list(), list(), list(), list())) %dopar%
+        outlist <- foreach(i = seq(B) ) %dopar% #, .combine = "comb", .multicombine = TRUE, .init=list(list(), list(), list(), list(), list()))
                            {
                                if (method == "training_test_replication")
                                {
@@ -227,11 +269,35 @@ validate.subgroup <- function(model,
                                                                            model$reference.trt)
 
                                    # save results
-                                   res  <- list(sbgrp.trt.eff.test[[1]],
-                                                sbgrp.trt.eff.test[[2]],
-                                                sbgrp.trt.eff.test[[3]],
-                                                as.vector(mod.b$coefficients),
-                                                sbgrp.trt.eff.test[[4]])
+
+                                   res  <- rep(list(list(sbgrp.trt.eff.test[[1]],
+                                                    sbgrp.trt.eff.test[[2]],
+                                                    sbgrp.trt.eff.test[[3]],
+                                                    as.vector(mod.b$coefficients),
+                                                    sbgrp.trt.eff.test[[4]])), 1 + n.quantiles)
+
+                                   for (q in 1:n.quantiles)
+                                   {
+
+                                       cutpt     <- round(100 * benefit.score.quantiles[q])
+                                       cutpt.txt <- paste0("quant", cutpt)
+
+                                       # estimate subgroup treatment effects on test data
+                                       sbgrp.trt.eff.test.q  <- subgroup.effects(benefit.scores.test,
+                                                                                 y.test, trt.test,
+                                                                                 pi.x.test,
+                                                                                 cutpt.txt,
+                                                                                 model$larger.outcome.better,
+                                                                                 model$reference.trt)
+
+                                       # save results
+                                       res[[1 + q]][[1]] <- sbgrp.trt.eff.test.q[[1]]
+                                       res[[1 + q]][[2]] <- sbgrp.trt.eff.test.q[[2]]
+                                       res[[1 + q]][[3]] <- sbgrp.trt.eff.test.q[[3]]
+                                       res[[1 + q]][[4]] <- as.vector(mod.b$coefficients)
+                                       res[[1 + q]][[5]] <- sbgrp.trt.eff.test.q[[4]]
+
+                                   }
 
                                } else if (method == "boot_bias_correction")
                                {   # bootstrap bias correction
@@ -248,8 +314,10 @@ validate.subgroup <- function(model,
                                        samp.idx    <- unlist(samp.lookup)
                                        # Remap matching IDs so that each cluster draw is assigned a unique matching ID
                                        samp.lengths           <- lapply(samp.lookup,length)
-                                       model$call$match.id <- unlist(lapply(1:length(samp.lengths),function(z){rep(z,samp.lengths[[z]])}))
+                                       model$call$match.id <- unlist(lapply(1:length(samp.lengths),function(z) {rep(z,samp.lengths[[z]])}))
                                    }
+
+
                                    model$call$x   <- x[samp.idx,]
 
                                    if (is.matrix(y))
@@ -271,21 +339,61 @@ validate.subgroup <- function(model,
                                    benefit.scores.orig <- mod.b$predict(x)
 
                                    sbgrp.trt.eff.orig  <- subgroup.effects(benefit.scores.orig,
-                                                                           y, trt, pi.x.b,
+                                                                           y, trt, model$pi.x,
                                                                            model$call$cutpoint,
                                                                            model$larger.outcome.better,
                                                                            model$reference.trt)
 
                                    # subtract estimated bias for current bootstrap iteration
-                                   res  <- list(model$subgroup.trt.effects[[1]] -
-                                                    (mod.b$subgroup.trt.effects[[1]] - sbgrp.trt.eff.orig[[1]]), # bias estimate portion
-                                                model$subgroup.trt.effects[[2]] -
-                                                    (mod.b$subgroup.trt.effects[[2]] - sbgrp.trt.eff.orig[[2]]), # bias estimate portion
-                                                model$subgroup.trt.effects[[3]] -
-                                                    (mod.b$subgroup.trt.effects[[3]] - sbgrp.trt.eff.orig[[3]]), # bias estimate portion
-                                                as.vector(mod.b$coefficients),
-                                                model$subgroup.trt.effects[[4]] -
-                                                    (mod.b$subgroup.trt.effects[[4]] - sbgrp.trt.eff.orig[[4]])) # bias estimate portion
+                                   res  <- rep(list(list(model$subgroup.trt.effects[[1]] -
+                                                             (mod.b$subgroup.trt.effects[[1]] - sbgrp.trt.eff.orig[[1]]), # bias estimate portion
+                                                         model$subgroup.trt.effects[[2]] -
+                                                             (mod.b$subgroup.trt.effects[[2]] - sbgrp.trt.eff.orig[[2]]), # bias estimate portion
+                                                         model$subgroup.trt.effects[[3]] -
+                                                             (mod.b$subgroup.trt.effects[[3]] - sbgrp.trt.eff.orig[[3]]), # bias estimate portion
+                                                         as.vector(mod.b$coefficients),
+                                                         model$subgroup.trt.effects[[4]] -
+                                                             (mod.b$subgroup.trt.effects[[4]] - sbgrp.trt.eff.orig[[4]]))), 1 + n.quantiles)
+                                   # bias estimate portion
+
+
+                                   for (q in 1:n.quantiles)
+                                   {
+
+                                       cutpt     <- round(100 * benefit.score.quantiles[q])
+                                       cutpt.txt <- paste0("quant", cutpt)
+
+                                       # estimate subgroup treatment effects on original data with resampled model
+                                       sbgrp.trt.eff.orig.q  <- subgroup.effects(benefit.scores.orig,
+                                                                                 y,
+                                                                                 trt,
+                                                                                 model$pi.x,
+                                                                                 cutpt.txt,
+                                                                                 model$larger.outcome.better,
+                                                                                 model$reference.trt)
+
+                                       # estimate subgroup treatment effects on resampled data with resampled model
+                                       sbgrp.trt.eff.mod  <- subgroup.effects(mod.b$benefit.scores,
+                                                                              y[samp.idx],
+                                                                              trt[samp.idx],
+                                                                              pi.x.b,
+                                                                              cutpt.txt,
+                                                                              model$larger.outcome.better,
+                                                                              model$reference.trt)
+
+
+                                       # save results
+                                       # subtract estimated bias for current bootstrap iteration
+                                       res[[1 + q]][[1]]  <- sbgrp.trt.eff.mod.orig[[q]][[1]] -
+                                           (sbgrp.trt.eff.mod[[1]] - sbgrp.trt.eff.orig.q[[1]]) # bias estimate portion
+                                       res[[1 + q]][[2]]  <- sbgrp.trt.eff.mod.orig[[q]][[2]] -
+                                           (sbgrp.trt.eff.mod[[2]] - sbgrp.trt.eff.orig.q[[2]]) # bias estimate portion
+                                       res[[1 + q]][[3]]  <- sbgrp.trt.eff.mod.orig[[q]][[3]] -
+                                           (sbgrp.trt.eff.mod[[3]] - sbgrp.trt.eff.orig.q[[3]]) # bias estimate portion
+                                       res[[1 + q]][[4]]  <- as.vector(mod.b$coefficients)
+                                       res[[1 + q]][[5]]  <- sbgrp.trt.eff.mod.orig[[q]][[4]] -
+                                           (sbgrp.trt.eff.mod[[4]] - sbgrp.trt.eff.orig.q[[4]]) # bias estimate portion
+                                   }
 
                                }
 
@@ -293,15 +401,27 @@ validate.subgroup <- function(model,
                            } # end parallel foreach loop
 
         ## collect results as they are collected for non-parallel loop
-        boot.list[[1]] <- unname(Reduce('rbind', outlist[[1]]))
+        #boot.list[[1]] <- unname(Reduce('rbind', outlist[[1]]))
         for (b in 1:B)
         {
-            boot.list[[2]][b,,] <- outlist[[2]][[b]]
-            boot.list[[3]][b,,] <- outlist[[3]][[b]]
+            boot.list[[1]][b,]  <- outlist[[b]][[1]][[1]]
+            boot.list[[2]][b,,] <- outlist[[b]][[1]][[2]]
+            boot.list[[3]][b,,] <- outlist[[b]][[1]][[3]]
+            boot.list[[4]][,b]  <- outlist[[b]][[1]][[4]]
+            boot.list[[5]][b]   <- outlist[[b]][[1]][[5]]
+
+            for (q in 1:n.quantiles)
+            {
+                boot.list.quantiles[[q]][[1]][b,]  <- outlist[[b]][[1 + q]][[1]]
+                boot.list.quantiles[[q]][[2]][b,,] <- outlist[[b]][[1 + q]][[2]]
+                boot.list.quantiles[[q]][[3]][b,,] <- outlist[[b]][[1 + q]][[3]]
+                boot.list.quantiles[[q]][[4]][,b]  <- outlist[[b]][[1 + q]][[4]]
+                boot.list.quantiles[[q]][[5]][b]   <- outlist[[b]][[1 + q]][[5]]
+            }
         }
 
-        boot.list[[4]] <- unname(Reduce('cbind', outlist[[4]]))
-        boot.list[[5]] <- unname(Reduce('c', outlist[[5]]))
+        #boot.list[[4]] <- unname(Reduce('cbind', outlist[[4]]))
+        #boot.list[[5]] <- unname(Reduce('c', outlist[[5]]))
         rm(outlist)
     } else
     {
@@ -361,6 +481,29 @@ validate.subgroup <- function(model,
                 boot.list[[4]][,b]  <- as.vector(mod.b$coefficients)
                 boot.list[[5]][b]   <- sbgrp.trt.eff.test[[4]]
 
+                for (q in 1:n.quantiles)
+                {
+
+                    cutpt <- round(100 * benefit.score.quantiles[q])
+                    cutpt.txt <- paste0("quant", cutpt)
+
+                    # estimate subgroup treatment effects on test data
+                    sbgrp.trt.eff.test.q  <- subgroup.effects(benefit.scores.test,
+                                                              y.test, trt.test,
+                                                              pi.x.test,
+                                                              cutpt.txt,
+                                                              model$larger.outcome.better,
+                                                              model$reference.trt)
+
+                    # save results
+                    boot.list.quantiles[[q]][[1]][b,]  <- sbgrp.trt.eff.test.q[[1]]
+                    boot.list.quantiles[[q]][[2]][b,,] <- sbgrp.trt.eff.test.q[[2]]
+                    boot.list.quantiles[[q]][[3]][b,,] <- sbgrp.trt.eff.test.q[[3]]
+                    boot.list.quantiles[[q]][[4]][,b]  <- as.vector(mod.b$coefficients)
+                    boot.list.quantiles[[q]][[5]][b]   <- sbgrp.trt.eff.test.q[[4]]
+
+                }
+
             } else if (method == "boot_bias_correction")
             {   # bootstrap bias correction
 
@@ -398,7 +541,7 @@ validate.subgroup <- function(model,
                 benefit.scores.orig <- mod.b$predict(x)
 
                 sbgrp.trt.eff.orig  <- subgroup.effects(benefit.scores.orig,
-                                                        y, trt, pi.x.b,
+                                                        y, trt, model$pi.x,
                                                         model$call$cutpoint,
                                                         model$larger.outcome.better,
                                                         model$reference.trt)
@@ -413,6 +556,43 @@ validate.subgroup <- function(model,
                 boot.list[[4]][,b]  <- as.vector(mod.b$coefficients)
                 boot.list[[5]][b]   <- model$subgroup.trt.effects[[4]] -
                     (mod.b$subgroup.trt.effects[[4]] - sbgrp.trt.eff.orig[[4]]) # bias estimate portion
+
+
+                for (q in 1:n.quantiles)
+                {
+
+                    cutpt <- round(100 * benefit.score.quantiles[q])
+                    cutpt.txt <- paste0("quant", cutpt)
+
+                    # estimate subgroup treatment effects on original data with resampled model
+                    sbgrp.trt.eff.orig  <- subgroup.effects(benefit.scores.orig,
+                                                            y, trt, model$pi.x,
+                                                            cutpt.txt,
+                                                            model$larger.outcome.better,
+                                                            model$reference.trt)
+
+                    # estimate subgroup treatment effects on resampled data with resampled model
+                    sbgrp.trt.eff.mod  <- subgroup.effects(mod.b$benefit.scores,
+                                                           y[samp.idx],
+                                                           trt[samp.idx],
+                                                           pi.x.b,
+                                                           cutpt.txt,
+                                                           model$larger.outcome.better,
+                                                           model$reference.trt)
+
+                    # save results
+                    # subtract estimated bias for current bootstrap iteration
+                    boot.list.quantiles[[q]][[1]][b,]  <- sbgrp.trt.eff.mod.orig[[q]][[1]] -
+                        (sbgrp.trt.eff.mod[[1]] - sbgrp.trt.eff.orig[[1]]) # bias estimate portion
+                    boot.list.quantiles[[q]][[2]][b,,] <- sbgrp.trt.eff.mod.orig[[q]][[2]] -
+                        (sbgrp.trt.eff.mod[[2]] - sbgrp.trt.eff.orig[[2]]) # bias estimate portion
+                    boot.list.quantiles[[q]][[3]][b,,] <- sbgrp.trt.eff.mod.orig[[q]][[3]] -
+                        (sbgrp.trt.eff.mod[[3]] - sbgrp.trt.eff.orig[[3]]) # bias estimate portion
+                    boot.list.quantiles[[q]][[4]][,b]  <- as.vector(mod.b$coefficients)
+                    boot.list.quantiles[[q]][[5]][b]   <- sbgrp.trt.eff.mod.orig[[q]][[4]] -
+                        (sbgrp.trt.eff.mod[[4]] - sbgrp.trt.eff.orig[[4]]) # bias estimate portion
+
+                }
 
             }
         } ## end resampling loop
@@ -430,17 +610,48 @@ validate.subgroup <- function(model,
     summary.stats    <- list(colMeans(boot.list[[1]], na.rm = TRUE),
                              apply(boot.list[[2]], c(2, 3), function(x) mean(x, na.rm = TRUE)),
                              apply(boot.list[[3]], c(2, 3), function(x) mean(x, na.rm = TRUE)),
-                             mean(boot.list[[4]], na.rm = TRUE))
+                             mean(boot.list[[5]], na.rm = TRUE))
 
     summary.stats.se <- list(apply(boot.list[[1]], 2, function(x) sd(x, na.rm = TRUE)),
                              apply(boot.list[[2]], c(2, 3), function(x) sd(x, na.rm = TRUE)),
                              apply(boot.list[[3]], c(2, 3), function(x) sd(x, na.rm = TRUE)),
-                             sd(boot.list[[4]], na.rm = TRUE))
+                             sd(boot.list[[5]], na.rm = TRUE))
 
     names(summary.stats) <- names(model$subgroup.trt.effects)
     names(boot.list) <- 1:length(names(boot.list))
     names(boot.list)[c(1:3, 5)] <- names(summary.stats)
     names(boot.list)[4] <- "coefficients"
+
+    summary.stats.quantile <- summary.stats.quantile.se <- vector(mode = "list", length = n.quantiles)
+    for (q in 1:n.quantiles)
+    {
+        summary.stats.quantile[[q]]    <- list(colMeans(boot.list.quantiles[[q]][[1]], na.rm = TRUE),
+                                               apply(boot.list.quantiles[[q]][[2]], c(2, 3), function(x) mean(x, na.rm = TRUE)),
+                                               apply(boot.list.quantiles[[q]][[3]], c(2, 3), function(x) mean(x, na.rm = TRUE)),
+                                               mean(boot.list.quantiles[[q]][[5]], na.rm = TRUE))
+
+        summary.stats.quantile.se[[q]] <- list(apply(boot.list.quantiles[[q]][[1]], 2, function(x) sd(x, na.rm = TRUE)),
+                                               apply(boot.list.quantiles[[q]][[2]], c(2, 3), function(x) sd(x, na.rm = TRUE)),
+                                               apply(boot.list.quantiles[[q]][[3]], c(2, 3), function(x) sd(x, na.rm = TRUE)),
+                                               sd(boot.list.quantiles[[q]][[5]], na.rm = TRUE))
+
+        names(summary.stats.quantile[[q]]) <- names(model$subgroup.trt.effects)
+
+        names(summary.stats.quantile[[q]]$subgroup.effects) <- names(model$subgroup.trt.effects$subgroup.effects)
+        dimnames(summary.stats.quantile[[q]]$sample.sizes)  <- dimnames(model$subgroup.trt.effects$sample.sizes)
+
+        names(summary.stats.quantile.se[[q]][[1]])          <- names(model$subgroup.trt.effects$subgroup.effects)
+        dimnames(summary.stats.quantile.se[[q]][[3]])       <- dimnames(model$subgroup.trt.effects$sample.sizes)
+
+        names(summary.stats.quantile.se[[q]]) <- paste("SE", names(summary.stats), sep = ".")
+
+        names(boot.list.quantiles[[q]]) <- 1:length(names(boot.list))
+        names(boot.list.quantiles[[q]])[c(1:3, 5)] <- names(summary.stats)
+        names(boot.list.quantiles[[q]])[4] <- "coefficients"
+    }
+
+    names(summary.stats.quantile) <- names(summary.stats.quantile.se) <-
+        names(boot.list.quantiles) <- paste0("Quant_", round(100 * benefit.score.quantiles))
 
 
     names(summary.stats$subgroup.effects) <- names(model$subgroup.trt.effects$subgroup.effects)
@@ -451,10 +662,14 @@ validate.subgroup <- function(model,
 
     names(summary.stats.se) <- paste("SE", names(summary.stats), sep = ".")
 
+    names(summary.stats.quantile) <- names(summary.stats.quantile.se) <- paste0("Quantile_", round(100 * benefit.score.quantiles))
 
     ret <- list(avg.results  = summary.stats,    # means
                 se.results   = summary.stats.se, # std errors
                 boot.results = boot.list,        # this is a list of results for each iter
+                avg.quantile.results = summary.stats.quantile,
+                se.quantile.results  = summary.stats.quantile.se,
+                boot.results.quantiles = boot.list.quantiles,
                 family       = model$family,     # model family
                 loss         = model$loss,       # model loss
                 method       = model$method,     # subgroup method (weighting vs a-learning)

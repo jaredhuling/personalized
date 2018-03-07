@@ -10,7 +10,7 @@
   "interaction", "conditional"), avg.line = TRUE, ...)
 
 \method{plot}{subgroup_validated}(x, type = c("boxplot", "density",
-  "interaction", "stability"), avg.line = TRUE, ...)
+  "interaction", "conditional", "stability"), avg.line = TRUE, ...)
 }
 \arguments{
 \item{x}{fitted object returned by \code{validate.subgroup()} or \code{fit.subgroup()} function}

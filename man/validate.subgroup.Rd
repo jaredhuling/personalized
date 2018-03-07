@@ -5,7 +5,9 @@
 \title{Validating fitted subgroup identification models}
 \usage{
 validate.subgroup(model, B = 50L, method = c("training_test_replication",
-  "boot_bias_correction"), train.fraction = 0.5, parallel = FALSE)
+  "boot_bias_correction"), train.fraction = 0.5,
+  benefit.score.quantiles = c(0.1666667, 0.3333333, 0.5, 0.6666667,
+  0.8333333), parallel = FALSE)
 }
 \arguments{
 \item{model}{fitted model object returned by \code{fit.subgroup()} function}
@@ -19,6 +21,11 @@ for this option)}
 
 \item{train.fraction}{fraction (between 0 and 1) of samples to be used for training in
 training/test replication. Only used for \code{method = "training_test_replication"}}
+
+\item{benefit.score.quantiles}{a vector of quantiles (between 0 and 1) of the benefit score values
+for which to return bootstrapped information about the subgroups. ie if one of the quantile values is 0.5, the
+median value of the benefit scores will be used as a cutoff to determine subgroups and summary statistics
+will be returned about these subgroups}
 
 \item{parallel}{Should the loop over replications be parallelized? If \code{FALSE}, then no, if \code{TRUE}, then yes.
 If user sets \code{parallel = TRUE} and the fitted \code{fit.subgroup()} object uses the parallel version of

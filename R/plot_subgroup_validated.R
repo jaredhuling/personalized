@@ -43,7 +43,7 @@
 #'
 #' @export
 plot.subgroup_validated <- function(x,
-                                    type = c("boxplot", "density", "interaction", "stability"),
+                                    type = c("boxplot", "density", "interaction", "conditional", "stability"),
                                     avg.line = TRUE,
                                     ...)
 {
@@ -61,26 +61,54 @@ plot.subgroup_validated <- function(x,
     n.entries <- prod(boot.dims[2:3])
     B <- boot.dims[1]
 
-    res.2.plot <- array(NA, dim = c(B * n.entries, 3))
-    colnames(res.2.plot) <- c("Recommended", "Received", "Value")
-    res.2.plot <- data.frame(res.2.plot)
-
     avg.res.2.plot <- data.frame(Recommended = rep(colnames(avg.res$avg.outcomes),
                                                    each = ncol(avg.res$avg.outcomes)),
                                  Received    = rep(rownames(avg.res$avg.outcomes),
                                                    ncol(avg.res$avg.outcomes)),
                                  Value       = as.vector(avg.res$avg.outcomes))
 
-    Recommended <- Received <- Value <- bs <- Outcome <- NULL
+    Recommended <- Received <- Value <- bs <- Quantile <- Outcome <- NULL
 
-    for (b in 1:B)
+    if (type == "conditional")
     {
-        cur.idx <- c(((b - 1) * n.entries + 1):(b * n.entries))
-        res.2.plot[cur.idx, 1] <- rep(colnames(boot.res[b,,]),
-                                      each = ncol(boot.res[b,,]))
-        res.2.plot[cur.idx, 2] <- rep(rownames(boot.res[b,,]),
-                                      ncol(boot.res[b,,]))
-        res.2.plot[cur.idx, 3] <- as.vector(boot.res[b,,])
+        n.quantiles    <- length(x$boot.results.quantiles)
+        quantile.names <- paste("Cutoff:", names(x$boot.results.quantiles))
+
+        res.2.plot <- array(NA, dim = c(B * n.entries * n.quantiles, 4))
+        colnames(res.2.plot) <- c("Recommended", "Received", "Value", "Quantile")
+        res.2.plot <- data.frame(res.2.plot)
+
+        ct <- 0
+        for (q in 1:n.quantiles)
+        {
+            for (b in 1:B)
+            {
+                res.cur.mat <- x$boot.results.quantiles[[q]]$avg.outcomes[b,,]
+                cur.idx <- c(((b - 1) * n.entries + 1):(b * n.entries)) + ct
+                res.2.plot[cur.idx, 1] <- rep(colnames(res.cur.mat),
+                                              each = ncol(res.cur.mat))
+                res.2.plot[cur.idx, 2] <- rep(rownames(res.cur.mat),
+                                              ncol(res.cur.mat))
+                res.2.plot[cur.idx, 3] <- as.vector(res.cur.mat)
+                res.2.plot[cur.idx, 4] <- quantile.names[q]
+
+            }
+            ct <- ct + B * n.entries
+        }
+    } else
+    {
+        res.2.plot <- array(NA, dim = c(B * n.entries, 3))
+        colnames(res.2.plot) <- c("Recommended", "Received", "Value")
+        res.2.plot <- data.frame(res.2.plot)
+        for (b in 1:B)
+        {
+            cur.idx <- c(((b - 1) * n.entries + 1):(b * n.entries))
+            res.2.plot[cur.idx, 1] <- rep(colnames(boot.res[b,,]),
+                                          each = ncol(boot.res[b,,]))
+            res.2.plot[cur.idx, 2] <- rep(rownames(boot.res[b,,]),
+                                          ncol(boot.res[b,,]))
+            res.2.plot[cur.idx, 3] <- as.vector(boot.res[b,,])
+        }
     }
 
 
@@ -126,6 +154,16 @@ plot.subgroup_validated <- function(x,
             geom_boxplot(aes(fill = Received)) +
             geom_rug(aes(colour = Received), alpha = 0.85) +
             facet_grid( ~ Recommended) +
+            theme(legend.position = "bottom") +
+            ylab(ylab.text) +
+            ggtitle(title.text)
+    } else if (type == "conditional")
+    {
+        pl.obj <- ggplot(res.2.plot,
+                         aes(x = Received, y = Value)) +
+            geom_boxplot(aes(fill = Received)) +
+            geom_rug(aes(colour = Received), alpha = 0.85) +
+            facet_grid(Recommended ~ Quantile) +
             theme(legend.position = "bottom") +
             ylab(ylab.text) +
             ggtitle(title.text)

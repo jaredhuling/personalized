@@ -273,7 +273,8 @@ subgroup.effects <- function(benefit.scores, y, trt,
         overall.subgroup.effect <- restricted.mean.agree - restricted.mean.disagree
     } else
     {
-        overall.subgroup.effect <- weighted.mean(y[idx.agree], w = wts[idx.agree]) - weighted.mean(y[!idx.agree], w = wts[!idx.agree])
+        overall.subgroup.effect <- weighted.mean(y[idx.agree], w = wts[idx.agree]) -
+            weighted.mean(y[!idx.agree], w = wts[!idx.agree])
     }
 
     #res.mat[1,1] <- mean.11
