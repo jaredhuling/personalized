@@ -88,6 +88,7 @@ plot(subgrp.model, type = "conditional")
 
 valmod <- validate.subgroup(subgrp.model, B = 3,
                           method = "training_test",
+                          benefit.score.quantiles = c(0.25, 0.5, 0.75),
                           train.fraction = 0.75)
 valmod$avg.results
 
@@ -95,6 +96,11 @@ plot(valmod)
 
 
 plot(valmod, type = "interaction")
+
+# see how summary statistics of subgroups change
+# when the subgroups are defined based on different cutoffs
+# (25th quantile of bene score, 50th, and 75th)
+plot(valmod, type = "conditional")
 
 # visualize the frequency of particular variables
 # of being selected across the resampling iterations with
