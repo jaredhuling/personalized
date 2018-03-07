@@ -100,11 +100,13 @@ plotCompare <- function(...,
 
     type <- match.arg(type)
 
-    is_fitted_obj <- sapply(list.obj, function(lo) (class(lo)[1] == "subgroup_fitted"))
+    is_fitted_obj    <- sapply(list.obj, function(lo) (class(lo)[1] == "subgroup_fitted"))
+    is_validated_obj <- sapply(list.obj, function(lo) (class(lo)[1] == "subgroup_validated"))
 
-    if (type == "conditional" & !all(is_fitted_obj))
+    if (type == "conditional" & (!all(is_fitted_obj) & !all(is_validated_obj)))
     {
-        stop("Only subgroup_fitted objects allowed for type = 'conditional'")
+        stop("type == 'conditional' only allowed if all objects are subgroup_fitted or subgroup_validated,
+             not a mix of the two")
     }
 
     all_binom <- all(sapply(list.obj, function(lo) lo$family == "binomial"))
@@ -206,18 +208,47 @@ plotCompare <- function(...,
                 n.entries <- prod(boot.dims[2:3])
                 B <- boot.dims[1]
 
-                res.2.plot <- array(NA, dim = c(B * n.entries, 3))
-                colnames(res.2.plot) <- c("Recommended", "Received", "Value")
-                res.2.plot <- data.frame(res.2.plot)
-
-                for (b in 1:B)
+                if (type != "conditional")
                 {
-                    cur.idx <- c(((b - 1) * n.entries + 1):(b * n.entries))
-                    res.2.plot[cur.idx, 1] <- rep(colnames(boot.res[b,,]),
-                                                  each = ncol(boot.res[b,,]))
-                    res.2.plot[cur.idx, 2] <- rep(rownames(boot.res[b,,]),
-                                                  ncol(boot.res[b,,]))
-                    res.2.plot[cur.idx, 3] <- as.vector(boot.res[b,,])
+                    res.2.plot <- array(NA, dim = c(B * n.entries, 3))
+                    colnames(res.2.plot) <- c("Recommended", "Received", "Value")
+                    res.2.plot <- data.frame(res.2.plot)
+
+                    for (b in 1:B)
+                    {
+                        cur.idx <- c(((b - 1) * n.entries + 1):(b * n.entries))
+                        res.2.plot[cur.idx, 1] <- rep(colnames(boot.res[b,,]),
+                                                      each = ncol(boot.res[b,,]))
+                        res.2.plot[cur.idx, 2] <- rep(rownames(boot.res[b,,]),
+                                                      ncol(boot.res[b,,]))
+                        res.2.plot[cur.idx, 3] <- as.vector(boot.res[b,,])
+                    }
+                } else
+                {
+                    n.quantiles    <- length(list.obj[[l]]$boot.results.quantiles)
+                    quantile.names <- paste("Cutoff:", names(list.obj[[l]]$boot.results.quantiles))
+
+                    res.2.plot <- array(NA, dim = c(B * n.entries * n.quantiles, 4))
+                    colnames(res.2.plot) <- c("Recommended", "Received", "Value", "Quantile")
+                    res.2.plot <- data.frame(res.2.plot)
+
+                    ct <- 0
+                    for (q in 1:n.quantiles)
+                    {
+                        for (b in 1:B)
+                        {
+                            res.cur.mat <- list.obj[[l]]$boot.results.quantiles[[q]]$avg.outcomes[b,,]
+                            cur.idx <- c(((b - 1) * n.entries + 1):(b * n.entries)) + ct
+                            res.2.plot[cur.idx, 1] <- rep(colnames(res.cur.mat),
+                                                          each = ncol(res.cur.mat))
+                            res.2.plot[cur.idx, 2] <- rep(rownames(res.cur.mat),
+                                                          ncol(res.cur.mat))
+                            res.2.plot[cur.idx, 3] <- as.vector(res.cur.mat)
+                            res.2.plot[cur.idx, 4] <- quantile.names[q]
+
+                        }
+                        ct <- ct + B * n.entries
+                    }
                 }
 
             }
@@ -254,30 +285,42 @@ plotCompare <- function(...,
         }
     } else if (type == "conditional")
     {
-        if (all_binom)
+        if (all(is_fitted_obj))
         {
-            pl.obj <- ggplot(res.2.plot,
-                             aes(x = bs, y = Outcome,
-                                 group = factor(Received),
-                                 color = factor(Received) )) +
-                geom_point() +
-                geom_smooth(method = "gam", method.args = list(family = "binomial")) +
-                facet_grid( ~ Model) +
-                theme(legend.position = "bottom") +
-                scale_color_discrete(name = "Received") +
-                ggtitle("Individual Observations by Treatment Group")
+            if (all_binom)
+            {
+                pl.obj <- ggplot(res.2.plot,
+                                 aes(x = bs, y = Outcome,
+                                     group = factor(Received),
+                                     color = factor(Received) )) +
+                    geom_point() +
+                    geom_smooth(method = "gam", method.args = list(family = "binomial")) +
+                    facet_grid( ~ Model) +
+                    theme(legend.position = "bottom") +
+                    scale_color_discrete(name = "Received") +
+                    ggtitle("Individual Observations by Treatment Group")
+            } else
+            {
+                pl.obj <- ggplot(res.2.plot,
+                                 aes(x = bs, y = Outcome,
+                                     group = factor(Received),
+                                     color = factor(Received) )) +
+                    geom_point() +
+                    geom_smooth(method = "gam") +
+                    facet_grid( ~ Model) +
+                    theme(legend.position = "bottom") +
+                    scale_color_discrete(name = "Received") +
+                    ggtitle("Individual Observations by Treatment Group")
+            }
         } else
         {
             pl.obj <- ggplot(res.2.plot,
-                             aes(x = bs, y = Outcome,
-                                 group = factor(Received),
-                                 color = factor(Received) )) +
-                geom_point() +
-                geom_smooth(method = "gam") +
-                facet_grid( ~ Model) +
+                             aes(x = Received, y = Value)) +
+                geom_boxplot(aes(fill = Received)) +
+                geom_rug(aes(colour = Received), alpha = 0.85) +
+                facet_grid(Recommended + Model ~ Quantile) +
                 theme(legend.position = "bottom") +
-                scale_color_discrete(name = "Received") +
-                ggtitle("Individual Observations by Treatment Group")
+                ylab("Average Outcome")
         }
     } else if (type == "boxplot")
     {
