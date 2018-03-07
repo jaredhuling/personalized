@@ -2,7 +2,7 @@
 
 * add quantile and median cutpoints as options
 * fixes subgroup effect calculation to account for weights
-* add conditional plots
+* add conditional plots for fitted and validated objects
 
 ## Test environments
 

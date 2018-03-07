@@ -1,3 +1,7 @@
+# personalized 0.1.4
+
+* Added plots of means within treatment groups as the benefit scores are varied
+
 # personalized 0.1.3
 
 * Added NSW Study dataset
