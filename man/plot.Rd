@@ -22,8 +22,11 @@ case the test results will be plotted. \code{"boxplot"} results in boxplots acro
 the bootstrap or training/test re-fitting. For the latter
 case the test results will be plotted. \code{"interaction"} creates an
 interaction plot for the different subgroups (crossing lines here means a meaningful subgroup).
-\code{"conditional"} plots smoothed (via a GAM smoother) means of the outcomes as a function of the estimated benefit score
-separately for the treated and untreated groups.}
+\code{"conditional"} For subgroup_fitted objects, plots smoothed (via a GAM smoother) means of the outcomes as a function of the estimated benefit score
+separately for the treated and untreated groups. For subgroup_validated objects, boxplots of summary statistics
+within subgroups will be plotted as subgroups are defined by different cutoffs of the benefit scores.
+These cutoffs can be specified via the \code{benefit.score.quantiles} argument of
+\code{\link[personalized]{validate.subgroup}}.}
 
 \item{avg.line}{boolean value of whether or not to plot a line for the average
 value in addition to the density (only valid for \code{type = "density"})}
