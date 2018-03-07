@@ -129,7 +129,10 @@ class and <code>type = 'linear.predictor'</code> yields estimated function (the 
       <th>cutpoint</th>
       <td><p>numeric value for patients with benefit scores above which
 (or below which if <code>larger.outcome.better = FALSE</code>)
-will be recommended to be in the treatment group</p></td>
+will be recommended to be in the treatment group. Can also set <code>cutpoint = "median"</code>, which will
+use the median value of the benefit scores as the cutpoint or can set specific quantile values via <code>"quantx"</code>
+where <code>"x"</code> is a number between 0 and 100 representing the quantile value; e.g. <code>cutpoint = "quant75"</code>
+will use the 75th perent upper quantile of the benefit scores as the quantile.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -186,12 +189,12 @@ will be recommended to be in the treatment group</p></td>
 
 <span class='no'>subgrp.model</span>$<span class='no'>subgroup.trt.effects</span></div><div class='output co'>#&gt; $subgroup.effects
 #&gt; 0 effect among recommended 0 1 effect among recommended 1 
-#&gt;                     15.24970                     20.07929 
+#&gt;                     16.52802                     22.55850 
 #&gt; 
 #&gt; $avg.outcomes
 #&gt;            Recommended 0 Recommended 1
-#&gt; Received 0     -10.47437     -26.14607
-#&gt; Received 1     -25.72407      -6.06678
+#&gt; Received 0     -10.03488    -27.368793
+#&gt; Received 1     -26.56290     -4.810295
 #&gt; 
 #&gt; $sample.sizes
 #&gt;            Recommended 0 Recommended 1
@@ -199,7 +202,7 @@ will be recommended to be in the treatment group</p></td>
 #&gt; Received 1           341           236
 #&gt; 
 #&gt; $overall.subgroup.effect
-#&gt; [1] 17.77298
+#&gt; [1] 19.7097
 #&gt; </div><div class='input'><span class='no'>benefit.scores</span> <span class='kw'>&lt;-</span> <span class='fu'>predict</span>(<span class='no'>subgrp.model</span>, <span class='kw'>newx</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"benefit.score"</span>)
 
 <span class='no'>rec.trt.grp</span> <span class='kw'>&lt;-</span> <span class='fu'>predict</span>(<span class='no'>subgrp.model</span>, <span class='kw'>newx</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"trt.group"</span>)</div></pre>

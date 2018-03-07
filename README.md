@@ -148,7 +148,10 @@ print(val.model, digits = 2, sample.pct = TRUE)
     ## Received Trt   -15.81 (SE = 5.9, 24.18%) -15.36 (SE = 9.02, 29.26%)
     ## 
     ## Ctrl effect among recommended Ctrl   Trt effect among recommended Trt 
-    ##          4.97 (SE = 11.23, 44.93%)          3.27 (SE = 11.73, 55.07%)
+    ##          4.97 (SE = 11.23, 44.93%)          3.27 (SE = 11.73, 55.07%) 
+    ## 
+    ## Overall Subgroup Effect 
+    ##         1.2 (SE = 8.77)
 
 Visualize subgroup-specific treatment effect estimates across
 training/testing

@@ -97,7 +97,7 @@
     <p>Plots comparison of results for estimated subgroup treatment effects</p>
     
 
-    <pre class="usage"><span class='fu'>plotCompare</span>(<span class='no'>...</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"boxplot"</span>, <span class='st'>"density"</span>, <span class='st'>"interaction"</span>),
+    <pre class="usage"><span class='fu'>plotCompare</span>(<span class='no'>...</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"boxplot"</span>, <span class='st'>"density"</span>, <span class='st'>"interaction"</span>, <span class='st'>"conditional"</span>),
   <span class='kw'>avg.line</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
@@ -116,7 +116,9 @@ across iterations of either the bootstrap or training/test re-fitting. For the l
 case the test results will be plotted. <code>"boxplot"</code> results in boxplots across all observations/iterations of either
 the bootstrap or training/test re-fitting. For the latter
 case the test results will be plotted. <code>"interaction"</code> creates an
-interaction plot for the different subgroups (crossing lines here means a meaningful subgroup)</p></td>
+interaction plot for the different subgroups (crossing lines here means a meaningful subgroup).
+<code>"conditional"</code> plots smoothed (via a GAM smoother) means of the outcomes as a function of the estimated benefit score
+separately for the treated and untreated groups.</p></td>
     </tr>
     <tr>
       <th>avg.line</th>

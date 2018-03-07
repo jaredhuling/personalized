@@ -207,7 +207,10 @@ Example 1: <code>augment.func &lt;- function(x, y) {lmod &lt;- lm(y ~ x); return
       <th>cutpoint</th>
       <td><p>numeric value for patients with benefit scores above which
 (or below which if <code>larger.outcome.better = FALSE</code>)
-will be recommended to be in the treatment group</p></td>
+will be recommended to be in the treatment group. Can also set <code>cutpoint = "median"</code>, which will
+use the median value of the benefit scores as the cutpoint or can set specific quantile values via <code>"quantx"</code>
+where <code>"x"</code> is a number between 0 and 100 representing the quantile value; e.g. <code>cutpoint = "quant75"</code>
+will use the 75th perent upper quantile of the benefit scores as the quantile.</p></td>
     </tr>
     <tr>
       <th>larger.outcome.better</th>
@@ -319,11 +322,11 @@ from <code>fit.subgroup</code>.</p>
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;                 Recommended 0      Recommended 1
-#&gt; Received 0   -6.8955 (n = 82) -20.5168 (n = 119)
-#&gt; Received 1 -21.0156 (n = 128)  -4.0916 (n = 171)
+#&gt; Received 0   -6.2631 (n = 82) -26.8532 (n = 119)
+#&gt; Received 1 -26.4854 (n = 128)  -1.6497 (n = 171)
 #&gt; 
 #&gt; 0 effect among recommended 0 1 effect among recommended 1 
-#&gt;              14.12 (n = 210)            16.4252 (n = 290) 
+#&gt;            20.2223 (n = 210)            25.2035 (n = 290) 
 #&gt; 
 #&gt; Benefit score quantiles: 
 #&gt;      0%     25%     50%     75%    100% 
@@ -362,11 +365,11 @@ from <code>fit.subgroup</code>.</p>
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;                 Recommended 0     Recommended 1
-#&gt; Received 0 -12.4266 (n = 131) -19.7006 (n = 70)
-#&gt; Received 1 -17.9533 (n = 141) -5.4318 (n = 158)
+#&gt; Received 0 -12.6764 (n = 131) -25.1851 (n = 70)
+#&gt; Received 1 -21.0034 (n = 141)  -2.777 (n = 158)
 #&gt; 
 #&gt; 0 effect among recommended 0 1 effect among recommended 1 
-#&gt;             5.5267 (n = 272)            14.2688 (n = 228) 
+#&gt;              8.327 (n = 272)            22.4081 (n = 228) 
 #&gt; 
 #&gt; Benefit score quantiles: 
 #&gt;      0%     25%     50%     75%    100% 
@@ -385,12 +388,12 @@ from <code>fit.subgroup</code>.</p>
 #&gt; function: propensity.func 
 #&gt; 
 #&gt; Average Outcomes:
-#&gt;              Recommended 0    Recommended 1
-#&gt; Received 0 0.5059 (n = 85) 0.2759 (n = 116)
-#&gt; Received 1   0.2 (n = 130) 0.5266 (n = 169)
+#&gt;               Recommended 0    Recommended 1
+#&gt; Received 0  0.5161 (n = 85) 0.1788 (n = 116)
+#&gt; Received 1 0.1778 (n = 130) 0.5541 (n = 169)
 #&gt; 
 #&gt; 0 effect among recommended 0 1 effect among recommended 1 
-#&gt;             0.3059 (n = 215)             0.2508 (n = 285) 
+#&gt;             0.3383 (n = 215)             0.3753 (n = 285) 
 #&gt; 
 #&gt; Benefit score quantiles: 
 #&gt;      0%     25%     50%     75%    100% 
@@ -409,12 +412,12 @@ from <code>fit.subgroup</code>.</p>
 #&gt; function: propensity.func 
 #&gt; 
 #&gt; Average Outcomes:
-#&gt;                Recommended 0     Recommended 1
-#&gt; Received 0 95.9592 (n = 137)   2.4098 (n = 64)
-#&gt; Received 1 85.5292 (n = 196) 42.1713 (n = 103)
+#&gt;                 Recommended 0     Recommended 1
+#&gt; Received 0 115.7397 (n = 137)   2.2659 (n = 64)
+#&gt; Received 1  78.6273 (n = 196) 40.6071 (n = 103)
 #&gt; 
 #&gt; 0 effect among recommended 0 1 effect among recommended 1 
-#&gt;              10.43 (n = 333)            39.7614 (n = 167) 
+#&gt;            37.1124 (n = 333)            38.3413 (n = 167) 
 #&gt; 
 #&gt; Benefit score quantiles: 
 #&gt;      0%     25%     50%     75%    100% 

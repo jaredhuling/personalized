@@ -97,7 +97,7 @@
     <p>Computes treatment effects within various subgroups to estimate subgroup treatment effects</p>
     
 
-    <pre class="usage"><span class='fu'>subgroup.effects</span>(<span class='no'>benefit.scores</span>, <span class='no'>y</span>, <span class='no'>trt</span>, <span class='kw'>cutpoint</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+    <pre class="usage"><span class='fu'>subgroup.effects</span>(<span class='no'>benefit.scores</span>, <span class='no'>y</span>, <span class='no'>trt</span>, <span class='no'>pi.x</span>, <span class='kw'>cutpoint</span> <span class='kw'>=</span> <span class='fl'>0</span>,
   <span class='kw'>larger.outcome.better</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>reference.trt</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
@@ -117,10 +117,17 @@
 treatment status is active.</p></td>
     </tr>
     <tr>
+      <th>pi.x</th>
+      <td><p>The propensity score for each observation</p></td>
+    </tr>
+    <tr>
       <th>cutpoint</th>
       <td><p>numeric value for patients with benefit scores above which
 (or below which if <code>larger.outcome.better = FALSE</code>)
-will be recommended to be in the treatment group</p></td>
+will be recommended to be in the treatment group. Can also set <code>cutpoint = "median"</code>, which will
+use the median value of the benefit scores as the cutpoint or can set specific quantile values via <code>"quantx"</code>
+where <code>"x"</code> is a number between 0 and 100 representing the quantile value; e.g. <code>cutpoint = "quant75"</code>
+will use the 75th perent upper quantile of the benefit scores as the quantile.</p></td>
     </tr>
     <tr>
       <th>larger.outcome.better</th>

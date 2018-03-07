@@ -100,11 +100,11 @@
 
     <pre class="usage"><span class='co'># S3 method for subgroup_fitted</span>
 <span class='fu'>plot</span>(<span class='no'>x</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"boxplot"</span>, <span class='st'>"density"</span>,
-  <span class='st'>"interaction"</span>), <span class='kw'>avg.line</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
+  <span class='st'>"interaction"</span>, <span class='st'>"conditional"</span>), <span class='kw'>avg.line</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for subgroup_validated</span>
 <span class='fu'>plot</span>(<span class='no'>x</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"boxplot"</span>, <span class='st'>"density"</span>,
-  <span class='st'>"interaction"</span>, <span class='st'>"stability"</span>), <span class='kw'>avg.line</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+  <span class='st'>"interaction"</span>, <span class='st'>"conditional"</span>, <span class='st'>"stability"</span>), <span class='kw'>avg.line</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -121,7 +121,12 @@ across iterations of either the bootstrap or training/test re-fitting. For the l
 case the test results will be plotted. <code>"boxplot"</code> results in boxplots across all observations/iterations of either
 the bootstrap or training/test re-fitting. For the latter
 case the test results will be plotted. <code>"interaction"</code> creates an
-interaction plot for the different subgroups (crossing lines here means a meaningful subgroup)</p></td>
+interaction plot for the different subgroups (crossing lines here means a meaningful subgroup).
+<code>"conditional"</code> For subgroup_fitted objects, plots smoothed (via a GAM smoother) means of the outcomes as a function of the estimated benefit score
+separately for the treated and untreated groups. For subgroup_validated objects, boxplots of summary statistics
+within subgroups will be plotted as subgroups are defined by different cutoffs of the benefit scores.
+These cutoffs can be specified via the <code>benefit.score.quantiles</code> argument of
+<code><a href='validate.subgroup.html'>validate.subgroup</a></code>.</p></td>
     </tr>
     <tr>
       <th>avg.line</th>
@@ -184,12 +189,12 @@ and <code><a href='fit.subgroup.html'>fit.subgroup</a></code> for function which
 
 <span class='no'>subgrp.model</span>$<span class='no'>subgroup.trt.effects</span></div><div class='output co'>#&gt; $subgroup.effects
 #&gt; 0 effect among recommended 0 1 effect among recommended 1 
-#&gt;                     10.94014                     11.23623 
+#&gt;                     19.38120                     14.91451 
 #&gt; 
 #&gt; $avg.outcomes
 #&gt;            Recommended 0 Recommended 1
-#&gt; Received 0     -13.02001     -24.33860
-#&gt; Received 1     -23.96015     -13.10237
+#&gt; Received 0     -3.240025    -24.586973
+#&gt; Received 1    -22.621221     -9.672463
 #&gt; 
 #&gt; $sample.sizes
 #&gt;            Recommended 0 Recommended 1
@@ -197,22 +202,24 @@ and <code><a href='fit.subgroup.html'>fit.subgroup</a></code> for function which
 #&gt; Received 1           168           126
 #&gt; 
 #&gt; $overall.subgroup.effect
-#&gt; [1] 11.06312
+#&gt; [1] 17.72144
 #&gt; </div><div class='input'>
 <span class='fu'>plot</span>(<span class='no'>subgrp.model</span>)</div><div class='img'><img src='plot-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 <span class='fu'>plot</span>(<span class='no'>subgrp.model</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"boxplot"</span>)</div><div class='img'><img src='plot-2.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 <span class='fu'>plot</span>(<span class='no'>subgrp.model</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"interaction"</span>)</div><div class='img'><img src='plot-3.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>subgrp.model</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"conditional"</span>)</div><div class='img'><img src='plot-4.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 <span class='no'>valmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='validate.subgroup.html'>validate.subgroup</a></span>(<span class='no'>subgrp.model</span>, <span class='kw'>B</span> <span class='kw'>=</span> <span class='fl'>3</span>,
                           <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"training_test"</span>,
+                          <span class='kw'>benefit.score.quantiles</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.25</span>, <span class='fl'>0.5</span>, <span class='fl'>0.75</span>),
                           <span class='kw'>train.fraction</span> <span class='kw'>=</span> <span class='fl'>0.75</span>)
 <span class='no'>valmod</span>$<span class='no'>avg.results</span></div><div class='output co'>#&gt; $subgroup.effects
 #&gt; 0 effect among recommended 0 1 effect among recommended 1 
-#&gt;                    20.233673                     5.031784 
+#&gt;                     26.61956                     10.55751 
 #&gt; 
 #&gt; $avg.outcomes
 #&gt;            Recommended 0 Recommended 1
-#&gt; Received 0     -3.471164     -22.13583
-#&gt; Received 1    -23.704837     -17.10405
+#&gt; Received 0      4.398924     -23.23820
+#&gt; Received 1    -22.220637     -12.68069
 #&gt; 
 #&gt; $sample.sizes
 #&gt;            Recommended 0 Recommended 1
@@ -220,11 +227,15 @@ and <code><a href='fit.subgroup.html'>fit.subgroup</a></code> for function which
 #&gt; Received 1     34.666667      44.66667
 #&gt; 
 #&gt; $overall.subgroup.effect
-#&gt; [1] -0.02713774
+#&gt; [1] 13.70518
 #&gt; </div><div class='input'>
-<span class='fu'>plot</span>(<span class='no'>valmod</span>)</div><div class='img'><img src='plot-4.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>valmod</span>)</div><div class='img'><img src='plot-5.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 
-<span class='fu'>plot</span>(<span class='no'>valmod</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"interaction"</span>)</div><div class='img'><img src='plot-5.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>valmod</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"interaction"</span>)</div><div class='img'><img src='plot-6.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='co'># see how summary statistics of subgroups change</span>
+<span class='co'># when the subgroups are defined based on different cutoffs</span>
+<span class='co'># (25th quantile of bene score, 50th, and 75th)</span>
+<span class='fu'>plot</span>(<span class='no'>valmod</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"conditional"</span>)</div><div class='img'><img src='plot-7.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 # visualize the frequency of particular variables
 # of being selected across the resampling iterations with
 # 'type = "stability"'

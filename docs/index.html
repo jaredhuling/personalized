@@ -71,63 +71,43 @@
     
 <div class="contents">
 
-<div id="overview-of-personalized" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#overview-of-personalized" class="anchor"></a>Overview of ‘personalized’</h1></div>
+<section id="overview-of-personalized" class="level1"><div class="page-header"><h1>Overview of ‘personalized’</h1></div>
 <p>The ‘personalized’ package is designed for the analysis of data where the effect of a treatment or intervention may vary for different patients. It can be used for either data from randomized controlled trials or observational studies and is not limited specifically to the analysis of medical data.</p>
 <p>The personalized package provides estimation methods for subgroup identification under the framework of <a href="http://onlinelibrary.wiley.com/doi/10.1111/biom.12676/abstract">Chen et al (2017)</a>. It also provides routines for valid estimation of the subgroup-specific treatment effects.</p>
 <p><img src="articles/usage_overview-1.png" width="100%"></p>
-<div id="documentation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#documentation" class="anchor"></a>Documentation</h2>
+<section id="documentation" class="level2"><h2>Documentation</h2>
 <p><a href="http://jaredhuling.org/personalized/">Documentation</a></p>
 <ul>
 <li><p><a href="http://jaredhuling.org/personalized/articles/usage_of_the_personalized_package.html">Tutorial / Vignette</a> - tutorial of statistical methodology and usage of the package</p></li>
 <li><p><a href="http://jaredhuling.org/personalized/reference/index.html">Function help files</a></p></li>
-</ul>
-</div>
-</div>
-<div id="installing-the-personalized-package" class="section level1">
-<h1 class="hasAnchor">
-<a href="#installing-the-personalized-package" class="anchor"></a>Installing the ‘personalized’ package</h1>
+</ul></section></section><section id="installing-the-personalized-package" class="level1"><h1>Installing the ‘personalized’ package</h1>
 <p>Install from CRAN using:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"personalized"</span>)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">install.packages</span>(<span class="st">"personalized"</span>)</a></code></pre></div>
 <p>or install the development version using the <strong>devtools</strong> package:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"jaredhuling/personalized"</span>)</code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"jaredhuling/personalized"</span>)</a></code></pre></div>
 <p>or by cloning and building using <code>R CMD INSTALL</code></p>
-</div>
-<div id="quick-usage-overview" class="section level1">
-<h1 class="hasAnchor">
-<a href="#quick-usage-overview" class="anchor"></a>Quick Usage Overview</h1>
+</section><section id="quick-usage-overview" class="level1"><h1>Quick Usage Overview</h1>
 <p>Load the package:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(personalized)</code></pre></div>
-<div id="create-a-propensity-score-model" class="section level3">
-<h3 class="hasAnchor">
-<a href="#create-a-propensity-score-model" class="anchor"></a>Create a propensity score model</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">library</span>(personalized)</a></code></pre></div>
+<section id="create-a-propensity-score-model" class="level3"><h3>Create a propensity score model</h3>
 <p>(it should be a function which inputs covariates and treatments and returns propensity score):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">prop.func &lt;-<span class="st"> </span><span class="cf">function</span>(x, trt)
-{
-    <span class="co"># fit propensity score model</span>
-    propens.model &lt;-<span class="st"> </span><span class="kw">cv.glmnet</span>(<span class="dt">y =</span> trt,
-                               <span class="dt">x =</span> x, <span class="dt">family =</span> <span class="st">"binomial"</span>)
-    pi.x &lt;-<span class="st"> </span><span class="kw">predict</span>(propens.model, <span class="dt">s =</span> <span class="st">"lambda.min"</span>,
-                    <span class="dt">newx =</span> x, <span class="dt">type =</span> <span class="st">"response"</span>)[,<span class="dv">1</span>]
-    pi.x
-}</code></pre></div>
-</div>
-<div id="fit-a-model-to-estimate-subgroup" class="section level3">
-<h3 class="hasAnchor">
-<a href="#fit-a-model-to-estimate-subgroup" class="anchor"></a>Fit a model to estimate subgroup:</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">subgrp.model &lt;-<span class="st"> </span><span class="kw"><a href="reference/fit.subgroup.html">fit.subgroup</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y,
-                             <span class="dt">trt =</span> trt,
-                             <span class="dt">propensity.func =</span> prop.func,
-                             <span class="dt">loss   =</span> <span class="st">"sq_loss_lasso"</span>,
-                             <span class="dt">nfolds =</span> <span class="dv">5</span>)              <span class="co"># option for cv.glmnet</span></code></pre></div>
-</div>
-<div id="display-estimated-subgroups-and-variables-selected-which-determine-the-subgroups" class="section level3">
-<h3 class="hasAnchor">
-<a href="#display-estimated-subgroups-and-variables-selected-which-determine-the-subgroups" class="anchor"></a>Display estimated subgroups and variables selected which determine the subgroups:</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(subgrp.model)</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">prop.func &lt;-<span class="st"> </span><span class="cf">function</span>(x, trt)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">{</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">    <span class="co"># fit propensity score model</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">    propens.model &lt;-<span class="st"> </span><span class="kw">cv.glmnet</span>(<span class="dt">y =</span> trt,</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">                               <span class="dt">x =</span> x, <span class="dt">family =</span> <span class="st">"binomial"</span>)</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">    pi.x &lt;-<span class="st"> </span><span class="kw">predict</span>(propens.model, <span class="dt">s =</span> <span class="st">"lambda.min"</span>,</a>
+<a class="sourceLine" id="cb4-7" data-line-number="7">                    <span class="dt">newx =</span> x, <span class="dt">type =</span> <span class="st">"response"</span>)[,<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb4-8" data-line-number="8">    pi.x</a>
+<a class="sourceLine" id="cb4-9" data-line-number="9">}</a></code></pre></div>
+</section><section id="fit-a-model-to-estimate-subgroup" class="level3"><h3>Fit a model to estimate subgroup:</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">subgrp.model &lt;-<span class="st"> </span><span class="kw"><a href="reference/fit.subgroup.html">fit.subgroup</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y,</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">                             <span class="dt">trt =</span> trt,</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">                             <span class="dt">propensity.func =</span> prop.func,</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">                             <span class="dt">loss   =</span> <span class="st">"sq_loss_lasso"</span>,</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">                             <span class="dt">nfolds =</span> <span class="dv">5</span>)              <span class="co"># option for cv.glmnet</span></a></code></pre></div>
+</section><section id="display-estimated-subgroups-and-variables-selected-which-determine-the-subgroups" class="level3"><h3>Display estimated subgroups and variables selected which determine the subgroups:</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">summary</span>(subgrp.model)</a></code></pre></div>
 <pre><code>## family:  gaussian 
 ## loss:    sq_loss_lasso 
 ## method:  weighting 
@@ -136,11 +116,11 @@
 ## 
 ## Average Outcomes:
 ##                 Recommended Ctrl    Recommended Trt
-## Received Ctrl  -5.6613 (n = 117) -23.6003 (n = 114)
-## Received Trt  -20.9028 (n = 132)  -7.3036 (n = 137)
+## Received Ctrl  -4.2429 (n = 117) -21.9576 (n = 114)
+## Received Trt  -23.6902 (n = 132)  -6.7605 (n = 137)
 ## 
 ## Ctrl effect among recommended Ctrl   Trt effect among recommended Trt 
-##                  15.2414 (n = 249)                  16.2968 (n = 251) 
+##                  19.4474 (n = 249)                  15.1972 (n = 251) 
 ## 
 ## Benefit score quantiles: 
 ##        0%       25%       50%       75%      100% 
@@ -159,18 +139,12 @@
 ## V40   0.0275
 ## V45   0.0945
 ## V50  -0.0422</code></pre>
-</div>
-<div id="use-repeated-train-and-test-splitting-to-estimate-subgroup-treatment-effects" class="section level3">
-<h3 class="hasAnchor">
-<a href="#use-repeated-train-and-test-splitting-to-estimate-subgroup-treatment-effects" class="anchor"></a>Use repeated train and test splitting to estimate subgroup treatment effects:</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">val.model &lt;-<span class="st"> </span><span class="kw"><a href="reference/validate.subgroup.html">validate.subgroup</a></span>(subgrp.model, <span class="dt">B =</span> <span class="dv">100</span>,
-                               <span class="dt">method =</span> <span class="st">"training_test"</span>,
-                               <span class="dt">train.fraction =</span> <span class="fl">0.75</span>)</code></pre></div>
-</div>
-<div id="display-estimated-subgroup-treatment-effects" class="section level3">
-<h3 class="hasAnchor">
-<a href="#display-estimated-subgroup-treatment-effects" class="anchor"></a>Display estimated subgroup treatment effects:</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(val.model, <span class="dt">digits =</span> <span class="dv">2</span>, <span class="dt">sample.pct =</span> <span class="ot">TRUE</span>)</code></pre></div>
+</section><section id="use-repeated-train-and-test-splitting-to-estimate-subgroup-treatment-effects" class="level3"><h3>Use repeated train and test splitting to estimate subgroup treatment effects:</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">val.model &lt;-<span class="st"> </span><span class="kw"><a href="reference/validate.subgroup.html">validate.subgroup</a></span>(subgrp.model, <span class="dt">B =</span> <span class="dv">100</span>,</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">                               <span class="dt">method =</span> <span class="st">"training_test"</span>,</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">                               <span class="dt">train.fraction =</span> <span class="fl">0.75</span>)</a></code></pre></div>
+</section><section id="display-estimated-subgroup-treatment-effects" class="level3"><h3>Display estimated subgroup treatment effects:</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">print</span>(val.model, <span class="dt">digits =</span> <span class="dv">2</span>, <span class="dt">sample.pct =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <pre><code>## family:  gaussian 
 ## loss:    sq_loss_lasso 
 ## method:  weighting 
@@ -180,21 +154,21 @@
 ## 
 ## Average Test Set Outcomes:
 ##                         Recommended Ctrl            Recommended Trt
-## Received Ctrl  -9.18 (SE = 6.83, 20.74%) -19.97 (SE = 6.14, 25.81%)
-## Received Trt  -16.35 (SE = 5.66, 24.18%) -13.03 (SE = 5.67, 29.26%)
+## Received Ctrl -10.85 (SE = 7.88, 20.74%)  -18.64 (SE = 6.5, 25.81%)
+## Received Trt   -15.81 (SE = 5.9, 24.18%) -15.36 (SE = 9.02, 29.26%)
 ## 
 ## Ctrl effect among recommended Ctrl   Trt effect among recommended Trt 
-##           7.17 (SE = 10.5, 44.93%)           6.94 (SE = 8.96, 55.07%)</code></pre>
+##          4.97 (SE = 11.23, 44.93%)          3.27 (SE = 11.73, 55.07%) 
+## 
+## Overall Subgroup Effect 
+##         1.2 (SE = 8.77)</code></pre>
 <p>Visualize subgroup-specific treatment effect estimates across training/testing iterations:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(val.model)</code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">plot</span>(val.model)</a></code></pre></div>
 <p><img src="articles/vis_val-1.png" width="75%" style="display: block; margin: auto;"></p>
-</div>
-<div id="investigate-the-marginal-characteristics-of-the-two-estimated-subgroups" class="section level3">
-<h3 class="hasAnchor">
-<a href="#investigate-the-marginal-characteristics-of-the-two-estimated-subgroups" class="anchor"></a>Investigate the marginal characteristics of the two estimated subgroups</h3>
+</section><section id="investigate-the-marginal-characteristics-of-the-two-estimated-subgroups" class="level3"><h3>Investigate the marginal characteristics of the two estimated subgroups</h3>
 <p>Here we only display covariates with a significantly different mean value (at level 0.05)</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">summ &lt;-<span class="st"> </span><span class="kw"><a href="reference/summarize.subgroups.html">summarize.subgroups</a></span>(subgrp.model)
-<span class="kw">print</span>(summ, <span class="dt">p.value =</span> <span class="fl">0.05</span>)</code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">summ &lt;-<span class="st"> </span><span class="kw"><a href="reference/summarize.subgroups.html">summarize.subgroups</a></span>(subgrp.model)</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="kw">print</span>(summ, <span class="dt">p.value =</span> <span class="fl">0.05</span>)</a></code></pre></div>
 <pre><code>##     Avg (recom Ctrl) Avg (recom Trt) Ctrl - Trt pval Ctrl - Trt
 ## V2           -1.8994          1.8703    -3.7697       6.746e-55
 ## V11           1.2394         -1.1216     2.3610       1.325e-21
@@ -211,16 +185,12 @@
 ## V35          0.1825         0.1973
 ## V39          0.1906         0.2016
 ## V43          0.2091         0.1872</code></pre>
-</div>
-<div id="accessing-help-files-for-main-functions-of-personalized" class="section level2">
-<h2 class="hasAnchor">
-<a href="#accessing-help-files-for-main-functions-of-personalized" class="anchor"></a>Accessing Help Files for Main Functions of <code>personalized</code>
+</section><section id="accessing-help-files-for-main-functions-of-personalized" class="level2"><h2>Accessing Help Files for Main Functions of <code>personalized</code>
 </h2>
 <p>Access help files for the main functions of the <code>personalized</code> package:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><a href="reference/fit.subgroup.html">?fit.subgroup
-?validate.subgroup</a></code></pre></div>
-</div>
-</div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">?fit.subgroup</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2">?validate.subgroup</a></code></pre></div>
+</section></section>
 </div>
   </div>
 
