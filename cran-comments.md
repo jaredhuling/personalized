@@ -6,8 +6,8 @@
 
 ## Test environments
 
-* local Windows 7 x64 install, (R 3.4.2)
-* Debian Linux, (R-devel r74175)
+* local Windows 7 x64 install, (R 3.4.3)
+* Debian Linux, (R-devel)
 * local Mac OSX Sierra (R 3.4.2)
 * Ubuntu 14.04 LTS (on travis-ci), (R 3.4.2)
 
