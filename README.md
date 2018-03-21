@@ -5,7 +5,7 @@ Status](https://travis-ci.org/jaredhuling/personalized.svg?branch=master)](https
 [![codecov](https://codecov.io/gh/jaredhuling/personalized/branch/master/graph/badge.svg)](https://codecov.io/gh/jaredhuling/personalized)
 [![](http://cranlogs.r-pkg.org/badges/personalized)](http://cran.rstudio.com/web/packages/personalized/index.html)
 
-<img src="vignettes/sticker.png" align="right" width="15%" height="15%" />
+<img src="man/figures/sticker.png" align="right" width="15%" height="15%" />
 
 # Overview of ‘personalized’
 

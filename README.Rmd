@@ -25,10 +25,10 @@ sticker(expression({plot.new(); text(0.5, 0.5, "p", font=2 ,cex = 9, col = scale
         p_y = 1.35,
         h_color = scales::alpha(unname(jcolors()[2]), 0.75),
         h_fill = scales::alpha(unname(jcolors()[2]), 1),
-        filename="vignettes/sticker.png")
+        filename="man/figures/sticker.png")
 ```
 
-<img src="vignettes/sticker.png" align="right" width="15%" height="15%" />
+<img src="man/figures/sticker.png" align="right" width="15%" height="15%" />
 
 # Overview of 'personalized'
 
