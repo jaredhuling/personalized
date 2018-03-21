@@ -18,13 +18,14 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Function reference" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -73,7 +74,7 @@
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -114,73 +115,73 @@
         <tr>
           <!--  -->
           <td>
-            <p><code><a href="check.overlap.html">check.overlap</a></code> </p>
-          </td>
-          <td><p>Check propensity score overlap</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="fit.subgroup.html">fit.subgroup</a></code> </p>
-          </td>
-          <td><p>Fitting subgroup identification models</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
             <p><code><a href="LaLonde.html">LaLonde</a></code> </p>
           </td>
           <td><p>National Supported Work Study Data</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="plot.html">plot</a></code> </p>
+            <p><code><a href="check.overlap.html">check.overlap()</a></code> </p>
+          </td>
+          <td><p>Check propensity score overlap</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="fit.subgroup.html">fit.subgroup()</a></code> </p>
+          </td>
+          <td><p>Fitting subgroup identification models</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="plot.html">plot(<i>&lt;subgroup_fitted&gt;</i>)</a></code> <code><a href="plot.html">plot(<i>&lt;subgroup_validated&gt;</i>)</a></code> </p>
           </td>
           <td><p>Plotting results for fitted subgroup identification models</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="plotCompare.html">plotCompare</a></code> </p>
+            <p><code><a href="plotCompare.html">plotCompare()</a></code> </p>
           </td>
           <td><p>Plot a comparison results for fitted or validated subgroup identification models</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="predict.html">predict</a></code> </p>
+            <p><code><a href="predict.html">predict(<i>&lt;subgroup_fitted&gt;</i>)</a></code> <code><a href="predict.html">predict(<i>&lt;wksvm&gt;</i>)</a></code> </p>
           </td>
           <td><p>Predict function for fitted subgroup identification models</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="print.html">print</a></code> </p>
+            <p><code><a href="print.html">print(<i>&lt;subgroup_fitted&gt;</i>)</a></code> <code><a href="print.html">print(<i>&lt;subgroup_validated&gt;</i>)</a></code> <code><a href="print.html">print(<i>&lt;subgroup_summary&gt;</i>)</a></code> </p>
           </td>
           <td><p>Printing results for fitted subgroup identification models</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="subgroup.effects.html">subgroup.effects</a></code> </p>
+            <p><code><a href="subgroup.effects.html">subgroup.effects()</a></code> </p>
           </td>
           <td><p>Computes treatment effects within various subgroups</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="summarize.subgroups.html">summarize.subgroups</a></code> </p>
+            <p><code><a href="summarize.subgroups.html">summarize.subgroups()</a></code> </p>
           </td>
           <td><p>Summarizing covariates within estimated subgroups</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="summary.html">summary</a></code> </p>
+            <p><code><a href="summary.html">summary(<i>&lt;subgroup_fitted&gt;</i>)</a></code> <code><a href="summary.html">summary(<i>&lt;wksvm&gt;</i>)</a></code> </p>
           </td>
           <td><p>Summary of results for fitted subgroup identification models</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="validate.subgroup.html">validate.subgroup</a></code> </p>
+            <p><code><a href="validate.subgroup.html">validate.subgroup()</a></code> </p>
           </td>
           <td><p>Validating fitted subgroup identification models</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="weighted.ksvm.html">weighted.ksvm</a></code> </p>
+            <p><code><a href="weighted.ksvm.html">weighted.ksvm()</a></code> </p>
           </td>
           <td><p>Fit weighted kernel svm model.</p></td>
         </tr>
@@ -203,7 +204,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
@@ -211,3 +212,4 @@
 
   </body>
 </html>
+
