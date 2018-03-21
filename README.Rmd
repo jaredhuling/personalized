@@ -15,12 +15,28 @@ opts_chunk$set(message = FALSE, warning=FALSE)
 [![codecov](https://codecov.io/gh/jaredhuling/personalized/branch/master/graph/badge.svg)](https://codecov.io/gh/jaredhuling/personalized)
 [![](http://cranlogs.r-pkg.org/badges/personalized)](http://cran.rstudio.com/web/packages/personalized/index.html)
 
+```{r make_sticker, echo = FALSE, out.width= "100%"}
+library(hexSticker)
+library(jcolors)
+
+sticker(expression({plot.new(); text(0.5, 0.5, "p", font=2 ,cex = 9, col = scales::alpha("#0091b6", 0.35))}),
+        package="personalized",
+        p_size=6, s_x=0.8, s_y=.75, s_width=1.3, s_height=1,
+        p_y = 1.35,
+        h_color = scales::alpha(unname(jcolors()[2]), 0.75),
+        h_fill = scales::alpha(unname(jcolors()[2]), 1),
+        filename="vignettes/sticker.png")
+```
+
+<img src="vignettes/sticker.png" align="right" width="15%" height="15%" />
 
 # Overview of 'personalized'
 
 The 'personalized' package is designed for the analysis of data where the effect of a treatment or intervention may vary for different patients. It can be used for either data from randomized controlled trials or observational studies and is not limited specifically to the analysis of medical data.
 
 The personalized package provides estimation methods for subgroup identification under the framework of [Chen et al (2017)](http://onlinelibrary.wiley.com/doi/10.1111/biom.12676/abstract). It also provides routines for valid estimation of the subgroup-specific treatment effects.
+
+
 
 
 ```{r usage_overview, echo = FALSE, out.width= "100%", fig.width = 14, fig.height=7, fig.path="vignettes/"}
@@ -89,6 +105,8 @@ textrect(elpos[6,], lab = "validate.subgroup(model)",
          rady = 0.065,
          adj = (0.5),
          cex = 2)
+
+
 
 ```
 
