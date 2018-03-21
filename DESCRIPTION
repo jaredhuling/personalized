@@ -2,7 +2,7 @@ Package: personalized
 Type: Package
 Title: Estimation and Validation Methods for Subgroup Identification and
     Personalized Medicine
-Version: 0.1.4
+Version: 0.1.5
 Authors@R: c(
     person("Jared", "Huling",  role = c("aut", "cre"), email = "jaredhuling@gmail.com"),
     person("Aaron", "Potvien", role = "ctb")
