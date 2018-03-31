@@ -10,6 +10,28 @@ output:
         toc_depth: 3
         number_sections: true
         self_contained: true
+preamble: >
+    \usepackage{amsmath,amssymb,amsfonts,bm,bbm,amsthm}
+    \usepackage{longtable}
+    \usepackage{booktabs}
+    \usepackage{bbm, bm}
+    \def\bsx {\boldsymbol x}
+    \def\bsX {\boldsymbol X}
+    \def\bsT {\boldsymbol T}
+    \def\bsbeta {\boldsymbol \beta}
+    \def\bsgamma {\boldsymbol \gamma}
+    \def\bsW {\boldsymbol W}
+    \def\bsy {\boldsymbol y}
+    \def\bsY {\boldsymbol Y}
+    \def\bsM {\boldsymbol M}
+    \def\bfx {\mathbf x}
+    \def\bfX {\mathbf X}
+    \def\bfT {\mathbf T}
+    \def\bfW {\mathbf W}
+    \def\bfy {\mathbf y}
+    \def\bfY {\mathbf Y}
+    \def\bfM {\mathbf M}
+    \def\bfU {\mathbf U}
 vignette: >
   %\VignetteIndexEntry{Usage of the Personalized Package}
   %\VignetteEngine{knitr::rmarkdown}
