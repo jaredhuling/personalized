@@ -173,6 +173,12 @@ test_that("test validate.subgroup for binary outcomes and various losses", {
     expect_error(validate.subgroup(subgrp.model, B = 10, train.fraction = 2,
                                    method = "training"))
 
+    expect_error(print(subgrp.val, which.quant = 99))
+
+    expect_error(print(subgrp.val, which.quant = 1:10))
+
+    print(subgrp.val, which.quant = c(4, 5))
+
 
     subgrp.model2 <- fit.subgroup(x = x, y = y.binary,
                                  trt = trt01,

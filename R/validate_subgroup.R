@@ -95,6 +95,8 @@
 #'                             train.fraction = 0.75)
 #' valmod
 #'
+#' print(valmod, which.quant = c(4, 5))
+#'
 #' bene.score.test <- subgrp.model$predict(x.test)
 #'
 #' mean(y.test[bene.score.test > 0 & trt01.test == 1]) -
