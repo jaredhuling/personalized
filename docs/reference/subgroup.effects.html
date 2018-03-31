@@ -29,6 +29,8 @@
 
 <meta property="og:description" content="Computes treatment effects within various subgroups to estimate subgroup treatment effects" />
 <meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,8 +53,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">personalized</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">personalized</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.5</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -105,7 +111,7 @@
     <pre class="usage"><span class='fu'>subgroup.effects</span>(<span class='no'>benefit.scores</span>, <span class='no'>y</span>, <span class='no'>trt</span>, <span class='no'>pi.x</span>, <span class='kw'>cutpoint</span> <span class='kw'>=</span> <span class='fl'>0</span>,
   <span class='kw'>larger.outcome.better</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>reference.trt</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>

@@ -30,6 +30,8 @@
 <meta property="og:description" content="Validates subgroup treatment effects for fitted
  subgroup identification model class of Chen, et al (2017)" />
 <meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -52,8 +54,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">personalized</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">personalized</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.5</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -109,7 +115,7 @@
   <span class='kw'>benefit.score.quantiles</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.1666667</span>, <span class='fl'>0.3333333</span>, <span class='fl'>0.5</span>, <span class='fl'>0.6666667</span>,
   <span class='fl'>0.8333333</span>), <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -258,6 +264,45 @@ doi:10.1002/(SICI)1097-0258(19960229)15:4&lt;361::AID-SIM168&gt;3.0.CO;2-4</p>
 #&gt; 
 #&gt; Overall Subgroup Effect 
 #&gt;    5.4065 (SE = 8.0859) </div><div class='input'>
+<span class='fu'>print</span>(<span class='no'>valmod</span>, <span class='kw'>which.quant</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>4</span>, <span class='fl'>5</span>))</div><div class='output co'>#&gt; family:  gaussian 
+#&gt; loss:    sq_loss_lasso 
+#&gt; method:  weighting 
+#&gt; 
+#&gt; validation method:  training_test_replication 
+#&gt; Cutoff:             Quant_67 
+#&gt; iterations:         10 
+#&gt; 
+#&gt; Average Test Set Outcomes:
+#&gt;                               Recommended 0                    Recommended 1
+#&gt; Received 0 -14.0381 (SE = 7.9558, n = 29.5) -30.5683 (SE = 5.5557, n = 27.2)
+#&gt; Received 1 -19.1725 (SE = 2.7345, n = 54.5) -16.1053 (SE = 8.1065, n = 13.8)
+#&gt; 
+#&gt;  0 effect among recommended 0  1 effect among recommended 1 
+#&gt;   5.1344 (SE = 8.506, n = 84) 14.4631 (SE = 9.6631, n = 41) 
+#&gt; 
+#&gt; Overall Subgroup Effect 
+#&gt;    9.5669 (SE = 5.7354) 
+#&gt; 
+#&gt; &lt;===============================================&gt;
+#&gt; 
+#&gt; family:  gaussian 
+#&gt; loss:    sq_loss_lasso 
+#&gt; method:  weighting 
+#&gt; 
+#&gt; validation method:  training_test_replication 
+#&gt; Cutoff:             Quant_83 
+#&gt; iterations:         10 
+#&gt; 
+#&gt; Average Test Set Outcomes:
+#&gt;                               Recommended 0                    Recommended 1
+#&gt; Received 0 -15.9204 (SE = 7.3824, n = 40.2) -33.8492 (SE = 7.3124, n = 16.5)
+#&gt; Received 1 -20.2731 (SE = 2.4943, n = 62.8)   -6.8326 (SE = 9.5111, n = 5.5)
+#&gt; 
+#&gt;  0 effect among recommended 0  1 effect among recommended 1 
+#&gt;  4.3527 (SE = 7.389, n = 103) 27.0166 (SE = 13.303, n = 22) 
+#&gt; 
+#&gt; Overall Subgroup Effect 
+#&gt;    9.0653 (SE = 5.3511) </div><div class='input'>
 <span class='no'>bene.score.test</span> <span class='kw'>&lt;-</span> <span class='no'>subgrp.model</span>$<span class='fu'>predict</span>(<span class='no'>x.test</span>)
 
 <span class='fu'>mean</span>(<span class='no'>y.test</span>[<span class='no'>bene.score.test</span> <span class='kw'>&gt;</span> <span class='fl'>0</span> <span class='kw'>&amp;</span> <span class='no'>trt01.test</span> <span class='kw'>==</span> <span class='fl'>1</span>]) -

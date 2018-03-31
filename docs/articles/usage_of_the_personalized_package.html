@@ -27,8 +27,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">personalized</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">personalized</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.5</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
@@ -71,7 +75,7 @@
       <h1>Usage of the Personalized Package</h1>
                         <h4 class="author">Jared Huling</h4>
             
-            <h4 class="date">2018-03-21</h4>
+            <h4 class="date">2018-03-31</h4>
       
       
 
@@ -163,6 +167,23 @@
 <a href="#variable-selection" class="anchor"></a>Variable Selection</h3>
 <p>For subgroup identification models with <span class="math inline">\(f(X) = X^T\beta\)</span>, the <code>personalized</code> package also allows for variable selection. Instead of minimizing <span class="math inline">\(L_W(f)\)</span> or <span class="math inline">\(L_A(f)\)</span>, we instead minimize a penalized version: <span class="math inline">\(L_W(f) + \lambda||\beta||_1\)</span> or <span class="math inline">\(L_A(f) + \lambda||\beta||_1\)</span>.</p>
 </div>
+<div id="extension-to-multi-category-treatments" class="section level2">
+<h2 class="hasAnchor">
+<a href="#extension-to-multi-category-treatments" class="anchor"></a>Extension to multi-category treatments</h2>
+<p>Often, multiple treatment options are available for patients instead of one treatment option and a control and the researcher may wish to understand which of all treatment options are the best for which patients. Extending the above methodology to multi-category treatment results in added complications, and in particular there is no straightforward extension of the A-learning method for multiple treatment settings. In the supplementary material of , the weighting method was extended to estimate a benefit score corresponding to each level of a treatment subject to a sum-to-zero constraint for identifiability. <!-- We assume that the expected outcome conditional on the covariate and treatment status information can be represented by  --> <!-- \begin{equation}\label{eqn:outcome_model_mult_trt} --> <!-- E(Y|\bfX, T) = g(\bfX) + \sum_{k = 1}^{K} 1(T = k)\Delta_k(\bfX), --> <!-- \end{equation} --> <!-- where $\sum_{k = 1}^{K} \Delta_k(\bfX) = 0$.   --> In particular, we are interested in estimating (the sign) of <span class="math display">\[\begin{eqnarray}
+\Delta_{kl}(\bfx) \equiv 
+\{ E(Y | T = k, \bfX = \bfx) - E(Y | T = l, \bfX = \bfx) \} \label{definition of Delta_kl}
+\end{eqnarray}\]</span> If <span class="math inline">\(\Delta_{kl}(\bfx) &gt; 0\)</span>, then treatment <span class="math inline">\(k\)</span> is preferable to treatment <span class="math inline">\(l\)</span> for a patient with <span class="math inline">\(\bfX = \bfx\)</span>. For each patient, evaluation of all pairwise comparisons of the <span class="math inline">\(\Delta_{kl}(\bfx)\)</span> indicates which treatment leads to the largest expected outcome. The weighting estimators of the benefit scores are the minimizers of the following loss function: <span class="math display">\[\begin{equation} \label{eqn:weighting_mult}
+L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\bfM(Y_i,  \sum_{k = 1}^{K}I(T_{i} = k)\times f_k(\bfx_i) ) }{ { Pr(T = T_i | \bfX = \bfx_i)} },
+\end{equation}\]</span> subject to <span class="math inline">\(\sum_{k = 1}^{K}f_k(\bfx_i) = 0\)</span>. Clearly when <span class="math inline">\(K = 2\)</span>, this loss function is equivalent to ().</p>
+<p>Estimation of the benefit scores in this model is still challenging without added modeling assumptions, as enforcing <span class="math inline">\(\sum_{k = 1}^{K}f_k(\bfx_i) = 0\)</span> may not always be feasible using existing estimation routines. However, if each <span class="math inline">\(\Delta_{kl}(\bfX)\)</span> has a linear form, i.e. <span class="math inline">\(\Delta_{kl}(\bfX) = \bfX^\top\bsbeta_k\)</span> where <span class="math inline">\(l\)</span> represents a reference treatment group, estimation can then easily be fit into the same computational framework as for the simpler two treatment case by constructing an appropriate design matrix. Thus, for multiple treatments the  package is restricted to linear estimators of the benefit scores. For instructive purposes, consider a scenario with three treatment options, <span class="math inline">\(A\)</span>, <span class="math inline">\(B\)</span>, and <span class="math inline">\(C\)</span>. Let <span class="math inline">\(\bsX = ({\bsX}_A^\top, {\bsX}_B^\top, {\bsX}_C^\top )^\top\)</span> be the design matrix for all patients, where each <span class="math inline">\({\bsX}_k^\top\)</span> is the sub-design matrix of patients who received treatment <span class="math inline">\(k\)</span>. Under <span class="math inline">\(\Delta_{kl}(\bfX) = \bfX^\top\bsbeta_k\)</span> with <span class="math inline">\(l\)</span> as the reference treatment, we can construct a new design matrix which can then be provided to existing estimation routines in order to minimize (). With treatment <span class="math inline">\(C\)</span> as the reference treatment, the design matrix is constructed as <span class="math display">\[
+\widetilde{{\bsX}} = \mbox{diag}(\boldsymbol J)\begin{pmatrix}
+{\bsX}_A &amp; \boldsymbol 0 \\
+\boldsymbol 0 &amp; {\bsX}_B \\
+{\bsX}_C &amp; {\bsX}_C
+\end{pmatrix},
+\]</span> where the <span class="math inline">\(i\)</span>th element of <span class="math inline">\(\boldsymbol J\)</span> is <span class="math inline">\(2I(T_i \neq C) - 1\)</span> and the weight vector <span class="math inline">\(\boldsymbol W\)</span> is constructed with the <span class="math inline">\(i\)</span>th element set to <span class="math inline">\(1 / Pr(T = T_i | \bsX = \bsx_i)\)</span>. Furthermore denote <span class="math inline">\(\widetilde{\bsbeta} = (\bsbeta_A^\top, \bsbeta_B^\top)^\top\)</span>. Hence <span class="math inline">\(\widetilde{{\bsX}}^\top\widetilde{\bsbeta} = {\bsX}_A^\top\bsbeta_A + {\bsX}_B^\top\bsbeta_B - {\bsX}_C^\top(\bsbeta_A + \bsbeta_B)\)</span>, and thus the sum-to-zero constraints on the benefit scores hold by construction.</p>
+</div>
 </div>
 <div id="quick-usage-reference" class="section level1">
 <h1 class="hasAnchor">
@@ -209,9 +230,9 @@
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_overlap-1.png" width="672"></p>
 <p>We can see that our propensity scores have common support.</p>
 </div>
-<div id="fitting-subgroup-identification-model" class="section level2">
+<div id="fitting-subgroup-identification-models" class="section level2">
 <h2 class="hasAnchor">
-<a href="#fitting-subgroup-identification-model" class="anchor"></a>Fitting Subgroup Identification Model</h2>
+<a href="#fitting-subgroup-identification-models" class="anchor"></a>Fitting Subgroup Identification Models</h2>
 <p>The next step is to choose and fit a subgroup identification model. In this example, the outcome is continuous, so we choose the squared error loss function. We also choose the model type (either the weighting or the A-learning method). The main function for fitting subgroup identification models is <code>fit.subgroup</code>. Since there are many covariates, we choose a loss function with a lasso penalty to select variables. The underlying fitting function here is <code>cv.glmnet()</code>. We can pass to <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> arguments of the <code>cv.glmnet()</code> function, such as <code>nfolds</code> for the number of cross validation folds.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">subgrp.model &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y,</a>
 <a class="sourceLine" id="cb4-2" data-line-number="2">                             <span class="dt">trt =</span> trt,</a>
@@ -325,9 +346,9 @@
 <p>For data from RCTs, the users can simply use a constant function for the propensity score. For example, if patients were equally randomized to the treatment and control groups, we know that <span class="math inline">\(\pi(x) = 1/2\)</span>.</p>
 </div>
 </div>
-<div id="fitting-subgroup-identification-models" class="section level2">
+<div id="fitting-subgroup-identification-models-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#fitting-subgroup-identification-models" class="anchor"></a>Fitting Subgroup Identification Models</h2>
+<a href="#fitting-subgroup-identification-models-1" class="anchor"></a>Fitting Subgroup Identification Models</h2>
 <div id="overview-1" class="section level3">
 <h3 class="hasAnchor">
 <a href="#overview-1" class="anchor"></a>Overview</h3>
@@ -555,7 +576,7 @@
 <p>For subgroup identification models for time-to-event outcomes, the user should provide <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> with a <code>Surv</code> object for <code>y</code>. This can be done like the following:</p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw">library</span>(survival)</a>
 <a class="sourceLine" id="cb28-2" data-line-number="2"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
-<a class="sourceLine" id="cb28-3" data-line-number="3">subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> <span class="kw"><a href="http://www.rdocumentation.org/packages/survival/topics/Surv">Surv</a></span>(y.time.to.event, status),</a>
+<a class="sourceLine" id="cb28-3" data-line-number="3">subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> <span class="kw">Surv</span>(y.time.to.event, status),</a>
 <a class="sourceLine" id="cb28-4" data-line-number="4">                           <span class="dt">trt =</span> trt,</a>
 <a class="sourceLine" id="cb28-5" data-line-number="5">                           <span class="dt">propensity.func =</span> prop.func,</a>
 <a class="sourceLine" id="cb28-6" data-line-number="6">                           <span class="dt">method =</span> <span class="st">"weighting"</span>,</a>
@@ -804,11 +825,15 @@
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#introduction-to-personalized">Introduction to <code>personalized</code></a></li>
+<li>
+<a href="#introduction-to-personalized">Introduction to <code>personalized</code></a><ul class="nav nav-pills nav-stacked">
+<li><a href="#extension-to-multi-category-treatments">Extension to multi-category treatments</a></li>
+      </ul>
+</li>
       <li>
 <a href="#quick-usage-reference">Quick Usage Reference</a><ul class="nav nav-pills nav-stacked">
 <li><a href="#creating-and-checking-propensity-score-model">Creating and Checking Propensity Score Model</a></li>
-      <li><a href="#fitting-subgroup-identification-model">Fitting Subgroup Identification Model</a></li>
+      <li><a href="#fitting-subgroup-identification-models">Fitting Subgroup Identification Models</a></li>
       <li><a href="#evaluating-treatment-effects-within-estimated-subgroups">Evaluating Treatment Effects within Estimated Subgroups</a></li>
       </ul>
 </li>
@@ -816,7 +841,7 @@
 <a href="#user-guide">User Guide</a><ul class="nav nav-pills nav-stacked">
 <li><a href="#overview">Overview</a></li>
       <li><a href="#creating-and-checking-a-propensity-score-model">Creating and Checking a propensity Score Model</a></li>
-      <li><a href="#fitting-subgroup-identification-models">Fitting Subgroup Identification Models</a></li>
+      <li><a href="#fitting-subgroup-identification-models-1">Fitting Subgroup Identification Models</a></li>
       <li><a href="#validating-subgroup-identification-models">Validating Subgroup Identification Models</a></li>
       </ul>
 </li>
