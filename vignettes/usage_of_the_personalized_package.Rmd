@@ -99,27 +99,27 @@ Often, multiple treatment options are available for patients instead of one trea
 <!-- where $\sum_{k = 1}^{K} \Delta_k(\bfX) = 0$.   -->
 In particular, we are interested in estimating (the sign) of
 \begin{eqnarray}
-\Delta_{kl}(\bfx) \equiv 
-\{ E(Y | T = k, \bfX = \bfx) - E(Y | T = l, \bfX = \bfx) \} \label{definition of Delta_kl}
+\Delta_{kl}(x) \equiv 
+\{ E(Y | T = k, { X} = { x}) - E(Y | T = l, \bfX = { x}) \} \label{definition of Delta_kl}
 \end{eqnarray}
-If $\Delta_{kl}(\bfx) > 0$, then treatment $k$ is preferable to treatment $l$ for a patient with $\bfX = \bfx$. For each patient, evaluation of all pairwise comparisons of the $\Delta_{kl}(\bfx)$ indicates which treatment leads to the largest expected outcome. 
+If $\Delta_{kl}(x) > 0$, then treatment $k$ is preferable to treatment $l$ for a patient with $\bfX = \bfx$. For each patient, evaluation of all pairwise comparisons of the $\Delta_{kl}(x)$ indicates which treatment leads to the largest expected outcome. 
 The weighting estimators of the benefit scores are the minimizers of the following loss function:
 \begin{equation} \label{eqn:weighting_mult}
-L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\bfM(Y_i,  \sum_{k = 1}^{K}I(T_{i} = k)\times f_k(\bfx_i) ) }{ { Pr(T = T_i | \bfX = \bfx_i)} },
+L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum_{k = 1}^{K}I(T_{i} = k)\times f_k(x_i) ) }{ { Pr(T = T_i | \bfX = \bfx_i)} },
 \end{equation}
-subject to $\sum_{k = 1}^{K}f_k(\bfx_i) = 0$.
+subject to $\sum_{k = 1}^{K}f_k(x_i) = 0$.
 Clearly when $K = 2$, this loss function is equivalent to (\ref{eqn:weighting}). 
 
-Estimation of the benefit scores in this model is still challenging without added modeling assumptions, as enforcing $\sum_{k = 1}^{K}f_k(\bfx_i) = 0$ may not always be feasible using existing estimation routines. 
-However, if each $\Delta_{kl}(\bfX)$ has a linear form, i.e. $\Delta_{kl}(\bfX) = \bfX^\top\bsbeta_k$ where $l$ represents a reference treatment group, estimation can then easily be fit into the same computational framework as for the simpler two treatment case by constructing an appropriate design matrix. Thus, for multiple treatments the \pkg{personalized} package is restricted to linear estimators of the benefit scores. For instructive purposes, consider a scenario with three treatment options, $A$, $B$, and $C$. Let $\bsX = ({\bsX}_A^\top, {\bsX}_B^\top, {\bsX}_C^\top )^\top$ be the design matrix for all patients, where each ${\bsX}_k^\top$ is the sub-design matrix of patients who received treatment $k$. Under $\Delta_{kl}(\bfX) = \bfX^\top\bsbeta_k$ with $l$ as the reference treatment, we can construct a new design matrix which can then be provided to existing estimation routines in order to minimize (\ref{eqn:weighting_mult}). With treatment $C$ as the reference treatment, the design matrix is constructed as
+Estimation of the benefit scores in this model is still challenging without added modeling assumptions, as enforcing $\sum_{k = 1}^{K}f_k(x_i) = 0$ may not always be feasible using existing estimation routines. 
+However, if each $\Delta_{kl}(X)$ has a linear form, i.e. $\Delta_{kl}(X) = X^\top\boldsymbol \beta_k$ where $l$ represents a reference treatment group, estimation can then easily be fit into the same computational framework as for the simpler two treatment case by constructing an appropriate design matrix. Thus, for multiple treatments the \pkg{personalized} package is restricted to linear estimators of the benefit scores. For instructive purposes, consider a scenario with three treatment options, $A$, $B$, and $C$. Let $\boldsymbol X = ({\boldsymbol X}_A^\top, {\boldsymbol X}_B^\top, {\boldsymbol X}_C^\top )^\top$ be the design matrix for all patients, where each ${\boldsymbol X}_k^\top$ is the sub-design matrix of patients who received treatment $k$. Under $\Delta_{kl}(X) = X^\top\boldsymbol \beta_k$ with $l$ as the reference treatment, we can construct a new design matrix which can then be provided to existing estimation routines in order to minimize (\ref{eqn:weighting_mult}). With treatment $C$ as the reference treatment, the design matrix is constructed as
 $$
-\widetilde{{\bsX}} = \mbox{diag}(\boldsymbol J)\begin{pmatrix}
-{\bsX}_A & \boldsymbol 0 \\
-\boldsymbol 0 & {\bsX}_B \\
-{\bsX}_C & {\bsX}_C
+\widetilde{{\boldsymbol X}} = \mbox{diag}(\boldsymbol J)\begin{pmatrix}
+{\boldsymbol X}_A & \boldsymbol 0 \\
+\boldsymbol 0 & {\boldsymbol X}_B \\
+{\boldsymbol X}_C & {\boldsymbol X}_C
 \end{pmatrix},
 $$
-where the $i$th element of $\boldsymbol J$ is $2I(T_i \neq C) - 1$ and the weight vector $\boldsymbol W$ is constructed with the $i$th element set to $1 / Pr(T = T_i | \bsX = \bsx_i)$. Furthermore denote $\widetilde{\bsbeta} = (\bsbeta_A^\top, \bsbeta_B^\top)^\top$. Hence $\widetilde{{\bsX}}^\top\widetilde{\bsbeta} = {\bsX}_A^\top\bsbeta_A + {\bsX}_B^\top\bsbeta_B - {\bsX}_C^\top(\bsbeta_A + \bsbeta_B)$, and thus the sum-to-zero constraints on the benefit scores hold by construction. 
+where the $i$th element of $\boldsymbol J$ is $2I(T_i \neq C) - 1$ and the weight vector $\boldsymbol W$ is constructed with the $i$th element set to $1 / Pr(T = T_i | X = {x}_i)$. Furthermore denote $\widetilde{\boldsymbol \beta} = (\boldsymbol \beta_A^\top, \boldsymbol \beta_B^\top)^\top$. Hence $\widetilde{{\boldsymbol X}}^\top\widetilde{\boldsymbol \beta} = {\boldsymbol X}_A^\top\boldsymbol \beta_A + {\boldsymbol X}_B^\top\boldsymbol \beta_B - {\boldsymbol X}_C^\top(\boldsymbol \beta_A + \boldsymbol \beta_B)$, and thus the sum-to-zero constraints on the benefit scores hold by construction. 
 
 
 
