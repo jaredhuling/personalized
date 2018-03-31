@@ -10,7 +10,7 @@
   ...)
 
 \method{print}{subgroup_validated}(x, digits = max(getOption("digits") - 3,
-  3), sample.pct = FALSE, ...)
+  3), sample.pct = FALSE, which.quant = NULL, ...)
 
 \method{print}{subgroup_summary}(x, p.value = 1,
   digits = max(getOption("digits") - 3, 3), ...)
@@ -25,6 +25,11 @@
 \item{sample.pct}{boolean variable of whether to print the percent of the test sample within each subgroup. If false
 the sample size itself, not the percent is printed. This may not be informative if the test sample size is much different
 from the total sample size}
+
+\item{which.quant}{when \code{validate.subgroup()} is called with a vector of quantile values specified for \code{benefit.score.quantiles},
+i.e. \code{benefit.score.quantiles = c(0.25, 0.5, 0.75)}, the argument \code{which.quant} can be a vector of indexes specifying which
+quantile cutoff value validation results to display, i.e. \code{which.quant = c(1,3)} in the above example results in the display of
+validation results for subgroups defined by cutoff values of the benefit score defined by the 25th abnd 75th quantiles of the benefit score}
 
 \item{p.value}{a p-value threshold for mean differences below which covariates will be displayed. For example,
 setting \code{p.value = 0.05} will display all covariates that have a significant difference between subgroups

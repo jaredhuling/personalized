@@ -1,5 +1,7 @@
 # personalized 0.1.5
 
+* Added printing of subgroup_validated results for quantile cutoffs via the which.quant argument
+
 # personalized 0.1.4
 
 * Added plots of means within treatment groups as the benefit scores are varied
