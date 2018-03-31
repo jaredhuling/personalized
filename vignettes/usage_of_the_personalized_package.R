@@ -215,6 +215,6 @@ plot(validation)
 ## ----plot_ex_model_1b----------------------------------------------------
 plot(validation, type = "density")
 
-## ----plot_compare_ex3----------------------------------------------------
-plotCompare(validation, validation.eff)
+## ----plot_compare_ex3, eval = FALSE--------------------------------------
+#  plotCompare(validation, validation.eff)
 
