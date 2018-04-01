@@ -1,3 +1,40 @@
 template:
   params:
     bootswatch: cerulean
+
+navbar:
+  type: default
+  left:
+    - text: Functions
+      href: reference/index.html
+
+reference:
+  - title: Main Functions
+    contents:
+    - fit.subgroup
+    - validate.subgroup
+    - starts_with("is.")
+    - starts_with("as.")
+
+  - title: Plotting
+    contents:
+    - check.overlap
+    - starts_with("plot")
+
+  - title: Summarizing
+    contents:
+    - starts_with("summar")
+    - starts_with("print")
+
+  - title: Predicting
+    contents:
+    - starts_with("predict")
+
+  - title: Data
+    contents:
+    - LaLonde
+
+  - title: Utilities
+    contents:
+    - subgroup.effects
+    - weighted.ksvm
