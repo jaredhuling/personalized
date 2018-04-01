@@ -64,10 +64,10 @@ test_that("test plotting for continuous outcomes with various options", {
                               trt = trt01,
                               propensity.func = prop.func,
                               loss   = "sq_loss_lasso",
-                              cutpoint = x,
+                              cutpoint = list(x),
                               nfolds = 5))
 
-    subgrp.model.bin <- fit.subgroup(x = x, y = y,
+    subgrp.model.bin <- fit.subgroup(x = x, y = y.binary,
                                  trt = trt01,
                                  propensity.func = prop.func,
                                  loss   = "logistic_loss_lasso",
