@@ -53,6 +53,32 @@ test_that("test plotting for continuous outcomes with various options", {
 
     expect_is(subgrp.model, "subgroup_fitted")
 
+    expect_error(fit.subgroup(x = x, y = y,
+                              trt = trt01,
+                              propensity.func = prop.func,
+                              loss   = "sq_loss_lasso",
+                              cutpoint = "haha",
+                              nfolds = 5))
+
+    expect_error(fit.subgroup(x = x, y = y,
+                              trt = trt01,
+                              propensity.func = prop.func,
+                              loss   = "sq_loss_lasso",
+                              cutpoint = x,
+                              nfolds = 5))
+
+    subgrp.model.bin <- fit.subgroup(x = x, y = y,
+                                 trt = trt01,
+                                 propensity.func = prop.func,
+                                 loss   = "logistic_loss_lasso",
+                                 cutpoint = "median",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model.bin, "subgroup_fitted")
+
+    plot(subgrp.model.bin, type = "boxplot")
+
+
     subgrp.model2 <- fit.subgroup(x = x, y = y,
                                  trt = trt01,
                                  propensity.func = prop.func,

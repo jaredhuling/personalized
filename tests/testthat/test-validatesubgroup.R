@@ -179,6 +179,8 @@ test_that("test validate.subgroup for binary outcomes and various losses", {
 
     print(subgrp.val, which.quant = c(4, 5))
 
+    print(subgrp.val, which.quant = c(4, 5), sample.pct = TRUE)
+
 
     subgrp.model2 <- fit.subgroup(x = x, y = y.binary,
                                  trt = trt01,
