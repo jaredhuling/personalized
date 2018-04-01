@@ -100,12 +100,12 @@ Often, multiple treatment options are available for patients instead of one trea
 In particular, we are interested in estimating (the sign) of
 \begin{eqnarray}
 \Delta_{kl}(x) \equiv 
-\{ E(Y | T = k, { X} = { x}) - E(Y | T = l, \bfX = { x}) \} \label{definition of Delta_kl}
+\{ E(Y | T = k, { X} = { x}) - E(Y | T = l, X = { x}) \} \label{definition of Delta_kl}
 \end{eqnarray}
-If $\Delta_{kl}(x) > 0$, then treatment $k$ is preferable to treatment $l$ for a patient with $\bfX = \bfx$. For each patient, evaluation of all pairwise comparisons of the $\Delta_{kl}(x)$ indicates which treatment leads to the largest expected outcome. 
+If $\Delta_{kl}(x) > 0$, then treatment $k$ is preferable to treatment $l$ for a patient with $X = x$. For each patient, evaluation of all pairwise comparisons of the $\Delta_{kl}(x)$ indicates which treatment leads to the largest expected outcome. 
 The weighting estimators of the benefit scores are the minimizers of the following loss function:
 \begin{equation} \label{eqn:weighting_mult}
-L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum_{k = 1}^{K}I(T_{i} = k)\times f_k(x_i) ) }{ { Pr(T = T_i | \bfX = \bfx_i)} },
+L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum_{k = 1}^{K}I(T_{i} = k)\times f_k(x_i) ) }{ { Pr(T = T_i | X = x_i)} },
 \end{equation}
 subject to $\sum_{k = 1}^{K}f_k(x_i) = 0$.
 Clearly when $K = 2$, this loss function is equivalent to (\ref{eqn:weighting}). 
