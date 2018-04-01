@@ -5,8 +5,17 @@ template:
 navbar:
   type: default
   left:
-    - text: Functions
+    - icon: fa-home
+      href: index.html
+    - text: "Vignettes"
+      href: articles/index.html
+    - text: "Functions"
       href: reference/index.html
+    - text: "News"
+      href: news/index.html
+  right:
+   - icon: fa-github
+     href: https://github.com/jaredhuling/personalized
 
 reference:
   - title: Main Functions
