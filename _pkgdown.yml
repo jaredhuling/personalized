@@ -9,6 +9,9 @@ navbar:
       href: index.html
     - text: "Vignettes"
       href: articles/index.html
+      menu:
+      - text: Usage of the personalized Package
+        href: articles/usage_of_the_personalized_package.html
     - text: "Functions"
       href: reference/index.html
     - text: "News"
