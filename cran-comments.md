@@ -1,8 +1,6 @@
 ## New version for 'personalized'
 
-* add quantile and median cutpoints as options
-* fixes subgroup effect calculation to account for weights
-* add conditional plots for fitted and validated objects
+* Added printing of subgroup_validated results for quantile cutoffs via the which.quant argument
 
 ## Test environments
 
