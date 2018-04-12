@@ -1,3 +1,7 @@
+# personalized 0.1.6
+
+* Simplified plot labeling
+
 # personalized 0.1.5
 
 * Added printing of subgroup_validated results for quantile cutoffs via the which.quant argument

@@ -72,8 +72,8 @@ plot.subgroup_validated <- function(x,
 
     avg.res.2.plot <- data.frame(Recommended = rep(colnames(avg.res$avg.outcomes),
                                                    each = ncol(avg.res$avg.outcomes)),
-                                 Received    = rep(rownames(avg.res$avg.outcomes),
-                                                   ncol(avg.res$avg.outcomes)),
+                                 Received    = gsub("^Received ", "", rep(rownames(avg.res$avg.outcomes),
+                                                   ncol(avg.res$avg.outcomes))),
                                  Value       = as.vector(avg.res$avg.outcomes))
 
     Recommended <- Received <- Value <- bs <- Quantile <- Outcome <- NULL
@@ -96,8 +96,8 @@ plot.subgroup_validated <- function(x,
                 cur.idx <- c(((b - 1) * n.entries + 1):(b * n.entries)) + ct
                 res.2.plot[cur.idx, 1] <- rep(colnames(res.cur.mat),
                                               each = ncol(res.cur.mat))
-                res.2.plot[cur.idx, 2] <- rep(rownames(res.cur.mat),
-                                              ncol(res.cur.mat))
+                res.2.plot[cur.idx, 2] <- gsub("^Received ", "", rep(rownames(res.cur.mat),
+                                              ncol(res.cur.mat)))
                 res.2.plot[cur.idx, 3] <- as.vector(res.cur.mat)
                 res.2.plot[cur.idx, 4] <- quantile.names[q]
 
@@ -114,8 +114,8 @@ plot.subgroup_validated <- function(x,
             cur.idx <- c(((b - 1) * n.entries + 1):(b * n.entries))
             res.2.plot[cur.idx, 1] <- rep(colnames(boot.res[b,,]),
                                           each = ncol(boot.res[b,,]))
-            res.2.plot[cur.idx, 2] <- rep(rownames(boot.res[b,,]),
-                                          ncol(boot.res[b,,]))
+            res.2.plot[cur.idx, 2] <- gsub("^Received ", "", rep(rownames(boot.res[b,,]),
+                                          ncol(boot.res[b,,])))
             res.2.plot[cur.idx, 3] <- as.vector(boot.res[b,,])
         }
     }
@@ -163,7 +163,7 @@ plot.subgroup_validated <- function(x,
             geom_boxplot(aes(fill = Received)) +
             geom_rug(aes(colour = Received), alpha = 0.85) +
             facet_grid( ~ Recommended) +
-            theme(legend.position = "bottom") +
+            theme(legend.position = "none") +
             ylab(ylab.text) +
             ggtitle(title.text)
     } else if (type == "conditional")
@@ -173,7 +173,7 @@ plot.subgroup_validated <- function(x,
             geom_boxplot(aes(fill = Received)) +
             geom_rug(aes(colour = Received), alpha = 0.85) +
             facet_grid(Recommended ~ Quantile) +
-            theme(legend.position = "bottom") +
+            theme(legend.position = "none") +
             ylab(ylab.text) +
             ggtitle(title.text)
     } else if (type == "stability")

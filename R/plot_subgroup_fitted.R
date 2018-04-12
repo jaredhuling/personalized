@@ -87,7 +87,7 @@ plot.subgroup_fitted <- function(x,
         #res.2.plot[, 1] <- ifelse(trt.rec == 1, "Recommended Trt", "Recommended Ctrl")
         #res.2.plot[, 2] <- ifelse(x$call$trt == 1, "Received Trt", "Received Ctrl")
         res.2.plot[, 1] <- paste("Recommended", trt.rec)
-        res.2.plot[, 2] <- paste("Received", x$call$trt)
+        res.2.plot[, 2] <- x$call$trt #paste("Received", x$call$trt)
 
         if (class(x$call$y) == "Surv")
         {
@@ -102,8 +102,8 @@ plot.subgroup_fitted <- function(x,
 
     avg.res.2.plot <- data.frame(Recommended = rep(colnames(avg.res$avg.outcomes),
                                                    each = ncol(avg.res$avg.outcomes)),
-                                 Received    = rep(rownames(avg.res$avg.outcomes),
-                                                   ncol(avg.res$avg.outcomes)),
+                                 Received    = gsub("^Received ", "", rep(rownames(avg.res$avg.outcomes),
+                                                   ncol(avg.res$avg.outcomes))),
                                  Value       = as.vector(avg.res$avg.outcomes))
 
     Recommended <- Received <- Value <- bs <- Outcome <- NULL
@@ -149,7 +149,7 @@ plot.subgroup_fitted <- function(x,
                 geom_boxplot(aes(fill = Received)) +
                 geom_rug(aes(colour = Received), alpha = 0.85) +
                 facet_grid( ~ Recommended) +
-                theme(legend.position = "bottom") +
+                theme(legend.position = "none") +
                 ylab(outcome.lab) +
                 ggtitle("Individual Observations Among Subgroups")
         }

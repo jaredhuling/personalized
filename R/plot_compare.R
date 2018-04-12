@@ -136,8 +136,8 @@ plotCompare <- function(...,
 
         avg.res.2.plot <- data.frame(Recommended = rep(colnames(avg.res$avg.outcomes),
                                                        each = ncol(avg.res$avg.outcomes)),
-                                     Received    = rep(rownames(avg.res$avg.outcomes),
-                                                       ncol(avg.res$avg.outcomes)),
+                                     Received    = gsub("^Received ", "", rep(rownames(avg.res$avg.outcomes),
+                                                       ncol(avg.res$avg.outcomes))),
                                      Value       = as.vector(avg.res$avg.outcomes),
                                      Model       = obj.names[l])
 
@@ -168,7 +168,7 @@ plotCompare <- function(...,
                     #res.2.plot[, 1] <- ifelse(trt.rec == 1, "Recommended Trt", "Recommended Ctrl")
                     #res.2.plot[, 2] <- ifelse(x$call$trt == 1, "Received Trt", "Received Ctrl")
                     res.2.plot[, 1] <- paste("Recommended", trt.rec)
-                    res.2.plot[, 2] <- paste("Received", list.obj[[l]]$call$trt)
+                    res.2.plot[, 2] <- list.obj[[l]]$call$trt #paste("Received", list.obj[[l]]$call$trt)
 
                     if (class(list.obj[[l]]$call$y) == "Surv")
                     {
@@ -189,7 +189,7 @@ plotCompare <- function(...,
                     #res.2.plot[, 1] <- ifelse(trt.rec == 1, "Recommended Trt", "Recommended Ctrl")
                     #res.2.plot[, 2] <- ifelse(x$call$trt == 1, "Received Trt", "Received Ctrl")
                     res.2.plot[, 1] <- benefit.scores
-                    res.2.plot[, 2] <- paste("Received", list.obj[[l]]$call$trt)
+                    res.2.plot[, 2] <- list.obj[[l]]$call$trt #paste("Received", list.obj[[l]]$call$trt)
 
                     if (class(list.obj[[l]]$call$y) == "Surv")
                     {
@@ -219,8 +219,8 @@ plotCompare <- function(...,
                         cur.idx <- c(((b - 1) * n.entries + 1):(b * n.entries))
                         res.2.plot[cur.idx, 1] <- rep(colnames(boot.res[b,,]),
                                                       each = ncol(boot.res[b,,]))
-                        res.2.plot[cur.idx, 2] <- rep(rownames(boot.res[b,,]),
-                                                      ncol(boot.res[b,,]))
+                        res.2.plot[cur.idx, 2] <- gsub("^Received ", "", rep(rownames(boot.res[b,,]),
+                                                      ncol(boot.res[b,,])))
                         res.2.plot[cur.idx, 3] <- as.vector(boot.res[b,,])
                     }
                 } else
@@ -241,8 +241,8 @@ plotCompare <- function(...,
                             cur.idx <- c(((b - 1) * n.entries + 1):(b * n.entries)) + ct
                             res.2.plot[cur.idx, 1] <- rep(colnames(res.cur.mat),
                                                           each = ncol(res.cur.mat))
-                            res.2.plot[cur.idx, 2] <- rep(rownames(res.cur.mat),
-                                                          ncol(res.cur.mat))
+                            res.2.plot[cur.idx, 2] <- gsub("^Received ", "", rep(rownames(res.cur.mat),
+                                                          ncol(res.cur.mat)))
                             res.2.plot[cur.idx, 3] <- as.vector(res.cur.mat)
                             res.2.plot[cur.idx, 4] <- quantile.names[q]
 
@@ -319,7 +319,7 @@ plotCompare <- function(...,
                 geom_boxplot(aes(fill = Received)) +
                 geom_rug(aes(colour = Received), alpha = 0.85) +
                 facet_grid(Quantile ~ Recommended + Model) +
-                theme(legend.position = "bottom") +
+                theme(legend.position = "none") +
                 ylab("Average Outcome")
         }
     } else if (type == "boxplot")
@@ -341,7 +341,7 @@ plotCompare <- function(...,
                 geom_boxplot(aes(fill = Received)) +
                 geom_rug(aes(colour = Received), alpha = 0.85) +
                 facet_grid(Recommended ~ Model) +
-                theme(legend.position = "bottom") +
+                theme(legend.position = "none") +
                 ylab("Outcome")
         }
     } else
