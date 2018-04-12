@@ -141,6 +141,8 @@ plotCompare <- function(...,
                                      Value       = as.vector(avg.res$avg.outcomes),
                                      Model       = obj.names[l])
 
+        avg.res.2.plot$Received <- as.factor(avg.res.2.plot$Received)
+
         avg.list[[l]] <- avg.res.2.plot
 
         if (type != "interaction")
@@ -252,6 +254,7 @@ plotCompare <- function(...,
                 }
 
             }
+            res.2.plot$Received <- as.factor(res.2.plot$Received)
 
             res.2.plot$Model <- obj.names[l]
             dat.list[[l]] <- res.2.plot

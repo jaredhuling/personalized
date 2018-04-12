@@ -87,7 +87,7 @@ plot.subgroup_fitted <- function(x,
         #res.2.plot[, 1] <- ifelse(trt.rec == 1, "Recommended Trt", "Recommended Ctrl")
         #res.2.plot[, 2] <- ifelse(x$call$trt == 1, "Received Trt", "Received Ctrl")
         res.2.plot[, 1] <- paste("Recommended", trt.rec)
-        res.2.plot[, 2] <- x$call$trt #paste("Received", x$call$trt)
+        res.2.plot[, 2] <- as.factor(x$call$trt) #paste("Received", x$call$trt)
 
         if (class(x$call$y) == "Surv")
         {
@@ -102,8 +102,8 @@ plot.subgroup_fitted <- function(x,
 
     avg.res.2.plot <- data.frame(Recommended = rep(colnames(avg.res$avg.outcomes),
                                                    each = ncol(avg.res$avg.outcomes)),
-                                 Received    = gsub("^Received ", "", rep(rownames(avg.res$avg.outcomes),
-                                                   ncol(avg.res$avg.outcomes))),
+                                 Received    = as.factor(gsub("^Received ", "", rep(rownames(avg.res$avg.outcomes),
+                                                   ncol(avg.res$avg.outcomes)))),
                                  Value       = as.vector(avg.res$avg.outcomes))
 
     Recommended <- Received <- Value <- bs <- Outcome <- NULL
@@ -187,6 +187,7 @@ plot.subgroup_fitted <- function(x,
                 geom_smooth(method = "gam", method.args = list(family = "binomial")) +
                 theme(legend.position = "bottom") +
                 scale_color_discrete(name = "Received") +
+                xlab("Benefit Score") +
                 ggtitle("Individual Observations by Treatment Group")
         } else
         {

@@ -76,6 +76,8 @@ plot.subgroup_validated <- function(x,
                                                    ncol(avg.res$avg.outcomes))),
                                  Value       = as.vector(avg.res$avg.outcomes))
 
+    avg.res.2.plot$Received <- as.factor(avg.res.2.plot$Received)
+
     Recommended <- Received <- Value <- bs <- Quantile <- Outcome <- NULL
 
     if (type == "conditional")
@@ -119,6 +121,8 @@ plot.subgroup_validated <- function(x,
             res.2.plot[cur.idx, 3] <- as.vector(boot.res[b,,])
         }
     }
+
+    res.2.plot$Received <- as.factor(res.2.plot$Received)
 
 
     title.text <- NULL
