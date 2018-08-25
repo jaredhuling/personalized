@@ -6,6 +6,7 @@
 #' @param ... the fitted (model or validation) objects to be plotted. Must be either
 #' objects returned from \code{fit.subgroup()} or \code{validate.subgroup()}
 #' @param type type of plot. \code{"density"} results in a density plot for the results
+#' across all observations (if \code{x} is from \code{fit.subgroup()}) or if \code{x} is from \code{validate.subgroup()}
 #' across iterations of either the bootstrap or training/test re-fitting. For the latter
 #' case the test results will be plotted. \code{"boxplot"} results in boxplots across all observations/iterations of either
 #' the bootstrap or training/test re-fitting. For the latter
