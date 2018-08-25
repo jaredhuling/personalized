@@ -1,7 +1,7 @@
 # personalized 0.1.6
 
 * Simplified plot labeling
-* 
+* Added clarifications to documentation
 
 # personalized 0.1.5
 
