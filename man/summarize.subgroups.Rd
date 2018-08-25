@@ -26,6 +26,9 @@ If x is a fitted object returned by \code{fit.subgroup()}, \code{subgroup} is no
 \description{
 Summarizes covariate values within the estimated subgroups
 }
+\details{
+The p-values shown are raw p-values and are not adjusted for multiple comparisons.
+}
 \examples{
 library(personalized)
 

@@ -3,6 +3,7 @@
 #' @description Summarizes covariate values within the estimated subgroups
 #' @param x a fitted object from \code{fit.subgroup()} or a matrix of covariate values
 #' @param ... optional arguments to \code{summarize.subgroups} methods
+#' @details The p-values shown are raw p-values and are not adjusted for multiple comparisons.
 #' @importFrom stats t.test chisq.test fisher.test
 #' @importFrom methods is
 #' @export
