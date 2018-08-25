@@ -32,6 +32,29 @@ If user sets \code{parallel = TRUE} and the fitted \code{fit.subgroup()} object 
 an internal model, say for \code{cv.glmnet()}, then the internal parallelization will be overridden so as
 not to create a conflict of parallelism.}
 }
+\value{
+An object of class \code{"subgroup_validated"}
+\item{avg.results}{Estimates of average conditional treatment effects when
+subgroups are determined based on the provided cutoff value for the benefit score. For example,
+if \code{cutoff = 0} and there is a treatment and control only, then the treatment is
+recommended if the benefit score is greater than 0.}
+\item{se.results}{Standard errors of the estimates from \code{avg.estimates}}
+\item{boot.results}{Contains the individual results for each replication. \code{avg.results} is comprised
+of averages of the values from \code{boot.results}}
+\item{avg.quantile.results}{Estimates of average conditional treatment effects when
+subgroups are determined based on different quntile cutoff values for the benefit score. For example,
+if \code{benefit.score.quantiles = 0.75} and there is a treatment and control only, then the treatment is
+recommended if the benefit score is greater than the 75th upper quantile of all benefit scores. If multiple quantile
+values are provided, e.g. \code{benefit.score.quantiles = c(0.15, 0.5, 0.85)}, then results will be provided
+for all quantile levels.}
+\item{se.quantile.results}{Standard errors corresponding to \code{avg.quantile.results}}
+\item{boot.results.quantiles}{Contains the individual results for each replication. \code{avg.quantile.results} is comprised
+of averages of the values from \code{boot.results.quantiles}}
+\item{family}{Family of the outcome. For example, \code{"gaussian"} for continuous outcomes}
+\item{method}{Method used for subgroup identification model. Weighting or A-learning}
+\item{val.method}{Method used for validation}
+\item{iterations}{Number of replications used in the validation process}
+}
 \description{
 Validates subgroup treatment effects for fitted
  subgroup identification model class of Chen, et al (2017)
