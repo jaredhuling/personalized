@@ -118,6 +118,33 @@
 #'   Estimating individualized treatment rules using outcome weighted learning.
 #'   Journal of the American Statistical Association, 107(499), 1106-1118. doi: 10.1080/01621459.2012.695674
 #'   \url{http://dx.doi.org/10.1080/01621459.2012.695674}
+#' @return An object of class \code{"subgroup_fitted"}.
+#' \item{predict}{A function that returns predictions of the covariate-conditional treatment effects }
+#' \item{model}{An object returned by the underlying fitting function used. For example, if the lasso use used to fit
+#' the underlying subgroup identification model, this will be an object returned by \code{cv.glmnet}. }
+#' \item{coefficients}{ If the underlying subgroup identification model is parametric, \code{coefficients} will contain
+#' the estimated coefficients of the model. }
+#' \item{call}{The call that produced the returned object. If \code{retcall = TRUE}, this will contain all objects
+#' supplied to \code{fit.subgroup()}}
+#' \item{family}{The family corresponding to the outcome provided}
+#' \item{loss}{The loss function used}
+#' \item{method}{The method used (either weighting or A-learning)}
+#' \item{propensity.func}{The propensity score function used}
+#' \item{larger.outcome.better}{If larger outcomes are preferred for this model}
+#' \item{var.names}{The names of all variables used}
+#' \item{n.trts}{The number of treatment levels}
+#' \item{comparison.trts}{All treatment levels other than the reference level}
+#' \item{reference.trt}{The reference level for the treatment. This should usually be the control group/level}
+#' \item{trts}{All treatment levels}
+#' \item{trt.received}{The vector of treatment assignments}
+#' \item{pi.x}{A vector of propensity scores}
+#' \item{y}{A vector of outcomes}
+#' \item{benefit.scores}{A vector of conditional treatment effects, i.e. benefit scores}
+#' \item{recommended.trts}{A vector of treatment recommendations (i.e. for each patient,
+#' which treatment results in the best expected potential outcomes)}
+#' \item{subgroup.trt.effects}{(Biased) estimates of the conditional treatment effects
+#' and conditional outcomes. These are essentially just empirical averages within
+#' different combinations of treatment assignments and treatment recommendations}
 #'
 #' @examples
 #' library(personalized)
