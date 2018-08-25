@@ -6,7 +6,6 @@
 #' @param ... the fitted (model or validation) objects to be plotted. Must be either
 #' objects returned from \code{fit.subgroup()} or \code{validate.subgroup()}
 #' @param type type of plot. \code{"density"} results in a density plot for the results
-#' across all observations (if \code{x} is from \code{fit.subgroup()}) or if \code{x} is from \code{validate.subgroup()}
 #' across iterations of either the bootstrap or training/test re-fitting. For the latter
 #' case the test results will be plotted. \code{"boxplot"} results in boxplots across all observations/iterations of either
 #' the bootstrap or training/test re-fitting. For the latter
@@ -273,7 +272,7 @@ plotCompare <- function(...,
         pl.obj <- ggplot(res.2.plot,
                          aes(x = Value, fill = Received)) +
             geom_density(alpha = 0.65) +
-            geom_rug(aes(colour = Received), alpha = 0.85) +
+            geom_rug(aes(colour = Received), alpha = 0.85, sides = "l") +
             coord_flip() +
             facet_grid(Recommended ~ Model) +
             theme(legend.position = "bottom") +
@@ -320,7 +319,7 @@ plotCompare <- function(...,
             pl.obj <- ggplot(res.2.plot,
                              aes(x = Received, y = Value)) +
                 geom_boxplot(aes(fill = Received)) +
-                geom_rug(aes(colour = Received), alpha = 0.85) +
+                geom_rug(aes(colour = Received), alpha = 0.85, sides = "l") +
                 facet_grid(Quantile ~ Recommended + Model) +
                 theme(legend.position = "none") +
                 ylab("Average Outcome")
@@ -342,7 +341,7 @@ plotCompare <- function(...,
             pl.obj <- ggplot(res.2.plot,
                              aes(x = Received, y = Value)) +
                 geom_boxplot(aes(fill = Received)) +
-                geom_rug(aes(colour = Received), alpha = 0.85) +
+                geom_rug(aes(colour = Received), alpha = 0.85, sides = "l") +
                 facet_grid(Recommended ~ Model) +
                 theme(legend.position = "none") +
                 ylab("Outcome")
