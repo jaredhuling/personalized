@@ -114,8 +114,8 @@ plot.subgroup_fitted <- function(x,
     {
         pl.obj <- ggplot(res.2.plot,
                          aes(x = Value, fill = Received)) +
-            geom_density(alpha = 0.65) +
-            geom_rug(aes(colour = Received), alpha = 0.85) +
+            geom_density(alpha = 0.65, na.rm = TRUE) +
+            geom_rug(aes(colour = Received), alpha = 0.85, na.rm = TRUE) +
             coord_flip() +
             facet_grid( ~ Recommended) +
             theme(legend.position = "bottom") +
@@ -136,7 +136,7 @@ plot.subgroup_fitted <- function(x,
             res.2.plot$Value <- as.factor(res.2.plot$Value)
             pl.obj <- ggplot(res.2.plot,
                              aes(x = Received, fill = factor(Value) )) +
-                geom_bar(position = "fill") +
+                geom_bar(position = "fill", na.rm = TRUE) +
                 facet_grid(~ Recommended) +
                 theme(legend.position = "bottom") +
                 ylab(outcome.lab) +
@@ -146,8 +146,8 @@ plot.subgroup_fitted <- function(x,
         {
             pl.obj <- ggplot(res.2.plot,
                              aes(x = Received, y = Value)) +
-                geom_boxplot(aes(fill = Received)) +
-                geom_rug(aes(colour = Received), alpha = 0.85) +
+                geom_boxplot(aes(fill = Received), na.rm = TRUE) +
+                geom_rug(aes(colour = Received), alpha = 0.85, na.rm = TRUE) +
                 facet_grid( ~ Recommended) +
                 theme(legend.position = "none") +
                 ylab(outcome.lab) +
@@ -183,8 +183,8 @@ plot.subgroup_fitted <- function(x,
                              aes(x = bs, y = Outcome,
                                  group = factor(Received),
                                  color = factor(Received) )) +
-                geom_point() +
-                geom_smooth(method = "gam", method.args = list(family = "binomial")) +
+                geom_point(na.rm = TRUE) +
+                geom_smooth(method = "gam", method.args = list(family = "binomial"), na.rm = TRUE) +
                 theme(legend.position = "bottom") +
                 scale_color_discrete(name = "Received") +
                 xlab("Benefit Score") +
@@ -195,8 +195,8 @@ plot.subgroup_fitted <- function(x,
                              aes(x = bs, y = Outcome,
                                  group = factor(Received),
                                  color = factor(Received) )) +
-                geom_point() +
-                geom_smooth(method = "gam") +
+                geom_point(na.rm = TRUE) +
+                geom_smooth(method = "gam", na.rm = TRUE) +
                 theme(legend.position = "bottom") +
                 scale_color_discrete(name = "Received") +
                 ggtitle("Individual Observations by Treatment Group")
@@ -205,8 +205,8 @@ plot.subgroup_fitted <- function(x,
     {
         pl.obj <- ggplot(avg.res.2.plot,
                          aes(x = Recommended, y = Value, group = Received)) +
-            geom_line(aes(colour = Received), size = 1.25) +
-            geom_point(aes(colour = Received), size = 2) +
+            geom_line(aes(colour = Received), size = 1.25, na.rm = TRUE) +
+            geom_point(aes(colour = Received), size = 2, na.rm = TRUE) +
             theme(legend.position = "bottom") +
             scale_x_discrete(expand = c(0.25, 0.25)) +
             ylab(paste0("Average ", outcome.lab)) +

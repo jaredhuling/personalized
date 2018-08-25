@@ -5,10 +5,11 @@
 \alias{summary.wksvm}
 \title{Summary of results for fitted subgroup identification models}
 \usage{
-\method{summary}{subgroup_fitted}(object, digits = max(getOption("digits") -
-  3, 3), ...)
+\method{summary}{subgroup_fitted}(object,
+  digits = max(getOption("digits") - 3, 3), ...)
 
-\method{summary}{wksvm}(object, digits = max(getOption("digits") - 3, 3), ...)
+\method{summary}{wksvm}(object, digits = max(getOption("digits") - 3, 3),
+  ...)
 }
 \arguments{
 \item{object}{a fitted object from either \code{fit.subgroup} or \code{validate.subgroup}}

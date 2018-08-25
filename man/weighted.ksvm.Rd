@@ -4,8 +4,9 @@
 \alias{weighted.ksvm}
 \title{Fit weighted kernel svm model.}
 \usage{
-weighted.ksvm(y, x, weights, C = c(0.1, 0.5, 1, 5, 10), kernel = "rbfdot",
-  kpar = "automatic", nfolds = 10, foldid = NULL, ...)
+weighted.ksvm(y, x, weights, C = c(0.1, 0.5, 1, 5, 10),
+  kernel = "rbfdot", kpar = "automatic", nfolds = 10,
+  foldid = NULL, ...)
 }
 \arguments{
 \item{y}{The response vector (either a character vector, factor vector, or numeric vector with values in {-1, 1})}

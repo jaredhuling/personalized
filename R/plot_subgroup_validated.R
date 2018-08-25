@@ -145,8 +145,8 @@ plot.subgroup_validated <- function(x,
     {
         pl.obj <- ggplot(res.2.plot,
                          aes(x = Value, fill = Received)) +
-            geom_density(alpha = 0.65) +
-            geom_rug(aes(colour = Received), alpha = 0.85) +
+            geom_density(alpha = 0.65, na.rm = TRUE) +
+            geom_rug(aes(colour = Received), alpha = 0.85, na.rm = TRUE) +
             coord_flip() +
             facet_grid( ~ Recommended) +
             theme(legend.position = "bottom") +
@@ -164,8 +164,8 @@ plot.subgroup_validated <- function(x,
     {
         pl.obj <- ggplot(res.2.plot,
                          aes(x = Received, y = Value)) +
-            geom_boxplot(aes(fill = Received)) +
-            geom_rug(aes(colour = Received), alpha = 0.85) +
+            geom_boxplot(aes(fill = Received), na.rm = TRUE) +
+            geom_rug(aes(colour = Received), alpha = 0.85, na.rm = TRUE) +
             facet_grid( ~ Recommended) +
             theme(legend.position = "none") +
             ylab(ylab.text) +
@@ -174,8 +174,8 @@ plot.subgroup_validated <- function(x,
     {
         pl.obj <- ggplot(res.2.plot,
                          aes(x = Received, y = Value)) +
-            geom_boxplot(aes(fill = Received)) +
-            geom_rug(aes(colour = Received), alpha = 0.85) +
+            geom_boxplot(aes(fill = Received), na.rm = TRUE) +
+            geom_rug(aes(colour = Received), alpha = 0.85, na.rm = TRUE) +
             facet_grid(Recommended ~ Quantile) +
             theme(legend.position = "none") +
             ylab(ylab.text) +
@@ -260,8 +260,8 @@ plot.subgroup_validated <- function(x,
     {
         pl.obj <- ggplot(avg.res.2.plot,
                          aes(x = Recommended, y = Value, group = Received)) +
-            geom_line(aes(colour = Received), size = 1.25) +
-            geom_point(aes(colour = Received), size = 2) +
+            geom_line(aes(colour = Received), size = 1.25, na.rm = TRUE) +
+            geom_point(aes(colour = Received), size = 2, na.rm = TRUE) +
             theme(legend.position = "bottom") +
             scale_x_discrete(expand = c(0.25, 0.25)) +
             ylab(ylab.text) +

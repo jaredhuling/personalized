@@ -6,11 +6,11 @@
 \alias{print.subgroup_summary}
 \title{Printing results for fitted subgroup identification models}
 \usage{
-\method{print}{subgroup_fitted}(x, digits = max(getOption("digits") - 3, 3),
-  ...)
+\method{print}{subgroup_fitted}(x, digits = max(getOption("digits") - 3,
+  3), ...)
 
-\method{print}{subgroup_validated}(x, digits = max(getOption("digits") - 3,
-  3), sample.pct = FALSE, which.quant = NULL, ...)
+\method{print}{subgroup_validated}(x, digits = max(getOption("digits") -
+  3, 3), sample.pct = FALSE, which.quant = NULL, ...)
 
 \method{print}{subgroup_summary}(x, p.value = 1,
   digits = max(getOption("digits") - 3, 3), ...)
