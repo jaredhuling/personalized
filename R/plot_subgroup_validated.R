@@ -146,7 +146,7 @@ plot.subgroup_validated <- function(x,
         pl.obj <- ggplot(res.2.plot,
                          aes(x = Value, fill = Received)) +
             geom_density(alpha = 0.65, na.rm = TRUE) +
-            geom_rug(aes(colour = Received), alpha = 0.85, na.rm = TRUE) +
+            geom_rug(aes(colour = Received), alpha = 0.85, na.rm = TRUE, sides = "l") +
             coord_flip() +
             facet_grid( ~ Recommended) +
             theme(legend.position = "bottom") +
@@ -165,7 +165,7 @@ plot.subgroup_validated <- function(x,
         pl.obj <- ggplot(res.2.plot,
                          aes(x = Received, y = Value)) +
             geom_boxplot(aes(fill = Received), na.rm = TRUE) +
-            geom_rug(aes(colour = Received), alpha = 0.85, na.rm = TRUE) +
+            geom_rug(aes(colour = Received), alpha = 0.85, na.rm = TRUE, sides = "l") +
             facet_grid( ~ Recommended) +
             theme(legend.position = "none") +
             ylab(ylab.text) +
@@ -175,7 +175,7 @@ plot.subgroup_validated <- function(x,
         pl.obj <- ggplot(res.2.plot,
                          aes(x = Received, y = Value)) +
             geom_boxplot(aes(fill = Received), na.rm = TRUE) +
-            geom_rug(aes(colour = Received), alpha = 0.85, na.rm = TRUE) +
+            geom_rug(aes(colour = Received), alpha = 0.85, na.rm = TRUE, sides = "l") +
             facet_grid(Recommended ~ Quantile) +
             theme(legend.position = "none") +
             ylab(ylab.text) +
