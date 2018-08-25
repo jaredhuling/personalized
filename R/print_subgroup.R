@@ -48,10 +48,13 @@ print.subgroup_fitted <- function(x, digits = max(getOption('digits')-3, 3), ...
     Cf2 <- paste0(round(x$subgroup.trt.effects$subgroup.effects, digits),
                                " (n = ", colSums(x$subgroup.trt.effects$sample.sizes), ")")
     names(Cf2) <- names(x$subgroup.trt.effects$subgroup.effects)
+    cat("Treatment effects conditional on subgroups:\n")
     print.default(Cf2, quote = FALSE, right = TRUE, na.print = "NA",
                   ...)
 
     ncol.bs <- NCOL(x$benefit.scores)
+
+    cat("\nNOTE: The above average outcomes are biased estimates of\n      the expected outcomes conditional on subgroups. \n      Use 'validate.subgroup()' to obtain unbiased estimates.\n")
 
     if (is.null(ncol.bs) || ncol.bs == 1)
     {
@@ -112,7 +115,7 @@ print.subgroup_validated <- function(x, digits = max(getOption('digits')-3, 3), 
             {
                 iters <- x$iterations
             }
-            cat("iterations:        ", iters, "\n\n")
+            cat("replications:        ", iters, "\n\n")
 
             if (x$val.method == "training_test_replication")
             {
@@ -159,6 +162,8 @@ print.subgroup_validated <- function(x, digits = max(getOption('digits')-3, 3), 
                               ", n = ", round(colSums(x$avg.quantile.results[[q]]$sample.sizes), digits), ")")
             }
             names(Cf2) <- names(x$avg.quantile.results[[q]]$subgroup.effects)
+
+            cat("Treatment effects conditional on subgroups:\n")
             print.default(Cf2, quote = FALSE, right = TRUE, na.print = "NA",
                           ...)
 
@@ -166,7 +171,7 @@ print.subgroup_validated <- function(x, digits = max(getOption('digits')-3, 3), 
 
             overall <- paste0(round(x$avg.quantile.results[[q]]$overall.subgroup.effect, digits),
                               " (SE = ", round(x$se.quantile.results[[q]]$SE.overall.subgroup.effect, digits), ")")
-            names(overall) <- "Overall Subgroup Effect"
+            names(overall) <- "Overall treatment effect conditional on subgroups"
 
             print.default(overall, quote = FALSE, right = TRUE, na.print = "NA",
                           ...)
@@ -191,7 +196,7 @@ print.subgroup_validated <- function(x, digits = max(getOption('digits')-3, 3), 
         {
             iters <- x$iterations
         }
-        cat("iterations: ", iters, "\n\n")
+        cat("replications: ", iters, "\n\n")
 
         if (x$val.method == "training_test_replication")
         {
@@ -237,6 +242,7 @@ print.subgroup_validated <- function(x, digits = max(getOption('digits')-3, 3), 
                           ", n = ", round(colSums(x$avg.results$sample.sizes), digits), ")")
         }
         names(Cf2) <- names(x$avg.results$subgroup.effects)
+        cat("Treatment effects conditional on subgroups:\n")
         print.default(Cf2, quote = FALSE, right = TRUE, na.print = "NA",
                       ...)
 
@@ -244,7 +250,7 @@ print.subgroup_validated <- function(x, digits = max(getOption('digits')-3, 3), 
 
         overall <- paste0(round(x$avg.results$overall.subgroup.effect, digits),
                           " (SE = ", round(x$se.results$SE.overall.subgroup.effect, digits), ")")
-        names(overall) <- "Overall Subgroup Effect"
+        names(overall) <- "Overall treatment effect conditional on subgroups"
 
         print.default(overall, quote = FALSE, right = TRUE, na.print = "NA",
                       ...)

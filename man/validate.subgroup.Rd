@@ -36,6 +36,28 @@ not to create a conflict of parallelism.}
 Validates subgroup treatment effects for fitted
  subgroup identification model class of Chen, et al (2017)
 }
+\details{
+Estimates of various quantities conditional on subgroups and treatment statuses are provided and displayed
+via the \code{\link[personalized]{print.subgroup_validated}} function:
+\enumerate{
+\item{"Conditional expected outcomes"}{ The first results shown when printing
+a \code{subgroup_validated} object are estimates of the expected outcomes conditional on
+the estimated subgroups (i.e. which subgroup is 'recommended' by the model) and conditional
+on treatment/intervention status. If there are two total treatment options, this results in a 2x2 table
+of expected conditional outcomes. }
+\item{"Treatment effects conditional on subgroups"}{ The second results shown when printing
+a \code{subgroup_validated} object are estimates of the expected outcomes conditional on
+the estimated subgroups. If the treatment takes levels \eqn{j \in \{1, \dots, K\}}, a total of \eqn{K}
+conditional treatment effects will be shown. For example, of the outcome is continuous, the
+\eqn{j}th conditional treatment effect is defined as \eqn{E(Y|Trt = j, Subgroup=j) - E(Y|Trt = j, Subgroup =/= j)}},
+where \eqn{Subgroup=j} if treatment \eqn{j} is recommended, i.e. treatment \eqn{j} results in the largest/best
+expected potential outcomes given the fitted model.
+\item{"Overall treatment effect conditional on subgroups "}{ The third quantity displayed shows the overall improvement
+in outcomes resulting from all treatment recommendations. This is essentially an average over all of the
+conditional treatment effects weighted by the proportion of the population recommended each respective
+treatment level.}
+}
+}
 \examples{
 library(personalized)
 
