@@ -393,6 +393,37 @@ subgrp.model.bin.cust <- fit.subgroup(x = x, y = y.binary,
 subgrp.model.bin.cust
 
 
+## try exponential loss for
+## positive outcomes
+
+fit.expo.loss <- function(x, y, weights, ...)
+{
+    expo.loss <- function(beta, x, y, weights) {
+        sum(weights * y * exp(-drop(x \%*\% beta)))
+    }
+
+    # use optim() to minimize loss function
+    opt <- optim(rep(0, NCOL(x)), fn = expo.loss, x = x, y = y, weights = weights)
+
+    coefs <- opt$par
+
+    pred <- function(x, type = "response") {
+        tcrossprod(cbind(1, x), t(coefs))
+    }
+
+    # return list of required components
+    list(predict = pred, model = opt, coefficients = coefs)
+}
+
+# use exponential loss for positive outcomes
+subgrp.model.expo <- fit.subgroup(x = x, y = y.count,
+                                  trt = trt01,
+                                  propensity.func = prop.func,
+                                  fit.custom.loss = fit.expo.loss)
+
+subgrp.model.expo
+
+
 }
 \references{
 Chen, S., Tian, L., Cai, T. and Yu, M. (2017), A general statistical framework for subgroup identification
