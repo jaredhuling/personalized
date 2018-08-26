@@ -76,6 +76,15 @@ test_that("test plotting for continuous outcomes with various options", {
 
     expect_is(subgrp.model.bin, "subgroup_fitted")
 
+    subgrp.model.bin2 <- fit.subgroup(x = x, y = y.binary,
+                                     trt = trt01,
+                                     propensity.func = prop.func,
+                                     loss   = "logistic_loss_lasso",
+                                     cutpoint = 0,
+                                     nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model.bin2, "subgroup_fitted")
+
     plot(subgrp.model.bin, type = "boxplot")
 
 
@@ -166,6 +175,10 @@ test_that("test plotting for continuous outcomes with various options", {
 
 
     pl <- plotCompare(subgrp.model, subgrp.model2, type = "interaction")
+
+    expect_is(pl, "ggplot")
+
+    pl <- plotCompare(subgrp.model.bin, subgrp.model.bin2, type = "density")
 
     expect_is(pl, "ggplot")
 
