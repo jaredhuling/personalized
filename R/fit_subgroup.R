@@ -417,6 +417,7 @@ fit.subgroup <- function(x,
 
         args_needed <- sort(c("...", "family", "match.id", "n.trts", "offset", "trt", "weights", "x", "y"))
 
+        ## make sure too many args aren't provided
         if (length(loss_args) > length(args_needed))
         {
             args_names <- paste(unname(sapply(args_needed, function(cr) paste0("'", cr, "'"))),
@@ -424,12 +425,14 @@ fit.subgroup <- function(x,
             stop(c("Too many arguments provided. Arguments allowed are: ", args_names) )
         } else
         {
+            ## make sure no invalid args are provided
             if (any(!(loss_args %in% args_needed)))
             {
                 stop("Invalid arguments given to 'fit.custom.loss'")
             }
         }
 
+        ## get arguments that weren't provided from args_needed
         args_2_add <- setdiff(args_needed, loss_args)
 
         ## add arguments to fit.custom.loss which
@@ -438,6 +441,9 @@ fit.subgroup <- function(x,
         {
             args_2_use    <- intersect(args_needed, loss_args)
             args_2_use_nd <- args_2_use[-match("...", args_2_use)]
+
+            ## define new fit function that has all requisite arguments
+            ## but that only actually calls the ones that were provided
             fit.custom.loss2 <- function(x, y, weights, trt, n.trts, match.id, offset, family, ...)
             {
                 if ("..." %in% args_2_use)
