@@ -184,7 +184,8 @@ as a means of incorporating the efficiency augmentation model's predictions}
  fit.custom.loss <- function(x, y, weights, offset, ...) {
      df <- data.frame(y = y, x)
 
-     # minimize squared error loss with NO lasso penalty
+     # minimize logistic loss with NO lasso penalty
+     # with allowance for efficiency augmentation
      glmf <- glm(y ~ x - 1, weights = weights,
                 offset = offset, # offset term allows for efficiency augmentation
                 family = binomial(), ...)
