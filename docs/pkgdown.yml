@@ -1,6 +1,6 @@
-pandoc: 2.1.2
-pkgdown: 0.1.0.9000
-pkgdown_sha: 5e4825875751c009444c56ce43d06324ec53e910
+pandoc: 2.2.3.2
+pkgdown: 1.1.0.9000
+pkgdown_sha: b2798656f04ce282edea3e12734ba5588c6acd6e
 articles:
   usage_of_the_personalized_package: usage_of_the_personalized_package.html
 

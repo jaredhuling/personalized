@@ -102,8 +102,13 @@ summary(subgrp.model)
     ## Received Ctrl  -4.2429 (n = 117) -21.9576 (n = 114)
     ## Received Trt  -23.6902 (n = 132)  -6.7605 (n = 137)
     ## 
+    ## Treatment effects conditional on subgroups:
     ## Ctrl effect among recommended Ctrl   Trt effect among recommended Trt 
     ##                  19.4474 (n = 249)                  15.1972 (n = 251) 
+    ## 
+    ## NOTE: The above average outcomes are biased estimates of
+    ##       the expected outcomes conditional on subgroups. 
+    ##       Use 'validate.subgroup()' to obtain unbiased estimates.
     ## 
     ## Benefit score quantiles: 
     ##        0%       25%       50%       75%      100% 
@@ -142,18 +147,19 @@ print(val.model, digits = 2, sample.pct = TRUE)
     ## method:  weighting 
     ## 
     ## validation method:  training_test_replication 
-    ## iterations:  100 
+    ## replications:  100 
     ## 
     ## Average Test Set Outcomes:
     ##                         Recommended Ctrl            Recommended Trt
     ## Received Ctrl -10.85 (SE = 7.88, 20.74%)  -18.64 (SE = 6.5, 25.81%)
     ## Received Trt   -15.81 (SE = 5.9, 24.18%) -15.36 (SE = 9.02, 29.26%)
     ## 
+    ## Treatment effects conditional on subgroups:
     ## Ctrl effect among recommended Ctrl   Trt effect among recommended Trt 
     ##          4.97 (SE = 11.23, 44.93%)          3.27 (SE = 11.73, 55.07%) 
     ## 
-    ## Overall Subgroup Effect 
-    ##         1.2 (SE = 8.77)
+    ## Overall treatment effect conditional on subgroups 
+    ##                                   1.2 (SE = 8.77)
 
 Visualize subgroup-specific treatment effect estimates across
 training/testing

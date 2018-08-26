@@ -21,15 +21,21 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
 <meta property="og:title" content="National Supported Work Study Data — LaLonde" />
 
 <meta property="og:description" content="The LaLonde dataset comes from the National Supported Work Study, which sought to
 evaluate the effectiveness of an employment trainining program on wage increases." />
 <meta name="twitter:card" content="summary" />
+
 
 
 <!-- mathjax -->
@@ -56,7 +62,7 @@ evaluate the effectiveness of an employment trainining program on wage increases
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">personalized</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.5</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.0</span>
       </span>
     </div>
 
@@ -96,6 +102,7 @@ evaluate the effectiveness of an employment trainining program on wage increases
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -103,17 +110,20 @@ evaluate the effectiveness of an employment trainining program on wage increases
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>National Supported Work Study Data</h1>
     
+    <div class="hidden name"><code>LaLonde.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>The LaLonde dataset comes from the National Supported Work Study, which sought to
 evaluate the effectiveness of an employment trainining program on wage increases.</p>
     
+    </div>
 
     <pre class="usage"><span class='no'>LaLonde</span></pre>
         
@@ -180,22 +190,27 @@ evaluate the effectiveness of an employment trainining program on wage increases
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;               Recommended Ctrl  Recommended Trt
-#&gt; Received Ctrl  0.7292 (n = 48) 0.5146 (n = 377)
-#&gt; Received Trt   0.5714 (n = 28) 0.6059 (n = 269)
+#&gt; Received Ctrl      NaN (n = 0) 0.5388 (n = 425)
+#&gt; Received Trt       NaN (n = 0) 0.6027 (n = 297)
 #&gt; 
+#&gt; Treatment effects conditional on subgroups:
 #&gt; Ctrl effect among recommended Ctrl   Trt effect among recommended Trt 
-#&gt;                    0.1577 (n = 76)                   0.0914 (n = 646) 
+#&gt;                        NaN (n = 0)                   0.0639 (n = 722) 
+#&gt; 
+#&gt; NOTE: The above average outcomes are biased estimates of
+#&gt;       the expected outcomes conditional on subgroups. 
+#&gt;       Use 'validate.subgroup()' to obtain unbiased estimates.
 #&gt; 
 #&gt; Benefit score quantiles: 
-#&gt;      0%     25%     50%     75%    100% 
-#&gt; -0.1811  0.1341  0.1341  0.1341  0.2980 
+#&gt;       0%      25%      50%      75%     100% 
+#&gt; 0.005158 0.140502 0.140502 0.140502 0.149550 
 #&gt; 
 #&gt; 2 out of 10 variables selected in total by the lasso (cross validation criterion).
 #&gt; 
 #&gt;         Estimate
-#&gt; Trt       0.1341
-#&gt; hispYes  -0.3152
-#&gt; marrYes   0.1639</div></pre>
+#&gt; Trt       0.1405
+#&gt; hispYes  -0.1353
+#&gt; marrYes   0.0090</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -224,6 +239,8 @@ evaluate the effectiveness of an employment trainining program on wage increases
 
       </footer>
    </div>
+
+  
 
   </body>
 </html>

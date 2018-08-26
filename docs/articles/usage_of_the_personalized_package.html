@@ -8,8 +8,8 @@
 <title>Usage of the Personalized Package • personalized</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><meta property="og:title" content="Usage of the Personalized Package">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Usage of the Personalized Package">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
@@ -18,7 +18,7 @@
 <![endif]-->
 </head>
 <body>
-    <div class="container template-vignette">
+    <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">personalized</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.5</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.0</span>
       </span>
     </div>
 
@@ -77,20 +77,20 @@
 
       
       </header><div class="row">
-  <div class="col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Usage of the Personalized Package</h1>
                         <h4 class="author">Jared Huling</h4>
             
-            <h4 class="date">2018-04-01</h4>
+            <h4 class="date">2018-08-26</h4>
       
       
+      <div class="hidden name"><code>usage_of_the_personalized_package.Rmd</code></div>
 
     </div>
 
     
     
-<div class="contents">
 <div id="introduction-to-personalized" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction-to-personalized" class="anchor"></a>Introduction to <code>personalized</code>
@@ -152,16 +152,21 @@
 <tr class="even">
 <td>Logistic</td>
 <td>B</td>
-<td align="left"><span class="math inline">\(M(y, v) = -(yv - \log(1 + \mbox{exp}\{-v\}))\)</span></td>
+<td align="left"><span class="math inline">\(M(y, v) = -[yv - \log(1 + \mbox{exp}\{-v\})]\)</span></td>
 </tr>
 <tr class="odd">
+<td>Poisson</td>
+<td>CT</td>
+<td align="left"><span class="math inline">\(M(y, v) = -[yv - \exp(v)]\)</span></td>
+</tr>
+<tr class="even">
 <td>Cox</td>
 <td>TTE</td>
 <td align="left"><span class="math inline">\(M(y, v) = -\left\{ \int_0^\tau\left( v - \log[E\{ e^vI(X \geq u) \}] \right)\mathrm{d} N(u) \right\}\)</span></td>
 </tr>
 </tbody>
 </table>
-<p>where “C” indicates usage for continuous outcomes, “B” indicates usage for binary outcomes, and “TTE” indicates usages for time-to-event outcomes, and for the last loss <span class="math inline">\(y = (X, \delta) = \{ \widetilde{X} \wedge C, I(\widetilde{X} \leq t) \}\)</span>, <span class="math inline">\(\widetilde{X}\)</span> is the survival time, &amp; <span class="math inline">\(C\)</span> is the censoring time, <span class="math inline">\(N(t) = I(\widetilde{X} \leq t)\delta\)</span>, and <span class="math inline">\(\tau\)</span> &amp; is fixed time point where <span class="math inline">\(P(X \geq \tau) &gt; 0\)</span>.</p>
+<p>where “C” indicates usage for continuous outcomes, “B” indicates usage for binary outcomes, “CT” indicates usages for count outcomes, and “TTE” indicates usages for time-to-event outcomes, and for the last loss <span class="math inline">\(y = (X, \delta) = \{ \widetilde{X} \wedge C, I(\widetilde{X} \leq t) \}\)</span>, <span class="math inline">\(\widetilde{X}\)</span> is the survival time, &amp; <span class="math inline">\(C\)</span> is the censoring time, <span class="math inline">\(N(t) = I(\widetilde{X} \leq t)\delta\)</span>, and <span class="math inline">\(\tau\)</span> &amp; is fixed time point where <span class="math inline">\(P(X \geq \tau) &gt; 0\)</span>.</p>
 </div>
 <div id="choice-of-f" class="section level3">
 <h3 class="hasAnchor">
@@ -234,7 +239,7 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 <a class="sourceLine" id="cb2-11" data-line-number="11">}</a></code></pre></div>
 <p>We then need to make sure the propensity scores have sufficient overlap between treatment groups. We can do this with the <code><a href="../reference/check.overlap.html">check.overlap()</a></code> function, which plots densities or histograms of the propensity scores for each of the treatment groups:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="../reference/check.overlap.html">check.overlap</a></span>(x, trt, prop.func)</a></code></pre></div>
-<p><img src="usage_of_the_personalized_package_files/figure-html/plot_overlap-1.png" width="672"></p>
+<p><img src="usage_of_the_personalized_package_files/figure-html/plot_overlap-1.png" width="700"></p>
 <p>We can see that our propensity scores have common support.</p>
 </div>
 <div id="fitting-subgroup-identification-models" class="section level2">
@@ -259,8 +264,13 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## Received 0  -9.9055 (n = 190) -16.5132 (n = 220)
 ## Received 1 -18.5664 (n = 272)  -7.6255 (n = 318)
 ## 
+## Treatment effects conditional on subgroups:
 ## 0 effect among recommended 0 1 effect among recommended 1 
 ##             8.6609 (n = 462)             8.8877 (n = 538) 
+## 
+## NOTE: The above average outcomes are biased estimates of
+##       the expected outcomes conditional on subgroups. 
+##       Use 'validate.subgroup()' to obtain unbiased estimates.
 ## 
 ## Benefit score quantiles: 
 ##       0%      25%      50%      75%     100% 
@@ -280,10 +290,10 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## V37   -0.1768</code></pre>
 <p>We can then plot the outcomes of patients in the different subgroups:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">plot</span>(subgrp.model)</a></code></pre></div>
-<p><img src="usage_of_the_personalized_package_files/figure-html/plot_model-1.png" width="672"></p>
+<p><img src="usage_of_the_personalized_package_files/figure-html/plot_model-1.png" width="700"></p>
 <p>Alternatively, we can create an interaction plot. This plot represents the average outcome within each subgroup broken down by treatment status. If the lines in the interaction plots cross, that indicates there is a subgroup treatment effect.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">plot</span>(subgrp.model, <span class="dt">type =</span> <span class="st">"interaction"</span>)</a></code></pre></div>
-<p><img src="usage_of_the_personalized_package_files/figure-html/plot_model_2-1.png" width="672"></p>
+<p><img src="usage_of_the_personalized_package_files/figure-html/plot_model_2-1.png" width="700"></p>
 </div>
 <div id="evaluating-treatment-effects-within-estimated-subgroups" class="section level2">
 <h2 class="hasAnchor">
@@ -301,7 +311,7 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## method:  weighting 
 ## 
 ## validation method:  training_test_replication 
-## iterations:  25 
+## replications:  25 
 ## 
 ## Average Test Set Outcomes:
 ##                                Recommended 0
@@ -311,21 +321,21 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## Received 0 -14.5556 (SE = 2.58, n = 50.44)
 ## Received 1 -9.3676 (SE = 3.4986, n = 75.2)
 ## 
+## Treatment effects conditional on subgroups:
 ##     0 effect among recommended 0     1 effect among recommended 1 
 ##  3.005 (SE = 4.6473, n = 124.36) 5.1881 (SE = 4.5859, n = 125.64) 
 ## 
-## Overall Subgroup Effect 
-##     3.442 (SE = 3.3063)</code></pre>
+## Overall treatment effect conditional on subgroups 
+##                               3.442 (SE = 3.3063)</code></pre>
 <p>We can then plot the average outcomes averaged over all replications of the training and testing partition procedure:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">plot</span>(validation)</a></code></pre></div>
-<pre><code>## Warning: Removed 4 rows containing non-finite values (stat_boxplot).</code></pre>
-<p><img src="usage_of_the_personalized_package_files/figure-html/plot_validation-1.png" width="672"> From the above plot we can evaluate what the impact of the subgroups is. Among patients for whom the model recommends the control is more effective than the treatment, we can see that those who instead take the treatment are worse off than patients who take the control. Similarly, among patients who are recommended the treatment, patients who take the treatment are better off on average than patients who do not take the treatment.</p>
+<p><img src="usage_of_the_personalized_package_files/figure-html/plot_validation-1.png" width="700"> From the above plot we can evaluate what the impact of the subgroups is. Among patients for whom the model recommends the control is more effective than the treatment, we can see that those who instead take the treatment are worse off than patients who take the control. Similarly, among patients who are recommended the treatment, patients who take the treatment are better off on average than patients who do not take the treatment.</p>
 <p>Similarly, we can create an interaction plot of either the bootstrap bias-corrected means within the different subgroups or the average test set means within subgroups. Here, lines crossing is an indicator of differential treatment effect between the subgroups.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">plot</span>(validation, <span class="dt">type =</span> <span class="st">"interaction"</span>)</a></code></pre></div>
-<p><img src="usage_of_the_personalized_package_files/figure-html/plot_validation_2-1.png" width="672"></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">plot</span>(validation, <span class="dt">type =</span> <span class="st">"interaction"</span>)</a></code></pre></div>
+<p><img src="usage_of_the_personalized_package_files/figure-html/plot_validation_2-1.png" width="700"></p>
 <p>We can also compare the validation results with the results on the observed data:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw"><a href="../reference/plotCompare.html">plotCompare</a></span>(subgrp.model, validation, <span class="dt">type =</span> <span class="st">"interaction"</span>)</a></code></pre></div>
-<p><img src="usage_of_the_personalized_package_files/figure-html/plot_validation_compare-1.png" width="672"></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw"><a href="../reference/plotCompare.html">plotCompare</a></span>(subgrp.model, validation, <span class="dt">type =</span> <span class="st">"interaction"</span>)</a></code></pre></div>
+<p><img src="usage_of_the_personalized_package_files/figure-html/plot_validation_compare-1.png" width="700"></p>
 <p>Note that the estimated treatment effects within subgroups are attenuated for the validated results. It is common for the estimated treatment effects within subgroups to be overly-optimistic based on the training data.</p>
 </div>
 </div>
@@ -387,26 +397,26 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 <a href="#propensity-func" class="anchor"></a><code>propensity.func</code>
 </h4>
 <p>The argument <code>propensity.func</code> corresponds to a function which returns a propensity score. While it seems cumbersome to have to specify a function instead of a vector of probabilities, it is crucial for later validation for the propensity scores to be re-estimated using the resampled or sampled data (this will be explained further in the section below for the <code><a href="../reference/validate.subgroup.html">validate.subgroup()</a></code> function). The user should specify a function which inputs two arguments: <code>trt</code> and <code>x</code>, where <code>trt</code> corresponds to the <code>trt</code> argument for the <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> function and <code>x</code> corresponds to the <code>x</code> argument for the <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> function. The function supplied to <code>propensity.func</code> should contain code that uses <code>x</code> and <code>trt</code> to fit a propensity score model and then return an estimated propensity score for each observation in <code>x</code>. A basic example which uses ` logistic regression model to estimate the propensity score is the following:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">propensity.func &lt;-<span class="st"> </span><span class="cf">function</span>(x, trt)</a>
-<a class="sourceLine" id="cb14-2" data-line-number="2">{</a>
-<a class="sourceLine" id="cb14-3" data-line-number="3">    <span class="co"># save data in a data.frame</span></a>
-<a class="sourceLine" id="cb14-4" data-line-number="4">    data.fr &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">trt =</span> trt, x)</a>
-<a class="sourceLine" id="cb14-5" data-line-number="5">    </a>
-<a class="sourceLine" id="cb14-6" data-line-number="6">    <span class="co"># fit propensity score model</span></a>
-<a class="sourceLine" id="cb14-7" data-line-number="7">    propensity.model &lt;-<span class="st"> </span><span class="kw">glm</span>(trt <span class="op">~</span><span class="st"> </span>., <span class="dt">family =</span> <span class="kw">binomial</span>(), <span class="dt">data =</span> data.fr)</a>
-<a class="sourceLine" id="cb14-8" data-line-number="8">    </a>
-<a class="sourceLine" id="cb14-9" data-line-number="9">    <span class="co"># create estimated probabilities</span></a>
-<a class="sourceLine" id="cb14-10" data-line-number="10">    pi.x &lt;-<span class="st"> </span><span class="kw">predict</span>(propensity.model, <span class="dt">type =</span> <span class="st">"response"</span>)</a>
-<a class="sourceLine" id="cb14-11" data-line-number="11">    <span class="kw">return</span>(pi.x)</a>
-<a class="sourceLine" id="cb14-12" data-line-number="12">}</a>
-<a class="sourceLine" id="cb14-13" data-line-number="13"></a>
-<a class="sourceLine" id="cb14-14" data-line-number="14"><span class="kw">propensity.func</span>(x, trt)[<span class="dv">101</span><span class="op">:</span><span class="dv">105</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">propensity.func &lt;-<span class="st"> </span><span class="cf">function</span>(x, trt)</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2">{</a>
+<a class="sourceLine" id="cb13-3" data-line-number="3">    <span class="co"># save data in a data.frame</span></a>
+<a class="sourceLine" id="cb13-4" data-line-number="4">    data.fr &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">trt =</span> trt, x)</a>
+<a class="sourceLine" id="cb13-5" data-line-number="5">    </a>
+<a class="sourceLine" id="cb13-6" data-line-number="6">    <span class="co"># fit propensity score model</span></a>
+<a class="sourceLine" id="cb13-7" data-line-number="7">    propensity.model &lt;-<span class="st"> </span><span class="kw">glm</span>(trt <span class="op">~</span><span class="st"> </span>., <span class="dt">family =</span> <span class="kw">binomial</span>(), <span class="dt">data =</span> data.fr)</a>
+<a class="sourceLine" id="cb13-8" data-line-number="8">    </a>
+<a class="sourceLine" id="cb13-9" data-line-number="9">    <span class="co"># create estimated probabilities</span></a>
+<a class="sourceLine" id="cb13-10" data-line-number="10">    pi.x &lt;-<span class="st"> </span><span class="kw">predict</span>(propensity.model, <span class="dt">type =</span> <span class="st">"response"</span>)</a>
+<a class="sourceLine" id="cb13-11" data-line-number="11">    <span class="kw">return</span>(pi.x)</a>
+<a class="sourceLine" id="cb13-12" data-line-number="12">}</a>
+<a class="sourceLine" id="cb13-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb13-14" data-line-number="14"><span class="kw">propensity.func</span>(x, trt)[<span class="dv">101</span><span class="op">:</span><span class="dv">105</span>]</a></code></pre></div>
 <pre><code>##       101       102       103       104       105 
 ## 0.2251357 0.2786683 0.9021204 0.4400091 0.8250830</code></pre>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">trt[<span class="dv">101</span><span class="op">:</span><span class="dv">105</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">trt[<span class="dv">101</span><span class="op">:</span><span class="dv">105</span>]</a></code></pre></div>
 <pre><code>## [1] 0 0 1 1 1</code></pre>
 <p>For randomized controlled trials with equal probability of assignment to treatment and control, the user can simply define <code>propensity.func</code> as:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">propensity.func &lt;-<span class="st"> </span><span class="cf">function</span>(x, trt) <span class="fl">0.5</span></a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">propensity.func &lt;-<span class="st"> </span><span class="cf">function</span>(x, trt) <span class="fl">0.5</span></a></code></pre></div>
 <p>which always returns the constant <span class="math inline">\(1/2\)</span>.</p>
 </div>
 <div id="loss" class="section level4">
@@ -471,13 +481,13 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 <li><code>'sq_loss_gbm'</code></li>
 <li><code>'abs_loss_gbm'</code></li>
 </ul>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">subgrp.model2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y,</a>
-<a class="sourceLine" id="cb19-2" data-line-number="2">                             <span class="dt">trt =</span> trt,</a>
-<a class="sourceLine" id="cb19-3" data-line-number="3">                             <span class="dt">propensity.func =</span> prop.func,</a>
-<a class="sourceLine" id="cb19-4" data-line-number="4">                             <span class="dt">loss   =</span> <span class="st">"sq_loss_lasso_gam"</span>,</a>
-<a class="sourceLine" id="cb19-5" data-line-number="5">                             <span class="dt">nfolds =</span> <span class="dv">10</span>)              <span class="co"># option for cv.glmnet</span></a>
-<a class="sourceLine" id="cb19-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb19-7" data-line-number="7"><span class="kw">summary</span>(subgrp.model2)</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">subgrp.model2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y,</a>
+<a class="sourceLine" id="cb18-2" data-line-number="2">                             <span class="dt">trt =</span> trt,</a>
+<a class="sourceLine" id="cb18-3" data-line-number="3">                             <span class="dt">propensity.func =</span> prop.func,</a>
+<a class="sourceLine" id="cb18-4" data-line-number="4">                             <span class="dt">loss   =</span> <span class="st">"sq_loss_lasso_gam"</span>,</a>
+<a class="sourceLine" id="cb18-5" data-line-number="5">                             <span class="dt">nfolds =</span> <span class="dv">10</span>)              <span class="co"># option for cv.glmnet</span></a>
+<a class="sourceLine" id="cb18-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb18-7" data-line-number="7"><span class="kw">summary</span>(subgrp.model2)</a></code></pre></div>
 <pre><code>## family:  gaussian 
 ## loss:    sq_loss_lasso_gam 
 ## method:  weighting 
@@ -489,8 +499,13 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## Received 0 -12.0824 (n = 201) -14.7591 (n = 209)
 ## Received 1  -20.517 (n = 288)  -5.5316 (n = 302)
 ## 
+## Treatment effects conditional on subgroups:
 ## 0 effect among recommended 0 1 effect among recommended 1 
 ##             8.4346 (n = 489)             9.2275 (n = 511) 
+## 
+## NOTE: The above average outcomes are biased estimates of
+##       the expected outcomes conditional on subgroups. 
+##       Use 'validate.subgroup()' to obtain unbiased estimates.
 ## 
 ## Benefit score quantiles: 
 ##       0%      25%      50%      75%     100% 
@@ -530,24 +545,24 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 <li><code>'logistic_loss_gbm'</code></li>
 </ul>
 <p>Note that all options that are available for continuous options can also potentially be used for binary outcomes.</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="co"># create binary outcomes</span></a>
-<a class="sourceLine" id="cb22-2" data-line-number="2">y.binary &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">*</span><span class="st"> </span>(xbeta <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n.obs, <span class="dt">sd =</span> <span class="dv">2</span>) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span> )</a></code></pre></div>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">subgrp.bin &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y.binary,</a>
-<a class="sourceLine" id="cb23-2" data-line-number="2">                           <span class="dt">trt =</span> trt,</a>
-<a class="sourceLine" id="cb23-3" data-line-number="3">                           <span class="dt">propensity.func =</span> prop.func,</a>
-<a class="sourceLine" id="cb23-4" data-line-number="4">                           <span class="dt">loss   =</span> <span class="st">"logistic_loss_lasso"</span>,</a>
-<a class="sourceLine" id="cb23-5" data-line-number="5">                           <span class="dt">nfolds =</span> <span class="dv">10</span>)      <span class="co"># option for cv.glmnet</span></a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="co"># create binary outcomes</span></a>
+<a class="sourceLine" id="cb21-2" data-line-number="2">y.binary &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">*</span><span class="st"> </span>(xbeta <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n.obs, <span class="dt">sd =</span> <span class="dv">2</span>) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span> )</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">subgrp.bin &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y.binary,</a>
+<a class="sourceLine" id="cb22-2" data-line-number="2">                           <span class="dt">trt =</span> trt,</a>
+<a class="sourceLine" id="cb22-3" data-line-number="3">                           <span class="dt">propensity.func =</span> prop.func,</a>
+<a class="sourceLine" id="cb22-4" data-line-number="4">                           <span class="dt">loss   =</span> <span class="st">"logistic_loss_lasso"</span>,</a>
+<a class="sourceLine" id="cb22-5" data-line-number="5">                           <span class="dt">nfolds =</span> <span class="dv">10</span>)      <span class="co"># option for cv.glmnet</span></a></code></pre></div>
 <p>When gradient-boosted decision trees are used for <span class="math inline">\(f(X)\)</span> by the package <code>gbm</code>, care must be taken to choose the hyperparameters effectively. Specifically, <code>shrinkage</code> (similar to the step-size in gradient descent), <code>n.trees</code> (the number of trees to fit), and <code>interaction.depth</code> (the maximum depth of each tree) should be tuned according to the data at hand. By default for gradient-boosting models, <code>fit.subgroup</code> plots the cross validation error versus the number of trees to give the user a sense of if their choice of tuning parameters is effective.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">subgrp.bin2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y.binary,</a>
-<a class="sourceLine" id="cb24-2" data-line-number="2">                            <span class="dt">trt =</span> trt,</a>
-<a class="sourceLine" id="cb24-3" data-line-number="3">                            <span class="dt">propensity.func =</span> prop.func,</a>
-<a class="sourceLine" id="cb24-4" data-line-number="4">                            <span class="dt">loss =</span> <span class="st">"logistic_loss_gbm"</span>,</a>
-<a class="sourceLine" id="cb24-5" data-line-number="5">                            <span class="dt">shrinkage =</span> <span class="fl">0.025</span>,  <span class="co"># options for gbm</span></a>
-<a class="sourceLine" id="cb24-6" data-line-number="6">                            <span class="dt">n.trees =</span> <span class="dv">1500</span>,</a>
-<a class="sourceLine" id="cb24-7" data-line-number="7">                            <span class="dt">interaction.depth =</span> <span class="dv">3</span>,</a>
-<a class="sourceLine" id="cb24-8" data-line-number="8">                            <span class="dt">cv.folds =</span> <span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">subgrp.bin2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y.binary,</a>
+<a class="sourceLine" id="cb23-2" data-line-number="2">                            <span class="dt">trt =</span> trt,</a>
+<a class="sourceLine" id="cb23-3" data-line-number="3">                            <span class="dt">propensity.func =</span> prop.func,</a>
+<a class="sourceLine" id="cb23-4" data-line-number="4">                            <span class="dt">loss =</span> <span class="st">"logistic_loss_gbm"</span>,</a>
+<a class="sourceLine" id="cb23-5" data-line-number="5">                            <span class="dt">shrinkage =</span> <span class="fl">0.025</span>,  <span class="co"># options for gbm</span></a>
+<a class="sourceLine" id="cb23-6" data-line-number="6">                            <span class="dt">n.trees =</span> <span class="dv">1500</span>,</a>
+<a class="sourceLine" id="cb23-7" data-line-number="7">                            <span class="dt">interaction.depth =</span> <span class="dv">3</span>,</a>
+<a class="sourceLine" id="cb23-8" data-line-number="8">                            <span class="dt">cv.folds =</span> <span class="dv">5</span>)</a></code></pre></div>
 <p>We can see that at least on the training data, the performance of the gradient-boosting model is better.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">subgrp.bin</a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">subgrp.bin</a></code></pre></div>
 <pre><code>## family:  binomial 
 ## loss:    logistic_loss_lasso 
 ## method:  weighting 
@@ -559,8 +574,13 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## Received 0 0.4377 (n = 181) 0.2059 (n = 229)
 ## Received 1 0.2293 (n = 270) 0.4367 (n = 320)
 ## 
+## Treatment effects conditional on subgroups:
 ## 0 effect among recommended 0 1 effect among recommended 1 
 ##             0.2084 (n = 451)             0.2308 (n = 549) 
+## 
+## NOTE: The above average outcomes are biased estimates of
+##       the expected outcomes conditional on subgroups. 
+##       Use 'validate.subgroup()' to obtain unbiased estimates.
 ## 
 ## Benefit score quantiles: 
 ##       0%      25%      50%      75%     100% 
@@ -575,22 +595,22 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 <li><code>'cox_loss_gbm'</code></li>
 </ul>
 <p>First we will generate time-to-event outcomes to illustrate usage of the <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> model.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="co"># create time-to-event outcomes</span></a>
-<a class="sourceLine" id="cb27-2" data-line-number="2">surv.time &lt;-<span class="st"> </span><span class="kw">exp</span>(<span class="op">-</span><span class="dv">20</span> <span class="op">-</span><span class="st"> </span>xbeta <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n.obs, <span class="dt">sd =</span> <span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb27-3" data-line-number="3">cens.time &lt;-<span class="st"> </span><span class="kw">exp</span>(<span class="kw">rnorm</span>(n.obs, <span class="dt">sd =</span> <span class="dv">3</span>))</a>
-<a class="sourceLine" id="cb27-4" data-line-number="4">y.time.to.event  &lt;-<span class="st"> </span><span class="kw">pmin</span>(surv.time, cens.time)</a>
-<a class="sourceLine" id="cb27-5" data-line-number="5">status           &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">*</span><span class="st"> </span>(surv.time <span class="op">&lt;=</span><span class="st"> </span>cens.time)</a></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="co"># create time-to-event outcomes</span></a>
+<a class="sourceLine" id="cb26-2" data-line-number="2">surv.time &lt;-<span class="st"> </span><span class="kw">exp</span>(<span class="op">-</span><span class="dv">20</span> <span class="op">-</span><span class="st"> </span>xbeta <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n.obs, <span class="dt">sd =</span> <span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb26-3" data-line-number="3">cens.time &lt;-<span class="st"> </span><span class="kw">exp</span>(<span class="kw">rnorm</span>(n.obs, <span class="dt">sd =</span> <span class="dv">3</span>))</a>
+<a class="sourceLine" id="cb26-4" data-line-number="4">y.time.to.event  &lt;-<span class="st"> </span><span class="kw">pmin</span>(surv.time, cens.time)</a>
+<a class="sourceLine" id="cb26-5" data-line-number="5">status           &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">*</span><span class="st"> </span>(surv.time <span class="op">&lt;=</span><span class="st"> </span>cens.time)</a></code></pre></div>
 <p>For subgroup identification models for time-to-event outcomes, the user should provide <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> with a <code>Surv</code> object for <code>y</code>. This can be done like the following:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw">library</span>(survival)</a>
-<a class="sourceLine" id="cb28-2" data-line-number="2"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
-<a class="sourceLine" id="cb28-3" data-line-number="3">subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> <span class="kw">Surv</span>(y.time.to.event, status),</a>
-<a class="sourceLine" id="cb28-4" data-line-number="4">                           <span class="dt">trt =</span> trt,</a>
-<a class="sourceLine" id="cb28-5" data-line-number="5">                           <span class="dt">propensity.func =</span> prop.func,</a>
-<a class="sourceLine" id="cb28-6" data-line-number="6">                           <span class="dt">method =</span> <span class="st">"weighting"</span>,</a>
-<a class="sourceLine" id="cb28-7" data-line-number="7">                           <span class="dt">loss   =</span> <span class="st">"cox_loss_lasso"</span>,</a>
-<a class="sourceLine" id="cb28-8" data-line-number="8">                           <span class="dt">nfolds =</span> <span class="dv">10</span>)      <span class="co"># option for cv.glmnet</span></a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw">library</span>(survival)</a>
+<a class="sourceLine" id="cb27-2" data-line-number="2"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
+<a class="sourceLine" id="cb27-3" data-line-number="3">subgrp.cox &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> <span class="kw"><a href="http://www.rdocumentation.org/packages/survival/topics/Surv">Surv</a></span>(y.time.to.event, status),</a>
+<a class="sourceLine" id="cb27-4" data-line-number="4">                           <span class="dt">trt =</span> trt,</a>
+<a class="sourceLine" id="cb27-5" data-line-number="5">                           <span class="dt">propensity.func =</span> prop.func,</a>
+<a class="sourceLine" id="cb27-6" data-line-number="6">                           <span class="dt">method =</span> <span class="st">"weighting"</span>,</a>
+<a class="sourceLine" id="cb27-7" data-line-number="7">                           <span class="dt">loss   =</span> <span class="st">"cox_loss_lasso"</span>,</a>
+<a class="sourceLine" id="cb27-8" data-line-number="8">                           <span class="dt">nfolds =</span> <span class="dv">10</span>)      <span class="co"># option for cv.glmnet</span></a></code></pre></div>
 <p>The subgroup treatment effects are estimated using the restricted mean statistic and can be displayed with <code><a href="../reference/summary.html">summary.subgroup_fitted()</a></code> or <code><a href="../reference/print.html">print.subgroup_fitted()</a></code> like the following:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="kw">summary</span>(subgrp.cox)</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw">summary</span>(subgrp.cox)</a></code></pre></div>
 <pre><code>## family:  cox 
 ## loss:    cox_loss_lasso 
 ## method:  weighting 
@@ -602,8 +622,13 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## Received 0 511.0578 (n = 260)  48.5139 (n = 150)
 ## Received 1 136.5828 (n = 369) 182.7359 (n = 221)
 ## 
+## Treatment effects conditional on subgroups:
 ## 0 effect among recommended 0 1 effect among recommended 1 
 ##            374.475 (n = 629)            134.222 (n = 371) 
+## 
+## NOTE: The above average outcomes are biased estimates of
+##       the expected outcomes conditional on subgroups. 
+##       Use 'validate.subgroup()' to obtain unbiased estimates.
 ## 
 ## Benefit score quantiles: 
 ##       0%      25%      50%      75%     100% 
@@ -627,28 +652,28 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 <a href="#efficiency-augmentation" class="anchor"></a>Efficiency Augmentation</h3>
 <p>The <code>personalized</code> package also allows for efficiency augmentation of the subgroup identification models for continuous outcomes. The basic idea of efficiency augmentation is to construct a model for the main effects of the model and shift the outcome based on these main effects. The resulting estimator based on the shifted outcome can be more efficient than using the outcome itself.</p>
 <p>In the <code>personalized</code> package, this involves providing <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> a function which inputs the covariate information <code>x</code> and the outcomes <code>y</code> and outputs a prediction for <code>y</code> based on <code>x</code>. The following is an example of such a function:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1">adjustment.func &lt;-<span class="st"> </span><span class="cf">function</span>(x, y)</a>
-<a class="sourceLine" id="cb31-2" data-line-number="2">{</a>
-<a class="sourceLine" id="cb31-3" data-line-number="3">    df.x  &lt;-<span class="st"> </span><span class="kw">data.frame</span>(x)</a>
-<a class="sourceLine" id="cb31-4" data-line-number="4">    </a>
-<a class="sourceLine" id="cb31-5" data-line-number="5">    <span class="co"># add all squared terms to model</span></a>
-<a class="sourceLine" id="cb31-6" data-line-number="6">    form  &lt;-<span class="st"> </span><span class="kw">eval</span>(<span class="kw">paste</span>(<span class="st">" ~ -1 + "</span>, </a>
-<a class="sourceLine" id="cb31-7" data-line-number="7">                <span class="kw">paste</span>(<span class="kw">paste</span>(<span class="st">'poly('</span>, <span class="kw">colnames</span>(df.x), <span class="st">', 2)'</span>, <span class="dt">sep=</span><span class="st">''</span>), </a>
-<a class="sourceLine" id="cb31-8" data-line-number="8">                      <span class="dt">collapse=</span><span class="st">" + "</span>)))</a>
-<a class="sourceLine" id="cb31-9" data-line-number="9">    mm    &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="kw">as.formula</span>(form), <span class="dt">data =</span> df.x)</a>
-<a class="sourceLine" id="cb31-10" data-line-number="10">    cvmod &lt;-<span class="st"> </span><span class="kw">cv.glmnet</span>(<span class="dt">y =</span> y, <span class="dt">x =</span> mm, <span class="dt">nfolds =</span> <span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb31-11" data-line-number="11">    predictions &lt;-<span class="st"> </span><span class="kw">predict</span>(cvmod, <span class="dt">newx =</span> mm, <span class="dt">s =</span> <span class="st">"lambda.min"</span>)</a>
-<a class="sourceLine" id="cb31-12" data-line-number="12">    predictions</a>
-<a class="sourceLine" id="cb31-13" data-line-number="13">}</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1">adjustment.func &lt;-<span class="st"> </span><span class="cf">function</span>(x, y)</a>
+<a class="sourceLine" id="cb30-2" data-line-number="2">{</a>
+<a class="sourceLine" id="cb30-3" data-line-number="3">    df.x  &lt;-<span class="st"> </span><span class="kw">data.frame</span>(x)</a>
+<a class="sourceLine" id="cb30-4" data-line-number="4">    </a>
+<a class="sourceLine" id="cb30-5" data-line-number="5">    <span class="co"># add all squared terms to model</span></a>
+<a class="sourceLine" id="cb30-6" data-line-number="6">    form  &lt;-<span class="st"> </span><span class="kw">eval</span>(<span class="kw">paste</span>(<span class="st">" ~ -1 + "</span>, </a>
+<a class="sourceLine" id="cb30-7" data-line-number="7">                <span class="kw">paste</span>(<span class="kw">paste</span>(<span class="st">'poly('</span>, <span class="kw">colnames</span>(df.x), <span class="st">', 2)'</span>, <span class="dt">sep=</span><span class="st">''</span>), </a>
+<a class="sourceLine" id="cb30-8" data-line-number="8">                      <span class="dt">collapse=</span><span class="st">" + "</span>)))</a>
+<a class="sourceLine" id="cb30-9" data-line-number="9">    mm    &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="kw">as.formula</span>(form), <span class="dt">data =</span> df.x)</a>
+<a class="sourceLine" id="cb30-10" data-line-number="10">    cvmod &lt;-<span class="st"> </span><span class="kw">cv.glmnet</span>(<span class="dt">y =</span> y, <span class="dt">x =</span> mm, <span class="dt">nfolds =</span> <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb30-11" data-line-number="11">    predictions &lt;-<span class="st"> </span><span class="kw">predict</span>(cvmod, <span class="dt">newx =</span> mm, <span class="dt">s =</span> <span class="st">"lambda.min"</span>)</a>
+<a class="sourceLine" id="cb30-12" data-line-number="12">    predictions</a>
+<a class="sourceLine" id="cb30-13" data-line-number="13">}</a></code></pre></div>
 <p>Then this can be used in <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> by passing the function to the argument <code>augment.func</code> like the following:</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1">subgrp.model.eff &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y,</a>
-<a class="sourceLine" id="cb32-2" data-line-number="2">                             <span class="dt">trt =</span> trt,</a>
-<a class="sourceLine" id="cb32-3" data-line-number="3">                             <span class="dt">propensity.func =</span> prop.func,</a>
-<a class="sourceLine" id="cb32-4" data-line-number="4">                             <span class="dt">loss   =</span> <span class="st">"sq_loss_lasso"</span>,</a>
-<a class="sourceLine" id="cb32-5" data-line-number="5">                             <span class="dt">augment.func =</span> adjustment.func,</a>
-<a class="sourceLine" id="cb32-6" data-line-number="6">                             <span class="dt">nfolds =</span> <span class="dv">10</span>)              <span class="co"># option for cv.glmnet</span></a>
-<a class="sourceLine" id="cb32-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb32-8" data-line-number="8"><span class="kw">summary</span>(subgrp.model.eff)</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1">subgrp.model.eff &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y,</a>
+<a class="sourceLine" id="cb31-2" data-line-number="2">                             <span class="dt">trt =</span> trt,</a>
+<a class="sourceLine" id="cb31-3" data-line-number="3">                             <span class="dt">propensity.func =</span> prop.func,</a>
+<a class="sourceLine" id="cb31-4" data-line-number="4">                             <span class="dt">loss   =</span> <span class="st">"sq_loss_lasso"</span>,</a>
+<a class="sourceLine" id="cb31-5" data-line-number="5">                             <span class="dt">augment.func =</span> adjustment.func,</a>
+<a class="sourceLine" id="cb31-6" data-line-number="6">                             <span class="dt">nfolds =</span> <span class="dv">10</span>)              <span class="co"># option for cv.glmnet</span></a>
+<a class="sourceLine" id="cb31-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb31-8" data-line-number="8"><span class="kw">summary</span>(subgrp.model.eff)</a></code></pre></div>
 <pre><code>## family:  gaussian 
 ## loss:    sq_loss_lasso 
 ## method:  weighting 
@@ -662,8 +687,13 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## Received 0  -7.8842 (n = 202) -19.1073 (n = 208)
 ## Received 1 -15.8012 (n = 292)  -9.7736 (n = 298)
 ## 
+## Treatment effects conditional on subgroups:
 ## 0 effect among recommended 0 1 effect among recommended 1 
 ##              7.917 (n = 494)             9.3337 (n = 506) 
+## 
+## NOTE: The above average outcomes are biased estimates of
+##       the expected outcomes conditional on subgroups. 
+##       Use 'validate.subgroup()' to obtain unbiased estimates.
 ## 
 ## Benefit score quantiles: 
 ##        0%       25%       50%       75%      100% 
@@ -684,23 +714,23 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 <h3 class="hasAnchor">
 <a href="#plotting-fitted-models" class="anchor"></a>Plotting Fitted Models</h3>
 <p>The outcomes (or average outcomes) of patients within different subgroups can be plotted using the <code>plot()</code> function. In particular, this function plots patient outcomes by treatment group within each subgroup of patients (those recommended the treatment by the model and those recommended the control by the model). Boxplots of the outcomes can be plotted in addition to densities and and interaction plot of the average outcomes within each of these groups. They can all be generated like the following:</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="kw">plot</span>(subgrp.model)</a></code></pre></div>
-<p><img src="usage_of_the_personalized_package_files/figure-html/plot_ex_model_1-1.png" width="672"></p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="kw">plot</span>(subgrp.model, <span class="dt">type =</span> <span class="st">"density"</span>)</a></code></pre></div>
-<p><img src="usage_of_the_personalized_package_files/figure-html/plot_ex_model_2-1.png" width="672"></p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1"><span class="kw">plot</span>(subgrp.model, <span class="dt">type =</span> <span class="st">"interaction"</span>)</a></code></pre></div>
-<p><img src="usage_of_the_personalized_package_files/figure-html/plot_ex_model_3-1.png" width="672"></p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="kw">plot</span>(subgrp.model)</a></code></pre></div>
+<p><img src="usage_of_the_personalized_package_files/figure-html/plot_ex_model_1-1.png" width="700"></p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="kw">plot</span>(subgrp.model, <span class="dt">type =</span> <span class="st">"density"</span>)</a></code></pre></div>
+<p><img src="usage_of_the_personalized_package_files/figure-html/plot_ex_model_2-1.png" width="700"></p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="kw">plot</span>(subgrp.model, <span class="dt">type =</span> <span class="st">"interaction"</span>)</a></code></pre></div>
+<p><img src="usage_of_the_personalized_package_files/figure-html/plot_ex_model_3-1.png" width="700"></p>
 <p>Multiple models can be visually compared using the <code><a href="../reference/plotCompare.html">plotCompare()</a></code> function, which offers the same plotting options as the <code><a href="../reference/plot.html">plot.subgroup_fitted()</a></code> function.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="kw"><a href="../reference/plotCompare.html">plotCompare</a></span>(subgrp.model, subgrp.model.eff)</a></code></pre></div>
-<p><img src="usage_of_the_personalized_package_files/figure-html/plot_compare_ex2-1.png" width="672"></p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1"><span class="kw"><a href="../reference/plotCompare.html">plotCompare</a></span>(subgrp.model, subgrp.model.eff)</a></code></pre></div>
+<p><img src="usage_of_the_personalized_package_files/figure-html/plot_compare_ex2-1.png" width="700"></p>
 </div>
 <div id="comparing-subgroups-from-a-fitted-model" class="section level3">
 <h3 class="hasAnchor">
 <a href="#comparing-subgroups-from-a-fitted-model" class="anchor"></a>Comparing Subgroups from a Fitted Model</h3>
 <p>The <code><a href="../reference/summarize.subgroups.html">summarize.subgroups()</a></code> function compares the means of covariate values within the estimated subgroups. P-values for the differences within subgroups are also computed. For continuous variables, the p-value will come from a t-test and for binary variables, the p-value will come from a chi-squared test.</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1">comp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/summarize.subgroups.html">summarize.subgroups</a></span>(subgrp.model)</a></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1">comp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/summarize.subgroups.html">summarize.subgroups</a></span>(subgrp.model)</a></code></pre></div>
 <p>The user can optionally print only the covariates which have significant differences between subgroups with a p-value below a given threshold like the following:</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="kw">print</span>(comp, <span class="dt">p.value =</span> <span class="fl">0.01</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="kw">print</span>(comp, <span class="dt">p.value =</span> <span class="fl">0.01</span>)</a></code></pre></div>
 <pre><code>##     Avg (recom 0) Avg (recom 1)   0 - 1 pval 0 - 1 SE (recom 0)
 ## V1        -0.3561        0.3957 -0.7518  6.564e-05       0.1386
 ## V2        -1.5303        1.5509 -3.0812  2.128e-66       0.1211
@@ -724,7 +754,7 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## V19       0.1279
 ## V37       0.1298</code></pre>
 <p>The covariate values and estimated subgroups can be directly used by the <code><a href="../reference/summarize.subgroups.html">summarize.subgroups()</a></code> function:</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1">comp2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/summarize.subgroups.html">summarize.subgroups</a></span>(x, <span class="dt">subgroup =</span> subgrp.model<span class="op">$</span>benefit.scores <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1">comp2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/summarize.subgroups.html">summarize.subgroups</a></span>(x, <span class="dt">subgroup =</span> subgrp.model<span class="op">$</span>benefit.scores <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</a></code></pre></div>
 </div>
 </div>
 <div id="validating-subgroup-identification-models" class="section level2">
@@ -741,21 +771,21 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 <a href="#repeated-trainingtest-splitting" class="anchor"></a>Repeated Training/Test Splitting</h3>
 <p>The first method is prediction-based. For each replication in this procedure, data are randomly partitioned into a training and testing portion. For each replocation the subgroup identification model is estimated using the training procedure and the subgroup treatment effects are estimated using the test data. This method requires two arguments to be passed to <code><a href="../reference/validate.subgroup.html">validate.subgroup()</a></code>. The first argument is <code>B</code>, the number of replications and the second argument is <code>train.fraction</code>, which is the proportion of all samples which will be used for training (hence <code>1 - train.fraction</code> is the portion of samples used for testing).</p>
 <p>The main object which needs to be passed to <code><a href="../reference/validate.subgroup.html">validate.subgroup()</a></code> is a fitted object returned by the <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code>. Note that in order to validate a fitted object from <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code>, the model must be fit with the <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> <code>retcall</code> set to <code>TRUE</code>.</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1"><span class="co"># check that the object is an object returned by fit.subgroup()</span></a>
-<a class="sourceLine" id="cb42-2" data-line-number="2"><span class="kw">class</span>(subgrp.model.eff)</a></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1"><span class="co"># check that the object is an object returned by fit.subgroup()</span></a>
+<a class="sourceLine" id="cb41-2" data-line-number="2"><span class="kw">class</span>(subgrp.model.eff)</a></code></pre></div>
 <pre><code>## [1] "subgroup_fitted"</code></pre>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1">validation.eff &lt;-<span class="st"> </span><span class="kw"><a href="../reference/validate.subgroup.html">validate.subgroup</a></span>(subgrp.model.eff, </a>
-<a class="sourceLine" id="cb44-2" data-line-number="2">                                 <span class="dt">B =</span> 25L,  <span class="co"># specify the number of replications</span></a>
-<a class="sourceLine" id="cb44-3" data-line-number="3">                                 <span class="dt">method =</span> <span class="st">"training_test_replication"</span>,</a>
-<a class="sourceLine" id="cb44-4" data-line-number="4">                                 <span class="dt">train.fraction =</span> <span class="fl">0.75</span>)</a>
-<a class="sourceLine" id="cb44-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb44-6" data-line-number="6">validation.eff</a></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1">validation.eff &lt;-<span class="st"> </span><span class="kw"><a href="../reference/validate.subgroup.html">validate.subgroup</a></span>(subgrp.model.eff, </a>
+<a class="sourceLine" id="cb43-2" data-line-number="2">                                 <span class="dt">B =</span> 25L,  <span class="co"># specify the number of replications</span></a>
+<a class="sourceLine" id="cb43-3" data-line-number="3">                                 <span class="dt">method =</span> <span class="st">"training_test_replication"</span>,</a>
+<a class="sourceLine" id="cb43-4" data-line-number="4">                                 <span class="dt">train.fraction =</span> <span class="fl">0.75</span>)</a>
+<a class="sourceLine" id="cb43-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb43-6" data-line-number="6">validation.eff</a></code></pre></div>
 <pre><code>## family:  gaussian 
 ## loss:    sq_loss_lasso 
 ## method:  weighting 
 ## 
 ## validation method:  training_test_replication 
-## iterations:  25 
+## replications:  25 
 ## 
 ## Average Test Set Outcomes:
 ##                               Recommended 0
@@ -765,34 +795,38 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## Received 0 -18.409 (SE = 2.3969, n = 52.72)
 ## Received 1 -9.4263 (SE = 3.2005, n = 73.68)
 ## 
+## Treatment effects conditional on subgroups:
 ##    0 effect among recommended 0    1 effect among recommended 1 
 ## 6.1723 (SE = 5.5794, n = 123.6) 8.9827 (SE = 4.0441, n = 126.4) 
 ## 
-## Overall Subgroup Effect 
-##    7.4119 (SE = 3.2998)</code></pre>
+## Overall treatment effect conditional on subgroups 
+##                              7.4119 (SE = 3.2998)</code></pre>
 </div>
 <div id="bootstrap-bias-correction" class="section level3">
 <h3 class="hasAnchor">
 <a href="#bootstrap-bias-correction" class="anchor"></a>Bootstrap Bias Correction</h3>
 <p>The second method is a bootstrap-based method which seeks to estimate the bias in the estimates of the subgroup treatment effects and then corrects for this bias (Harrell, et al. 1996).</p>
 <ul>
-<li><p>For a statistic <span class="math inline">\(d\)</span> let <span class="math inline">\(d_{train}(X)\)</span> be the statistic estimated with the training data and evaluated on data <span class="math inline">\(X\)</span> and <span class="math inline">\(d_{b}(X)\)</span> be the statistics estimated using a bootstrap sample <span class="math inline">\(X_b\)</span> (samples with replacement from <span class="math inline">\(X\)</span>) and evaluated on <span class="math inline">\(X\)</span></p></li>
+<li>
+<p>For a statistic <span class="math inline">\(d\)</span> let <span class="math inline">\(d_{train}(X)\)</span> be the statistic estimated with the training data and evaluated on data <span class="math inline">\(X\)</span> and <span class="math inline">\(d_{b}(X)\)</span> be the statistics estimated using a bootstrap sample <span class="math inline">\(X_b\)</span> (samples with replacement from <span class="math inline">\(X\)</span>) and evaluated on <span class="math inline">\(X\)</span></p>
+<p></p>
+</li>
 <li><p>The bootstrap estimate of the amount of bias with regards to the statistic <span class="math inline">\(d\)</span> is <span class="math display">\[
 {bias}(X) = \frac{1}{B}\sum_{b = 1}^B [d_b(X_b) - d_b(X) ]
 \]</span></p></li>
 <li><p>Then a bias-corrected estimate of the statistic <span class="math inline">\(d\)</span> is <span class="math display">\[d_{train}(X) - {bias}(X)\]</span></p></li>
 </ul>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" data-line-number="1">validation3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/validate.subgroup.html">validate.subgroup</a></span>(subgrp.model, </a>
-<a class="sourceLine" id="cb46-2" data-line-number="2">                                 <span class="dt">B =</span> 25L,  <span class="co"># specify the number of replications</span></a>
-<a class="sourceLine" id="cb46-3" data-line-number="3">                                 <span class="dt">method =</span> <span class="st">"boot_bias_correction"</span>)</a>
-<a class="sourceLine" id="cb46-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb46-5" data-line-number="5">validation3</a></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1">validation3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/validate.subgroup.html">validate.subgroup</a></span>(subgrp.model, </a>
+<a class="sourceLine" id="cb45-2" data-line-number="2">                                 <span class="dt">B =</span> 25L,  <span class="co"># specify the number of replications</span></a>
+<a class="sourceLine" id="cb45-3" data-line-number="3">                                 <span class="dt">method =</span> <span class="st">"boot_bias_correction"</span>)</a>
+<a class="sourceLine" id="cb45-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb45-5" data-line-number="5">validation3</a></code></pre></div>
 <pre><code>## family:  gaussian 
 ## loss:    sq_loss_lasso 
 ## method:  weighting 
 ## 
 ## validation method:  boot_bias_correction 
-## iterations:  25 
+## replications:  25 
 ## 
 ## Average Bootstrap Bias-Corrected Outcomes:
 ##                                 Recommended 0
@@ -802,26 +836,24 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## Received 0 -15.0433 (SE = 1.5727, n = 212.6)
 ## Received 1  -9.2469 (SE = 1.6187, n = 326.6)
 ## 
+## Treatment effects conditional on subgroups:
 ##    0 effect among recommended 0    1 effect among recommended 1 
 ## 4.5142 (SE = 2.2994, n = 460.8) 5.7964 (SE = 2.3648, n = 539.2) 
 ## 
-## Overall Subgroup Effect 
-##    4.9823 (SE = 1.5705)</code></pre>
+## Overall treatment effect conditional on subgroups 
+##                              4.9823 (SE = 1.5705)</code></pre>
 </div>
 <div id="plotting-validated-models" class="section level3">
 <h3 class="hasAnchor">
 <a href="#plotting-validated-models" class="anchor"></a>Plotting Validated Models</h3>
 <p>The results for each of the iterations of either the bootstrap of the training and testing partitioning procedure can be plotted using the <code>plot()</code> function similarly to how the <code>plot()</code> function can be used for fitted objects from <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code>. Similarly, boxplots, density plots, and interaction plots are all available through the <code>type</code> argument:</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1"><span class="kw">plot</span>(validation)</a></code></pre></div>
-<pre><code>## Warning: Removed 4 rows containing non-finite values (stat_boxplot).</code></pre>
-<p><img src="usage_of_the_personalized_package_files/figure-html/plot_ex_model_1a-1.png" width="672"></p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1"><span class="kw">plot</span>(validation, <span class="dt">type =</span> <span class="st">"density"</span>)</a></code></pre></div>
-<pre><code>## Warning: Removed 4 rows containing non-finite values (stat_density).</code></pre>
-<p><img src="usage_of_the_personalized_package_files/figure-html/plot_ex_model_1b-1.png" width="672"></p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1"><span class="kw">plot</span>(validation)</a></code></pre></div>
+<p><img src="usage_of_the_personalized_package_files/figure-html/plot_ex_model_1a-1.png" width="700"></p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1"><span class="kw">plot</span>(validation, <span class="dt">type =</span> <span class="st">"density"</span>)</a></code></pre></div>
+<p><img src="usage_of_the_personalized_package_files/figure-html/plot_ex_model_1b-1.png" width="700"></p>
 <p>Multiple validated models can be visually compared using the <code><a href="../reference/plotCompare.html">plotCompare()</a></code> function, which offers the same plotting options as the <code><a href="../reference/plot.html">plot.subgroup_validated()</a></code> function. Here we compare the model fitted using <code>sq_loss_lasso</code> to the one fitted using <code>sq_loss_lasso</code> and efficiency augmentation:</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" data-line-number="1"><span class="kw"><a href="../reference/plotCompare.html">plotCompare</a></span>(validation, validation.eff)</a></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1"><span class="kw"><a href="../reference/plotCompare.html">plotCompare</a></span>(validation, validation.eff)</a></code></pre></div>
 <p>We can see above that the model with efficiency augmentation finds subgroups with more impactful treatment effects.</p>
-</div>
 </div>
 </div>
 </div>
@@ -869,6 +901,8 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 
       </footer>
 </div>
+
+  
 
   </body>
 </html>

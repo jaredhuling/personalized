@@ -21,14 +21,20 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
 <meta property="og:title" content="Summarizing covariates within estimated subgroups — summarize.subgroups" />
 
 <meta property="og:description" content="Summarizes covariate values within the estimated subgroups" />
 <meta name="twitter:card" content="summary" />
+
 
 
 <!-- mathjax -->
@@ -55,7 +61,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">personalized</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.5</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.0</span>
       </span>
     </div>
 
@@ -95,6 +101,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -102,16 +109,19 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Summarizing covariates within estimated subgroups</h1>
     
+    <div class="hidden name"><code>summarize.subgroups.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Summarizes covariate values within the estimated subgroups</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>summarize.subgroups</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
@@ -142,10 +152,14 @@ If x is a fitted object returned by <code><a href='fit.subgroup.html'>fit.subgro
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The p-values shown are raw p-values and are not adjusted for multiple comparisons.</p>
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><code><a href='fit.subgroup.html'>fit.subgroup</a></code> for function which fits subgroup identification models and
-<code><a href='print.html'>print.subgroup_summary</a></code> for arguments for printing options for <code>summarize.subgroups()</code>.</p>
+    <div class='dont-index'><p><code><a href='fit.subgroup.html'>fit.subgroup</a></code> for function which fits subgroup identification models and
+<code><a href='print.html'>print.subgroup_summary</a></code> for arguments for printing options for <code>summarize.subgroups()</code>.</p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -218,6 +232,8 @@ If x is a fitted object returned by <code><a href='fit.subgroup.html'>fit.subgro
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#details">Details</a></li>
+
       <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
@@ -237,6 +253,8 @@ If x is a fitted object returned by <code><a href='fit.subgroup.html'>fit.subgro
 
       </footer>
    </div>
+
+  
 
   </body>
 </html>

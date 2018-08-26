@@ -21,11 +21,17 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
 <meta property="og:title" content="Function reference" />
+
 
 
 <!-- mathjax -->
@@ -52,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">personalized</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.5</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.0</span>
       </span>
     </div>
 
@@ -92,6 +98,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -99,143 +106,142 @@
       
       </header>
 
-      <div class="row">
-  <div class="col-md-9">
+<div class="row">
+  <div class="contents col-md-9">
     <div class="page-header">
       <h1>Reference</h1>
     </div>
 
-    <div class="contents">
-      <table class="ref-index">
+    <table class="ref-index">
 
-      <colgroup>
-        <col class="alias" />
-        <col class="title" />
-      </colgroup>
+    <colgroup>
+      
+      <col class="alias" />
+      <col class="title" />
+    </colgroup>
 
-      <tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-main-functions" class="hasAnchor"><a href="#section-main-functions" class="anchor"></a>Main Functions</h2>
-            <p class="section-desc"></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="fit.subgroup.html">fit.subgroup()</a></code> </p>
-          </td>
-          <td><p>Fitting subgroup identification models</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="validate.subgroup.html">validate.subgroup()</a></code> </p>
-          </td>
-          <td><p>Validating fitted subgroup identification models</p></td>
-        </tr>
-      </tbody><tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-plotting" class="hasAnchor"><a href="#section-plotting" class="anchor"></a>Plotting</h2>
-            <p class="section-desc"></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="check.overlap.html">check.overlap()</a></code> </p>
-          </td>
-          <td><p>Check propensity score overlap</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="plot.html">plot(<i>&lt;subgroup_fitted&gt;</i>)</a></code> <code><a href="plot.html">plot(<i>&lt;subgroup_validated&gt;</i>)</a></code> </p>
-          </td>
-          <td><p>Plotting results for fitted subgroup identification models</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="plotCompare.html">plotCompare()</a></code> </p>
-          </td>
-          <td><p>Plot a comparison results for fitted or validated subgroup identification models</p></td>
-        </tr>
-      </tbody><tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-summarizing" class="hasAnchor"><a href="#section-summarizing" class="anchor"></a>Summarizing</h2>
-            <p class="section-desc"></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="summarize.subgroups.html">summarize.subgroups()</a></code> </p>
-          </td>
-          <td><p>Summarizing covariates within estimated subgroups</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="summary.html">summary(<i>&lt;subgroup_fitted&gt;</i>)</a></code> <code><a href="summary.html">summary(<i>&lt;wksvm&gt;</i>)</a></code> </p>
-          </td>
-          <td><p>Summary of results for fitted subgroup identification models</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="print.html">print(<i>&lt;subgroup_fitted&gt;</i>)</a></code> <code><a href="print.html">print(<i>&lt;subgroup_validated&gt;</i>)</a></code> <code><a href="print.html">print(<i>&lt;subgroup_summary&gt;</i>)</a></code> </p>
-          </td>
-          <td><p>Printing results for fitted subgroup identification models</p></td>
-        </tr>
-      </tbody><tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-predicting" class="hasAnchor"><a href="#section-predicting" class="anchor"></a>Predicting</h2>
-            <p class="section-desc"></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="predict.html">predict(<i>&lt;subgroup_fitted&gt;</i>)</a></code> <code><a href="predict.html">predict(<i>&lt;wksvm&gt;</i>)</a></code> </p>
-          </td>
-          <td><p>Predict function for fitted subgroup identification models</p></td>
-        </tr>
-      </tbody><tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-data" class="hasAnchor"><a href="#section-data" class="anchor"></a>Data</h2>
-            <p class="section-desc"></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="LaLonde.html">LaLonde</a></code> </p>
-          </td>
-          <td><p>National Supported Work Study Data</p></td>
-        </tr>
-      </tbody><tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-utilities" class="hasAnchor"><a href="#section-utilities" class="anchor"></a>Utilities</h2>
-            <p class="section-desc"></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="subgroup.effects.html">subgroup.effects()</a></code> </p>
-          </td>
-          <td><p>Computes treatment effects within various subgroups</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="weighted.ksvm.html">weighted.ksvm()</a></code> </p>
-          </td>
-          <td><p>Fit weighted kernel svm model.</p></td>
-        </tr>
-      </tbody>
-      </table>
-    </div>
+    <tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-main-functions" class="hasAnchor"><a href="#section-main-functions" class="anchor"></a>Main Functions</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="fit.subgroup.html">fit.subgroup()</a></code> </p>
+        </td>
+        <td><p>Fitting subgroup identification models</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="validate.subgroup.html">validate.subgroup()</a></code> </p>
+        </td>
+        <td><p>Validating fitted subgroup identification models</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-plotting" class="hasAnchor"><a href="#section-plotting" class="anchor"></a>Plotting</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="check.overlap.html">check.overlap()</a></code> </p>
+        </td>
+        <td><p>Check propensity score overlap</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plot.html">plot(<i>&lt;subgroup_fitted&gt;</i>)</a></code> <code><a href="plot.html">plot(<i>&lt;subgroup_validated&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Plotting results for fitted subgroup identification models</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plotCompare.html">plotCompare()</a></code> </p>
+        </td>
+        <td><p>Plot a comparison results for fitted or validated subgroup identification models</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-summarizing" class="hasAnchor"><a href="#section-summarizing" class="anchor"></a>Summarizing</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="summarize.subgroups.html">summarize.subgroups()</a></code> </p>
+        </td>
+        <td><p>Summarizing covariates within estimated subgroups</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="summary.html">summary(<i>&lt;subgroup_fitted&gt;</i>)</a></code> <code><a href="summary.html">summary(<i>&lt;wksvm&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Summary of results for fitted subgroup identification models</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="print.html">print(<i>&lt;subgroup_fitted&gt;</i>)</a></code> <code><a href="print.html">print(<i>&lt;subgroup_validated&gt;</i>)</a></code> <code><a href="print.html">print(<i>&lt;subgroup_summary&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Printing results for fitted subgroup identification models</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-predicting" class="hasAnchor"><a href="#section-predicting" class="anchor"></a>Predicting</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="predict.html">predict(<i>&lt;subgroup_fitted&gt;</i>)</a></code> <code><a href="predict.html">predict(<i>&lt;wksvm&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Predict function for fitted subgroup identification models</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-data" class="hasAnchor"><a href="#section-data" class="anchor"></a>Data</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="LaLonde.html">LaLonde</a></code> </p>
+        </td>
+        <td><p>National Supported Work Study Data</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-utilities" class="hasAnchor"><a href="#section-utilities" class="anchor"></a>Utilities</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="subgroup.effects.html">subgroup.effects()</a></code> </p>
+        </td>
+        <td><p>Computes treatment effects within various subgroups</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="weighted.ksvm.html">weighted.ksvm()</a></code> </p>
+        </td>
+        <td><p>Fit weighted kernel svm model.</p></td>
+      </tr>
+    </tbody>
+    </table>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -262,6 +268,8 @@
 
       </footer>
    </div>
+
+  
 
   </body>
 </html>

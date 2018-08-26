@@ -21,15 +21,21 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
 <meta property="og:title" content="Validating fitted subgroup identification models — validate.subgroup" />
 
 <meta property="og:description" content="Validates subgroup treatment effects for fitted
  subgroup identification model class of Chen, et al (2017)" />
 <meta name="twitter:card" content="summary" />
+
 
 
 <!-- mathjax -->
@@ -56,7 +62,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">personalized</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.5</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.0</span>
       </span>
     </div>
 
@@ -96,6 +102,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -103,22 +110,25 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Validating fitted subgroup identification models</h1>
     
+    <div class="hidden name"><code>validate.subgroup.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Validates subgroup treatment effects for fitted
  subgroup identification model class of Chen, et al (2017)</p>
     
+    </div>
 
-    <pre class="usage"><span class='fu'>validate.subgroup</span>(<span class='no'>model</span>, <span class='kw'>B</span> <span class='kw'>=</span> <span class='fl'>50L</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"training_test_replication"</span>,
-  <span class='st'>"boot_bias_correction"</span>), <span class='kw'>train.fraction</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
-  <span class='kw'>benefit.score.quantiles</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.1666667</span>, <span class='fl'>0.3333333</span>, <span class='fl'>0.5</span>, <span class='fl'>0.6666667</span>,
-  <span class='fl'>0.8333333</span>), <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>validate.subgroup</span>(<span class='no'>model</span>, <span class='kw'>B</span> <span class='kw'>=</span> <span class='fl'>50L</span>,
+  <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"training_test_replication"</span>, <span class='st'>"boot_bias_correction"</span>),
+  <span class='kw'>train.fraction</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>benefit.score.quantiles</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.1666667</span>,
+  <span class='fl'>0.3333333</span>, <span class='fl'>0.5</span>, <span class='fl'>0.6666667</span>, <span class='fl'>0.8333333</span>), <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -159,6 +169,53 @@ not to create a conflict of parallelism.</p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>An object of class <code>"subgroup_validated"</code></p>
+<dt>avg.results</dt><dd><p>Estimates of average conditional treatment effects when
+subgroups are determined based on the provided cutoff value for the benefit score. For example,
+if <code>cutoff = 0</code> and there is a treatment and control only, then the treatment is
+recommended if the benefit score is greater than 0.</p></dd>
+<dt>se.results</dt><dd><p>Standard errors of the estimates from <code>avg.estimates</code></p></dd>
+<dt>boot.results</dt><dd><p>Contains the individual results for each replication. <code>avg.results</code> is comprised
+of averages of the values from <code>boot.results</code></p></dd>
+<dt>avg.quantile.results</dt><dd><p>Estimates of average conditional treatment effects when
+subgroups are determined based on different quntile cutoff values for the benefit score. For example,
+if <code>benefit.score.quantiles = 0.75</code> and there is a treatment and control only, then the treatment is
+recommended if the benefit score is greater than the 75th upper quantile of all benefit scores. If multiple quantile
+values are provided, e.g. <code>benefit.score.quantiles = c(0.15, 0.5, 0.85)</code>, then results will be provided
+for all quantile levels.</p></dd>
+<dt>se.quantile.results</dt><dd><p>Standard errors corresponding to <code>avg.quantile.results</code></p></dd>
+<dt>boot.results.quantiles</dt><dd><p>Contains the individual results for each replication. <code>avg.quantile.results</code> is comprised
+of averages of the values from <code>boot.results.quantiles</code></p></dd>
+<dt>family</dt><dd><p>Family of the outcome. For example, <code>"gaussian"</code> for continuous outcomes</p></dd>
+<dt>method</dt><dd><p>Method used for subgroup identification model. Weighting or A-learning</p></dd>
+<dt>val.method</dt><dd><p>Method used for validation</p></dd>
+<dt>iterations</dt><dd><p>Number of replications used in the validation process</p></dd>
+
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Estimates of various quantities conditional on subgroups and treatment statuses are provided and displayed
+via the <code><a href='print.html'>print.subgroup_validated</a></code> function:</p><ol>
+<li><p>"Conditional expected outcomes" The first results shown when printing
+a <code>subgroup_validated</code> object are estimates of the expected outcomes conditional on
+the estimated subgroups (i.e. which subgroup is 'recommended' by the model) and conditional
+on treatment/intervention status. If there are two total treatment options, this results in a 2x2 table
+of expected conditional outcomes.</p></li>
+<li><p>"Treatment effects conditional on subgroups" The second results shown when printing
+a <code>subgroup_validated</code> object are estimates of the expected outcomes conditional on
+the estimated subgroups. If the treatment takes levels \(j \in \{1, \dots, K\}\), a total of \(K\)
+conditional treatment effects will be shown. For example, of the outcome is continuous, the
+\(j\)th conditional treatment effect is defined as \(E(Y|Trt = j, Subgroup=j) - E(Y|Trt = j, Subgroup =/= j)\),
+where \(Subgroup=j\) if treatment \(j\) is recommended, i.e. treatment \(j\) results in the largest/best
+expected potential outcomes given the fitted model.</p></li>
+<li><p>"Overall treatment effect conditional on subgroups " The third quantity displayed shows the overall improvement
+in outcomes resulting from all treatment recommendations. This is essentially an average over all of the
+conditional treatment effects weighted by the proportion of the population recommended each respective
+treatment level.</p></li>
+</ol>
+    
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Chen, S., Tian, L., Cai, T. and Yu, M. (2017), A general statistical framework for subgroup identification
@@ -169,9 +226,9 @@ doi:10.1002/(SICI)1097-0258(19960229)15:4&lt;361::AID-SIM168&gt;3.0.CO;2-4</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><code><a href='fit.subgroup.html'>fit.subgroup</a></code> for function which fits subgroup identification models,
+    <div class='dont-index'><p><code><a href='fit.subgroup.html'>fit.subgroup</a></code> for function which fits subgroup identification models,
 <code><a href='plot.html'>plot.subgroup_validated</a></code> for plotting of validation results, and
-<code><a href='print.html'>print.subgroup_validated</a></code> for arguments for printing options for <code>validate.subgroup()</code>.</p>
+<code><a href='print.html'>print.subgroup_validated</a></code> for arguments for printing options for <code>validate.subgroup()</code>.</p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -257,36 +314,38 @@ doi:10.1002/(SICI)1097-0258(19960229)15:4&lt;361::AID-SIM168&gt;3.0.CO;2-4</p>
 #&gt; method:  weighting 
 #&gt; 
 #&gt; validation method:  training_test_replication 
-#&gt; iterations:  10 
+#&gt; replications:  10 
 #&gt; 
 #&gt; Average Test Set Outcomes:
 #&gt;                                Recommended 0                   Recommended 1
 #&gt; Received 0 -14.9597 (SE = 11.1886, n = 13.7)  -21.4771 (SE = 7.7994, n = 43)
 #&gt; Received 1    -21.5129 (SE = 3.6628, n = 37) -14.965 (SE = 4.2433, n = 31.3)
 #&gt; 
+#&gt; Treatment effects conditional on subgroups:
 #&gt;    0 effect among recommended 0    1 effect among recommended 1 
 #&gt; 6.5532 (SE = 11.8404, n = 50.7) 6.5121 (SE = 10.2546, n = 74.3) 
 #&gt; 
-#&gt; Overall Subgroup Effect 
-#&gt;    5.4065 (SE = 8.0859) </div><div class='input'>
+#&gt; Overall treatment effect conditional on subgroups 
+#&gt;                              5.4065 (SE = 8.0859) </div><div class='input'>
 <span class='fu'>print</span>(<span class='no'>valmod</span>, <span class='kw'>which.quant</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>4</span>, <span class='fl'>5</span>))</div><div class='output co'>#&gt; family:  gaussian 
 #&gt; loss:    sq_loss_lasso 
 #&gt; method:  weighting 
 #&gt; 
 #&gt; validation method:  training_test_replication 
 #&gt; Cutoff:             Quant_67 
-#&gt; iterations:         10 
+#&gt; replications:         10 
 #&gt; 
 #&gt; Average Test Set Outcomes:
 #&gt;                               Recommended 0                    Recommended 1
 #&gt; Received 0 -14.0381 (SE = 7.9558, n = 29.5) -30.5683 (SE = 5.5557, n = 27.2)
 #&gt; Received 1 -19.1725 (SE = 2.7345, n = 54.5) -16.1053 (SE = 8.1065, n = 13.8)
 #&gt; 
+#&gt; Treatment effects conditional on subgroups:
 #&gt;  0 effect among recommended 0  1 effect among recommended 1 
 #&gt;   5.1344 (SE = 8.506, n = 84) 14.4631 (SE = 9.6631, n = 41) 
 #&gt; 
-#&gt; Overall Subgroup Effect 
-#&gt;    9.5669 (SE = 5.7354) 
+#&gt; Overall treatment effect conditional on subgroups 
+#&gt;                              9.5669 (SE = 5.7354) 
 #&gt; 
 #&gt; &lt;===============================================&gt;
 #&gt; 
@@ -296,18 +355,19 @@ doi:10.1002/(SICI)1097-0258(19960229)15:4&lt;361::AID-SIM168&gt;3.0.CO;2-4</p>
 #&gt; 
 #&gt; validation method:  training_test_replication 
 #&gt; Cutoff:             Quant_83 
-#&gt; iterations:         10 
+#&gt; replications:         10 
 #&gt; 
 #&gt; Average Test Set Outcomes:
 #&gt;                               Recommended 0                    Recommended 1
 #&gt; Received 0 -15.9204 (SE = 7.3824, n = 40.2) -33.8492 (SE = 7.3124, n = 16.5)
 #&gt; Received 1 -20.2731 (SE = 2.4943, n = 62.8)   -6.8326 (SE = 9.5111, n = 5.5)
 #&gt; 
+#&gt; Treatment effects conditional on subgroups:
 #&gt;  0 effect among recommended 0  1 effect among recommended 1 
 #&gt;  4.3527 (SE = 7.389, n = 103) 27.0166 (SE = 13.303, n = 22) 
 #&gt; 
-#&gt; Overall Subgroup Effect 
-#&gt;    9.0653 (SE = 5.3511) </div><div class='input'>
+#&gt; Overall treatment effect conditional on subgroups 
+#&gt;                              9.0653 (SE = 5.3511) </div><div class='input'>
 <span class='no'>bene.score.test</span> <span class='kw'>&lt;-</span> <span class='no'>subgrp.model</span>$<span class='fu'>predict</span>(<span class='no'>x.test</span>)
 
 <span class='fu'>mean</span>(<span class='no'>y.test</span>[<span class='no'>bene.score.test</span> <span class='kw'>&gt;</span> <span class='fl'>0</span> <span class='kw'>&amp;</span> <span class='no'>trt01.test</span> <span class='kw'>==</span> <span class='fl'>1</span>]) -
@@ -322,6 +382,10 @@ doi:10.1002/(SICI)1097-0258(19960229)15:4&lt;361::AID-SIM168&gt;3.0.CO;2-4</p>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
+
       <li><a href="#references">References</a></li>
 
       <li><a href="#see-also">See also</a></li>
@@ -343,6 +407,8 @@ doi:10.1002/(SICI)1097-0258(19960229)15:4&lt;361::AID-SIM168&gt;3.0.CO;2-4</p>
 
       </footer>
    </div>
+
+  
 
   </body>
 </html>

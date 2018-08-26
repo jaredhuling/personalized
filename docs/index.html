@@ -9,8 +9,8 @@
     Personalized Medicine • personalized</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="jquery.sticky-kit.min.js"></script><script src="pkgdown.js"></script><meta property="og:title" content="Estimation and Validation Methods for Subgroup Identification and
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
+<script src="pkgdown.js"></script><meta property="og:title" content="Estimation and Validation Methods for Subgroup Identification and
     Personalized Medicine">
 <meta property="og:description" content="Provides functions for fitting and validation of subgroup
     identification and personalized medicine models under the general subgroup
@@ -24,7 +24,7 @@
 <![endif]-->
 </head>
 <body>
-    <div class="container template-vignette">
+    <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -35,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">personalized</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.5</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.0</span>
       </span>
     </div>
 
@@ -83,12 +83,11 @@
 
       
       </header><div class="row">
-  <div class="col-md-9">
+  <div class="col-md-9 contents">
     
 
     
     
-<div class="contents">
 
 <p><img src="reference/figures/sticker.png" align="right" width="15%" height="15%"></p>
 <div id="overview-of-personalized" class="section level1">
@@ -159,8 +158,13 @@
 ## Received Ctrl  -4.2429 (n = 117) -21.9576 (n = 114)
 ## Received Trt  -23.6902 (n = 132)  -6.7605 (n = 137)
 ## 
+## Treatment effects conditional on subgroups:
 ## Ctrl effect among recommended Ctrl   Trt effect among recommended Trt 
 ##                  19.4474 (n = 249)                  15.1972 (n = 251) 
+## 
+## NOTE: The above average outcomes are biased estimates of
+##       the expected outcomes conditional on subgroups. 
+##       Use 'validate.subgroup()' to obtain unbiased estimates.
 ## 
 ## Benefit score quantiles: 
 ##        0%       25%       50%       75%      100% 
@@ -196,18 +200,19 @@
 ## method:  weighting 
 ## 
 ## validation method:  training_test_replication 
-## iterations:  100 
+## replications:  100 
 ## 
 ## Average Test Set Outcomes:
 ##                         Recommended Ctrl            Recommended Trt
 ## Received Ctrl -10.85 (SE = 7.88, 20.74%)  -18.64 (SE = 6.5, 25.81%)
 ## Received Trt   -15.81 (SE = 5.9, 24.18%) -15.36 (SE = 9.02, 29.26%)
 ## 
+## Treatment effects conditional on subgroups:
 ## Ctrl effect among recommended Ctrl   Trt effect among recommended Trt 
 ##          4.97 (SE = 11.23, 44.93%)          3.27 (SE = 11.73, 55.07%) 
 ## 
-## Overall Subgroup Effect 
-##         1.2 (SE = 8.77)</code></pre>
+## Overall treatment effect conditional on subgroups 
+##                                   1.2 (SE = 8.77)</code></pre>
 <p>Visualize subgroup-specific treatment effect estimates across training/testing iterations:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">plot</span>(val.model)</a></code></pre></div>
 <p><img src="articles/vis_val-1.png" width="75%" style="display: block; margin: auto;"></p>
@@ -242,7 +247,6 @@
 <p>Access help files for the main functions of the <code>personalized</code> package:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">?fit.subgroup</a>
 <a class="sourceLine" id="cb14-2" data-line-number="2">?validate.subgroup</a></code></pre></div>
-</div>
 </div>
 </div>
   </div>
@@ -295,6 +299,8 @@
 
       </footer>
 </div>
+
+  
 
   </body>
 </html>

@@ -21,15 +21,21 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
 <meta property="og:title" content="Printing results for fitted subgroup identification models — print.subgroup_fitted" />
 
 <meta property="og:description" content="Prints results for estimated subgroup treatment effects
 Prints summary results for estimated subgroup treatment effects" />
 <meta name="twitter:card" content="summary" />
+
 
 
 <!-- mathjax -->
@@ -56,7 +62,7 @@ Prints summary results for estimated subgroup treatment effects" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">personalized</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.5</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.0</span>
       </span>
     </div>
 
@@ -96,6 +102,7 @@ Prints summary results for estimated subgroup treatment effects" />
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -103,25 +110,28 @@ Prints summary results for estimated subgroup treatment effects" />
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Printing results for fitted subgroup identification models</h1>
     
+    <div class="hidden name"><code>print.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Prints results for estimated subgroup treatment effects</p>
 <p>Prints summary results for estimated subgroup treatment effects</p>
     
+    </div>
 
     <pre class="usage"><span class='co'># S3 method for subgroup_fitted</span>
-<span class='fu'>print</span>(<span class='no'>x</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fu'>max</span>(<span class='fu'>getOption</span>(<span class='st'>"digits"</span>) - <span class='fl'>3</span>, <span class='fl'>3</span>),
-  <span class='no'>...</span>)
+<span class='fu'>print</span>(<span class='no'>x</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fu'>max</span>(<span class='fu'>getOption</span>(<span class='st'>"digits"</span>) - <span class='fl'>3</span>,
+  <span class='fl'>3</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for subgroup_validated</span>
-<span class='fu'>print</span>(<span class='no'>x</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fu'>max</span>(<span class='fu'>getOption</span>(<span class='st'>"digits"</span>) - <span class='fl'>3</span>,
-  <span class='fl'>3</span>), <span class='kw'>sample.pct</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>which.quant</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+<span class='fu'>print</span>(<span class='no'>x</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fu'>max</span>(<span class='fu'>getOption</span>(<span class='st'>"digits"</span>) -
+  <span class='fl'>3</span>, <span class='fl'>3</span>), <span class='kw'>sample.pct</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>which.quant</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for subgroup_summary</span>
 <span class='fu'>print</span>(<span class='no'>x</span>, <span class='kw'>p.value</span> <span class='kw'>=</span> <span class='fl'>1</span>,
@@ -165,9 +175,9 @@ setting <code>p.value = 0.05</code> will display all covariates that have a sign
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><code><a href='validate.subgroup.html'>validate.subgroup</a></code> for function which creates validation results
+    <div class='dont-index'><p><code><a href='validate.subgroup.html'>validate.subgroup</a></code> for function which creates validation results
 and <code><a href='fit.subgroup.html'>fit.subgroup</a></code> for function which fits subgroup identification models.</p>
-<p><code><a href='summarize.subgroups.html'>summarize.subgroups</a></code> for function which summarizes subgroup covariate values</p>
+<p><code><a href='summarize.subgroups.html'>summarize.subgroups</a></code> for function which summarizes subgroup covariate values</p></div>
     
 
   </div>
@@ -193,6 +203,8 @@ and <code><a href='fit.subgroup.html'>fit.subgroup</a></code> for function which
 
       </footer>
    </div>
+
+  
 
   </body>
 </html>

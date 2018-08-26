@@ -21,14 +21,20 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
 <meta property="og:title" content="Computes treatment effects within various subgroups — subgroup.effects" />
 
 <meta property="og:description" content="Computes treatment effects within various subgroups to estimate subgroup treatment effects" />
 <meta name="twitter:card" content="summary" />
+
 
 
 <!-- mathjax -->
@@ -55,7 +61,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">personalized</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.5</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.0</span>
       </span>
     </div>
 
@@ -95,6 +101,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -102,16 +109,19 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Computes treatment effects within various subgroups</h1>
     
+    <div class="hidden name"><code>subgroup.effects.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Computes treatment effects within various subgroups to estimate subgroup treatment effects</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>subgroup.effects</span>(<span class='no'>benefit.scores</span>, <span class='no'>y</span>, <span class='no'>trt</span>, <span class='no'>pi.x</span>, <span class='kw'>cutpoint</span> <span class='kw'>=</span> <span class='fl'>0</span>,
   <span class='kw'>larger.outcome.better</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>reference.trt</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
@@ -161,8 +171,8 @@ The default is the last level of <code>trt</code> if it is a factor.</p></td>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><code><a href='fit.subgroup.html'>fit.subgroup</a></code> for function which fits subgroup identification models which generate
-benefit scores.</p>
+    <div class='dont-index'><p><code><a href='fit.subgroup.html'>fit.subgroup</a></code> for function which fits subgroup identification models which generate
+benefit scores.</p></div>
     
 
   </div>
@@ -188,6 +198,8 @@ benefit scores.</p>
 
       </footer>
    </div>
+
+  
 
   </body>
 </html>

@@ -21,11 +21,17 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
 <meta property="og:title" content="Changelog" />
+
 
 
 <!-- mathjax -->
@@ -52,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">personalized</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.5</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.0</span>
       </span>
     </div>
 
@@ -92,6 +98,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -99,18 +106,27 @@
       
       </header>
 
-      <div class="row">
-
-  <div class="col-md-9">
+<div class="row">
+  <div class="col-md-9 contents">
     <div class="page-header">
       <h1>Changelog <small></small></h1>
       
     </div>
 
-    <div class="contents">
+    <div id="personalized-0-2-0" class="section level1">
+<h1 class="page-header">
+<a href="#personalized-0-2-0" class="anchor"></a>personalized 0.2.0<small> Unreleased </small>
+</h1>
+<ul>
+<li>Simplified plot labeling</li>
+<li>Added clarifications to documentation</li>
+<li>Added customized loss function option</li>
+<li>Added options for count outcomes via Poisson negative log-likelihood as the loss</li>
+</ul>
+</div>
     <div id="personalized-0-1-5" class="section level1">
 <h1 class="page-header">
-<a href="#personalized-0-1-5" class="anchor"></a>personalized 0.1.5<small> Unreleased </small>
+<a href="#personalized-0-1-5" class="anchor"></a>personalized 0.1.5<small> 2018-04-11 </small>
 </h1>
 <ul>
 <li>Added printing of subgroup_validated results for quantile cutoffs via the which.quant argument</li>
@@ -166,13 +182,13 @@
 <li><p>Aaron added match.id argument to allow proper analysis of matched case-control datasets</p></li>
 </ul>
 </div>
-    </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#personalized-0-2-0">0.2.0</a></li>
         <li><a href="#personalized-0-1-5">0.1.5</a></li>
         <li><a href="#personalized-0-1-4">0.1.4</a></li>
         <li><a href="#personalized-0-1-3">0.1.3</a></li>
@@ -196,6 +212,8 @@
 
       </footer>
    </div>
+
+  
 
   </body>
 </html>
