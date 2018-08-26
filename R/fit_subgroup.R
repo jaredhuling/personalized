@@ -138,7 +138,7 @@
 #'      lmf <- lm(y ~ x - 1, weights = weights, ...)
 #'
 #'      # save coefficients
-#'      cfs = unname(coef(lmf))
+#'      cfs = coef(lmf)
 #'
 #'      # create prediction function. Notice
 #'      # how a column of 1's is appended
@@ -157,7 +157,7 @@
 #'  }
 #'
 #'  Example 2: \preformatted{
-#'  fit.custom.loss <- function(x, y, weights, offset, ...) {
+#'  fit.custom.loss.bin <- function(x, y, weights, offset, ...) {
 #'      df <- data.frame(y = y, x)
 #'
 #'      # minimize logistic loss with NO lasso penalty
@@ -167,7 +167,7 @@
 #'                 family = binomial(), ...)
 #'
 #'      # save coefficients
-#'      cfs = unname(coef(glmf))
+#'      cfs = coef(glmf)
 #'
 #'      # create prediction function.
 #'      prd = function(x, type = "response")
@@ -341,6 +341,39 @@
 #'                            nfolds = 5)              # option for cv.glmnet
 #'
 #' subgrp.model.cox
+#'
+#'
+#'
+#' ## Use custom loss function for binary outcomes
+#'
+#' fit.custom.loss.bin <- function(x, y, weights, offset, ...) {
+#'     df <- data.frame(y = y, x)
+#'
+#'     # minimize logistic loss with NO lasso penalty
+#'     # with allowance for efficiency augmentation
+#'     glmf <- glm(y ~ x - 1, weights = weights,
+#'                 offset = offset, # offset term allows for efficiency augmentation
+#'                 family = binomial(), ...)
+#'
+#'     # save coefficients
+#'     cfs = coef(glmf)
+#'
+#'     # create prediction function.
+#'     prd = function(x, type = "response")
+#'     {
+#'         #cbind(1, x)
+#'         tcrossprod(cbind(1, x), t(cfs))
+#'     }
+#'     # return lost of required components
+#'     list(predict = prd, model = glmf, coefficients = cfs)
+#' }
+#'
+#' subgrp.model.bin.cust <- fit.subgroup(x = x, y = y.binary,
+#'                                  trt = trt01,
+#'                                  propensity.func = prop.func,
+#'                                  fit.custom.loss = fit.custom.loss.bin)
+#'
+#' subgrp.model.bin.cust
 #'
 #'
 #' @export
