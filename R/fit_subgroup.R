@@ -411,7 +411,8 @@ fit.subgroup <- function(x,
             # need to return the function itself
             # if a function name was given so that
             # we can add function arguments if need be.
-            fit.custom.loss <- get(fit.custom.loss)
+            #fit.custom.loss <- get(fit.custom.loss, envir = environment())
+            fit.custom.loss <- match.fun(fit.custom.loss)
         }
 
         args_needed <- sort(c("...", "family", "match.id", "n.trts", "offset", "trt", "weights", "x", "y"))

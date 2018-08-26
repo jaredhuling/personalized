@@ -98,6 +98,10 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
                               loss   = "sq_loss_lasso",
                               nfolds = 5))
 
+    expect_error(fit.subgroup(x = y, y = y,
+                              trt = trt01,
+                              propensity.func = prop.func))
+
     subgrp.model <- fit.subgroup(x = x, y = y,
                                  trt = trt01,
                                  propensity.func = prop.func,
@@ -137,6 +141,33 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
         list(predict = prd, model = lmf, coefficients = cfs)
     }
 
+
+    fit.custom.loss2 <- function(x, y, weights, family, match.id,
+                                 n.trts, offset, trt, ...) {
+        df <- data.frame(y = y, x)
+
+        # minimize squared error loss with NO lasso penalty
+        lmf <- lm(y ~ x - 1, weights = weights, ...)
+
+        # save coefficients
+        cfs = unname(coef(lmf))
+
+        # create prediction function. Notice
+        # how a column of 1's is appended
+        # to ensure treatment main effects are included
+        # in predictions
+        prd = function(x, type = "response")
+        {
+            # roxygen2 removes the below, so
+            # using tcrossprod instead
+            #cbind(1, x)
+            tcrossprod(cbind(1, x), t(cfs))
+        }
+        # return lost of required components
+        list(predict = prd, model = lmf, coefficients = cfs)
+    }
+
+
     fit.custom.loss.bad <- function(x, y, weights, wrongarg, ...) {
         df <- data.frame(y = y, x)
 
@@ -160,6 +191,82 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
         # return lost of required components
         list(predict = prd, model = lmf, coefficients = cfs)
     }
+
+
+    fit.custom.loss.bad2 <- function(x, y, weights, wrongarg, wrongarg2, wrongarg3, wrongarg4, wrongarg5,
+                                     just, toooo, many, arguments, ...) {
+        df <- data.frame(y = y, x)
+
+        # minimize squared error loss with NO lasso penalty
+        lmf <- lm(y ~ x - 1, weights = weights, ...)
+
+        # save coefficients
+        cfs = unname(coef(lmf))
+
+        # create prediction function. Notice
+        # how a column of 1's is appended
+        # to ensure treatment main effects are included
+        # in predictions
+        prd = function(x, type = "response")
+        {
+            # roxygen2 removes the below, so
+            # using tcrossprod instead
+            #cbind(1, x)
+            tcrossprod(cbind(1, x), t(cfs))
+        }
+        # return lost of required components
+        list(predict = prd, model = lmf, coefficients = cfs)
+    }
+
+    fit.custom.loss.bad3 <- function(x, y, weights) {
+        df <- data.frame(y = y, x)
+
+        # minimize squared error loss with NO lasso penalty
+        lmf <- lm(y ~ x - 1, weights = weights, ...)
+
+        # save coefficients
+        cfs = unname(coef(lmf))
+
+        # create prediction function. Notice
+        # how a column of 1's is appended
+        # to ensure treatment main effects are included
+        # in predictions
+        prd = function(x, type = "response")
+        {
+            # roxygen2 removes the below, so
+            # using tcrossprod instead
+            #cbind(1, x)
+            tcrossprod(cbind(1, x), t(cfs))
+        }
+        # return lost of required components
+        list(predict = prd, model = lmf, coefficients = cfs)
+    }
+
+
+    fit.custom.loss.bad4 <- function(x, y, ...) {
+        df <- data.frame(y = y, x)
+
+        # minimize squared error loss with NO lasso penalty
+        lmf <- lm(y ~ x - 1, weights = weights, ...)
+
+        # save coefficients
+        cfs = unname(coef(lmf))
+
+        # create prediction function. Notice
+        # how a column of 1's is appended
+        # to ensure treatment main effects are included
+        # in predictions
+        prd = function(x, type = "response")
+        {
+            # roxygen2 removes the below, so
+            # using tcrossprod instead
+            #cbind(1, x)
+            tcrossprod(cbind(1, x), t(cfs))
+        }
+        # return lost of required components
+        list(predict = prd, model = lmf, coefficients = cfs)
+    }
+
 
 
     fit.custom.loss.bin <- function(x, y, weights, offset, ...) {
@@ -202,6 +309,14 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
                                  loss = "custom",
                                  fit.custom.loss = fit.custom.loss)
 
+    # use loss with all possible args provided
+    subgrp.model <- fit.subgroup(x = x, y = y,
+                                 trt = trt01,
+                                 propensity.func = prop.func,
+                                 loss = "custom",
+                                 fit.custom.loss = fit.custom.loss2)
+
+
     expect_error(fit.subgroup(x = x, y = y,
                               trt = trt01,
                               propensity.func = prop.func,
@@ -211,6 +326,21 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
                               trt = trt01,
                               propensity.func = prop.func,
                               fit.custom.loss = fit.custom.loss.bad))
+
+    expect_error(fit.subgroup(x = x, y = y,
+                              trt = trt01,
+                              propensity.func = prop.func,
+                              fit.custom.loss = fit.custom.loss.bad2))
+
+    expect_error(fit.subgroup(x = x, y = y,
+                              trt = trt01,
+                              propensity.func = prop.func,
+                              fit.custom.loss = fit.custom.loss.bad3))
+
+    expect_error(fit.subgroup(x = x, y = y,
+                              trt = trt01,
+                              propensity.func = prop.func,
+                              fit.custom.loss = fit.custom.loss.bad4))
 
 
     ###############################
@@ -233,6 +363,28 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
                                  nfolds = 5)
 
     expect_is(subgrp.model, "subgroup_fitted")
+
+
+    expect_warning(fit.subgroup(x = x, y = y,
+                              trt = as.factor(trt01),
+                              propensity.func = prop.func,
+                              reference.trt = 2,
+                              loss   = "owl_logistic_loss_lasso",
+                              nfolds = 5))
+
+    ## only 1 trt level
+    expect_error(fit.subgroup(x = x, y = y,
+                                trt = as.factor(rep(1, NROW(y))),
+                                propensity.func = prop.func,
+                                loss   = "owl_logistic_loss_lasso",
+                                nfolds = 5))
+
+    ## too many trt levels
+    expect_error(fit.subgroup(x = x, y = y,
+                              trt = as.factor(1:NROW(y)),
+                              propensity.func = prop.func,
+                              loss   = "owl_logistic_loss_lasso",
+                              nfolds = 5))
 
     subgrp.model <- fit.subgroup(x = x, y = y,
                                  trt = as.factor(trt01),
@@ -621,6 +773,16 @@ test_that("test fit.subgroup with augment.func for continuous outcomes and vario
                                  augment.func = augment.func,
                                  propensity.func = prop.func,
                                  loss   = "sq_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+    ## test for method which uses adjustment directly
+    subgrp.model <- fit.subgroup(x = x, y = y,
+                                 trt = trt01,
+                                 augment.func = augment.func,
+                                 propensity.func = prop.func,
+                                 loss   = "owl_logistic_loss_lasso",
                                  nfolds = 5)              # option for cv.glmnet
 
     expect_is(subgrp.model, "subgroup_fitted")
