@@ -17,6 +17,7 @@
 #' (\code{type = "code"})
 #' @param bins integer number of bins for histograms when \code{type = "histogram"}
 #' @importFrom ggplot2 guides guide_legend
+#' @importFrom methods formalArgs
 #' @examples
 #' library(personalized)
 #'

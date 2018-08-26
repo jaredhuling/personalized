@@ -65,18 +65,110 @@
 #' @param augment.func function which inputs the response \code{y}, the covariates \code{x}, and \code{trt} and outputs
 #' predicted values (on the link scale) for the response using a model constructed with \code{x}. \code{augment.func()} can also be simply
 #' a function of \code{x} and \code{y}. This function is used for efficiency augmentation.
-#' When the form of the augmentation function is correct, it can provide efficient estimation of the subgroups
+#' When the form of the augmentation function is correct, it can provide efficient estimation of the subgroups. Some examples of possible
+#' augmentation functions are:
+#'
 #' Example 1: \code{augment.func <- function(x, y) {lmod <- lm(y ~ x); return(fitted(lmod))}}
 #'
-#' Example 2: \code{augment.func <- function(x, y, trt) {lmod <- lm(y ~ x + trt); return(fitted(lmod))}}
+#' Example 2:
+#' \preformatted{
+#' augment.func <- function(x, y, trt) {
+#'     lmod <- lm(y ~ x + trt)
+#'     return(fitted(lmod))
+#' }
+#' }
 #'
 #' For binary and time-to-event outcomes, make sure that predictions are returned on the scale of the predictors
 #'
 #' Example 3:
+#' \preformatted{augment.func <- function(x, y) {
+#'         bmod <- glm(y ~ x, family = binomial())
+#'         return(predict(bmod, type = "link"))
+#'     }
+#'  }
+#' @param fit.custom.loss A user-specified custom loss function to be used in model fitting. If provided, this function should
+#' take the modified design matrix as an argument and the responses and optimize a custom weighted loss function.
 #'
-#' \code{augment.func <- function(x, y) {
-#'     bmod <- glm(y ~ x, family = binomial());
-#'     return(predict(bmod, type = "link"))}
+#' The
+#' provided function must return a list with the following elements:
+#' \itemize{
+#' \item{\code{predict}}{ a function that inputs a design matrix and a 'type' argument for the type of predictions and outputs
+#' a vector of predictions on the scale of the linear predictor. Note that the matrix provided to 'fit.custom.loss'
+#' has a column appended to the first column of \code{x} corresponding to the treatment main effect.
+#' Thus, the prediction function should deal with this,
+#' e.g. \code{predict(model, cbind(1, x))}}
+#' \item{\code{model} }{ a fitted model object returned by the underlying fitting function}
+#' \item{\code{coefficients}}{ if the underlying fitting function yields a vector of coefficient estimates, they should be provided here}
+#' }
+#' The provided function \strong{MUST} be a function
+#' with the following arguments:
+#' \enumerate{
+#' \item{\code{x}}{ design matrix}
+#' \item{\code{y}}{ vector of responses}
+#' \item{\code{weights}}{ vector for observations weights. The underlying loss function MUST have samples weighted according
+#' to this vector. See below example}
+#' \item{\code{...}}{ additional arguments passed via '...'. This can be used so that users can specify more arguments to the
+#' underlying fitting function if so desired.}
+#' }
+#' The provided function can also optionally take the following arguments:
+#' \enumerate{
+#' \item{\code{match.id}}{ vector of case/control cluster IDs. This is useful if cross validation is used in the underlying fitting function
+#' in which case it is advisable to sample whole clusters randomly instead of individual observations.}
+#' \item{\code{offset}}{ if efficiency augmentation is used, the predictions from the outcome model from \code{augment.func}
+#' will be provided via the \code{offset} argument, which can be used as an offset in the underlying fitting function
+#' as a means of incorporating the efficiency augmentation model's predictions}
+#' \item{\code{trt}}{ vector of treatment statuses}
+#' \item{\code{family}}{ family of outcome}
+#' \item{\code{n.trts}}{ numer of treatment levels. Can be useful if there are more than 2 treatment levels}
+#' }
+#'
+#'  Example 1: \preformatted{
+#'  fit.custom.loss <- function(x, y, weights, ...) {
+#'      df <- data.frame(y = y, x)
+#'
+#'      # minimize squared error loss with NO lasso penalty
+#'      lmf <- lm(y ~ x - 1, weights = weights, ...)
+#'
+#'      # save coefficients
+#'      cfs = unname(coef(lmf))
+#'
+#'      # create prediction function. Notice
+#'      # how a column of 1's is appended
+#'      # to ensure treatment main effects are included
+#'      # in predictions
+#'      prd = function(x, type = "response")
+#'      {
+#'          # roxygen2 removes the below, so
+#'          # using tcrossprod instead
+#'          #cbind(1, x) %*% cfs
+#'          tcrossprod(cbind(1, x), t(cfs))
+#'      }
+#'      # return lost of required components
+#'      list(predict = prd, model = lmf, coefficients = cfs)
+#'  }
+#'  }
+#'
+#'  Example 2: \preformatted{
+#'  fit.custom.loss <- function(x, y, weights, offset, ...) {
+#'      df <- data.frame(y = y, x)
+#'
+#'      # minimize squared error loss with NO lasso penalty
+#'      glmf <- glm(y ~ x - 1, weights = weights,
+#'                 offset = offset, # offset term allows for efficiency augmentation
+#'                 family = binomial(), ...)
+#'
+#'      # save coefficients
+#'      cfs = unname(coef(glmf))
+#'
+#'      # create prediction function.
+#'      prd = function(x, type = "response")
+#'      {
+#'          #cbind(1, x) %*% cfs
+#'          tcrossprod(cbind(1, x), t(cfs))
+#'      }
+#'      # return lost of required components
+#'      list(predict = prd, model = glmf, coefficients = cfs)
+#'  }
 #'  }
 #' @param cutpoint numeric value for patients with benefit scores above which
 #' (or below which if \code{larger.outcome.better = FALSE})
@@ -251,14 +343,16 @@ fit.subgroup <- function(x,
                                         "sq_loss_gbm",
                                         "abs_loss_gbm",
                                         "logistic_loss_gbm",
-                                        "cox_loss_gbm"),
-                         method     = c("weighting", "a_learning"),
-                         match.id = NULL,
+                                        "cox_loss_gbm",
+                                        "custom"),
+                         method       = c("weighting", "a_learning"),
+                         match.id     = NULL,
                          augment.func = NULL,
-                         cutpoint   = 0,
+                         fit.custom.loss       = NULL,
+                         cutpoint              = 0,
                          larger.outcome.better = TRUE,
-                         reference.trt = NULL,
-                         retcall    = TRUE,
+                         reference.trt         = NULL,
+                         retcall               = TRUE,
                          ...)
 {
 
@@ -288,6 +382,86 @@ fit.subgroup <- function(x,
     } else
     {
         family <- "gaussian"
+    }
+
+
+    ## if a custom loss function is provided,
+    ## we need to do a lot of checking to make
+    ## sure it has some basic requirements.
+    if (!is.null(fit.custom.loss))
+    {
+        loss <- "custom"
+
+        loss_args <- formalArgs(fit.custom.loss)
+
+        if (loss_args[length(loss_args)] != "...")
+        {
+            stop("last argument of 'fit.custom.loss' must be '...'")
+        }
+
+        loss_args <- sort(loss_args)
+
+        if (!(all(c("weights", "x" , "y") %in% loss_args)))
+        {
+            stop("'fit.custom.loss' must have arguments 'x', 'y', and 'weights'")
+        }
+
+        if (is.character(fit.custom.loss))
+        {
+            # need to return the function itself
+            # if a function name was given so that
+            # we can add function arguments if need be.
+            fit.custom.loss <- get(fit.custom.loss)
+        }
+
+        args_needed <- sort(c("...", "family", "match.id", "n.trts", "offset", "trt", "weights", "x", "y"))
+
+        if (length(loss_args) > length(args_needed))
+        {
+            args_names <- paste(unname(sapply(args_needed, function(cr) paste0("'", cr, "'"))),
+                                collapse = ", ")
+            stop(c("Too many arguments provided. Arguments allowed are: ", args_names) )
+        } else
+        {
+            if (any(!(loss_args %in% args_needed)))
+            {
+                stop("Invalid arguments given to 'fit.custom.loss'")
+            }
+        }
+
+        args_2_add <- setdiff(args_needed, loss_args)
+
+        ## add arguments to fit.custom.loss which
+        ## were not defined in fit.custom.loss but need to be there
+        if (length(args_2_add))
+        {
+            args_2_use    <- intersect(args_needed, loss_args)
+            args_2_use_nd <- args_2_use[-match("...", args_2_use)]
+            fit.custom.loss2 <- function(x, y, weights, trt, n.trts, match.id, offset, family, ...)
+            {
+                if ("..." %in% args_2_use)
+                {
+                    dots <- list(...)
+                    arglist <- lapply(args_2_use_nd, function(rg) get(rg, envir = environment()))
+                    names(arglist) <- args_2_use_nd
+                    return( do.call(fit.custom.loss, c(arglist, dots)  ) )
+                } else
+                {
+                    arglist <- lapply(args_2_use_nd, function(rg) get(rg, envir = environment()))
+                    names(arglist) <- args_2_use_nd
+                    return( do.call(fit.custom.loss, arglist) )
+                }
+            }
+        } else
+        {
+            fit.custom.loss2 <- fit.custom.loss
+        }
+
+    }
+
+    if (loss == "custom" & is.null(fit.custom.loss))
+    {
+        stop("if loss = 'custom', then user must specify a custom loss function via the 'fit.custom.loss' argument")
     }
 
 
@@ -361,7 +535,8 @@ fit.subgroup <- function(x,
                              "sq_loss_gbm"                      = "offset",
                              "abs_loss_gbm"                     = "offset",
                              "logistic_loss_gbm"                = "offset",
-                             "cox_loss_gbm"                     = "offset")
+                             "cox_loss_gbm"                     = "offset",
+                             "custom"                           = "offset_notdots")
 
     if (is.factor(trt))
     {
@@ -429,7 +604,8 @@ fit.subgroup <- function(x,
     }
 
     # Check match.id validity and convert it to a factor, if supplied
-    if (!is.null(match.id)) {
+    if (!is.null(match.id))
+    {
         match.id <- tryCatch(expr=as.factor(match.id), error = function(e) {stop("match.id must be a factor or capable of being coerced to a factor.")})
         if (length(levels(match.id)) < 2) {stop("match.id must have at least 2 levels")}
     }
@@ -516,6 +692,10 @@ fit.subgroup <- function(x,
     } else
     {
         y.adj <- y
+        if (augment.method == "offset_notdots")
+        {
+            extra.args <- list(offset = rep(1, NROW(y)))
+        }
     }
 
     # stop if augmentation function provided
@@ -737,12 +917,20 @@ fit.subgroup <- function(x,
                                                 match.id = match.id, ...), extra.args) )
     } else
     {
-        # identify correct fitting function and call it
-        fit_fun      <- paste0("fit_", loss)
+        if (loss == "custom")
+        {
+            fitted.model <- do.call(fit.custom.loss2, c(list(x = x.tilde, trt = trt, n.trts = n.trts,
+                                                             y = y.adj, weights = wts, family = family,
+                                                             match.id = match.id, ...), extra.args)  )
+        } else
+        {
+            # identify correct fitting function and call it
+            fit_fun      <- paste0("fit_", loss)
 
-        fitted.model <- do.call(fit_fun, c(list(x = x.tilde, trt = trt, n.trts = n.trts,
-                                                y = y.adj, wts = wts, family = family,
-                                                match.id = match.id, ...), extra.args)  )
+            fitted.model <- do.call(fit_fun, c(list(x = x.tilde, trt = trt, n.trts = n.trts,
+                                                    y = y.adj, wts = wts, family = family,
+                                                    match.id = match.id, ...), extra.args)  )
+        }
     }
 
 

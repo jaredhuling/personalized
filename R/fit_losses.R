@@ -220,7 +220,7 @@ fit_sq_loss_lasso <- function(x, y, trt, n.trts, wts, family, match.id, intercep
         df.folds <- data.frame(match.id = sample(levels(match.id)),
                                fold.id = 1:length(levels(match.id)) %% nfolds)
         # Obtain vector of fold IDs with respect to the data
-        foldid <- sapply(match.id, function(z) {df.folds[which(z == df.folds$match.id),"fold.id"]}) +1
+        foldid <- sapply(match.id, function(z) {df.folds[which(z == df.folds$match.id),"fold.id"]}) + 1
     } else
     {
         if ("foldid" %in% dot.names)
@@ -393,23 +393,23 @@ fit_sq_loss_lasso_gam <- function(x, y, trt, n.trts, wts, family, match.id, inte
         if ("foldid" %in% dot.names)
         {
             warning("User-supplied foldid will be ignored since match.id was detected.
-                    Folds will be randomly assigned to clusters according to match.id.")
+                     Folds will be randomly assigned to clusters according to match.id.")
         }
         # Assign a fold ID for each cluster level
         df.folds <- data.frame(match.id = sample(levels(match.id)),
                                fold.id = 1:length(levels(match.id)) %% nfolds)
         # Obtain vector of fold IDs with respect to the data
-        foldid <- sapply(match.id, function(z) {df.folds[which(z == df.folds$match.id),"fold.id"]}) +1
+        foldid <- sapply(match.id, function(z) {df.folds[which(z == df.folds$match.id),"fold.id"]}) + 1
+    } else
+    {
+        if ("foldid" %in% dot.names)
+        {
+            foldid <- list.dots$foldid
         } else
         {
-            if ("foldid" %in% dot.names)
-            {
-                foldid <- list.dots$foldid
-            } else
-            {
-                foldid <- sample(rep(seq(nfolds), length = nrow(x)))
-            }
+            foldid <- sample(rep(seq(nfolds), length = nrow(x)))
         }
+    }
     list.dots$foldid <- foldid
 
     glmnet.argnames <- union(names(formals(cv.glmnet)), names(formals(glmnet)))

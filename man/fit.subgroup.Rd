@@ -11,10 +11,11 @@ fit.subgroup(x, y, trt, propensity.func = NULL,
   "logistic_loss_lasso_gam", "sq_loss_gam", "logistic_loss_gam",
   "owl_logistic_loss_gam", "owl_logistic_flip_loss_gam",
   "owl_logistic_loss_lasso_gam", "owl_logistic_flip_loss_lasso_gam",
-  "sq_loss_gbm", "abs_loss_gbm", "logistic_loss_gbm", "cox_loss_gbm"),
-  method = c("weighting", "a_learning"), match.id = NULL,
-  augment.func = NULL, cutpoint = 0, larger.outcome.better = TRUE,
-  reference.trt = NULL, retcall = TRUE, ...)
+  "sq_loss_gbm", "abs_loss_gbm", "logistic_loss_gbm", "cox_loss_gbm",
+  "custom"), method = c("weighting", "a_learning"), match.id = NULL,
+  augment.func = NULL, fit.custom.loss = NULL, cutpoint = 0,
+  larger.outcome.better = TRUE, reference.trt = NULL, retcall = TRUE,
+  ...)
 }
 \arguments{
 \item{x}{The design matrix (not including intercept term)}
@@ -86,18 +87,111 @@ fouth patient is a case and the fifth through seventh patients are matched with 
 \item{augment.func}{function which inputs the response \code{y}, the covariates \code{x}, and \code{trt} and outputs
 predicted values (on the link scale) for the response using a model constructed with \code{x}. \code{augment.func()} can also be simply
 a function of \code{x} and \code{y}. This function is used for efficiency augmentation.
-When the form of the augmentation function is correct, it can provide efficient estimation of the subgroups
+When the form of the augmentation function is correct, it can provide efficient estimation of the subgroups. Some examples of possible
+augmentation functions are:
+
 Example 1: \code{augment.func <- function(x, y) {lmod <- lm(y ~ x); return(fitted(lmod))}}
 
-Example 2: \code{augment.func <- function(x, y, trt) {lmod <- lm(y ~ x + trt); return(fitted(lmod))}}
+Example 2:
+\preformatted{
+augment.func <- function(x, y, trt) {
+    lmod <- lm(y ~ x + trt)
+    return(fitted(lmod))
+}
+}
 
 For binary and time-to-event outcomes, make sure that predictions are returned on the scale of the predictors
 
 Example 3:
+\preformatted{augment.func <- function(x, y) {
+        bmod <- glm(y ~ x, family = binomial())
+        return(predict(bmod, type = "link"))
+    }
+ }}
 
-\code{augment.func <- function(x, y) {
-    bmod <- glm(y ~ x, family = binomial());
-    return(predict(bmod, type = "link"))}
+\item{fit.custom.loss}{A user-specified custom loss function to be used in model fitting. If provided, this function should
+take the modified design matrix as an argument and the responses and optimize a custom weighted loss function.
+
+The
+provided function must return a list with the following elements:
+\itemize{
+\item{\code{predict}}{ a function that inputs a design matrix and a 'type' argument for the type of predictions and outputs
+a vector of predictions on the scale of the linear predictor. Note that the matrix provided to 'fit.custom.loss'
+has a column appended to the first column of \code{x} corresponding to the treatment main effect.
+Thus, the prediction function should deal with this,
+e.g. \code{predict(model, cbind(1, x))}}
+\item{\code{model} }{ a fitted model object returned by the underlying fitting function}
+\item{\code{coefficients}}{ if the underlying fitting function yields a vector of coefficient estimates, they should be provided here}
+}
+The provided function \strong{MUST} be a function
+with the following arguments:
+\enumerate{
+\item{\code{x}}{ design matrix}
+\item{\code{y}}{ vector of responses}
+\item{\code{weights}}{ vector for observations weights. The underlying loss function MUST have samples weighted according
+to this vector. See below example}
+\item{\code{...}}{ additional arguments passed via '...'. This can be used so that users can specify more arguments to the
+underlying fitting function if so desired.}
+}
+The provided function can also optionally take the following arguments:
+\enumerate{
+\item{\code{match.id}}{ vector of case/control cluster IDs. This is useful if cross validation is used in the underlying fitting function
+in which case it is advisable to sample whole clusters randomly instead of individual observations.}
+\item{\code{offset}}{ if efficiency augmentation is used, the predictions from the outcome model from \code{augment.func}
+will be provided via the \code{offset} argument, which can be used as an offset in the underlying fitting function
+as a means of incorporating the efficiency augmentation model's predictions}
+\item{\code{trt}}{ vector of treatment statuses}
+\item{\code{family}}{ family of outcome}
+\item{\code{n.trts}}{ numer of treatment levels. Can be useful if there are more than 2 treatment levels}
+}
+
+ Example 1: \preformatted{
+ fit.custom.loss <- function(x, y, weights, ...) {
+     df <- data.frame(y = y, x)
+
+     # minimize squared error loss with NO lasso penalty
+     lmf <- lm(y ~ x - 1, weights = weights, ...)
+
+     # save coefficients
+     cfs = unname(coef(lmf))
+
+     # create prediction function. Notice
+     # how a column of 1's is appended
+     # to ensure treatment main effects are included
+     # in predictions
+     prd = function(x, type = "response")
+     {
+         # roxygen2 removes the below, so
+         # using tcrossprod instead
+         #cbind(1, x) %*% cfs
+         tcrossprod(cbind(1, x), t(cfs))
+     }
+     # return lost of required components
+     list(predict = prd, model = lmf, coefficients = cfs)
+ }
+ }
+
+ Example 2: \preformatted{
+ fit.custom.loss <- function(x, y, weights, offset, ...) {
+     df <- data.frame(y = y, x)
+
+     # minimize squared error loss with NO lasso penalty
+     glmf <- glm(y ~ x - 1, weights = weights,
+                offset = offset, # offset term allows for efficiency augmentation
+                family = binomial(), ...)
+
+     # save coefficients
+     cfs = unname(coef(glmf))
+
+     # create prediction function.
+     prd = function(x, type = "response")
+     {
+         #cbind(1, x) %*% cfs
+         tcrossprod(cbind(1, x), t(cfs))
+     }
+     # return lost of required components
+     list(predict = prd, model = glmf, coefficients = cfs)
+ }
  }}
 
 \item{cutpoint}{numeric value for patients with benefit scores above which

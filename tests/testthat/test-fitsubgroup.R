@@ -110,6 +110,113 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
 
     invisible(capture.output(summary(subgrp.model)))
 
+
+    #### TEST CUSTOM LOSS FUNCTIONS
+
+    fit.custom.loss <- function(x, y, weights, ...) {
+        df <- data.frame(y = y, x)
+
+        # minimize squared error loss with NO lasso penalty
+        lmf <- lm(y ~ x - 1, weights = weights, ...)
+
+        # save coefficients
+        cfs = unname(coef(lmf))
+
+        # create prediction function. Notice
+        # how a column of 1's is appended
+        # to ensure treatment main effects are included
+        # in predictions
+        prd = function(x, type = "response")
+        {
+            # roxygen2 removes the below, so
+            # using tcrossprod instead
+            #cbind(1, x)
+            tcrossprod(cbind(1, x), t(cfs))
+        }
+        # return lost of required components
+        list(predict = prd, model = lmf, coefficients = cfs)
+    }
+
+    fit.custom.loss.bad <- function(x, y, weights, wrongarg, ...) {
+        df <- data.frame(y = y, x)
+
+        # minimize squared error loss with NO lasso penalty
+        lmf <- lm(y ~ x - 1, weights = weights, ...)
+
+        # save coefficients
+        cfs = unname(coef(lmf))
+
+        # create prediction function. Notice
+        # how a column of 1's is appended
+        # to ensure treatment main effects are included
+        # in predictions
+        prd = function(x, type = "response")
+        {
+            # roxygen2 removes the below, so
+            # using tcrossprod instead
+            #cbind(1, x)
+            tcrossprod(cbind(1, x), t(cfs))
+        }
+        # return lost of required components
+        list(predict = prd, model = lmf, coefficients = cfs)
+    }
+
+
+    fit.custom.loss.bin <- function(x, y, weights, offset, ...) {
+        df <- data.frame(y = y, x)
+
+        # minimize squared error loss with NO lasso penalty
+        glmf <- glm(y ~ x - 1, weights = weights,
+                    offset = offset, # offset term allows for efficiency augmentation
+                    family = binomial(), ...)
+
+        # save coefficients
+        cfs = unname(coef(glmf))
+
+        # create prediction function.
+        prd = function(x, type = "response")
+        {
+            #cbind(1, x)
+            tcrossprod(cbind(1, x), t(cfs))
+        }
+        # return lost of required components
+        list(predict = prd, model = glmf, coefficients = cfs)
+    }
+
+
+    subgrp.model <- fit.subgroup(x = x, y = y,
+                                 trt = trt01,
+                                 propensity.func = prop.func,
+                                 fit.custom.loss = fit.custom.loss,
+                                 loss   = "custom")
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+    invisible(capture.output(print(subgrp.model, digits = 2)))
+
+    invisible(capture.output(summary(subgrp.model)))
+
+    subgrp.model <- fit.subgroup(x = x, y = y,
+                                 trt = trt01,
+                                 propensity.func = prop.func,
+                                 loss = "custom",
+                                 fit.custom.loss = fit.custom.loss)
+
+    expect_error(fit.subgroup(x = x, y = y,
+                              trt = trt01,
+                              propensity.func = prop.func,
+                              loss = "custom"))
+
+    expect_error(fit.subgroup(x = x, y = y,
+                              trt = trt01,
+                              propensity.func = prop.func,
+                              fit.custom.loss = fit.custom.loss.bad))
+
+
+    ###############################
+
+
+
     # test for factor trt
     subgrp.model <- fit.subgroup(x = x, y = y,
                                  trt = as.factor(trt01),
