@@ -42,9 +42,17 @@
 #'     \itemize{
 #'         \item{All losses for continuous outcomes can be used plus the following:}
 #'         \item{\code{"logistic_loss_lasso"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with with linear model and lasso penalty}
-#'         \item{\code{"logistic_loss_lasso_gam"}}{ - M(y, v) = y * log(1 + exp\{-v\}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
-#'         \item{\code{"logistic_loss_gam"}}{ - M(y, v) = y * log(1 + exp\{-v\}) with generalized additive model fit on all variables}
+#'         \item{\code{"logistic_loss_lasso_gam"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with variables selected by lasso penalty and generalized additive model fit on the selected variables}
+#'         \item{\code{"logistic_loss_gam"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with generalized additive model fit on all variables}
 #'         \item{\code{"logistic_loss_gbm"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with gradient-boosted decision trees model}
+#'     }
+#'     \item{Count Outcomes}
+#'     \itemize{
+#'         \item{All losses for continuous outcomes can be used plus the following:}
+#'         \item{\code{"poisson_loss_lasso"}}{ - M(y, v) = -[yv - exp(v)] with with linear model and lasso penalty}
+#'         \item{\code{"poisson_loss_lasso_gam"}}{ - M(y, v) = -[yv - exp(v)] with variables selected by lasso penalty and generalized additive model fit on the selected variables}
+#'         \item{\code{"poisson_loss_gam"}}{ - M(y, v) = -[yv - exp(v)] with generalized additive model fit on all variables}
+#'         \item{\code{"poisson_loss_gbm"}}{ - M(y, v) = -[yv - exp(v)] with gradient-boosted decision trees model}
 #'     }
 #'     \item{Time-to-Event Outcomes}
 #'     \itemize{
