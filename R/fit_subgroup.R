@@ -962,6 +962,31 @@ fit.subgroup <- function(x,
             fitted.model <- do.call(fit.custom.loss2, c(list(x = x.tilde, trt = trt, n.trts = n.trts,
                                                              y = y.adj, weights = wts, family = family,
                                                              match.id = match.id, ...), extra.args)  )
+
+            ## some general error checking for custom losses
+            if (length(fitted.model) == 3)
+            {
+                lst_names <- sort(names(fitted.model))
+                if (any(lst_names != c("coefficients", "model", "predict")))
+                {
+                    stop("'fit.custom.loss' must return a list with elements 'coefficients', 'model', and 'predict'. If
+                         underlying methodology does not return coefficients, the coefficients element can take the value NULL")
+                }
+            } else if (length(fitted.model) == 2)
+            {
+                lst_names <- sort(names(fitted.model))
+                if (any(lst_names != c("model", "predict")))
+                {
+                    stop("'fit.custom.loss' must return a list with elements 'model' and 'predict'")
+                }
+                fitted.model <- c( fitted.model, list(coefficients = NULL) )
+            }
+
+            if (!is.function(fitted.model$predict))
+            {
+                stop("the 'predict' element of the list returned by 'fit.custom.loss' must be a function")
+            }
+
         } else
         {
             # identify correct fitting function and call it
@@ -995,6 +1020,12 @@ fit.subgroup <- function(x,
     fitted.model$y                     <- y
 
     fitted.model$benefit.scores        <- fitted.model$predict(x)
+
+    if (NROW(fitted.model$benefit.scores) != NROW(y))
+    {
+        warning("predict function returned a vector of predictions not equal to the number of observations
+                when applied to the whole sample. Please check predict function.")
+    }
 
     fitted.model$recommended.trts      <- predict.subgroup_fitted(fitted.model, newx = x,
                                                                   type = "trt.group",
