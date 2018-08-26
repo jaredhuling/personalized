@@ -5,14 +5,15 @@
 \title{Fitting subgroup identification models}
 \usage{
 fit.subgroup(x, y, trt, propensity.func = NULL,
-  loss = c("sq_loss_lasso", "logistic_loss_lasso", "cox_loss_lasso",
-  "owl_logistic_loss_lasso", "owl_logistic_flip_loss_lasso",
-  "owl_hinge_loss", "owl_hinge_flip_loss", "sq_loss_lasso_gam",
-  "logistic_loss_lasso_gam", "sq_loss_gam", "logistic_loss_gam",
+  loss = c("sq_loss_lasso", "logistic_loss_lasso", "poisson_loss_lasso",
+  "cox_loss_lasso", "owl_logistic_loss_lasso",
+  "owl_logistic_flip_loss_lasso", "owl_hinge_loss", "owl_hinge_flip_loss",
+  "sq_loss_lasso_gam", "poisson_loss_lasso_gam", "logistic_loss_lasso_gam",
+  "sq_loss_gam", "poisson_loss_gam", "logistic_loss_gam",
   "owl_logistic_loss_gam", "owl_logistic_flip_loss_gam",
   "owl_logistic_loss_lasso_gam", "owl_logistic_flip_loss_lasso_gam",
-  "sq_loss_gbm", "abs_loss_gbm", "logistic_loss_gbm", "cox_loss_gbm",
-  "custom"), method = c("weighting", "a_learning"), match.id = NULL,
+  "sq_loss_gbm", "poisson_loss_gbm", "logistic_loss_gbm", "cox_loss_gbm",  
+     "custom"), method = c("weighting", "a_learning"), match.id = NULL,
   augment.func = NULL, fit.custom.loss = NULL, cutpoint = 0,
   larger.outcome.better = TRUE, reference.trt = NULL, retcall = TRUE,
   ...)
@@ -281,6 +282,9 @@ y <- drop(xbeta) + rnorm(n.obs, sd = 2)
 # binary outcomes
 y.binary <- 1 * (xbeta + rnorm(n.obs, sd = 2) > 0 )
 
+# count outcomes
+y.count <- round(abs(xbeta + rnorm(n.obs, sd = 2)))
+
 # time-to-event outcomes
 surv.time <- exp(-20 - xbeta + rnorm(n.obs, sd = 1))
 cens.time <- exp(rnorm(n.obs, sd = 3))
@@ -317,6 +321,7 @@ subgrp.modelg <- fit.subgroup(x = x, y = y,
 
 subgrp.modelg
 
+# use logistic loss for binary outcomes
 subgrp.model.bin <- fit.subgroup(x = x, y = y.binary,
                            trt = trt01,
                            propensity.func = prop.func,
@@ -325,6 +330,16 @@ subgrp.model.bin <- fit.subgroup(x = x, y = y.binary,
                            nfolds = 5)              # option for cv.glmnet
 
 subgrp.model.bin
+
+# use poisson loss for count/poisson outcomes
+subgrp.model.poisson <- fit.subgroup(x = x, y = y.count,
+                           trt = trt01,
+                           propensity.func = prop.func,
+                           loss   = "poisson_loss_lasso",
+                           type.measure = "mse",    # option for cv.glmnet
+                           nfolds = 5)              # option for cv.glmnet
+
+subgrp.model.poisson
 
 library(survival)
 subgrp.model.cox <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),

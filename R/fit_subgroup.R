@@ -265,6 +265,9 @@
 #' # binary outcomes
 #' y.binary <- 1 * (xbeta + rnorm(n.obs, sd = 2) > 0 )
 #'
+#' # count outcomes
+#' y.count <- round(abs(xbeta + rnorm(n.obs, sd = 2)))
+#'
 #' # time-to-event outcomes
 #' surv.time <- exp(-20 - xbeta + rnorm(n.obs, sd = 1))
 #' cens.time <- exp(rnorm(n.obs, sd = 3))
@@ -301,6 +304,7 @@
 #'
 #' subgrp.modelg
 #'
+#' # use logistic loss for binary outcomes
 #' subgrp.model.bin <- fit.subgroup(x = x, y = y.binary,
 #'                            trt = trt01,
 #'                            propensity.func = prop.func,
@@ -309,6 +313,16 @@
 #'                            nfolds = 5)              # option for cv.glmnet
 #'
 #' subgrp.model.bin
+#'
+#' # use poisson loss for count/poisson outcomes
+#' subgrp.model.poisson <- fit.subgroup(x = x, y = y.count,
+#'                            trt = trt01,
+#'                            propensity.func = prop.func,
+#'                            loss   = "poisson_loss_lasso",
+#'                            type.measure = "mse",    # option for cv.glmnet
+#'                            nfolds = 5)              # option for cv.glmnet
+#'
+#' subgrp.model.poisson
 #'
 #' library(survival)
 #' subgrp.model.cox <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
@@ -327,21 +341,24 @@ fit.subgroup <- function(x,
                          propensity.func = NULL,
                          loss       = c("sq_loss_lasso",
                                         "logistic_loss_lasso",
+                                        "poisson_loss_lasso",
                                         "cox_loss_lasso",
                                         "owl_logistic_loss_lasso",
                                         "owl_logistic_flip_loss_lasso",
                                         "owl_hinge_loss",
                                         "owl_hinge_flip_loss",
                                         "sq_loss_lasso_gam",
+                                        "poisson_loss_lasso_gam",
                                         "logistic_loss_lasso_gam",
                                         "sq_loss_gam",
+                                        "poisson_loss_gam",
                                         "logistic_loss_gam",
                                         "owl_logistic_loss_gam",
                                         "owl_logistic_flip_loss_gam",
                                         "owl_logistic_loss_lasso_gam",
                                         "owl_logistic_flip_loss_lasso_gam",
                                         "sq_loss_gbm",
-                                        "abs_loss_gbm",
+                                        "poisson_loss_gbm",
                                         "logistic_loss_gbm",
                                         "cox_loss_gbm",
                                         "custom"),
@@ -379,6 +396,9 @@ fit.subgroup <- function(x,
     } else if (grepl("logistic_loss", loss) | grepl("huberized_loss", loss))
     {
         family <- "binomial"
+    } else if (grepl("poisson_loss", loss))
+    {
+        family <- "poisson"
     } else
     {
         family <- "gaussian"
@@ -526,20 +546,24 @@ fit.subgroup <- function(x,
     augment.method <- switch(loss,
                              "sq_loss_lasso"                    = "offset",
                              "logistic_loss_lasso"              = "offset",
+                             "poisson_loss_lasso"                   = "offset",
                              "cox_loss_lasso"                   = "offset",
                              "owl_logistic_loss_lasso"          = "adj",
                              "owl_logistic_flip_loss_lasso"     = "adj",
                              "owl_hinge_loss"                   = "adj",
                              "owl_hinge_flip_loss"              = "adj",
                              "sq_loss_lasso_gam"                = "offset",
+                             "poisson_loss_lasso_gam"               = "offset",
                              "logistic_loss_lasso_gam"          = "offset",
                              "sq_loss_gam"                      = "offset",
+                             "poisson_loss_gam"                     = "offset",
                              "logistic_loss_gam"                = "offset",
                              "owl_logistic_loss_gam"            = "adj",
                              "owl_logistic_flip_loss_gam"       = "adj",
                              "owl_logistic_loss_lasso_gam"      = "adj",
                              "owl_logistic_flip_loss_lasso_gam" = "adj",
                              "sq_loss_gbm"                      = "offset",
+                             "poisson_loss_gbm"                     = "offset",
                              "abs_loss_gbm"                     = "offset",
                              "logistic_loss_gbm"                = "offset",
                              "cox_loss_gbm"                     = "offset",

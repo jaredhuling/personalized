@@ -22,7 +22,7 @@
 #' The default is the last level of \code{trt} if it is a factor.
 #' @seealso \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models which generate
 #' benefit scores.
-#' @importFrom stats median weighted.mean
+#' @importFrom stats median weighted.mean poisson
 #' @export
 subgroup.effects <- function(benefit.scores, y, trt,
                              pi.x,

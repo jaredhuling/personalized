@@ -29,6 +29,9 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
     # binary outcomes
     y.binary <- 1 * (xbeta + rnorm(n.obs, sd = 2) > 0 )
 
+    # count outcomes
+    y.count <- round(abs(xbeta + rnorm(n.obs, sd = 2)))
+
     # time-to-event outcomes
     surv.time <- exp(-20 - xbeta + rnorm(n.obs, sd = 1))
     cens.time <- exp(rnorm(n.obs, sd = 3))
@@ -606,16 +609,16 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
     invisible(capture.output(summary(subgrp.model)))
     expect_is(subgrp.model, "subgroup_fitted")
 
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = trt01,
-                                 propensity.func = prop.func,
-                                 loss   = "abs_loss_gbm",
-                                 n.trees = 5,
-                                 n.cores = 1)
-
-    invisible(capture.output(print(subgrp.model)))
-    invisible(capture.output(summary(subgrp.model)))
-    expect_is(subgrp.model, "subgroup_fitted")
+    # subgrp.model <- fit.subgroup(x = x, y = y,
+    #                              trt = trt01,
+    #                              propensity.func = prop.func,
+    #                              loss   = "abs_loss_gbm",
+    #                              n.trees = 5,
+    #                              n.cores = 1)
+    #
+    # invisible(capture.output(print(subgrp.model)))
+    # invisible(capture.output(summary(subgrp.model)))
+    # expect_is(subgrp.model, "subgroup_fitted")
 })
 
 
@@ -741,6 +744,9 @@ test_that("test fit.subgroup with augment.func for continuous outcomes and vario
     # continuous outcomes
     y <- drop(xbeta) + rnorm(n.obs, sd = 2)
 
+    # count outcomes
+    y.count <- round(abs(drop(xbeta) + rnorm(n.obs, sd = 2)))
+
     # binary outcomes
     y.binary <- 1 * (xbeta + rnorm(n.obs, sd = 2) > 0 )
 
@@ -863,16 +869,16 @@ test_that("test fit.subgroup with augment.func for continuous outcomes and vario
     invisible(capture.output(summary(subgrp.model)))
     expect_is(subgrp.model, "subgroup_fitted")
 
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = trt01,
-                                 propensity.func = prop.func,
-                                 loss   = "abs_loss_gbm",
-                                 n.trees = 5,
-                                 n.cores = 1)
-
-    invisible(capture.output(print(subgrp.model)))
-    invisible(capture.output(summary(subgrp.model)))
-    expect_is(subgrp.model, "subgroup_fitted")
+    # subgrp.model <- fit.subgroup(x = x, y = y,
+    #                              trt = trt01,
+    #                              propensity.func = prop.func,
+    #                              loss   = "abs_loss_gbm",
+    #                              n.trees = 5,
+    #                              n.cores = 1)
+    #
+    # invisible(capture.output(print(subgrp.model)))
+    # invisible(capture.output(summary(subgrp.model)))
+    # expect_is(subgrp.model, "subgroup_fitted")
 
     expect_warning(fit.subgroup(x = x, y = y,
                                 trt = trt01,
@@ -882,13 +888,13 @@ test_that("test fit.subgroup with augment.func for continuous outcomes and vario
                                 cv.folds = 1,
                                 n.cores = 1))
 
-    expect_warning(fit.subgroup(x = x, y = y,
-                              trt = trt01,
-                              propensity.func = prop.func,
-                              loss   = "abs_loss_gbm",
-                              n.trees = 5,
-                              cv.folds = 1,
-                              n.cores = 1))
+    # expect_warning(fit.subgroup(x = x, y = y,
+    #                           trt = trt01,
+    #                           propensity.func = prop.func,
+    #                           loss   = "abs_loss_gbm",
+    #                           n.trees = 5,
+    #                           cv.folds = 1,
+    #                           n.cores = 1))
 
     subgrp.model <- fit.subgroup(x = x, y = y.binary,
                                  trt = trt01,
@@ -1002,6 +1008,9 @@ test_that("test fit.subgroup for binary outcomes and various losses", {
     # binary outcomes
     y.binary <- 1 * (xbeta + rnorm(n.obs, sd = 2) > 0 )
 
+    # count outcomes
+    y.count <- round(abs(drop(xbeta) + rnorm(n.obs, sd = 2)))
+
     # time-to-event outcomes
     surv.time <- exp(-20 - xbeta + rnorm(n.obs, sd = 1))
     cens.time <- exp(rnorm(n.obs, sd = 3))
@@ -1030,6 +1039,42 @@ test_that("test fit.subgroup for binary outcomes and various losses", {
     invisible(capture.output(print(subgrp.model, digits = 2)))
 
     invisible(capture.output(summary(subgrp.model)))
+
+
+    subgrp.model <- fit.subgroup(x = x, y = y.count,
+                                 trt = trt01,
+                                 propensity.func = prop.func,
+                                 loss   = "poisson_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+    invisible(capture.output(print(subgrp.model, digits = 2)))
+
+    invisible(capture.output(summary(subgrp.model)))
+
+
+    subgrp.model <- fit.subgroup(x = x, y = y.count,
+                                 trt = trt01,
+                                 propensity.func = prop.func,
+                                 loss   = "poisson_loss_lasso_gam")
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+    invisible(capture.output(print(subgrp.model, digits = 2)))
+
+    invisible(capture.output(summary(subgrp.model)))
+
+    # subgrp.model <- fit.subgroup(x = x, y = y.count,
+    #                              trt = trt01,
+    #                              propensity.func = prop.func,
+    #                              loss   = "poisson_loss_gbm")
+    #
+    # expect_is(subgrp.model, "subgroup_fitted")
+    #
+    # invisible(capture.output(print(subgrp.model, digits = 2)))
+    #
+    # invisible(capture.output(summary(subgrp.model)))
 
 
     augment.func <- function(x, y) {
@@ -1220,6 +1265,25 @@ test_that("test fit.subgroup for continuous outcomes and match.id provided", {
 
     expect_is(subgrp.model.m, "subgroup_fitted")
 
+
+    subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
+                                   trt = trt.m,
+                                   match.id = match.id,
+                                   loss   = "owl_hinge_loss",
+                                   margin = 5,
+                                   nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model.m, "subgroup_fitted")
+
+    subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
+                                   trt = trt.m,
+                                   match.id = match.id,
+                                   loss   = "owl_hinge_flip_loss",
+                                   margin = 5,
+                                   nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model.m, "subgroup_fitted")
+
     subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
                                    trt = trt.m,
                                    match.id = match.id,
@@ -1248,12 +1312,12 @@ test_that("test fit.subgroup for continuous outcomes and match.id provided", {
 
     expect_is(subgrp.model.m, "subgroup_fitted")
 
-    subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
-                                   trt = trt.m,
-                                   match.id = match.id,
-                                   loss   = "abs_loss_gbm", n.trees = 5, n.cores = 1)
-
-    expect_is(subgrp.model.m, "subgroup_fitted")
+    # subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
+    #                                trt = trt.m,
+    #                                match.id = match.id,
+    #                                loss   = "abs_loss_gbm", n.trees = 5, n.cores = 1)
+    #
+    # expect_is(subgrp.model.m, "subgroup_fitted")
 
     subgrp.model.m <- fit.subgroup(x = x.m, y = y.binary.m,
                                    trt = trt.m,
