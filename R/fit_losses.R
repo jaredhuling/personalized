@@ -264,7 +264,7 @@ fit_sq_loss_lasso <- function(x, y, trt, n.trts, wts, family, match.id, intercep
 
 
 fit_logistic_loss_lasso <- fit_sq_loss_lasso
-fit_poisson_loss_lasso      <- fit_sq_loss_lasso
+fit_poisson_loss_lasso  <- fit_sq_loss_lasso
 
 #' @import survival
 fit_cox_loss_lasso <- function(x, y, trt, n.trts, wts, family, match.id, ...)
