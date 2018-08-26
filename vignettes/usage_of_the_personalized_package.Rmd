@@ -74,10 +74,11 @@ The `personalized` package offers a flexible range of choices both for the form 
 | OWL Logistic Flip          | C/B           | $M(y, v) = \vert y\vert \log(1 + \exp\{-\mbox{sign}(y)v\})$ |
 | OWL Hinge           | C/B           | $M(y, v) = y\max(0, 1 - v)$ |
 | OWL Hinge Flip           | C/B           | $M(y, v) = \vert y\vert\max(0, 1 - \mbox{sign}(y)v)$ |
-| Logistic             | B           | $M(y, v) = -(yv - \log(1 + \mbox{exp}\{-v\}))$ |
+| Logistic             | B           | $M(y, v) = -[yv - \log(1 + \mbox{exp}\{-v\})]$ |
+| Poisson           | CT           | $M(y, v) = -[yv - \exp(v)]$ |
 | Cox             | TTE           | $M(y, v) = -\left\{ \int_0^\tau\left(  v - \log[E\{ e^vI(X \geq u) \}]  \right)\mathrm{d} N(u) \right\}$ |       
 
-where "C" indicates usage for continuous outcomes, "B" indicates usage for binary outcomes, and "TTE" indicates usages for time-to-event outcomes, and for the last loss $y = (X, \delta) = \{ \widetilde{X} \wedge C, I(\widetilde{X} \leq t) \}$, $\widetilde{X}$ is the survival time, 
+where "C" indicates usage for continuous outcomes, "B" indicates usage for binary outcomes, "CT" indicates usages for count outcomes, and "TTE" indicates usages for time-to-event outcomes, and for the last loss $y = (X, \delta) = \{ \widetilde{X} \wedge C, I(\widetilde{X} \leq t) \}$, $\widetilde{X}$ is the survival time, 
  & $C$ is the censoring time, $N(t) = I(\widetilde{X} \leq t)\delta$, and $\tau$ 
  & is fixed time point where $P(X \geq \tau) > 0$.
 
