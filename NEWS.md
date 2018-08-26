@@ -1,7 +1,9 @@
-# personalized 0.1.6
+# personalized 0.2.0
 
 * Simplified plot labeling
 * Added clarifications to documentation
+* Added customized loss function option
+* Added options for count outcomes via Poisson negative log-likelihood as the loss
 
 # personalized 0.1.5
 
