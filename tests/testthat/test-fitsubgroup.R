@@ -1124,7 +1124,6 @@ test_that("test fit.subgroup for binary outcomes and various losses", {
 
     invisible(capture.output(summary(subgrp.modelga)))
 
-
     subgrp.model <- fit.subgroup(x = x, y = y.binary,
                                  trt = trt01,
                                  propensity.func = prop.func,
