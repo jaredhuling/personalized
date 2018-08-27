@@ -295,7 +295,6 @@ as a means of incorporating the efficiency augmentation model's predictions</p><
      {
          # roxygen2 removes the below, so
          # using tcrossprod instead
-         #cbind(1, x) <!-- %*% cfs -->
          tcrossprod(cbind(1, x), t(cfs))
      }
      # return lost of required components
@@ -319,7 +318,6 @@ as a means of incorporating the efficiency augmentation model's predictions</p><
      # create prediction function.
      prd = function(x, type = "response")
      {
-         #cbind(1, x) <!-- %*% cfs -->
          tcrossprod(cbind(1, x), t(cfs))
      }
      # return lost of required components
@@ -646,7 +644,6 @@ from <code>fit.subgroup</code>.</p></div>
     <span class='co'># create prediction function.</span>
     <span class='no'>prd</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>type</span> <span class='kw'>=</span> <span class='st'>"response"</span>)
     {
-        <span class='co'>#cbind(1, x)</span>
         <span class='fu'>tcrossprod</span>(<span class='fu'>cbind</span>(<span class='fl'>1</span>, <span class='no'>x</span>), <span class='fu'>t</span>(<span class='no'>cfs</span>))
     }
     <span class='co'># return lost of required components</span>
