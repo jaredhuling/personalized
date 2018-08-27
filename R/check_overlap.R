@@ -16,6 +16,7 @@
 #' group, a density (\code{type = "density"}) for each treatment group, or to plot both a density and histogram
 #' (\code{type = "code"})
 #' @param bins integer number of bins for histograms when \code{type = "histogram"}
+#' @param alpha value between 0 and 1 indicating transparency level (1 for solid, 0 for fully transparent)
 #' @importFrom ggplot2 guides guide_legend
 #' @importFrom methods formalArgs
 #' @examples
@@ -93,8 +94,9 @@
 check.overlap <- function(x,
                           trt,
                           propensity.func,
-                          type = c("histogram", "density", "both"),
-                          bins = 50L)
+                          type  = c("histogram", "density", "both"),
+                          bins  = 50L,
+                          alpha = ifelse(type == "both", 0.35, 0.5))
 {
     type <- match.arg(type)
     bins <- as.integer(bins[1])
@@ -161,7 +163,7 @@ check.overlap <- function(x,
     if (type == "density")
     {
         pl.obj <- ggplot(prop.scores, aes(x = prop.score, fill = Treatment)) +
-            geom_density(alpha = 0.5, colour = "grey50") +
+            geom_density(alpha = alpha, colour = "grey50") +
             geom_rug(aes(colour = Treatment)) +
             theme(legend.position = "bottom") +
             ggtitle("Densities of propensity scores by treatment group") +
@@ -169,7 +171,7 @@ check.overlap <- function(x,
     } else if (type == "histogram")
     {
         pl.obj <- ggplot(prop.scores, aes(x = prop.score, fill = Treatment)) +
-            geom_histogram(bins = bins, alpha = 0.5, position = "identity") +
+            geom_histogram(bins = bins, alpha = alpha, position = "identity") +
             geom_rug(aes(colour = Treatment)) +
             theme(legend.position = "bottom") +
             ggtitle("Histograms of propensity scores by treatment group") +
@@ -177,9 +179,9 @@ check.overlap <- function(x,
     } else
     {
         pl.obj <- ggplot(prop.scores, aes(x = prop.score, fill = Treatment)) +
-            geom_histogram(aes(y = ..density..), bins = bins, alpha = 0.25, position = "identity") +
+            geom_histogram(aes(y = ..density..), bins = bins, alpha = alpha, position = "identity") +
             geom_rug(aes(colour = Treatment)) +
-            geom_density(alpha = 0.25) +
+            geom_density(alpha = alpha) +
             theme(legend.position = "bottom") +
             ggtitle("Densities and histograms of propensity scores by treatment group") +
             xlab("Propensity Score")

@@ -5,7 +5,7 @@
 \title{Check propensity score overlap}
 \usage{
 check.overlap(x, trt, propensity.func, type = c("histogram", "density",
-  "both"), bins = 50L)
+  "both"), bins = 50L, alpha = ifelse(type == "both", 0.35, 0.5))
 }
 \arguments{
 \item{x}{The design matrix (not including intercept term)}
@@ -24,6 +24,8 @@ group, a density (\code{type = "density"}) for each treatment group, or to plot 
 (\code{type = "code"})}
 
 \item{bins}{integer number of bins for histograms when \code{type = "histogram"}}
+
+\item{alpha}{value between 0 and 1 indicating transparency level (1 for solid, 0 for fully transparent)}
 }
 \description{
 Results in a plot to check whether the propensity score has adequate overlap between treatment groups
