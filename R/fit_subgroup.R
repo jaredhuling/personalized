@@ -22,7 +22,7 @@
 #' allows for flexible estimation using machine learning and can be useful when the underlying treatment-covariate interaction
 #' is complex.
 #' \itemize{
-#'     \item{Continuous Outcomes}
+#'     \item{\strong{Continuous Outcomes}}
 #'     \itemize{
 #'         \item{\code{"sq_loss_lasso"}}{ - M(y, v) = (v - y) ^ 2 with linear model and lasso penalty}
 #'         \item{\code{"owl_logistic_loss_lasso"}} { - M(y, v) = ylog(1 + exp\{-v\}) (method of Regularized Outcome Weighted Subgroup Identification)}
@@ -38,7 +38,7 @@
 #'         \item{\code{"sq_loss_gbm"}}{ - M(y, v) = (v - y) ^ 2 with gradient-boosted decision trees model}
 #'         \item{\code{"abs_loss_gbm"}}{ - M(y, v) = |v - y| with gradient-boosted decision trees model}
 #'     }
-#'     \item{Binary Outcomes}
+#'     \item{\strong{Binary Outcomes}}
 #'     \itemize{
 #'         \item{All losses for continuous outcomes can be used plus the following:}
 #'         \item{\code{"logistic_loss_lasso"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with with linear model and lasso penalty}
@@ -46,7 +46,7 @@
 #'         \item{\code{"logistic_loss_gam"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with generalized additive model fit on all variables}
 #'         \item{\code{"logistic_loss_gbm"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with gradient-boosted decision trees model}
 #'     }
-#'     \item{Count Outcomes}
+#'     \item{\strong{Count Outcomes}}
 #'     \itemize{
 #'         \item{All losses for continuous outcomes can be used plus the following:}
 #'         \item{\code{"poisson_loss_lasso"}}{ - M(y, v) = -[yv - exp(v)] with with linear model and lasso penalty}
@@ -54,7 +54,7 @@
 #'         \item{\code{"poisson_loss_gam"}}{ - M(y, v) = -[yv - exp(v)] with generalized additive model fit on all variables}
 #'         \item{\code{"poisson_loss_gbm"}}{ - M(y, v) = -[yv - exp(v)] with gradient-boosted decision trees model}
 #'     }
-#'     \item{Time-to-Event Outcomes}
+#'     \item{\strong{Time-to-Event Outcomes}}
 #'     \itemize{
 #'         \item{\code{"cox_loss_lasso"}}{ - M corresponds to the negative partial likelihood of the cox model with linear model and additionally a lasso penalty}
 #'         \item{\code{"cox_loss_gbm"}}{ - M corresponds to the negative partial likelihood of the cox model with gradient-boosted decision trees model}
@@ -98,7 +98,7 @@
 #' take the modified design matrix as an argument and the responses and optimize a custom weighted loss function.
 #'
 #' The
-#' provided function must return a list with the following elements:
+#' provided function \strong{MUST} return a list with the following elements:
 #' \itemize{
 #' \item{\code{predict}}{ a function that inputs a design matrix and a 'type' argument for the type of predictions and outputs
 #' a vector of predictions on the scale of the linear predictor. Note that the matrix provided to 'fit.custom.loss'
@@ -113,7 +113,7 @@
 #' \enumerate{
 #' \item{\code{x}}{ design matrix}
 #' \item{\code{y}}{ vector of responses}
-#' \item{\code{weights}}{ vector for observations weights. The underlying loss function MUST have samples weighted according
+#' \item{\code{weights}}{ vector for observations weights. The underlying loss function \strong{MUST} have samples weighted according
 #' to this vector. See below example}
 #' \item{\code{...}}{ additional arguments passed via '...'. This can be used so that users can specify more arguments to the
 #' underlying fitting function if so desired.}
