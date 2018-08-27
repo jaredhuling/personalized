@@ -172,7 +172,6 @@ as a means of incorporating the efficiency augmentation model's predictions}
      {
          # roxygen2 removes the below, so
          # using tcrossprod instead
-         #cbind(1, x) %*% cfs
          tcrossprod(cbind(1, x), t(cfs))
      }
      # return lost of required components
@@ -196,7 +195,6 @@ as a means of incorporating the efficiency augmentation model's predictions}
      # create prediction function.
      prd = function(x, type = "response")
      {
-         #cbind(1, x) %*% cfs
          tcrossprod(cbind(1, x), t(cfs))
      }
      # return lost of required components
@@ -378,7 +376,6 @@ fit.custom.loss.bin <- function(x, y, weights, offset, ...) {
     # create prediction function.
     prd = function(x, type = "response")
     {
-        #cbind(1, x)
         tcrossprod(cbind(1, x), t(cfs))
     }
     # return lost of required components

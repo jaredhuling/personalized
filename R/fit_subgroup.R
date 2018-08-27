@@ -148,7 +148,6 @@
 #'      {
 #'          # roxygen2 removes the below, so
 #'          # using tcrossprod instead
-#'          #cbind(1, x) %*% cfs
 #'          tcrossprod(cbind(1, x), t(cfs))
 #'      }
 #'      # return lost of required components
@@ -172,7 +171,6 @@
 #'      # create prediction function.
 #'      prd = function(x, type = "response")
 #'      {
-#'          #cbind(1, x) %*% cfs
 #'          tcrossprod(cbind(1, x), t(cfs))
 #'      }
 #'      # return lost of required components
@@ -361,7 +359,6 @@
 #'     # create prediction function.
 #'     prd = function(x, type = "response")
 #'     {
-#'         #cbind(1, x)
 #'         tcrossprod(cbind(1, x), t(cfs))
 #'     }
 #'     # return lost of required components
