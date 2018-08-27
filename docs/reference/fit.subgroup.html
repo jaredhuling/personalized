@@ -285,7 +285,7 @@ as a means of incorporating the efficiency augmentation model's predictions</p><
      lmf &lt;- lm(y ~ x - 1, weights = weights, ...)
 
      # save coefficients
-     cfs = unname(coef(lmf))
+     cfs = coef(lmf)
 
      # create prediction function. Notice
      # how a column of 1's is appended
@@ -304,7 +304,7 @@ as a means of incorporating the efficiency augmentation model's predictions</p><
  </pre>
 
 <p>Example 2:</p><pre>
- fit.custom.loss &lt;- function(x, y, weights, offset, ...) {
+ fit.custom.loss.bin &lt;- function(x, y, weights, offset, ...) {
      df &lt;- data.frame(y = y, x)
 
      # minimize logistic loss with NO lasso penalty
@@ -314,7 +314,7 @@ as a means of incorporating the efficiency augmentation model's predictions</p><
                 family = binomial(), ...)
 
      # save coefficients
-     cfs = unname(coef(glmf))
+     cfs = coef(glmf)
 
      # create prediction function.
      prd = function(x, type = "response")
@@ -627,6 +627,109 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; Benefit score quantiles: 
 #&gt;       0%      25%      50%      75%     100% 
 #&gt; -0.84649 -0.34304 -0.15214  0.04893  0.83324 </div><div class='input'>
+
+
+<span class='co'>## Use custom loss function for binary outcomes</span>
+
+<span class='no'>fit.custom.loss.bin</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>weights</span>, <span class='no'>offset</span>, <span class='no'>...</span>) {
+    <span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>, <span class='no'>x</span>)
+
+    <span class='co'># minimize logistic loss with NO lasso penalty</span>
+    <span class='co'># with allowance for efficiency augmentation</span>
+    <span class='no'>glmf</span> <span class='kw'>&lt;-</span> <span class='fu'>glm</span>(<span class='no'>y</span> ~ <span class='no'>x</span> - <span class='fl'>1</span>, <span class='kw'>weights</span> <span class='kw'>=</span> <span class='no'>weights</span>,
+                <span class='kw'>offset</span> <span class='kw'>=</span> <span class='no'>offset</span>, <span class='co'># offset term allows for efficiency augmentation</span>
+                <span class='kw'>family</span> <span class='kw'>=</span> <span class='fu'>binomial</span>(), <span class='no'>...</span>)
+
+    <span class='co'># save coefficients</span>
+    <span class='no'>cfs</span> <span class='kw'>=</span> <span class='fu'>coef</span>(<span class='no'>glmf</span>)
+
+    <span class='co'># create prediction function.</span>
+    <span class='no'>prd</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>type</span> <span class='kw'>=</span> <span class='st'>"response"</span>)
+    {
+        <span class='co'>#cbind(1, x)</span>
+        <span class='fu'>tcrossprod</span>(<span class='fu'>cbind</span>(<span class='fl'>1</span>, <span class='no'>x</span>), <span class='fu'>t</span>(<span class='no'>cfs</span>))
+    }
+    <span class='co'># return lost of required components</span>
+    <span class='fu'>list</span>(<span class='kw'>predict</span> <span class='kw'>=</span> <span class='no'>prd</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='no'>glmf</span>, <span class='kw'>coefficients</span> <span class='kw'>=</span> <span class='no'>cfs</span>)
+}
+
+<span class='no'>subgrp.model.bin.cust</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y.binary</span>,
+                                 <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
+                                 <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>,
+                                 <span class='kw'>fit.custom.loss</span> <span class='kw'>=</span> <span class='no'>fit.custom.loss.bin</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: non-integer #successes in a binomial glm!</span></div><div class='input'>
+<span class='no'>subgrp.model.bin.cust</span></div><div class='output co'>#&gt; family:  gaussian 
+#&gt; loss:    custom 
+#&gt; method:  weighting 
+#&gt; propensity 
+#&gt; function: propensity.func 
+#&gt; 
+#&gt; Average Outcomes:
+#&gt;               Recommended 0    Recommended 1
+#&gt; Received 0  0.4743 (n = 81) 0.1858 (n = 120)
+#&gt; Received 1 0.1822 (n = 164) 0.6117 (n = 135)
+#&gt; 
+#&gt; Treatment effects conditional on subgroups:
+#&gt; 0 effect among recommended 0 1 effect among recommended 1 
+#&gt;             0.2921 (n = 245)             0.4258 (n = 255) 
+#&gt; 
+#&gt; NOTE: The above average outcomes are biased estimates of
+#&gt;       the expected outcomes conditional on subgroups. 
+#&gt;       Use 'validate.subgroup()' to obtain unbiased estimates.
+#&gt; 
+#&gt; Benefit score quantiles: 
+#&gt;       0%      25%      50%      75%     100% 
+#&gt; -4.22578 -0.90985  0.03891  1.20601  5.19151 </div><div class='input'>
+
+<span class='co'>## try exponential loss for</span>
+<span class='co'>## positive outcomes</span>
+
+<span class='no'>fit.expo.loss</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>weights</span>, <span class='no'>...</span>)
+{
+    <span class='no'>expo.loss</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>beta</span>, <span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>weights</span>) {
+        <span class='fu'>sum</span>(<span class='no'>weights</span> * <span class='no'>y</span> * <span class='fu'>exp</span>(-<span class='fu'>drop</span>(<span class='no'>x</span> <span class='kw'>%*%</span> <span class='no'>beta</span>)))
+    }
+
+    <span class='co'># use optim() to minimize loss function</span>
+    <span class='no'>opt</span> <span class='kw'>&lt;-</span> <span class='fu'>optim</span>(<span class='fu'>rep</span>(<span class='fl'>0</span>, <span class='fu'>NCOL</span>(<span class='no'>x</span>)), <span class='kw'>fn</span> <span class='kw'>=</span> <span class='no'>expo.loss</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>, <span class='kw'>weights</span> <span class='kw'>=</span> <span class='no'>weights</span>)
+
+    <span class='no'>coefs</span> <span class='kw'>&lt;-</span> <span class='no'>opt</span>$<span class='no'>par</span>
+
+    <span class='no'>pred</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>type</span> <span class='kw'>=</span> <span class='st'>"response"</span>) {
+        <span class='fu'>tcrossprod</span>(<span class='fu'>cbind</span>(<span class='fl'>1</span>, <span class='no'>x</span>), <span class='fu'>t</span>(<span class='no'>coefs</span>))
+    }
+
+    <span class='co'># return list of required components</span>
+    <span class='fu'>list</span>(<span class='kw'>predict</span> <span class='kw'>=</span> <span class='no'>pred</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='no'>opt</span>, <span class='kw'>coefficients</span> <span class='kw'>=</span> <span class='no'>coefs</span>)
+}
+
+<span class='co'># use exponential loss for positive outcomes</span>
+<span class='no'>subgrp.model.expo</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y.count</span>,
+                                  <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
+                                  <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>,
+                                  <span class='kw'>fit.custom.loss</span> <span class='kw'>=</span> <span class='no'>fit.expo.loss</span>)
+
+<span class='no'>subgrp.model.expo</span></div><div class='output co'>#&gt; family:  gaussian 
+#&gt; loss:    custom 
+#&gt; method:  weighting 
+#&gt; propensity 
+#&gt; function: propensity.func 
+#&gt; 
+#&gt; Average Outcomes:
+#&gt;                Recommended 0     Recommended 1
+#&gt; Received 0  29.786 (n = 155)  13.1373 (n = 46)
+#&gt; Received 1 16.1079 (n = 104) 26.6315 (n = 195)
+#&gt; 
+#&gt; Treatment effects conditional on subgroups:
+#&gt; 0 effect among recommended 0 1 effect among recommended 1 
+#&gt;            13.6781 (n = 259)            13.4942 (n = 241) 
+#&gt; 
+#&gt; NOTE: The above average outcomes are biased estimates of
+#&gt;       the expected outcomes conditional on subgroups. 
+#&gt;       Use 'validate.subgroup()' to obtain unbiased estimates.
+#&gt; 
+#&gt; Benefit score quantiles: 
+#&gt;       0%      25%      50%      75%     100% 
+#&gt; -1.58085 -0.36471 -0.04896  0.32519  1.85048 </div><div class='input'>
 
 </div></pre>
   </div>

@@ -124,7 +124,7 @@
     </div>
 
     <pre class="usage"><span class='fu'>check.overlap</span>(<span class='no'>x</span>, <span class='no'>trt</span>, <span class='no'>propensity.func</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"histogram"</span>, <span class='st'>"density"</span>,
-  <span class='st'>"both"</span>), <span class='kw'>bins</span> <span class='kw'>=</span> <span class='fl'>50L</span>)</pre>
+  <span class='st'>"both"</span>), <span class='kw'>bins</span> <span class='kw'>=</span> <span class='fl'>50L</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fu'>ifelse</span>(<span class='no'>type</span> <span class='kw'>==</span> <span class='st'>"both"</span>, <span class='fl'>0.35</span>, <span class='fl'>0.5</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -155,6 +155,10 @@ group, a density (<code>type = "density"</code>) for each treatment group, or to
     <tr>
       <th>bins</th>
       <td><p>integer number of bins for histograms when <code>type = "histogram"</code></p></td>
+    </tr>
+    <tr>
+      <th>alpha</th>
+      <td><p>value between 0 and 1 indicating transparency level (1 for solid, 0 for fully transparent)</p></td>
     </tr>
     </table>
     
