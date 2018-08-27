@@ -172,7 +172,7 @@ with nonparametric additive terms for each selected variable. <code>sq_loss_gam<
 <code>sq_loss_gbm</code> involves a squared error loss with a gradient-boosted decision trees model for the benefit score; this
 allows for flexible estimation using machine learning and can be useful when the underlying treatment-covariate interaction
 is complex.</p><ul>
-<li><p>Continuous Outcomes</p><ul>
+<li><p><strong>Continuous Outcomes</strong></p><ul>
 <li><p><code>"sq_loss_lasso"</code> - M(y, v) = (v - y) ^ 2 with linear model and lasso penalty</p></li>
 <li><p><code>"owl_logistic_loss_lasso"</code>  - M(y, v) = ylog(1 + exp{-v}) (method of Regularized Outcome Weighted Subgroup Identification)</p></li>
 <li><p><code>"owl_logistic_flip_loss_lasso"</code>  - M(y, v) = |y|log(1 + exp{-sign(y)v})</p></li>
@@ -187,21 +187,21 @@ is complex.</p><ul>
 <li><p><code>"sq_loss_gbm"</code> - M(y, v) = (v - y) ^ 2 with gradient-boosted decision trees model</p></li>
 <li><p><code>"abs_loss_gbm"</code> - M(y, v) = |v - y| with gradient-boosted decision trees model</p></li>
 </ul></li>
-<li><p>Binary Outcomes</p><ul>
+<li><p><strong>Binary Outcomes</strong></p><ul>
 <li><p>All losses for continuous outcomes can be used plus the following:</p></li>
 <li><p><code>"logistic_loss_lasso"</code> - M(y, v) = -[yv - log(1 + exp{-v})] with with linear model and lasso penalty</p></li>
 <li><p><code>"logistic_loss_lasso_gam"</code> - M(y, v) = -[yv - log(1 + exp{-v})] with variables selected by lasso penalty and generalized additive model fit on the selected variables</p></li>
 <li><p><code>"logistic_loss_gam"</code> - M(y, v) = -[yv - log(1 + exp{-v})] with generalized additive model fit on all variables</p></li>
 <li><p><code>"logistic_loss_gbm"</code> - M(y, v) = -[yv - log(1 + exp{-v})] with gradient-boosted decision trees model</p></li>
 </ul></li>
-<li><p>Count Outcomes</p><ul>
+<li><p><strong>Count Outcomes</strong></p><ul>
 <li><p>All losses for continuous outcomes can be used plus the following:</p></li>
 <li><p><code>"poisson_loss_lasso"</code> - M(y, v) = -[yv - exp(v)] with with linear model and lasso penalty</p></li>
 <li><p><code>"poisson_loss_lasso_gam"</code> - M(y, v) = -[yv - exp(v)] with variables selected by lasso penalty and generalized additive model fit on the selected variables</p></li>
 <li><p><code>"poisson_loss_gam"</code> - M(y, v) = -[yv - exp(v)] with generalized additive model fit on all variables</p></li>
 <li><p><code>"poisson_loss_gbm"</code> - M(y, v) = -[yv - exp(v)] with gradient-boosted decision trees model</p></li>
 </ul></li>
-<li><p>Time-to-Event Outcomes</p><ul>
+<li><p><strong>Time-to-Event Outcomes</strong></p><ul>
 <li><p><code>"cox_loss_lasso"</code> - M corresponds to the negative partial likelihood of the cox model with linear model and additionally a lasso penalty</p></li>
 <li><p><code>"cox_loss_gbm"</code> - M corresponds to the negative partial likelihood of the cox model with gradient-boosted decision trees model</p></li>
 </ul></li>
@@ -250,7 +250,7 @@ augment.func &lt;- function(x, y, trt) {
       <td><p>A user-specified custom loss function to be used in model fitting. If provided, this function should
 take the modified design matrix as an argument and the responses and optimize a custom weighted loss function.</p>
 <p>The
-provided function must return a list with the following elements:</p><ul>
+provided function <strong>MUST</strong> return a list with the following elements:</p><ul>
 <li><p><code>predict</code> a function that inputs a design matrix and a 'type' argument for the type of predictions and outputs
 a vector of predictions on the scale of the linear predictor. Note that the matrix provided to 'fit.custom.loss'
 has a column appended to the first column of <code>x</code> corresponding to the treatment main effect.
@@ -262,7 +262,7 @@ e.g. <code>predict(model, cbind(1, x))</code></p></li>
 with the following arguments:</p><ol>
 <li><p><code>x</code> design matrix</p></li>
 <li><p><code>y</code> vector of responses</p></li>
-<li><p><code>weights</code> vector for observations weights. The underlying loss function MUST have samples weighted according
+<li><p><code>weights</code> vector for observations weights. The underlying loss function <strong>MUST</strong> have samples weighted according
 to this vector. See below example</p></li>
 <li><p><code>...</code> additional arguments passed via '...'. This can be used so that users can specify more arguments to the
 underlying fitting function if so desired.</p></li>
