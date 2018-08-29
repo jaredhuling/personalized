@@ -344,9 +344,6 @@ subgrp.model.bin <- fit.subgroup(x = x, y = y.binary,
 
 subgrp.model.bin
 
-# estimates of the individual-specific
-# treatment effect estimates:
-subgrp.model.bin$individual.trt.effects
 
 # use poisson loss for count/poisson outcomes
 subgrp.model.poisson <- fit.subgroup(x = x, y = y.count,
@@ -371,9 +368,6 @@ subgrp.model.cox <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
 
 subgrp.model.cox
 
-# estimates of the individual-specific
-# treatment effect estimates:
-subgrp.model.cox$individual.trt.effects
 
 
 

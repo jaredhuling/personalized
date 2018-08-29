@@ -276,6 +276,12 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ##       0%      25%      50%      75%     100% 
 ## -10.9672  -1.8897   0.3569   2.2806  10.0196 
 ## 
+## Summary of individual treatment effects: 
+## E[Y|T=1, X] - E[Y|T=-1, X]
+## 
+##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+## -21.9345  -3.7794   0.7138   0.4061   4.5611  20.0392 
+## 
 ## 8 out of 50 variables selected in total by the lasso (cross validation criterion).
 ## 
 ##      Estimate
@@ -509,7 +515,13 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## 
 ## Benefit score quantiles: 
 ##       0%      25%      50%      75%     100% 
-## -21.2251  -4.1385   0.1479   4.4585  22.4945</code></pre>
+## -21.2251  -4.1385   0.1479   4.4585  22.4945 
+## 
+## Summary of individual treatment effects: 
+## E[Y|T=1, X] - E[Y|T=-1, X]
+## 
+##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+## -42.4502  -8.2769   0.2958   0.3248   8.9169  44.9889</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -584,7 +596,13 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## 
 ## Benefit score quantiles: 
 ##       0%      25%      50%      75%     100% 
-## -1.31720 -0.24199  0.06729  0.38384  1.48203</code></pre>
+## -1.31720 -0.24199  0.06729  0.38384  1.48203 
+## 
+## Summary of individual treatment effects: 
+## E[Y|T=1, X] - E[Y|T=-1, X]
+## 
+##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+## -0.57743 -0.12041  0.03363  0.02991  0.18960  0.62976</code></pre>
 </div>
 <div id="time-to-event-outcomes" class="section level3">
 <h3 class="hasAnchor">
@@ -633,6 +651,17 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## Benefit score quantiles: 
 ##       0%      25%      50%      75%     100% 
 ## -0.56536 -0.17097 -0.05576  0.06300  0.63843 
+## 
+## Summary of individual treatment effects: 
+## E[Y|T=1, X] / E[Y|T=-1, X]
+## 
+## Note: for survival outcomes, the above ratio is 
+## E[g(Y)|T=1, X] / E[g(Y)|T=-1, X], 
+## where g() is a monotone increasing function of Y, 
+## the survival time
+## 
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##  0.5281  0.9389  1.0573  1.0701  1.1865  1.7601 
 ## 
 ## 7 out of 49 variables selected in total by the lasso (cross validation criterion).
 ## 
@@ -698,6 +727,12 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## Benefit score quantiles: 
 ##        0%       25%       50%       75%      100% 
 ## -11.70152  -2.57836   0.04442   2.53750  10.44856 
+## 
+## Summary of individual treatment effects: 
+## E[Y|T=1, X] - E[Y|T=-1, X]
+## 
+##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+## -23.40304  -5.15672   0.08885  -0.04936   5.07500  20.89711 
 ## 
 ## 6 out of 50 variables selected in total by the lasso (cross validation criterion).
 ## 
