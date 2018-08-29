@@ -258,6 +258,8 @@ which treatment results in the best expected potential outcomes)}
 \item{subgroup.trt.effects}{(Biased) estimates of the conditional treatment effects
 and conditional outcomes. These are essentially just empirical averages within
 different combinations of treatment assignments and treatment recommendations}
+\item{individual.trt.effects}{estimates of the individual treatment effects as returned by
+\code{\link[personalized]{treat.effects}}}
 }
 \description{
 Fits subgroup identification model class of Chen, et al (2017)
@@ -316,6 +318,10 @@ subgrp.model <- fit.subgroup(x = x, y = y,
                            nfolds = 10)              # option for cv.glmnet
 
 summary(subgrp.model)
+
+# estimates of the individual-specific
+# treatment effect estimates:
+str(subgrp.model$individual.trt.effects)
 
 # fit lasso + gam model with REML option for gam
 

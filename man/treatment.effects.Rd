@@ -17,16 +17,16 @@ treat.effects(benefit.scores, loss = all_losses,
 \method{treatment.effects}{subgroup_fitted}(x, ...)
 }
 \arguments{
-\item{x}{a fitted object from \code{fit.subgroup()} or a matrix of covariate values}
+\item{x}{a fitted object from \code{fit.subgroup()}}
 
 \item{...}{not used}
 
 \item{benefit.scores}{vector of estimated benefit scores}
 
-\item{loss}{choice USED TO CALCULATE \code{benefit.scores} of both the M function from Chen, et al (2017) and
+\item{loss}{loss choice USED TO CALCULATE \code{benefit.scores} of both the M function from Chen, et al (2017) and
 potentially the penalty used for variable selection. See \code{\link[personalized]{fit.subgroup}} for more details.}
 
-\item{method}{method USED TO CALCULATE \code{benefit.scores}. Either the \code{"weighting"} method or
+\item{method}{method choice USED TO CALCULATE \code{benefit.scores}. Either the \code{"weighting"} method or
 \code{"a_learning"} method. See \code{\link[personalized]{fit.subgroup}} for more details}
 
 \item{pi.x}{The propensity score for each observation}

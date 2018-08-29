@@ -115,9 +115,9 @@ treatment.effects.default <- function(x, ...)
 
 
 #' @param benefit.scores vector of estimated benefit scores
-#' @param loss choice USED TO CALCULATE \code{benefit.scores} of both the M function from Chen, et al (2017) and
+#' @param loss loss choice USED TO CALCULATE \code{benefit.scores} of both the M function from Chen, et al (2017) and
 #' potentially the penalty used for variable selection. See \code{\link[personalized]{fit.subgroup}} for more details.
-#' @param method method USED TO CALCULATE \code{benefit.scores}. Either the \code{"weighting"} method or
+#' @param method method choice USED TO CALCULATE \code{benefit.scores}. Either the \code{"weighting"} method or
 #' \code{"a_learning"} method. See \code{\link[personalized]{fit.subgroup}} for more details
 #' @param pi.x The propensity score for each observation
 #' @rdname treatment.effects
@@ -135,7 +135,7 @@ treat.effects <- function(benefit.scores,
 
 
 #' @seealso \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models.
-#' @param x a fitted object from \code{fit.subgroup()} or a matrix of covariate values
+#' @param x a fitted object from \code{fit.subgroup()}
 #' @rdname treatment.effects
 #' @export
 #' @examples

@@ -393,6 +393,8 @@ which treatment results in the best expected potential outcomes)</p></dd>
 <dt>subgroup.trt.effects</dt><dd><p>(Biased) estimates of the conditional treatment effects
 and conditional outcomes. These are essentially just empirical averages within
 different combinations of treatment assignments and treatment recommendations</p></dd>
+<dt>individual.trt.effects</dt><dd><p>estimates of the individual treatment effects as returned by
+<code><a href='treatment.effects.html'>treat.effects</a></code></p></dd>
 
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
@@ -505,6 +507,11 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; V11   -0.6036
 #&gt; V13    1.2472
 #&gt; V15    0.3743</div><div class='input'>
+<span class='co'># estimates of the individual-specific</span>
+<span class='co'># treatment effect estimates:</span>
+<span class='fu'>str</span>(<span class='no'>subgrp.model</span>$<span class='no'>individual.trt.effects</span>)</div><div class='output co'>#&gt; List of 2
+#&gt;  $ delta: num [1:500] 6.08 5.48 19.28 8.17 24.04 ...
+#&gt;  $ gamma: logi NA</div><div class='input'>
 <span class='co'># fit lasso + gam model with REML option for gam</span>
 
 <span class='no'>subgrp.modelg</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>,
@@ -653,7 +660,7 @@ from <code>fit.subgroup</code>.</p></div>
 <span class='no'>subgrp.model.bin.cust</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y.binary</span>,
                                  <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
                                  <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>,
-                                 <span class='kw'>fit.custom.loss</span> <span class='kw'>=</span> <span class='no'>fit.custom.loss.bin</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: non-integer #successes in a binomial glm!</span></div><div class='input'>
+                                 <span class='kw'>fit.custom.loss</span> <span class='kw'>=</span> <span class='no'>fit.custom.loss.bin</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: non-integer #successes in a binomial glm!</span></div><div class='output co'>#&gt; <span class='warning'>Warning: treatment effects not available for loss: custom</span></div><div class='input'>
 <span class='no'>subgrp.model.bin.cust</span></div><div class='output co'>#&gt; family:  gaussian 
 #&gt; loss:    custom 
 #&gt; method:  weighting 
@@ -703,8 +710,7 @@ from <code>fit.subgroup</code>.</p></div>
 <span class='no'>subgrp.model.expo</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y.count</span>,
                                   <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
                                   <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>,
-                                  <span class='kw'>fit.custom.loss</span> <span class='kw'>=</span> <span class='no'>fit.expo.loss</span>)
-
+                                  <span class='kw'>fit.custom.loss</span> <span class='kw'>=</span> <span class='no'>fit.expo.loss</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: treatment effects not available for loss: custom</span></div><div class='input'>
 <span class='no'>subgrp.model.expo</span></div><div class='output co'>#&gt; family:  gaussian 
 #&gt; loss:    custom 
 #&gt; method:  weighting 

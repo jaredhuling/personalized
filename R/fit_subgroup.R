@@ -244,6 +244,8 @@
 #' \item{subgroup.trt.effects}{(Biased) estimates of the conditional treatment effects
 #' and conditional outcomes. These are essentially just empirical averages within
 #' different combinations of treatment assignments and treatment recommendations}
+#' \item{individual.trt.effects}{estimates of the individual treatment effects as returned by
+#' \code{\link[personalized]{treat.effects}}}
 #'
 #' @examples
 #' library(personalized)
@@ -299,6 +301,10 @@
 #'                            nfolds = 10)              # option for cv.glmnet
 #'
 #' summary(subgrp.model)
+#'
+#' # estimates of the individual-specific
+#' # treatment effect estimates:
+#' str(subgrp.model$individual.trt.effects)
 #'
 #' # fit lasso + gam model with REML option for gam
 #'
@@ -1101,6 +1107,12 @@ fit.subgroup <- function(x,
                                                           cutpoint,
                                                           larger.outcome.better,
                                                           reference.trt = reference.trt)
+
+    # calculate individual treatment effect estimates
+    fitted.model$individual.trt.effects <- treat.effects(fitted.model$benefit.scores,
+                                                         loss,
+                                                         method,
+                                                         pi.x)
 
     class(fitted.model) <- "subgroup_fitted"
 
