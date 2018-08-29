@@ -173,7 +173,9 @@ i.e. \(E[Y|T=1, X] / E[Y|T=-1, X]\))</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='fit.subgroup.html'>fit.subgroup</a></code> for function which fits subgroup identification models.</p></div>
+    <div class='dont-index'><p><code><a href='fit.subgroup.html'>fit.subgroup</a></code> for function which fits subgroup identification models.</p>
+<p><code><a href='print.individual_treatment_effects.html'>print.individual_treatment_effects</a></code> for printing of objects returned by
+<code>treat.effects</code> or <code>treatment.effects</code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -226,8 +228,12 @@ i.e. \(E[Y|T=1, X] / E[Y|T=-1, X]\))</p>
 <span class='no'>trt_eff</span> <span class='kw'>&lt;-</span> <span class='fu'>treatment.effects</span>(<span class='no'>subgrp.model</span>)
 <span class='fu'>str</span>(<span class='no'>trt_eff</span>)</div><div class='output co'>#&gt; List of 2
 #&gt;  $ delta: num [1:1000] -11.55 -9.8 4.52 -7.03 -26.16 ...
-#&gt;  $ gamma: logi NA</div><div class='input'>
-<span class='fu'>print</span>(<span class='fu'>summary</span>(<span class='no'>trt_eff</span>$<span class='no'>delta</span>))</div><div class='output co'>#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#&gt;  $ gamma: logi NA
+#&gt;  - attr(*, "class")= chr [1:2] "individual_treatment_effects" "list"</div><div class='input'>
+<span class='no'>trt_eff</span></div><div class='output co'>#&gt; Summary of individual treatment effects: 
+#&gt; E[Y|T=1, X] - E[Y|T=-1, X]
+#&gt; 
+#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 #&gt; -57.436 -13.833  -2.261  -1.396  10.513  49.163 </div><div class='input'>
 
 <span class='fu'>library</span>(<span class='no'>survival</span>)
@@ -240,8 +246,17 @@ i.e. \(E[Y|T=1, X] / E[Y|T=-1, X]\))</p>
 <span class='no'>trt_eff_c</span> <span class='kw'>&lt;-</span> <span class='fu'>treatment.effects</span>(<span class='no'>subgrp.model.cox</span>)
 <span class='fu'>str</span>(<span class='no'>trt_eff_c</span>)</div><div class='output co'>#&gt; List of 2
 #&gt;  $ delta: logi NA
-#&gt;  $ gamma: num [1:1000] 0.618 0.772 1.112 0.863 0.393 ...</div><div class='input'>
-<span class='fu'>print</span>(<span class='fu'>summary</span>(<span class='no'>trt_eff_c</span>$<span class='no'>gamma</span>))</div><div class='output co'>#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#&gt;  $ gamma: num [1:1000] 0.618 0.772 1.112 0.863 0.393 ...
+#&gt;  - attr(*, "class")= chr [1:2] "individual_treatment_effects" "list"</div><div class='input'>
+<span class='no'>trt_eff_c</span></div><div class='output co'>#&gt; Summary of individual treatment effects: 
+#&gt; E[Y|T=1, X] / E[Y|T=-1, X]
+#&gt; 
+#&gt; Note: for survival outcomes, the above ratio is 
+#&gt; E[g(Y)|T=1, X] / E[g(Y)|T=-1, X], 
+#&gt; where g() is a monotone increasing function of Y, 
+#&gt; the survival time
+#&gt; 
+#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 #&gt;  0.1886  0.7587  1.1040  1.2425  1.5352  4.3112 </div><div class='input'>
 </div></pre>
   </div>
