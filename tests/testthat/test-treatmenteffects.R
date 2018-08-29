@@ -56,6 +56,8 @@ test_that("test that treatment effect calculations work", {
 
     trt_eff <- treatment.effects(subgrp.model)
 
+    print(trt_eff)
+
     expect_true(is.na(trt_eff$gamma))
 
     subgrp.modela <- fit.subgroup(x = x, y = y,
@@ -68,6 +70,8 @@ test_that("test that treatment effect calculations work", {
     trt_eff <- treatment.effects(subgrp.modela)
     expect_true(is.na(trt_eff$gamma))
 
+    print(trt_eff)
+
 
     trt_eff <- treat.effects(subgrp.modela$benefit.scores,
                              subgrp.modela$loss,
@@ -77,6 +81,8 @@ test_that("test that treatment effect calculations work", {
     expect_error(treat.effects(subgrp.modela$benefit.scores,
                                "poisson_loss_lasso_gam",
                                subgrp.modela$method))
+
+    print(trt_eff)
 
 
     expect_warning(treat.effects(subgrp.modela$benefit.scores,
@@ -96,6 +102,8 @@ test_that("test that treatment effect calculations work", {
 
     expect_true(all(trt_eff_c$gamma >= 0))
     expect_true(is.na(trt_eff_c$delta))
+
+    print(trt_eff_c)
 
 
     ## other calculation types
