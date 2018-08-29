@@ -89,7 +89,7 @@ subgrp.model <- fit.subgroup(x = x, y = y,
 trt_eff <- treatment.effects(subgrp.model)
 str(trt_eff)
 
-print(summary(trt_eff$delta))
+trt_eff
 
 
 library(survival)
@@ -102,9 +102,12 @@ subgrp.model.cox <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
 trt_eff_c <- treatment.effects(subgrp.model.cox)
 str(trt_eff_c)
 
-print(summary(trt_eff_c$gamma))
+trt_eff_c
 
 }
 \seealso{
 \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models.
+
+\code{\link[personalized]{print.individual_treatment_effects}} for printing of objects returned by
+\code{treat.effects} or \code{treatment.effects}
 }

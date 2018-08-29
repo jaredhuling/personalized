@@ -102,8 +102,11 @@ calc_treatment_effects <- function(benefit.scores,
     {
         warning(paste("treatment effects not available for loss:", loss) )
     }
-    list(delta = trt_eff_delta,
-         gamma = trt_eff_gamma)
+    effects <- list(delta = trt_eff_delta,
+                    gamma = trt_eff_gamma)
+    class(effects) <- c("individual_treatment_effects", class(effects) )
+
+    effects
 }
 
 #' @rdname treatment.effects
@@ -136,6 +139,8 @@ treat.effects <- function(benefit.scores,
 
 #' @seealso \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models.
 #' @param x a fitted object from \code{fit.subgroup()}
+#' @seealso \code{\link[personalized]{print.individual_treatment_effects}} for printing of objects returned by
+#' \code{treat.effects} or \code{treatment.effects}
 #' @rdname treatment.effects
 #' @export
 #' @examples
@@ -188,7 +193,7 @@ treat.effects <- function(benefit.scores,
 #' trt_eff <- treatment.effects(subgrp.model)
 #' str(trt_eff)
 #'
-#' print(summary(trt_eff$delta))
+#' trt_eff
 #'
 #'
 #' library(survival)
@@ -201,7 +206,7 @@ treat.effects <- function(benefit.scores,
 #' trt_eff_c <- treatment.effects(subgrp.model.cox)
 #' str(trt_eff_c)
 #'
-#' print(summary(trt_eff_c$gamma))
+#' trt_eff_c
 #'
 treatment.effects.subgroup_fitted <- function(x, ...)
 {
@@ -210,3 +215,40 @@ treatment.effects.subgroup_fitted <- function(x, ...)
                   x$method,
                   x$pi.x)
 }
+
+
+
+
+
+
+
+#' Printing individualized treatment effects
+#'
+#' @description Prints results for estimated subgroup treatment effects
+#'
+#' @param x a fitted object from either \code{\link[personalized]{treat.effects}} or \code{\link[personalized]{treatment.effects}}
+#' @param digits minimal number of significant digits to print.
+#' @param ... further arguments passed to or from \code{\link[base]{print.default}}.
+#' @export
+print.individual_treatment_effects <- function(x, digits = max(getOption('digits')-3, 3), ...)
+{
+
+    if (!is.na(x$delta[1]))
+    {
+        cat("Summary of individual treatment effects: \nE[Y|T=1, X] - E[Y|T=-1, X]\n\n")
+
+        print(summary(x$delta), digits = digits, ...)
+    }
+
+
+    if (!is.na(x$gamma[1]))
+    {
+        cat("Summary of individual treatment effects: \nE[Y|T=1, X] / E[Y|T=-1, X]\n\n")
+
+        cat("Note: for survival outcomes, the above ratio is \nE[g(Y)|T=1, X] / E[g(Y)|T=-1, X], \nwhere g() is a monotone increasing function of Y, \nthe survival time\n\n")
+
+        print(summary(x$gamma), digits = digits, ...)
+    }
+
+}
+
