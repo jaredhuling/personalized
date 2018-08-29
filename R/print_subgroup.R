@@ -68,6 +68,9 @@ print.subgroup_fitted <- function(x, digits = max(getOption('digits')-3, 3), ...
             print(quantile(x$benefit.scores[,cc]), digits = digits)
         }
     }
+
+    cat("\n")
+    print.individual_treatment_effects(x$individual.trt.effects, digits = digits, ...)
 }
 
 #' @param sample.pct boolean variable of whether to print the percent of the test sample within each subgroup. If false

@@ -321,7 +321,7 @@ summary(subgrp.model)
 
 # estimates of the individual-specific
 # treatment effect estimates:
-str(subgrp.model$individual.trt.effects)
+subgrp.model$individual.trt.effects
 
 # fit lasso + gam model with REML option for gam
 
@@ -344,6 +344,10 @@ subgrp.model.bin <- fit.subgroup(x = x, y = y.binary,
 
 subgrp.model.bin
 
+# estimates of the individual-specific
+# treatment effect estimates:
+subgrp.model.bin$individual.trt.effects
+
 # use poisson loss for count/poisson outcomes
 subgrp.model.poisson <- fit.subgroup(x = x, y = y.count,
                            trt = trt01,
@@ -354,6 +358,10 @@ subgrp.model.poisson <- fit.subgroup(x = x, y = y.count,
 
 subgrp.model.poisson
 
+# estimates of the individual-specific
+# treatment effect estimates:
+subgrp.model.poisson$individual.trt.effects
+
 library(survival)
 subgrp.model.cox <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
                            trt = trt01,
@@ -362,6 +370,10 @@ subgrp.model.cox <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
                            nfolds = 5)              # option for cv.glmnet
 
 subgrp.model.cox
+
+# estimates of the individual-specific
+# treatment effect estimates:
+subgrp.model.cox$individual.trt.effects
 
 
 
