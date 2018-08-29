@@ -1,13 +1,16 @@
 ## New version for 'personalized'
 
-* Added printing of subgroup_validated results for quantile cutoffs via the which.quant argument
+* Simplified plot labeling
+* Added clarifications to documentation
+* Added customized loss function option
+* Added options for count outcomes via Poisson negative log-likelihood as the loss
+* Added treatment effect calculation based on estimated benefit scores
 
 ## Test environments
 
-* local Windows 7 x64 install, (R 3.4.3)
 * Debian Linux, (R-devel)
-* local Mac OSX Sierra (R 3.4.2)
-* Ubuntu 14.04 LTS (on travis-ci), (R 3.4.2)
+* local Mac OSX Sierra (R 3.5.1)
+* Ubuntu 14.04.5 LTS (on travis-ci), (R 3.5.0)
 
 ## R CMD check results
 
