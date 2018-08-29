@@ -182,6 +182,10 @@ test_that("test plotting for continuous outcomes with various options", {
 
     expect_is(pl, "ggplot")
 
+    pl <- plotCompare(subgrp.model.bin, subgrp.model.bin2, type = "boxplot")
+
+    expect_is(pl, "ggplot")
+
 
     pl <- plotCompare(subgrp.model, subgrp.val, type = "boxplot")
 
