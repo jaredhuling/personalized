@@ -114,6 +114,12 @@ summary(subgrp.model)
     ##        0%       25%       50%       75%      100% 
     ## -14.15602  -3.58120   0.04648   3.51676  14.78106 
     ## 
+    ## Summary of individual treatment effects: 
+    ## E[Y|T=1, X] - E[Y|T=-1, X]
+    ## 
+    ##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+    ## -28.31203  -7.16240   0.09296   0.27303   7.03352  29.56212 
+    ## 
     ## 9 out of 50 variables selected in total by the lasso (cross validation criterion).
     ## 
     ##     Estimate
