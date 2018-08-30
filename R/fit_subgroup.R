@@ -663,6 +663,11 @@ fit.subgroup <- function(x,
         n.trts      <- length(unique.trts)
     }
 
+    if (n.trts > 2 & loss == "custom")
+    {
+        stop("custom loss functions not currently available for multiple treatments")
+    }
+
     if (n.trts > 2 & grepl("owl_", loss) & grepl("hinge_", loss))
     {
         stop("OWL hinge loss not available for multiple treatments.")
