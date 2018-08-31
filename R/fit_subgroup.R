@@ -135,7 +135,8 @@
 #'      df <- data.frame(y = y, x)
 #'
 #'      # minimize squared error loss with NO lasso penalty
-#'      lmf <- lm(y ~ x - 1, weights = weights, ...)
+#'      lmf <- lm(y ~ x - 1, weights = weights,
+#'                data = df, ...)
 #'
 #'      # save coefficients
 #'      cfs = coef(lmf)
@@ -146,9 +147,9 @@
 #'      # in predictions
 #'      prd = function(x, type = "response")
 #'      {
-#'          # roxygen2 removes the below, so
-#'          # using tcrossprod instead
-#'          tcrossprod(cbind(1, x), t(cfs))
+#'          dfte <- cbind(1, x)
+#'          colnames(dfte) <- names(cfs)
+#'          predict(lmf, data.frame(dfte))
 #'      }
 #'      # return lost of required components
 #'      list(predict = prd, model = lmf, coefficients = cfs)
@@ -163,6 +164,7 @@
 #'      # with allowance for efficiency augmentation
 #'      glmf <- glm(y ~ x - 1, weights = weights,
 #'                 offset = offset, # offset term allows for efficiency augmentation
+#'                 data = df,
 #'                 family = binomial(), ...)
 #'
 #'      # save coefficients
@@ -171,7 +173,11 @@
 #'      # create prediction function.
 #'      prd = function(x, type = "response")
 #'      {
-#'          tcrossprod(cbind(1, x), t(cfs))
+#'          dfte <- cbind(1, x)
+#'          colnames(dfte) <- names(cfs)
+#'          ## predictions must be returned on the scale
+#'          ## of the linear predictor
+#'          predict(glmf, data.frame(dfte), type = "link")
 #'      }
 #'      # return lost of required components
 #'      list(predict = prd, model = glmf, coefficients = cfs)
@@ -369,9 +375,12 @@
 #'     cfs = coef(glmf)
 #'
 #'     # create prediction function.
-#'     prd = function(x, type = "response")
-#'     {
-#'         tcrossprod(cbind(1, x), t(cfs))
+#'     prd = function(x, type = "response") {
+#'          dfte <- cbind(1, x)
+#'          colnames(dfte) <- names(cfs)
+#'          ## predictions must be returned on the scale
+#'          ## of the linear predictor
+#'          predict(glmf, data.frame(dfte), type = "link")
 #'     }
 #'     # return lost of required components
 #'     list(predict = prd, model = glmf, coefficients = cfs)
