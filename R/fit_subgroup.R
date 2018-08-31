@@ -526,6 +526,7 @@ fit.subgroup <- function(x,
             fit.custom.loss <- match.fun(fit.custom.loss)
         }
 
+        ## a listing of the possible arguments that can be given to fit.custom.loss
         args_needed <- sort(c("...", "family", "match.id", "n.trts", "offset", "trt", "weights", "x", "y"))
 
         ## make sure too many args aren't provided
