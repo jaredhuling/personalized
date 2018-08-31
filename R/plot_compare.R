@@ -272,8 +272,8 @@ plotCompare <- function(...,
     {
         pl.obj <- ggplot(res.2.plot,
                          aes(x = Value, fill = Received)) +
-            geom_density(alpha = 0.65) +
-            geom_rug(aes(colour = Received), alpha = 0.85, sides = "l") +
+            geom_density(alpha = 0.65, na.rm = TRUE) +
+            geom_rug(aes(colour = Received), alpha = 0.85, sides = "l", na.rm = TRUE) +
             coord_flip() +
             facet_grid(Recommended ~ Model) +
             theme(legend.position = "bottom") +
@@ -296,8 +296,8 @@ plotCompare <- function(...,
                                  aes(x = bs, y = Outcome,
                                      group = factor(Received),
                                      color = factor(Received) )) +
-                    geom_point() +
-                    geom_smooth(method = "gam", method.args = list(family = "binomial")) +
+                    geom_point(na.rm = TRUE) +
+                    geom_smooth(method = "gam", method.args = list(family = "binomial"), na.rm = TRUE) +
                     facet_grid( ~ Model) +
                     theme(legend.position = "bottom") +
                     scale_color_discrete(name = "Received") +
@@ -308,8 +308,8 @@ plotCompare <- function(...,
                                  aes(x = bs, y = Outcome,
                                      group = factor(Received),
                                      color = factor(Received) )) +
-                    geom_point() +
-                    geom_smooth(method = "gam") +
+                    geom_point(na.rm = TRUE) +
+                    geom_smooth(method = "gam", na.rm = TRUE) +
                     facet_grid( ~ Model) +
                     theme(legend.position = "bottom") +
                     scale_color_discrete(name = "Received") +
@@ -319,8 +319,8 @@ plotCompare <- function(...,
         {
             pl.obj <- ggplot(res.2.plot,
                              aes(x = Received, y = Value)) +
-                geom_boxplot(aes(fill = Received)) +
-                geom_rug(aes(colour = Received), alpha = 0.85, sides = "l") +
+                geom_boxplot(aes(fill = Received), na.rm = TRUE) +
+                geom_rug(aes(colour = Received), alpha = 0.85, sides = "l", na.rm = TRUE) +
                 facet_grid(Quantile ~ Recommended + Model) +
                 theme(legend.position = "none") +
                 ylab("Average Outcome")
@@ -332,7 +332,7 @@ plotCompare <- function(...,
             res.2.plot$Value <- as.factor(res.2.plot$Value)
             pl.obj <- ggplot(res.2.plot,
                              aes(x = Received, fill = factor(Value) )) +
-                geom_bar(position = "fill") +
+                geom_bar(position = "fill", na.rm = TRUE) +
                 facet_grid(Recommended ~ Model) +
                 theme(legend.position = "bottom") +
                 ylab("Outcome")
@@ -341,8 +341,8 @@ plotCompare <- function(...,
         {
             pl.obj <- ggplot(res.2.plot,
                              aes(x = Received, y = Value)) +
-                geom_boxplot(aes(fill = Received)) +
-                geom_rug(aes(colour = Received), alpha = 0.85, sides = "l") +
+                geom_boxplot(aes(fill = Received), na.rm = TRUE) +
+                geom_rug(aes(colour = Received), alpha = 0.85, sides = "l", na.rm = TRUE) +
                 facet_grid(Recommended ~ Model) +
                 theme(legend.position = "none") +
                 ylab("Outcome")
@@ -351,8 +351,8 @@ plotCompare <- function(...,
     {
         pl.obj <- ggplot(avg.res.2.plot,
                          aes(x = Recommended, y = Value, group = Received)) +
-            geom_line(aes(colour = Received), size = 1.25) +
-            geom_point(aes(colour = Received), size = 2) +
+            geom_line(aes(colour = Received), size = 1.25, na.rm = TRUE) +
+            geom_point(aes(colour = Received), size = 2, na.rm = TRUE) +
             facet_grid( ~ Model) +
             theme(legend.position = "bottom") +
             scale_x_discrete(expand = c(0.25, 0.25)) +

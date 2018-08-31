@@ -104,8 +104,18 @@ Example 1: \code{augment.func <- function(x, y) {lmod <- lm(y ~ x); return(fitte
 Example 2:
 \preformatted{
 augment.func <- function(x, y, trt) {
-    lmod <- lm(y ~ x + trt)
-    return(fitted(lmod))
+    data <- data.frame(x, y, trt)
+    lmod <- lm(y ~ x * trt)
+    ## get predictions when trt = 1
+    data$trt <- 1
+    preds_1  <- predict(lmod, data)
+
+    ## get predictions when trt = -1
+    data$trt <- -1
+    preds_n1 <- predict(lmod, data)
+
+    ## return predictions averaged over trt
+    return(0.5 * (preds_1 + preds_n1))
 }
 }
 
@@ -121,8 +131,7 @@ Example 3:
 \item{fit.custom.loss}{A user-specified custom loss function to be used in model fitting. If provided, this function should
 take the modified design matrix as an argument and the responses and optimize a custom weighted loss function.
 
-The
-provided function \strong{MUST} return a list with the following elements:
+The provided function \strong{MUST} return a list with the following elements:
 \itemize{
 \item{\code{predict}}{ a function that inputs a design matrix and a 'type' argument for the type of predictions and outputs
 a vector of predictions on the scale of the linear predictor. Note that the matrix provided to 'fit.custom.loss'
@@ -361,9 +370,6 @@ subgrp.model.poisson <- fit.subgroup(x = x, y = y.count,
 
 subgrp.model.poisson
 
-# estimates of the individual-specific
-# treatment effect estimates:
-subgrp.model.poisson$individual.trt.effects
 
 library(survival)
 subgrp.model.cox <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
