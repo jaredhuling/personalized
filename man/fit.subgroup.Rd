@@ -362,14 +362,18 @@ subgrp.modelg
 
 augment.func <- function(x, y, trt) {
     data <- data.frame(x, y, trt)
-    lmod <- lm(y ~ x * trt)
+    xm <- model.matrix(y~trt*x-1, data = data)
+
+    lmod <- cv.glmnet(y = y, x = xm)
     ## get predictions when trt = 1
     data$trt <- 1
-    preds_1  <- predict(lmod, data)
+    xm <- model.matrix(y~trt*x-1, data = data)
+    preds_1  <- predict(lmod, xm, s = "lambda.min")
 
     ## get predictions when trt = -1
     data$trt <- -1
-    preds_n1 <- predict(lmod, data)
+    xm <- model.matrix(y~trt*x-1, data = data)
+    preds_n1  <- predict(lmod, xm, s = "lambda.min")
 
     ## return predictions averaged over trt
     return(0.5 * (preds_1 + preds_n1))
