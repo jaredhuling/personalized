@@ -56,6 +56,8 @@ print.subgroup_fitted <- function(x, digits = max(getOption('digits')-3, 3), ...
 
     cat("\nNOTE: The above average outcomes are biased estimates of\n      the expected outcomes conditional on subgroups. \n      Use 'validate.subgroup()' to obtain unbiased estimates.\n")
 
+    cat("\n---------------------------------------------------\n")
+
     if (is.null(ncol.bs) || ncol.bs == 1)
     {
         cat("\nBenefit score quantiles: \n")
@@ -69,6 +71,7 @@ print.subgroup_fitted <- function(x, digits = max(getOption('digits')-3, 3), ...
         }
     }
 
+    cat("\n---------------------------------------------------\n")
     cat("\n")
     print.individual_treatment_effects(x$individual.trt.effects, digits = digits, ...)
 }

@@ -36,16 +36,15 @@ summary.subgroup_fitted <- function(object, digits = max(getOption('digits')-3, 
             ntot <- length(as.vector(est.coef)[-1])
         }
 
-
-        cat("\n")
-
         ## if variables are selected print out how many are selected
         ## and their coefficient estimates
+
+        cat("\n---------------------------------------------------\n\n")
 
         cat(nsel - object$n.trts + 1 - 1 * (grepl("owl_", object$loss) & object$n.trts > 2),
             "out of",
             ntot - object$n.trts + 1 - 1 * (grepl("owl_", object$loss) & object$n.trts > 2),
-            "variables selected in total by the lasso (cross validation criterion).\n\n")
+            "interactions selected in total by the lasso (cross validation criterion).\n\n")
 
         if (object$n.trts == 2)
         {
@@ -143,6 +142,8 @@ summary.subgroup_fitted <- function(object, digits = max(getOption('digits')-3, 
 
     } else
     {
+        cat("\n---------------------------------------------------\n")
+        cat("The following summary pertains to estimated treatment-covariate interactions:\n")
         return(summary(object$model))
     }
 }
