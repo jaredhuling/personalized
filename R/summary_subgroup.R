@@ -46,6 +46,8 @@ summary.subgroup_fitted <- function(object, digits = max(getOption('digits')-3, 
             ntot - object$n.trts + 1 - 1 * (grepl("owl_", object$loss) & object$n.trts > 2),
             "interactions selected in total by the lasso (cross validation criterion).\n\n")
 
+        cat("The first estimate is the treatment main effect, which is always selected. \nAny other variables selected represent treatment-covariate interactions.\n\n")
+
         if (object$n.trts == 2)
         {
             vnames   <- rownames(est.coef)
@@ -57,7 +59,7 @@ summary.subgroup_fitted <- function(object, digits = max(getOption('digits')-3, 
             rownames(coefmat) <- sel.varnames
             colnames(coefmat) <- "Estimate"
 
-            print.default(round(coefmat, digits), quote = FALSE, right = TRUE, na.print = "NA", ...)
+            print.default(t(round(coefmat, digits)), quote = FALSE, right = TRUE, na.print = "NA", ...)
         } else
         {
 
