@@ -279,6 +279,7 @@
 #' trt      <- 2 * trt01 - 1
 #'
 #' # simulate response
+#' # delta below drives treatment effect heterogeneity
 #' delta <- 2 * (0.5 + x[,2] - x[,3] - x[,11] + x[,1] * x[,12] )
 #' xbeta <- x[,1] + x[,11] - 2 * x[,12]^2 + x[,13] + 0.5 * x[,15] ^ 2
 #' xbeta <- xbeta + delta * trt
@@ -309,6 +310,10 @@
 #'     pi.x
 #' }
 #'
+#'
+#' ####################  Continuous outcomes ################################
+#'
+#'
 #' subgrp.model <- fit.subgroup(x = x, y = y,
 #'                            trt = trt01,
 #'                            propensity.func = prop.func,
@@ -332,6 +337,38 @@
 #'
 #' subgrp.modelg
 #'
+#' ####################  Using an augmentation function #####################
+#' ## augmentation funcions involve modeling the conditional mean E[Y|T, X]
+#' ## and returning predictions that are averaged over the treatment values
+#' ## return <- 1/2 * (hat{E}[Y|T=1, X] + hat{E}[Y|T=-1, X])
+#' ##########################################################################
+#'
+#' augment.func <- function(x, y, trt) {
+#'     data <- data.frame(x, y, trt)
+#'     lmod <- lm(y ~ x * trt)
+#'     ## get predictions when trt = 1
+#'     data$trt <- 1
+#'     preds_1  <- predict(lmod, data)
+#'
+#'     ## get predictions when trt = -1
+#'     data$trt <- -1
+#'     preds_n1 <- predict(lmod, data)
+#'
+#'     ## return predictions averaged over trt
+#'     return(0.5 * (preds_1 + preds_n1))
+#' }
+#'
+#' subgrp.model.aug <- fit.subgroup(x = x, y = y,
+#'                            trt = trt01,
+#'                            propensity.func = prop.func,
+#'                            augment.func    = augment.func,
+#'                            loss   = "sq_loss_lasso",
+#'                            nfolds = 10)              # option for cv.glmnet
+#'
+#' summary(subgrp.model.aug)
+#'
+#' ####################  Binary outcomes ####################################
+#'
 #' # use logistic loss for binary outcomes
 #' subgrp.model.bin <- fit.subgroup(x = x, y = y.binary,
 #'                            trt = trt01,
@@ -342,6 +379,8 @@
 #'
 #' subgrp.model.bin
 #'
+#'
+#' ####################  Count outcomes #####################################
 #'
 #' # use poisson loss for count/poisson outcomes
 #' subgrp.model.poisson <- fit.subgroup(x = x, y = y.count,
@@ -354,6 +393,8 @@
 #' subgrp.model.poisson
 #'
 #'
+#' ####################  Time-to-event outcomes #############################
+#'
 #' library(survival)
 #' subgrp.model.cox <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
 #'                            trt = trt01,
@@ -364,7 +405,7 @@
 #' subgrp.model.cox
 #'
 #'
-#'
+#' ####################  Using custom loss functions ########################
 #'
 #' ## Use custom loss function for binary outcomes
 #'
