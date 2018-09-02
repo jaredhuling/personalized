@@ -1173,6 +1173,9 @@ fit.subgroup <- function(x,
         colnames(bene.scores) <- cnames
     }
 
+    attr(bene.scores, "comparison.trts") <- comparison.trts
+    attr(bene.scores, "reference.trt")   <- reference.trt
+
     fitted.model$benefit.scores        <- bene.scores
 
 

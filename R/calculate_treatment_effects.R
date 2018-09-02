@@ -236,19 +236,40 @@ print.individual_treatment_effects <- function(x, digits = max(getOption('digits
 
     if (!is.na(x$delta[1]))
     {
-        cat("Summary of individual treatment effects: \nE[Y|T=1, X] - E[Y|T=-1, X]\n\n")
+        if (NCOL(x$delta) == 1)
+        {
+            comp <- attr(x$delta, "comparison.trts")
+            ref  <- attr(x$delta, "reference.trt")
+            cat(paste0("Summary of individual treatment effects: \nE[Y|T=", comp, ", X] - E[Y|T=", ref, ", X]\n\n"))
+            print(summary(x$delta), digits = digits, ...)
+        } else
+        {
+            cat("Summary of individual treatment effects: \nE[Y|T=1, X] - E[Y|T=-1, X] (-1 is reference lvl)\n\n")
 
-        print(summary(x$delta), digits = digits, ...)
+            print(summary(x$delta), digits = digits, ...)
+        }
     }
 
 
     if (!is.na(x$gamma[1]))
     {
-        cat("Summary of individual treatment effects: \nE[Y|T=1, X] / E[Y|T=-1, X]\n\n")
+        if (NCOL(x$gamma) == 1)
+        {
+            comp <- attr(x$gamma, "comparison.trts")
+            ref  <- attr(x$gamma, "reference.trt")
+            cat(paste0("Summary of individual treatment effects: \nE[Y|T=", comp, ", X] / E[Y|T=", ref, ", X]\n\n"))
 
-        cat("Note: for survival outcomes, the above ratio is \nE[g(Y)|T=1, X] / E[g(Y)|T=-1, X], \nwhere g() is a monotone increasing function of Y, \nthe survival time\n\n")
+            cat(paste0("Note: for survival outcomes, the above ratio is \nE[g(Y)|T=", comp, ", X] / E[g(Y)|T=", ref, ", X], \nwhere g() is a monotone increasing function of Y, \nthe survival time\n\n"))
 
-        print(summary(x$gamma), digits = digits, ...)
+            print(summary(x$gamma), digits = digits, ...)
+        } else
+        {
+            cat("Summary of individual treatment effects: \nE[Y|T=1, X] / E[Y|T=-1, X] (-1 is reference lvl)\n\n")
+
+            cat("Note: for survival outcomes, the above ratio is \nE[g(Y)|T=1, X] / E[g(Y)|T=-1, X], \nwhere g() is a monotone increasing function of Y, \nthe survival time\n\n")
+
+            print(summary(x$gamma), digits = digits, ...)
+        }
     }
 
 }
