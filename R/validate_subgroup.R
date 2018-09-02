@@ -716,6 +716,11 @@ validate.subgroup <- function(model,
                 family       = model$family,     # model family
                 loss         = model$loss,       # model loss
                 method       = model$method,     # subgroup method (weighting vs a-learning)
+                n.trts       = model$n.trts,
+                larger.outcome.better = model$larger.outcome.better,
+                cutpoint              = model$cutpoint,
+                comparison.trts       = model$comparison.trts,
+                reference.trt         = model$reference.trt,
                 val.method   = method,
                 iterations   = B)
     class(ret) <- "subgroup_validated"

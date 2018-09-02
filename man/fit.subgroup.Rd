@@ -259,6 +259,7 @@ supplied to \code{fit.subgroup()}}
 \item{method}{The method used (either weighting or A-learning)}
 \item{propensity.func}{The propensity score function used}
 \item{larger.outcome.better}{If larger outcomes are preferred for this model}
+\item{cutpoint}{Benefit score cutoff value used for determining subgroups}
 \item{var.names}{The names of all variables used}
 \item{n.trts}{The number of treatment levels}
 \item{comparison.trts}{All treatment levels other than the reference level}

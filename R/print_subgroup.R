@@ -12,9 +12,10 @@
 #' @export
 print.subgroup_fitted <- function(x, digits = max(getOption('digits')-3, 3), ...)
 {
-    cat("family: ", x$family, "\n")
-    cat("loss:   ", x$loss, "\n")
-    cat("method: ", x$method, "\n")
+    cat("family:   ", x$family, "\n")
+    cat("loss:     ", x$loss, "\n")
+    cat("method:   ", x$method, "\n")
+    cat("cutpoint: ", x$cutpoint, "\n")
 
     if (!is.null(x$augment.func))
     {
@@ -28,22 +29,23 @@ print.subgroup_fitted <- function(x, digits = max(getOption('digits')-3, 3), ...
     {
         func.name <- as.character(substitute(x$propensity.func))
         func.name <- func.name[length(func.name)]
-        cat("propensity \nfunction:",
+        cat("propensity \nfunction: ",
             func.name,
             "\n")
     }
+    cat("\n")
     if (x$n.trts == 2)
     {
         if (x$larger.outcome.better)
         {
-            cat("benefit score: f(x), Trt recomm =",
+            cat("benefit score: f(x), \nTrt recomm =",
                 paste0(x$comparison.trts, "*I(f(x)>c)+",
-                       x$reference.trt, "*I(f(x)<=c)"), " where c is cutpoint\n")
+                       x$reference.trt, "*I(f(x)<=c)"), "where c is 'cutpoint'\n")
         } else
         {
-            cat("benefit score: f(x), Trt recomm =",
+            cat("benefit score: f(x), \nTrt recomm =",
                 paste0(x$comparison.trts, "*I(f(x)<c)+",
-                       x$reference.trt, "*I(f(x)>=c)"), " where c is cutpoint\n")
+                       x$reference.trt, "*I(f(x)>=c)"), "where c is 'cutpoint'\n")
         }
 
     } else
@@ -56,7 +58,7 @@ print.subgroup_fitted <- function(x, digits = max(getOption('digits')-3, 3), ...
         trt.rec.text <- paste0("maxval = max(", paste(paste0("f_", (x$comparison.trts), "(x)"), collapse = ", "), ")")
         cat(trt.rec.text, "\n")
         cat("which.max(maxval) = The trt level which maximizes maxval\n")
-        cat("Trt recomm = which.max(maxval)*I(maxval > c) +", paste0(x$reference.trt, "*I(maxval <= c) where c is cutpoint\n") )
+        cat("Trt recomm = which.max(maxval)*I(maxval > c) +", paste0(x$reference.trt, "*I(maxval <= c) where c is 'cutpoint'\n") )
     }
 
 
@@ -141,7 +143,7 @@ print.subgroup_validated <- function(x, digits = max(getOption('digits')-3, 3), 
             cat("loss:   ", x$loss, "\n")
             cat("method: ", x$method, "\n\n")
             cat("validation method: ", x$val.method, "\n")
-            cat("Cutoff:            ", names(x$boot.results.quantiles)[q], "\n")
+            cat("cutpoint:            ", names(x$boot.results.quantiles)[q], "\n")
 
             if (is.null(x$iterations))
             {
@@ -159,6 +161,37 @@ print.subgroup_validated <- function(x, digits = max(getOption('digits')-3, 3), 
             {
                 valtext <- "Bootstrap Bias-Corrected Outcomes:"
             }
+
+
+
+            if (x$n.trts == 2)
+            {
+                if (x$larger.outcome.better)
+                {
+                    cat("benefit score: f(x), \nTrt recomm =",
+                        paste0(x$comparison.trts, "*I(f(x)>c)+",
+                               x$reference.trt, "*I(f(x)<=c)"), "where c is 'cutpoint'\n\n")
+                } else
+                {
+                    cat("benefit score: f(x), \nTrt recomm =",
+                        paste0(x$comparison.trts, "*I(f(x)<c)+",
+                               x$reference.trt, "*I(f(x)>=c)"), "where c is 'cutpoint'\n\n")
+                }
+
+            } else
+            {
+                bene.text <- paste(paste0("f_", (x$comparison.trts), "(x): ",
+                                          paste(x$comparison.trts, "vs", x$reference.trt)),
+                                   collapse = ",  ")
+                bene.txt2 <- paste0("\n               f_", x$reference.trt,  "(x): 0")
+                cat("benefit score:", bene.text, bene.txt2, "\n")
+                trt.rec.text <- paste0("maxval = max(", paste(paste0("f_", (x$comparison.trts), "(x)"), collapse = ", "), ")")
+                cat(trt.rec.text, "\n")
+                cat("which.max(maxval) = The trt level which maximizes maxval\n")
+                cat("Trt recomm = which.max(maxval)*I(maxval > c) +", paste0(x$reference.trt, "*I(maxval <= c) where c is 'cutpoint'\n") )
+            }
+
+
 
             cat(paste0("Average ", valtext, "\n"))
 
@@ -225,6 +258,7 @@ print.subgroup_validated <- function(x, digits = max(getOption('digits')-3, 3), 
         cat("loss:   ", x$loss, "\n")
         cat("method: ", x$method, "\n\n")
         cat("validation method: ", x$val.method, "\n")
+        cat("cutpoint:            ", x$cutpoint, "\n")
 
         if (is.null(x$iterations))
         {
@@ -242,6 +276,34 @@ print.subgroup_validated <- function(x, digits = max(getOption('digits')-3, 3), 
         {
             valtext <- "Bootstrap Bias-Corrected Outcomes:"
         }
+
+        if (x$n.trts == 2)
+        {
+            if (x$larger.outcome.better)
+            {
+                cat("benefit score: f(x), \nTrt recomm =",
+                    paste0(x$comparison.trts, "*I(f(x)>c)+",
+                           x$reference.trt, "*I(f(x)<=c)"), "where c is 'cutpoint'\n\n")
+            } else
+            {
+                cat("benefit score: f(x), \nTrt recomm =",
+                    paste0(x$comparison.trts, "*I(f(x)<c)+",
+                           x$reference.trt, "*I(f(x)>=c)"), "where c is 'cutpoint'\n\n")
+            }
+
+        } else
+        {
+            bene.text <- paste(paste0("f_", (x$comparison.trts), "(x): ",
+                                      paste(x$comparison.trts, "vs", x$reference.trt)),
+                               collapse = ",  ")
+            bene.txt2 <- paste0("\n               f_", x$reference.trt,  "(x): 0")
+            cat("benefit score:", bene.text, bene.txt2, "\n")
+            trt.rec.text <- paste0("maxval = max(", paste(paste0("f_", (x$comparison.trts), "(x)"), collapse = ", "), ")")
+            cat(trt.rec.text, "\n")
+            cat("which.max(maxval) = The trt level which maximizes maxval\n")
+            cat("Trt recomm = which.max(maxval)*I(maxval > c) +", paste0(x$reference.trt, "*I(maxval <= c) where c is 'cutpoint'\n") )
+        }
+
 
         cat(paste0("Average ", valtext, "\n"))
 
