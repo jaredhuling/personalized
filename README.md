@@ -91,12 +91,15 @@ subgrp.model <- fit.subgroup(x = x, y = y,
 summary(subgrp.model)
 ```
 
-    ## family:  gaussian 
-    ## loss:    sq_loss_lasso 
-    ## method:  weighting 
+    ## family:    gaussian 
+    ## loss:      sq_loss_lasso 
+    ## method:    weighting 
+    ## cutpoint:  0 
     ## propensity 
-    ## function: propensity.func 
-    ## benefit score: f(x), Trt recomm = Trt*I(f(x)>c)+Ctrl*I(f(x)<=c)  where c is cutpoint
+    ## function:  propensity.func 
+    ## 
+    ## benefit score: f(x), 
+    ## Trt recomm = Trt*I(f(x)>c)+Ctrl*I(f(x)<=c) where c is 'cutpoint'
     ## 
     ## Average Outcomes:
     ##                 Recommended Ctrl    Recommended Trt
@@ -158,7 +161,11 @@ print(val.model, digits = 2, sample.pct = TRUE)
     ## method:  weighting 
     ## 
     ## validation method:  training_test_replication 
-    ## replications:  100 
+    ## cutpoint:           0 
+    ## replications:       100 
+    ## 
+    ## benefit score: f(x), 
+    ## Trt recomm = Trt*I(f(x)>c)+Ctrl*I(f(x)<=c) where c is 'cutpoint'
     ## 
     ## Average Test Set Outcomes:
     ##                         Recommended Ctrl            Recommended Trt

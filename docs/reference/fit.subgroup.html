@@ -394,6 +394,7 @@ supplied to <code>fit.subgroup()</code></p></dd>
 <dt>method</dt><dd><p>The method used (either weighting or A-learning)</p></dd>
 <dt>propensity.func</dt><dd><p>The propensity score function used</p></dd>
 <dt>larger.outcome.better</dt><dd><p>If larger outcomes are preferred for this model</p></dd>
+<dt>cutpoint</dt><dd><p>Benefit score cutoff value used for determining subgroups</p></dd>
 <dt>var.names</dt><dd><p>The names of all variables used</p></dd>
 <dt>n.trts</dt><dd><p>The number of treatment levels</p></dd>
 <dt>comparison.trts</dt><dd><p>All treatment levels other than the reference level</p></dd>
@@ -492,12 +493,15 @@ from <code>fit.subgroup</code>.</p></div>
                            <span class='kw'>loss</span>   <span class='kw'>=</span> <span class='st'>"sq_loss_lasso"</span>,
                            <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>10</span>)              <span class='co'># option for cv.glmnet</span>
 
-<span class='fu'>summary</span>(<span class='no'>subgrp.model</span>)</div><div class='output co'>#&gt; family:  gaussian 
-#&gt; loss:    sq_loss_lasso 
-#&gt; method:  weighting 
+<span class='fu'>summary</span>(<span class='no'>subgrp.model</span>)</div><div class='output co'>#&gt; family:    gaussian 
+#&gt; loss:      sq_loss_lasso 
+#&gt; method:    weighting 
+#&gt; cutpoint:  0 
 #&gt; propensity 
-#&gt; function: propensity.func 
-#&gt; benefit score: f(x), Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c)  where c is cutpoint
+#&gt; function:  propensity.func 
+#&gt; 
+#&gt; benefit score: f(x), 
+#&gt; Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;                 Recommended 0      Recommended 1
@@ -553,12 +557,15 @@ from <code>fit.subgroup</code>.</p></div>
                             <span class='kw'>method.gam</span> <span class='kw'>=</span> <span class='st'>"REML"</span>,     <span class='co'># option for gam</span>
                             <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>5</span>)              <span class='co'># option for cv.glmnet</span>
 
-<span class='no'>subgrp.modelg</span></div><div class='output co'>#&gt; family:  gaussian 
-#&gt; loss:    sq_loss_lasso_gam 
-#&gt; method:  weighting 
+<span class='no'>subgrp.modelg</span></div><div class='output co'>#&gt; family:    gaussian 
+#&gt; loss:      sq_loss_lasso_gam 
+#&gt; method:    weighting 
+#&gt; cutpoint:  0 
 #&gt; propensity 
-#&gt; function: propensity.func 
-#&gt; benefit score: f(x), Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c)  where c is cutpoint
+#&gt; function:  propensity.func 
+#&gt; 
+#&gt; benefit score: f(x), 
+#&gt; Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;                 Recommended 0     Recommended 1
@@ -620,14 +627,17 @@ from <code>fit.subgroup</code>.</p></div>
                            <span class='kw'>loss</span>   <span class='kw'>=</span> <span class='st'>"sq_loss_lasso"</span>,
                            <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>10</span>)              <span class='co'># option for cv.glmnet</span>
 
-<span class='fu'>summary</span>(<span class='no'>subgrp.model.aug</span>)</div><div class='output co'>#&gt; family:  gaussian 
-#&gt; loss:    sq_loss_lasso 
-#&gt; method:  weighting 
+<span class='fu'>summary</span>(<span class='no'>subgrp.model.aug</span>)</div><div class='output co'>#&gt; family:    gaussian 
+#&gt; loss:      sq_loss_lasso 
+#&gt; method:    weighting 
+#&gt; cutpoint:  0 
 #&gt; augmentation 
 #&gt; function: augment.func 
 #&gt; propensity 
-#&gt; function: propensity.func 
-#&gt; benefit score: f(x), Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c)  where c is cutpoint
+#&gt; function:  propensity.func 
+#&gt; 
+#&gt; benefit score: f(x), 
+#&gt; Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;                 Recommended 0      Recommended 1
@@ -677,12 +687,15 @@ from <code>fit.subgroup</code>.</p></div>
                            <span class='kw'>type.measure</span> <span class='kw'>=</span> <span class='st'>"auc"</span>,    <span class='co'># option for cv.glmnet</span>
                            <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>5</span>)              <span class='co'># option for cv.glmnet</span>
 
-<span class='no'>subgrp.model.bin</span></div><div class='output co'>#&gt; family:  binomial 
-#&gt; loss:    logistic_loss_lasso 
-#&gt; method:  weighting 
+<span class='no'>subgrp.model.bin</span></div><div class='output co'>#&gt; family:    binomial 
+#&gt; loss:      logistic_loss_lasso 
+#&gt; method:    weighting 
+#&gt; cutpoint:  0 
 #&gt; propensity 
-#&gt; function: propensity.func 
-#&gt; benefit score: f(x), Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c)  where c is cutpoint
+#&gt; function:  propensity.func 
+#&gt; 
+#&gt; benefit score: f(x), 
+#&gt; Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;               Recommended 0    Recommended 1
@@ -723,12 +736,15 @@ from <code>fit.subgroup</code>.</p></div>
                            <span class='kw'>type.measure</span> <span class='kw'>=</span> <span class='st'>"mse"</span>,    <span class='co'># option for cv.glmnet</span>
                            <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>5</span>)              <span class='co'># option for cv.glmnet</span>
 
-<span class='no'>subgrp.model.poisson</span></div><div class='output co'>#&gt; family:  poisson 
-#&gt; loss:    poisson_loss_lasso 
-#&gt; method:  weighting 
+<span class='no'>subgrp.model.poisson</span></div><div class='output co'>#&gt; family:    poisson 
+#&gt; loss:      poisson_loss_lasso 
+#&gt; method:    weighting 
+#&gt; cutpoint:  0 
 #&gt; propensity 
-#&gt; function: propensity.func 
-#&gt; benefit score: f(x), Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c)  where c is cutpoint
+#&gt; function:  propensity.func 
+#&gt; 
+#&gt; benefit score: f(x), 
+#&gt; Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;                Recommended 0     Recommended 1
@@ -768,12 +784,15 @@ from <code>fit.subgroup</code>.</p></div>
                            <span class='kw'>loss</span>   <span class='kw'>=</span> <span class='st'>"cox_loss_lasso"</span>,
                            <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>5</span>)              <span class='co'># option for cv.glmnet</span>
 
-<span class='no'>subgrp.model.cox</span></div><div class='output co'>#&gt; family:  cox 
-#&gt; loss:    cox_loss_lasso 
-#&gt; method:  weighting 
+<span class='no'>subgrp.model.cox</span></div><div class='output co'>#&gt; family:    cox 
+#&gt; loss:      cox_loss_lasso 
+#&gt; method:    weighting 
+#&gt; cutpoint:  0 
 #&gt; propensity 
-#&gt; function: propensity.func 
-#&gt; benefit score: f(x), Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c)  where c is cutpoint
+#&gt; function:  propensity.func 
+#&gt; 
+#&gt; benefit score: f(x), 
+#&gt; Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;                 Recommended 0     Recommended 1
@@ -841,12 +860,15 @@ from <code>fit.subgroup</code>.</p></div>
                                  <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
                                  <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>,
                                  <span class='kw'>fit.custom.loss</span> <span class='kw'>=</span> <span class='no'>fit.custom.loss.bin</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: non-integer #successes in a binomial glm!</span></div><div class='input'>
-<span class='no'>subgrp.model.bin.cust</span></div><div class='output co'>#&gt; family:  gaussian 
-#&gt; loss:    custom 
-#&gt; method:  weighting 
+<span class='no'>subgrp.model.bin.cust</span></div><div class='output co'>#&gt; family:    gaussian 
+#&gt; loss:      custom 
+#&gt; method:    weighting 
+#&gt; cutpoint:  0 
 #&gt; propensity 
-#&gt; function: propensity.func 
-#&gt; benefit score: f(x), Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c)  where c is cutpoint
+#&gt; function:  propensity.func 
+#&gt; 
+#&gt; benefit score: f(x), 
+#&gt; Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;               Recommended 0    Recommended 1
@@ -900,12 +922,15 @@ from <code>fit.subgroup</code>.</p></div>
                                   <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>,
                                   <span class='kw'>fit.custom.loss</span> <span class='kw'>=</span> <span class='no'>fit.expo.loss</span>)
 
-<span class='no'>subgrp.model.expo</span></div><div class='output co'>#&gt; family:  gaussian 
-#&gt; loss:    custom 
-#&gt; method:  weighting 
+<span class='no'>subgrp.model.expo</span></div><div class='output co'>#&gt; family:    gaussian 
+#&gt; loss:      custom 
+#&gt; method:    weighting 
+#&gt; cutpoint:  0 
 #&gt; propensity 
-#&gt; function: propensity.func 
-#&gt; benefit score: f(x), Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c)  where c is cutpoint
+#&gt; function:  propensity.func 
+#&gt; 
+#&gt; benefit score: f(x), 
+#&gt; Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;                Recommended 0     Recommended 1

@@ -147,12 +147,15 @@
 <h3 class="hasAnchor">
 <a href="#display-estimated-subgroups-and-variables-selected-which-determine-the-subgroups" class="anchor"></a>Display estimated subgroups and variables selected which determine the subgroups:</h3>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">summary</span>(subgrp.model)</a></code></pre></div>
-<pre><code>## family:  gaussian 
-## loss:    sq_loss_lasso 
-## method:  weighting 
+<pre><code>## family:    gaussian 
+## loss:      sq_loss_lasso 
+## method:    weighting 
+## cutpoint:  0 
 ## propensity 
-## function: propensity.func 
-## benefit score: f(x), Trt recomm = Trt*I(f(x)&gt;c)+Ctrl*I(f(x)&lt;=c)  where c is cutpoint
+## function:  propensity.func 
+## 
+## benefit score: f(x), 
+## Trt recomm = Trt*I(f(x)&gt;c)+Ctrl*I(f(x)&lt;=c) where c is 'cutpoint'
 ## 
 ## Average Outcomes:
 ##                 Recommended Ctrl    Recommended Trt
@@ -211,7 +214,11 @@
 ## method:  weighting 
 ## 
 ## validation method:  training_test_replication 
-## replications:  100 
+## cutpoint:           0 
+## replications:       100 
+## 
+## benefit score: f(x), 
+## Trt recomm = Trt*I(f(x)&gt;c)+Ctrl*I(f(x)&lt;=c) where c is 'cutpoint'
 ## 
 ## Average Test Set Outcomes:
 ##                         Recommended Ctrl            Recommended Trt

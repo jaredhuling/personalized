@@ -182,12 +182,15 @@ evaluate the effectiveness of an employment trainining program on wage increases
     <span class='kw'>type.measure</span> <span class='kw'>=</span> <span class='st'>"auc"</span>,
     <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>10</span>)
 
-<span class='fu'>summary</span>(<span class='no'>subgrp_fit_w</span>)</div><div class='output co'>#&gt; family:  binomial 
-#&gt; loss:    logistic_loss_lasso 
-#&gt; method:  weighting 
+<span class='fu'>summary</span>(<span class='no'>subgrp_fit_w</span>)</div><div class='output co'>#&gt; family:    binomial 
+#&gt; loss:      logistic_loss_lasso 
+#&gt; method:    weighting 
+#&gt; cutpoint:  0 
 #&gt; propensity 
-#&gt; function: propensity.func 
-#&gt; benefit score: f(x), Trt recomm = Trt*I(f(x)&gt;c)+Ctrl*I(f(x)&lt;=c)  where c is cutpoint
+#&gt; function:  propensity.func 
+#&gt; 
+#&gt; benefit score: f(x), 
+#&gt; Trt recomm = Trt*I(f(x)&gt;c)+Ctrl*I(f(x)&lt;=c) where c is 'cutpoint'
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;               Recommended Ctrl  Recommended Trt

@@ -253,12 +253,15 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 <a class="sourceLine" id="cb4-5" data-line-number="5">                             <span class="dt">nfolds =</span> <span class="dv">10</span>)              <span class="co"># option for cv.glmnet</span></a>
 <a class="sourceLine" id="cb4-6" data-line-number="6"></a>
 <a class="sourceLine" id="cb4-7" data-line-number="7"><span class="kw">summary</span>(subgrp.model)</a></code></pre></div>
-<pre><code>## family:  gaussian 
-## loss:    sq_loss_lasso 
-## method:  weighting 
+<pre><code>## family:    gaussian 
+## loss:      sq_loss_lasso 
+## method:    weighting 
+## cutpoint:  0 
 ## propensity 
-## function: propensity.func 
-## benefit score: f(x), Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c)  where c is cutpoint
+## function:  propensity.func 
+## 
+## benefit score: f(x), 
+## Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
 ## 
 ## Average Outcomes:
 ##                 Recommended 0      Recommended 1
@@ -321,7 +324,11 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## method:  weighting 
 ## 
 ## validation method:  training_test_replication 
-## replications:  25 
+## cutpoint:           0 
+## replications:       25 
+## 
+## benefit score: f(x), 
+## Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
 ## 
 ## Average Test Set Outcomes:
 ##                                Recommended 0
@@ -501,12 +508,15 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 <a class="sourceLine" id="cb18-5" data-line-number="5">                             <span class="dt">nfolds =</span> <span class="dv">10</span>)              <span class="co"># option for cv.glmnet</span></a>
 <a class="sourceLine" id="cb18-6" data-line-number="6"></a>
 <a class="sourceLine" id="cb18-7" data-line-number="7"><span class="kw">summary</span>(subgrp.model2)</a></code></pre></div>
-<pre><code>## family:  gaussian 
-## loss:    sq_loss_lasso_gam 
-## method:  weighting 
+<pre><code>## family:    gaussian 
+## loss:      sq_loss_lasso_gam 
+## method:    weighting 
+## cutpoint:  0 
 ## propensity 
-## function: propensity.func 
-## benefit score: f(x), Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c)  where c is cutpoint
+## function:  propensity.func 
+## 
+## benefit score: f(x), 
+## Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
 ## 
 ## Average Outcomes:
 ##                 Recommended 0      Recommended 1
@@ -592,12 +602,15 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 <a class="sourceLine" id="cb23-8" data-line-number="8">                            <span class="dt">cv.folds =</span> <span class="dv">5</span>)</a></code></pre></div>
 <p>We can see that at least on the training data, the performance of the gradient-boosting model is better.</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">subgrp.bin</a></code></pre></div>
-<pre><code>## family:  binomial 
-## loss:    logistic_loss_lasso 
-## method:  weighting 
+<pre><code>## family:    binomial 
+## loss:      logistic_loss_lasso 
+## method:    weighting 
+## cutpoint:  0 
 ## propensity 
-## function: propensity.func 
-## benefit score: f(x), Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c)  where c is cutpoint
+## function:  propensity.func 
+## 
+## benefit score: f(x), 
+## Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
 ## 
 ## Average Outcomes:
 ##               Recommended 0    Recommended 1
@@ -653,12 +666,15 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 <a class="sourceLine" id="cb27-8" data-line-number="8">                           <span class="dt">nfolds =</span> <span class="dv">10</span>)      <span class="co"># option for cv.glmnet</span></a></code></pre></div>
 <p>The subgroup treatment effects are estimated using the restricted mean statistic and can be displayed with <code><a href="../reference/summary.html">summary.subgroup_fitted()</a></code> or <code><a href="../reference/print.html">print.subgroup_fitted()</a></code> like the following:</p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw">summary</span>(subgrp.cox)</a></code></pre></div>
-<pre><code>## family:  cox 
-## loss:    cox_loss_lasso 
-## method:  weighting 
+<pre><code>## family:    cox 
+## loss:      cox_loss_lasso 
+## method:    weighting 
+## cutpoint:  0 
 ## propensity 
-## function: propensity.func 
-## benefit score: f(x), Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c)  where c is cutpoint
+## function:  propensity.func 
+## 
+## benefit score: f(x), 
+## Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
 ## 
 ## Average Outcomes:
 ##                 Recommended 0      Recommended 1
@@ -731,14 +747,17 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 <a class="sourceLine" id="cb31-6" data-line-number="6">                             <span class="dt">nfolds =</span> <span class="dv">10</span>)              <span class="co"># option for cv.glmnet</span></a>
 <a class="sourceLine" id="cb31-7" data-line-number="7"></a>
 <a class="sourceLine" id="cb31-8" data-line-number="8"><span class="kw">summary</span>(subgrp.model.eff)</a></code></pre></div>
-<pre><code>## family:  gaussian 
-## loss:    sq_loss_lasso 
-## method:  weighting 
+<pre><code>## family:    gaussian 
+## loss:      sq_loss_lasso 
+## method:    weighting 
+## cutpoint:  0 
 ## augmentation 
 ## function: augment.func 
 ## propensity 
-## function: propensity.func 
-## benefit score: f(x), Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c)  where c is cutpoint
+## function:  propensity.func 
+## 
+## benefit score: f(x), 
+## Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
 ## 
 ## Average Outcomes:
 ##                 Recommended 0      Recommended 1
@@ -854,7 +873,11 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## method:  weighting 
 ## 
 ## validation method:  training_test_replication 
-## replications:  25 
+## cutpoint:           0 
+## replications:       25 
+## 
+## benefit score: f(x), 
+## Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
 ## 
 ## Average Test Set Outcomes:
 ##                               Recommended 0
@@ -898,7 +921,11 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## method:  weighting 
 ## 
 ## validation method:  boot_bias_correction 
-## replications:  25 
+## cutpoint:           0 
+## replications:       25 
+## 
+## benefit score: f(x), 
+## Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
 ## 
 ## Average Bootstrap Bias-Corrected Outcomes:
 ##                                 Recommended 0

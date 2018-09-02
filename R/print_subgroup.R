@@ -143,7 +143,7 @@ print.subgroup_validated <- function(x, digits = max(getOption('digits')-3, 3), 
             cat("loss:   ", x$loss, "\n")
             cat("method: ", x$method, "\n\n")
             cat("validation method: ", x$val.method, "\n")
-            cat("cutpoint:            ", names(x$boot.results.quantiles)[q], "\n")
+            cat("cutpoint:          ", names(x$boot.results.quantiles)[q], "\n")
 
             if (is.null(x$iterations))
             {
@@ -152,7 +152,7 @@ print.subgroup_validated <- function(x, digits = max(getOption('digits')-3, 3), 
             {
                 iters <- x$iterations
             }
-            cat("replications:        ", iters, "\n\n")
+            cat("replications:      ", iters, "\n\n")
 
             if (x$val.method == "training_test_replication")
             {
@@ -258,7 +258,7 @@ print.subgroup_validated <- function(x, digits = max(getOption('digits')-3, 3), 
         cat("loss:   ", x$loss, "\n")
         cat("method: ", x$method, "\n\n")
         cat("validation method: ", x$val.method, "\n")
-        cat("cutpoint:            ", x$cutpoint, "\n")
+        cat("cutpoint:          ", x$cutpoint, "\n")
 
         if (is.null(x$iterations))
         {
@@ -267,7 +267,7 @@ print.subgroup_validated <- function(x, digits = max(getOption('digits')-3, 3), 
         {
             iters <- x$iterations
         }
-        cat("replications: ", iters, "\n\n")
+        cat("replications:      ", iters, "\n\n")
 
         if (x$val.method == "training_test_replication")
         {
