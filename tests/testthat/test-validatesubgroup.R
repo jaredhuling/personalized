@@ -169,6 +169,13 @@ test_that("test validate.subgroup for binary outcomes and various losses", {
                                  loss   = "sq_loss_lasso",
                                  nfolds = 5)              # option for cv.glmnet
 
+    subgrp.val <- validate.subgroup(subgrp.model, B = 10,
+                                    benefit.score.quantiles = NULL,
+                                    method = "training")
+
+    subgrp.val <- validate.subgroup(subgrp.model, B = 10,
+                                    benefit.score.quantiles = numeric(0),
+                                    method = "training")
 
     subgrp.val <- validate.subgroup(subgrp.model, B = 10,
                                     method = "training")

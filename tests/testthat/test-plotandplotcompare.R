@@ -232,6 +232,74 @@ test_that("test plotting for continuous outcomes with various options", {
 
     expect_is(pl, "ggplot")
 
+
+
+    subgrp.model <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
+                                 trt = trt01,
+                                 propensity.func = prop.func,
+                                 loss   = "cox_loss_lasso",
+                                 nfolds = 5)              # option for cv.glmnet
+
+    expect_is(subgrp.model, "subgroup_fitted")
+
+    subgrp.val <- validate.subgroup(subgrp.model, B = 10,
+                                    method = "train")
+
+    expect_is(subgrp.val, "subgroup_validated")
+
+
+    pl <- plot(subgrp.model, type = "boxplot")
+
+    expect_is(pl, "ggplot")
+
+    pl <- plot(subgrp.val, type = "boxplot")
+
+    expect_is(pl, "ggplot")
+
+
+    subgrp.val2 <- validate.subgroup(subgrp.model, B = 10,
+                                    method = "boot")
+
+    expect_is(subgrp.val2, "subgroup_validated")
+
+    pl <- plot(subgrp.val2, type = "boxplot")
+
+    expect_is(pl, "ggplot")
+
+    subgrp.model2 <- subgrp.model
+    pl <- plotCompare(subgrp.model, subgrp.model2, type = "conditional")
+
+    expect_is(pl, "ggplot")
+
+
+
+
+    #### TEST CUSTOM LOSS FUNCTIONS
+
+    fit.custom.loss <- function(x, y, weights, ...) {
+        df <- data.frame(y = y, x)
+
+        # minimize squared error loss with NO lasso penalty
+        lmf <- lm(y ~ x - 1, weights = weights, ...)
+
+        # save coefficients
+        cfs = unname(coef(lmf))
+
+        # create prediction function. Notice
+        # how a column of 1's is appended
+        # to ensure treatment main effects are included
+        # in predictions
+        prd = function(x, type = "response")
+        {
+            # roxygen2 removes the below, so
+            # using tcrossprod instead
+            #cbind(1, x)
+            tcrossprod(cbind(1, x), t(cfs))
+        }
+        # return lost of required components
+        list(predict = prd, model = lmf, coefficients = cfs)
+    }
+
 })
 
 
