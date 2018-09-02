@@ -96,6 +96,7 @@ summary(subgrp.model)
     ## method:  weighting 
     ## propensity 
     ## function: propensity.func 
+    ## benefit score: f(x), Trt recomm = Trt*I(f(x)>c)+Ctrl*I(f(x)<=c)  where c is cutpoint
     ## 
     ## Average Outcomes:
     ##                 Recommended Ctrl    Recommended Trt
@@ -103,8 +104,10 @@ summary(subgrp.model)
     ## Received Trt  -23.6902 (n = 132)  -6.7605 (n = 137)
     ## 
     ## Treatment effects conditional on subgroups:
-    ## Ctrl effect among recommended Ctrl   Trt effect among recommended Trt 
-    ##                  19.4474 (n = 249)                  15.1972 (n = 251) 
+    ## Est of E[Y|T=Ctrl,T=Recom]-E[Y|T=/=Ctrl,T=Recom] 
+    ##                                19.4474 (n = 249) 
+    ##   Est of E[Y|T=Trt,T=Recom]-E[Y|T=/=Trt,T=Recom] 
+    ##                                15.1972 (n = 251) 
     ## 
     ## NOTE: The above average outcomes are biased estimates of
     ##       the expected outcomes conditional on subgroups. 
@@ -112,7 +115,7 @@ summary(subgrp.model)
     ## 
     ## ---------------------------------------------------
     ## 
-    ## Benefit score quantiles (Trt vs Ctrl): 
+    ## Benefit score quantiles (f(X) for Trt vs Ctrl): 
     ##        0%       25%       50%       75%      100% 
     ## -14.15602  -3.58120   0.04648   3.51676  14.78106 
     ## 
@@ -163,11 +166,14 @@ print(val.model, digits = 2, sample.pct = TRUE)
     ## Received Trt   -15.81 (SE = 5.9, 24.18%) -15.36 (SE = 9.02, 29.26%)
     ## 
     ## Treatment effects conditional on subgroups:
-    ## Ctrl effect among recommended Ctrl   Trt effect among recommended Trt 
-    ##          4.97 (SE = 11.23, 44.93%)          3.27 (SE = 11.73, 55.07%) 
+    ## Est of E[Y|T=Ctrl,T=Recom]-E[Y|T=/=Ctrl,T=Recom] 
+    ##                        4.97 (SE = 11.23, 44.93%) 
+    ##   Est of E[Y|T=Trt,T=Recom]-E[Y|T=/=Trt,T=Recom] 
+    ##                        3.27 (SE = 11.73, 55.07%) 
     ## 
-    ## Overall treatment effect conditional on subgroups 
-    ##                                   1.2 (SE = 8.77)
+    ## Est of 
+    ## E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:                
+    ## 1.2 (SE = 8.77)
 
 Visualize subgroup-specific treatment effect estimates across
 training/testing
