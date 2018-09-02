@@ -32,6 +32,33 @@ print.subgroup_fitted <- function(x, digits = max(getOption('digits')-3, 3), ...
             func.name,
             "\n")
     }
+    if (x$n.trts == 2)
+    {
+        if (x$larger.outcome.better)
+        {
+            cat("benefit score: f(x), Trt recomm =",
+                paste0(x$comparison.trts, "*I(f(x)>c)+",
+                       x$reference.trt, "*I(f(x)<=c)"), " where c is cutpoint\n")
+        } else
+        {
+            cat("benefit score: f(x), Trt recomm =",
+                paste0(x$comparison.trts, "*I(f(x)<c)+",
+                       x$reference.trt, "*I(f(x)>=c)"), " where c is cutpoint\n")
+        }
+
+    } else
+    {
+        bene.text <- paste(paste0("f_", (x$comparison.trts), "(x): ",
+                                  paste(x$comparison.trts, "vs", x$reference.trt)),
+                           collapse = ",  ")
+        bene.txt2 <- paste0("\n               f_", x$reference.trt,  "(x): 0")
+        cat("benefit score:", bene.text, bene.txt2, "\n")
+        trt.rec.text <- paste0("maxval = max(", paste(paste0("f_", (x$comparison.trts), "(x)"), collapse = ", "), ")")
+        cat(trt.rec.text, "\n")
+        cat("which.max(maxval) = The trt level which maximizes maxval\n")
+        cat("Trt recomm = which.max(maxval)*I(maxval > c) +", paste0(x$reference.trt, "*I(maxval <= c) where c is cutpoint\n") )
+    }
+
 
     cat("\n")
 
@@ -61,14 +88,14 @@ print.subgroup_fitted <- function(x, digits = max(getOption('digits')-3, 3), ...
     if (is.null(ncol.bs) || ncol.bs == 1)
     {
         cname <- paste0(x$comparison.trts, " vs ", x$reference.trt)
-        cat("\nBenefit score", paste0("quantiles (", cname, "): \n") )
+        cat("\nBenefit score", paste0("quantiles (f(X) for ", cname, "): \n") )
         print(quantile(x$benefit.scores), digits = digits)
     } else
     {
         for (cc in 1:ncol.bs)
         {
             cname <- paste0(x$comparison.trts[cc], " vs ", x$reference.trt)
-            cat("\nBenefit score", cc, paste0("quantiles (", cname, "): \n") )
+            cat("\nBenefit score", cc, paste0("quantiles (f(X) for ", cname, "): \n") )
             print(quantile(x$benefit.scores[,cc]), digits = digits)
         }
     }
@@ -179,7 +206,9 @@ print.subgroup_validated <- function(x, digits = max(getOption('digits')-3, 3), 
 
             overall <- paste0(round(x$avg.quantile.results[[q]]$overall.subgroup.effect, digits),
                               " (SE = ", round(x$se.quantile.results[[q]]$SE.overall.subgroup.effect, digits), ")")
-            names(overall) <- "Overall treatment effect conditional on subgroups"
+            #names(overall) <- "Overall treatment effect conditional on subgroups (E[Y|Trt Received = Trt recommended])"
+            cat("Est of E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:")
+            names(overall) <- ""
 
             print.default(overall, quote = FALSE, right = TRUE, na.print = "NA",
                           ...)
@@ -258,9 +287,11 @@ print.subgroup_validated <- function(x, digits = max(getOption('digits')-3, 3), 
 
         overall <- paste0(round(x$avg.results$overall.subgroup.effect, digits),
                           " (SE = ", round(x$se.results$SE.overall.subgroup.effect, digits), ")")
-        names(overall) <- "Overall treatment effect conditional on subgroups"
+        #names(overall) <- "Overall treatment effect conditional on subgroups"
+        cat("Est of \nE[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:")
+        names(overall) <- ""
 
-        print.default(overall, quote = FALSE, right = TRUE, na.print = "NA",
+        print.default(overall, quote = FALSE, right = FALSE, na.print = "NA",
                       ...)
     }
 
