@@ -215,8 +215,10 @@ will use the 75th perent upper quantile of the benefit scores as the quantile.</
                             <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>5</span>)              <span class='co'># option for cv.glmnet</span>
 
 <span class='no'>subgrp.model</span>$<span class='no'>subgroup.trt.effects</span></div><div class='output co'>#&gt; $subgroup.effects
-#&gt; 0 effect among recommended 0 1 effect among recommended 1 
-#&gt;                     16.52802                     22.55850 
+#&gt; Est of E[Y|T=0,T=Recom]-E[Y|T=/=0,T=Recom] 
+#&gt;                                   16.52802 
+#&gt; Est of E[Y|T=1,T=Recom]-E[Y|T=/=1,T=Recom] 
+#&gt;                                   22.55850 
 #&gt; 
 #&gt; $avg.outcomes
 #&gt;            Recommended 0 Recommended 1

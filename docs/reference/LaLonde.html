@@ -187,6 +187,7 @@ evaluate the effectiveness of an employment trainining program on wage increases
 #&gt; method:  weighting 
 #&gt; propensity 
 #&gt; function: propensity.func 
+#&gt; benefit score: f(x), Trt recomm = Trt*I(f(x)&gt;c)+Ctrl*I(f(x)&lt;=c)  where c is cutpoint
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;               Recommended Ctrl  Recommended Trt
@@ -194,8 +195,10 @@ evaluate the effectiveness of an employment trainining program on wage increases
 #&gt; Received Trt       NaN (n = 0) 0.6027 (n = 297)
 #&gt; 
 #&gt; Treatment effects conditional on subgroups:
-#&gt; Ctrl effect among recommended Ctrl   Trt effect among recommended Trt 
-#&gt;                        NaN (n = 0)                   0.0639 (n = 722) 
+#&gt; Est of E[Y|T=Ctrl,T=Recom]-E[Y|T=/=Ctrl,T=Recom] 
+#&gt;                                      NaN (n = 0) 
+#&gt;   Est of E[Y|T=Trt,T=Recom]-E[Y|T=/=Trt,T=Recom] 
+#&gt;                                 0.0639 (n = 722) 
 #&gt; 
 #&gt; NOTE: The above average outcomes are biased estimates of
 #&gt;       the expected outcomes conditional on subgroups. 
@@ -203,7 +206,7 @@ evaluate the effectiveness of an employment trainining program on wage increases
 #&gt; 
 #&gt; ---------------------------------------------------
 #&gt; 
-#&gt; Benefit score quantiles (Trt vs Ctrl): 
+#&gt; Benefit score quantiles (f(X) for Trt vs Ctrl): 
 #&gt;       0%      25%      50%      75%     100% 
 #&gt; 0.005158 0.140502 0.140502 0.140502 0.149550 
 #&gt; 

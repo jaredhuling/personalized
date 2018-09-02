@@ -497,6 +497,7 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; method:  weighting 
 #&gt; propensity 
 #&gt; function: propensity.func 
+#&gt; benefit score: f(x), Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c)  where c is cutpoint
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;                 Recommended 0      Recommended 1
@@ -504,8 +505,10 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; Received 1 -26.9737 (n = 121)   -1.834 (n = 178)
 #&gt; 
 #&gt; Treatment effects conditional on subgroups:
-#&gt; 0 effect among recommended 0 1 effect among recommended 1 
-#&gt;            20.2208 (n = 203)            22.6694 (n = 297) 
+#&gt; Est of E[Y|T=0,T=Recom]-E[Y|T=/=0,T=Recom] 
+#&gt;                          20.2208 (n = 203) 
+#&gt; Est of E[Y|T=1,T=Recom]-E[Y|T=/=1,T=Recom] 
+#&gt;                          22.6694 (n = 297) 
 #&gt; 
 #&gt; NOTE: The above average outcomes are biased estimates of
 #&gt;       the expected outcomes conditional on subgroups. 
@@ -513,7 +516,7 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; 
 #&gt; ---------------------------------------------------
 #&gt; 
-#&gt; Benefit score quantiles (1 vs 0): 
+#&gt; Benefit score quantiles (f(X) for 1 vs 0): 
 #&gt;      0%     25%     50%     75%    100% 
 #&gt; -27.548  -3.989   2.619   8.564  24.586 
 #&gt; 
@@ -555,6 +558,7 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; method:  weighting 
 #&gt; propensity 
 #&gt; function: propensity.func 
+#&gt; benefit score: f(x), Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c)  where c is cutpoint
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;                 Recommended 0     Recommended 1
@@ -562,8 +566,10 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; Received 1 -21.0867 (n = 141) -2.7467 (n = 158)
 #&gt; 
 #&gt; Treatment effects conditional on subgroups:
-#&gt; 0 effect among recommended 0 1 effect among recommended 1 
-#&gt;             8.4113 (n = 273)            22.6397 (n = 227) 
+#&gt; Est of E[Y|T=0,T=Recom]-E[Y|T=/=0,T=Recom] 
+#&gt;                           8.4113 (n = 273) 
+#&gt; Est of E[Y|T=1,T=Recom]-E[Y|T=/=1,T=Recom] 
+#&gt;                          22.6397 (n = 227) 
 #&gt; 
 #&gt; NOTE: The above average outcomes are biased estimates of
 #&gt;       the expected outcomes conditional on subgroups. 
@@ -571,7 +577,7 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; 
 #&gt; ---------------------------------------------------
 #&gt; 
-#&gt; Benefit score quantiles (1 vs 0): 
+#&gt; Benefit score quantiles (f(X) for 1 vs 0): 
 #&gt;      0%     25%     50%     75%    100% 
 #&gt; -58.022 -11.497  -2.069   9.130  45.392 
 #&gt; 
@@ -621,6 +627,7 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; function: augment.func 
 #&gt; propensity 
 #&gt; function: propensity.func 
+#&gt; benefit score: f(x), Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c)  where c is cutpoint
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;                 Recommended 0      Recommended 1
@@ -628,8 +635,10 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; Received 1 -26.5609 (n = 116)  -2.4744 (n = 183)
 #&gt; 
 #&gt; Treatment effects conditional on subgroups:
-#&gt; 0 effect among recommended 0 1 effect among recommended 1 
-#&gt;            18.2525 (n = 198)            20.9606 (n = 302) 
+#&gt; Est of E[Y|T=0,T=Recom]-E[Y|T=/=0,T=Recom] 
+#&gt;                          18.2525 (n = 198) 
+#&gt; Est of E[Y|T=1,T=Recom]-E[Y|T=/=1,T=Recom] 
+#&gt;                          20.9606 (n = 302) 
 #&gt; 
 #&gt; NOTE: The above average outcomes are biased estimates of
 #&gt;       the expected outcomes conditional on subgroups. 
@@ -637,7 +646,7 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; 
 #&gt; ---------------------------------------------------
 #&gt; 
-#&gt; Benefit score quantiles (1 vs 0): 
+#&gt; Benefit score quantiles (f(X) for 1 vs 0): 
 #&gt;      0%     25%     50%     75%    100% 
 #&gt; -29.635  -4.645   2.712   9.598  33.270 
 #&gt; 
@@ -673,6 +682,7 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; method:  weighting 
 #&gt; propensity 
 #&gt; function: propensity.func 
+#&gt; benefit score: f(x), Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c)  where c is cutpoint
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;               Recommended 0    Recommended 1
@@ -680,8 +690,10 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; Received 1 0.1856 (n = 127)  0.546 (n = 172)
 #&gt; 
 #&gt; Treatment effects conditional on subgroups:
-#&gt; 0 effect among recommended 0 1 effect among recommended 1 
-#&gt;             0.3414 (n = 210)             0.3716 (n = 290) 
+#&gt; Est of E[Y|T=0,T=Recom]-E[Y|T=/=0,T=Recom] 
+#&gt;                           0.3414 (n = 210) 
+#&gt; Est of E[Y|T=1,T=Recom]-E[Y|T=/=1,T=Recom] 
+#&gt;                           0.3716 (n = 290) 
 #&gt; 
 #&gt; NOTE: The above average outcomes are biased estimates of
 #&gt;       the expected outcomes conditional on subgroups. 
@@ -689,7 +701,7 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; 
 #&gt; ---------------------------------------------------
 #&gt; 
-#&gt; Benefit score quantiles (1 vs 0): 
+#&gt; Benefit score quantiles (f(X) for 1 vs 0): 
 #&gt;      0%     25%     50%     75%    100% 
 #&gt; -1.9448 -0.3378  0.1509  0.6138  2.1915 
 #&gt; 
@@ -716,6 +728,7 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; method:  weighting 
 #&gt; propensity 
 #&gt; function: propensity.func 
+#&gt; benefit score: f(x), Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c)  where c is cutpoint
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;                Recommended 0     Recommended 1
@@ -723,8 +736,10 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; Received 1 18.5265 (n = 186) 27.7822 (n = 113)
 #&gt; 
 #&gt; Treatment effects conditional on subgroups:
-#&gt; 0 effect among recommended 0 1 effect among recommended 1 
-#&gt;             8.4695 (n = 316)             8.2399 (n = 184) 
+#&gt; Est of E[Y|T=0,T=Recom]-E[Y|T=/=0,T=Recom] 
+#&gt;                           8.4695 (n = 316) 
+#&gt; Est of E[Y|T=1,T=Recom]-E[Y|T=/=1,T=Recom] 
+#&gt;                           8.2399 (n = 184) 
 #&gt; 
 #&gt; NOTE: The above average outcomes are biased estimates of
 #&gt;       the expected outcomes conditional on subgroups. 
@@ -732,7 +747,7 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; 
 #&gt; ---------------------------------------------------
 #&gt; 
-#&gt; Benefit score quantiles (1 vs 0): 
+#&gt; Benefit score quantiles (f(X) for 1 vs 0): 
 #&gt;      0%     25%     50%     75%    100% 
 #&gt; -2.8807 -1.0340 -0.3018  0.2388  2.8825 
 #&gt; 
@@ -758,6 +773,7 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; method:  weighting 
 #&gt; propensity 
 #&gt; function: propensity.func 
+#&gt; benefit score: f(x), Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c)  where c is cutpoint
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;                 Recommended 0     Recommended 1
@@ -765,8 +781,10 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; Received 1 180.6631 (n = 203) 134.9956 (n = 96)
 #&gt; 
 #&gt; Treatment effects conditional on subgroups:
-#&gt; 0 effect among recommended 0 1 effect among recommended 1 
-#&gt;            -5.4405 (n = 343)           126.5361 (n = 157) 
+#&gt; Est of E[Y|T=0,T=Recom]-E[Y|T=/=0,T=Recom] 
+#&gt;                          -5.4405 (n = 343) 
+#&gt; Est of E[Y|T=1,T=Recom]-E[Y|T=/=1,T=Recom] 
+#&gt;                         126.5361 (n = 157) 
 #&gt; 
 #&gt; NOTE: The above average outcomes are biased estimates of
 #&gt;       the expected outcomes conditional on subgroups. 
@@ -774,7 +792,7 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; 
 #&gt; ---------------------------------------------------
 #&gt; 
-#&gt; Benefit score quantiles (1 vs 0): 
+#&gt; Benefit score quantiles (f(X) for 1 vs 0): 
 #&gt;       0%      25%      50%      75%     100% 
 #&gt; -0.87626 -0.34859 -0.14888  0.06438  0.87688 
 #&gt; 
@@ -828,6 +846,7 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; method:  weighting 
 #&gt; propensity 
 #&gt; function: propensity.func 
+#&gt; benefit score: f(x), Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c)  where c is cutpoint
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;               Recommended 0    Recommended 1
@@ -835,8 +854,10 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; Received 1 0.1819 (n = 164) 0.6108 (n = 135)
 #&gt; 
 #&gt; Treatment effects conditional on subgroups:
-#&gt; 0 effect among recommended 0 1 effect among recommended 1 
-#&gt;               0.01 (n = 285)             0.1397 (n = 215) 
+#&gt; Est of E[Y|T=0,T=Recom]-E[Y|T=/=0,T=Recom] 
+#&gt;                             0.01 (n = 285) 
+#&gt; Est of E[Y|T=1,T=Recom]-E[Y|T=/=1,T=Recom] 
+#&gt;                           0.1397 (n = 215) 
 #&gt; 
 #&gt; NOTE: The above average outcomes are biased estimates of
 #&gt;       the expected outcomes conditional on subgroups. 
@@ -844,7 +865,7 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; 
 #&gt; ---------------------------------------------------
 #&gt; 
-#&gt; Benefit score quantiles (1 vs 0): 
+#&gt; Benefit score quantiles (f(X) for 1 vs 0): 
 #&gt;      0%     25%     50%     75%    100% 
 #&gt; -5.1588 -1.2724 -0.3145  0.7797  4.0227 
 #&gt; 
@@ -884,6 +905,7 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; method:  weighting 
 #&gt; propensity 
 #&gt; function: propensity.func 
+#&gt; benefit score: f(x), Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c)  where c is cutpoint
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;                Recommended 0     Recommended 1
@@ -891,8 +913,10 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; Received 1 15.0464 (n = 112) 27.9179 (n = 187)
 #&gt; 
 #&gt; Treatment effects conditional on subgroups:
-#&gt; 0 effect among recommended 0 1 effect among recommended 1 
-#&gt;            15.3959 (n = 254)            12.5233 (n = 246) 
+#&gt; Est of E[Y|T=0,T=Recom]-E[Y|T=/=0,T=Recom] 
+#&gt;                          15.3959 (n = 254) 
+#&gt; Est of E[Y|T=1,T=Recom]-E[Y|T=/=1,T=Recom] 
+#&gt;                          12.5233 (n = 246) 
 #&gt; 
 #&gt; NOTE: The above average outcomes are biased estimates of
 #&gt;       the expected outcomes conditional on subgroups. 
@@ -900,7 +924,7 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; 
 #&gt; ---------------------------------------------------
 #&gt; 
-#&gt; Benefit score quantiles (1 vs 0): 
+#&gt; Benefit score quantiles (f(X) for 1 vs 0): 
 #&gt;        0%       25%       50%       75%      100% 
 #&gt; -1.414203 -0.326411 -0.003262  0.379219  1.989184 
 #&gt; 

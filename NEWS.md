@@ -5,6 +5,7 @@
 * Added customized loss function option
 * Added options for count outcomes via Poisson negative log-likelihood as the loss
 * Added treatment effect calculation based on estimated benefit scores
+* Clarified/improved printing
 
 # personalized 0.1.5
 

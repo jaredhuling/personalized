@@ -273,8 +273,10 @@ doi:10.1002/(SICI)1097-0258(19960229)15:4&lt;361::AID-SIM168&gt;3.0.CO;2-4</p>
                              <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>5</span>)    <span class='co'># option for cv.glmnet</span>
 
 <span class='no'>subgrp.model</span>$<span class='no'>subgroup.trt.effects</span></div><div class='output co'>#&gt; $subgroup.effects
-#&gt; 0 effect among recommended 0 1 effect among recommended 1 
-#&gt;                     19.75833                     18.26168 
+#&gt; Est of E[Y|T=0,T=Recom]-E[Y|T=/=0,T=Recom] 
+#&gt;                                   19.75833 
+#&gt; Est of E[Y|T=1,T=Recom]-E[Y|T=/=1,T=Recom] 
+#&gt;                                   18.26168 
 #&gt; 
 #&gt; $avg.outcomes
 #&gt;            Recommended 0 Recommended 1
@@ -322,11 +324,14 @@ doi:10.1002/(SICI)1097-0258(19960229)15:4&lt;361::AID-SIM168&gt;3.0.CO;2-4</p>
 #&gt; Received 1    -21.5129 (SE = 3.6628, n = 37) -14.965 (SE = 4.2433, n = 31.3)
 #&gt; 
 #&gt; Treatment effects conditional on subgroups:
-#&gt;    0 effect among recommended 0    1 effect among recommended 1 
-#&gt; 6.5532 (SE = 11.8404, n = 50.7) 6.5121 (SE = 10.2546, n = 74.3) 
+#&gt; Est of E[Y|T=0,T=Recom]-E[Y|T=/=0,T=Recom] 
+#&gt;            6.5532 (SE = 11.8404, n = 50.7) 
+#&gt; Est of E[Y|T=1,T=Recom]-E[Y|T=/=1,T=Recom] 
+#&gt;            6.5121 (SE = 10.2546, n = 74.3) 
 #&gt; 
-#&gt; Overall treatment effect conditional on subgroups 
-#&gt;                              5.4065 (SE = 8.0859) </div><div class='input'>
+#&gt; Est of 
+#&gt; E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:                     
+#&gt; 5.4065 (SE = 8.0859) </div><div class='input'>
 <span class='fu'>print</span>(<span class='no'>valmod</span>, <span class='kw'>which.quant</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>4</span>, <span class='fl'>5</span>))</div><div class='output co'>#&gt; family:  gaussian 
 #&gt; loss:    sq_loss_lasso 
 #&gt; method:  weighting 
@@ -341,11 +346,13 @@ doi:10.1002/(SICI)1097-0258(19960229)15:4&lt;361::AID-SIM168&gt;3.0.CO;2-4</p>
 #&gt; Received 1 -19.1725 (SE = 2.7345, n = 54.5) -16.1053 (SE = 8.1065, n = 13.8)
 #&gt; 
 #&gt; Treatment effects conditional on subgroups:
-#&gt;  0 effect among recommended 0  1 effect among recommended 1 
-#&gt;   5.1344 (SE = 8.506, n = 84) 14.4631 (SE = 9.6631, n = 41) 
+#&gt; Est of E[Y|T=0,T=Recom]-E[Y|T=/=0,T=Recom] 
+#&gt;                5.1344 (SE = 8.506, n = 84) 
+#&gt; Est of E[Y|T=1,T=Recom]-E[Y|T=/=1,T=Recom] 
+#&gt;              14.4631 (SE = 9.6631, n = 41) 
 #&gt; 
-#&gt; Overall treatment effect conditional on subgroups 
-#&gt;                              9.5669 (SE = 5.7354) 
+#&gt; Est of E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:                     
+#&gt; 9.5669 (SE = 5.7354) 
 #&gt; 
 #&gt; &lt;===============================================&gt;
 #&gt; 
@@ -363,11 +370,13 @@ doi:10.1002/(SICI)1097-0258(19960229)15:4&lt;361::AID-SIM168&gt;3.0.CO;2-4</p>
 #&gt; Received 1 -20.2731 (SE = 2.4943, n = 62.8)   -6.8326 (SE = 9.5111, n = 5.5)
 #&gt; 
 #&gt; Treatment effects conditional on subgroups:
-#&gt;  0 effect among recommended 0  1 effect among recommended 1 
-#&gt;  4.3527 (SE = 7.389, n = 103) 27.0166 (SE = 13.303, n = 22) 
+#&gt; Est of E[Y|T=0,T=Recom]-E[Y|T=/=0,T=Recom] 
+#&gt;               4.3527 (SE = 7.389, n = 103) 
+#&gt; Est of E[Y|T=1,T=Recom]-E[Y|T=/=1,T=Recom] 
+#&gt;              27.0166 (SE = 13.303, n = 22) 
 #&gt; 
-#&gt; Overall treatment effect conditional on subgroups 
-#&gt;                              9.0653 (SE = 5.3511) </div><div class='input'>
+#&gt; Est of E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:                     
+#&gt; 9.0653 (SE = 5.3511) </div><div class='input'>
 <span class='no'>bene.score.test</span> <span class='kw'>&lt;-</span> <span class='no'>subgrp.model</span>$<span class='fu'>predict</span>(<span class='no'>x.test</span>)
 
 <span class='fu'>mean</span>(<span class='no'>y.test</span>[<span class='no'>bene.score.test</span> <span class='kw'>&gt;</span> <span class='fl'>0</span> <span class='kw'>&amp;</span> <span class='no'>trt01.test</span> <span class='kw'>==</span> <span class='fl'>1</span>]) -
