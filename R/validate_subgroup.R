@@ -256,11 +256,12 @@ validate.subgroup <- function(model,
 
     if (parallel)
     {
-        comb <- function(x, ...)
-        {
-            lapply(seq_along(x),
-                   function(i) c(x[[i]], lapply(list(...), function(y) y[[i]])))
-        }
+        ## no longer needed:
+        #comb <- function(x, ...)
+        #{
+        #    lapply(seq_along(x),
+        #           function(i) c(x[[i]], lapply(list(...), function(y) y[[i]])))
+        #}
 
         outlist <- foreach(i = seq(B) ) %dopar% #, .combine = "comb", .multicombine = TRUE, .init=list(list(), list(), list(), list(), list()))
                            {

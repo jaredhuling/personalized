@@ -63,6 +63,13 @@ test_that("weighted.ksvm fitting", {
 
     expect_is(wk, "wksvm")
 
+
+    wk <- weighted.ksvm(x = x[1:100,], y = as.factor(y[1:100]), C = c(1, 3),
+                        foldid = foldid,
+                        weights = weights[1:100])
+
+    expect_is(wk, "wksvm")
+
     expect_warning(weighted.ksvm(x = x[1:100,], y = as.character(y[1:100]), C = c(1, 3),
                                  nfolds = -5,
                                  weights = weights[1:100]))
@@ -74,6 +81,13 @@ test_that("weighted.ksvm fitting", {
     wk <- weighted.ksvm(x = x[1:100,], y = as.character(y[1:100]), C = c(1, 10),
                         foldid = foldid,
                         kernel = "polydot",
+                        weights = weights[1:100])
+
+    expect_is(wk, "wksvm")
+
+
+    wk <- weighted.ksvm(x = x[1:100,], y = as.factor(y[1:100]), C = c(1, 3),
+                        foldid = foldid,
                         weights = weights[1:100])
 
     expect_is(wk, "wksvm")
@@ -108,6 +122,15 @@ test_that("weighted.ksvm fitting", {
                         weights = weights[1:100])
 
     expect_is(wk, "wksvm")
+
+    wk <- weighted.ksvm(x = x[1:25,], y = as.character(y[1:25]), C = c(1, 10),
+                        kernel = "tanhdot", maxiter = 500, bound = 10,
+                        weights = weights[1:25])
+
+    expect_is(wk, "wksvm")
+
+    summary(wk)
+
 
     wk <- weighted.ksvm(x = x[1:100,], y = as.character(y[1:100]), C = c(1, 10),
                         foldid = foldid,
