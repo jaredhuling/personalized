@@ -102,6 +102,7 @@ calc_treatment_effects <- function(benefit.scores,
     {
         warning(paste("treatment effects not available for loss:", loss) )
     }
+
     effects <- list(delta = trt_eff_delta,
                     gamma = trt_eff_gamma)
     class(effects) <- c("individual_treatment_effects", class(effects) )

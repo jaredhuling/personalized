@@ -106,7 +106,7 @@ summary.subgroup_fitted <- function(object, digits = max(getOption('digits')-3, 
                     colnames(coefmat) <- paste0("Estimates for delta(",
                                                 object$comparison.trts[t], " vs ", object$reference.trt, ")" )
 
-                    print.default(round(coefmat, digits), quote = FALSE, right = TRUE, na.print = "NA", ...)
+                    print.default(t(round(coefmat, digits)), quote = FALSE, right = TRUE, na.print = "NA", ...)
                 }
             } else
             {
@@ -137,7 +137,7 @@ summary.subgroup_fitted <- function(object, digits = max(getOption('digits')-3, 
                     colnames(coefmat) <- paste0("Estimates for delta(",
                                                 object$trts[t],")" )
 
-                    print.default(round(coefmat, digits), quote = FALSE, right = TRUE, na.print = "NA", ...)
+                    print.default(t(round(coefmat, digits)), quote = FALSE, right = TRUE, na.print = "NA", ...)
                 }
             }
         }

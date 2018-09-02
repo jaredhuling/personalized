@@ -1158,7 +1158,24 @@ fit.subgroup <- function(x,
     fitted.model$pi.x                  <- pi.x
     fitted.model$y                     <- y
 
-    fitted.model$benefit.scores        <- fitted.model$predict(x)
+
+
+    bene.scores <- fitted.model$predict(x)
+
+    if (NCOL(bene.scores) > 1)
+    {
+        cnames <- 1:NCOL(bene.scores)
+
+        for (t in 1:(n.trts - 1))
+        {
+            cnames[t] <- paste0(comparison.trts[t], "-vs-", reference.trt)
+        }
+        colnames(bene.scores) <- cnames
+    }
+
+    fitted.model$benefit.scores        <- bene.scores
+
+
 
     if (NROW(fitted.model$benefit.scores) != NROW(y))
     {
