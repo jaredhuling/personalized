@@ -50,15 +50,29 @@ print.subgroup_fitted <- function(x, digits = max(getOption('digits')-3, 3), ...
 
     } else
     {
-        bene.text <- paste(paste0("f_", (x$comparison.trts), "(x): ",
-                                  paste(x$comparison.trts, "vs", x$reference.trt)),
-                           collapse = ",  ")
-        bene.txt2 <- paste0("\n               f_", x$reference.trt,  "(x): 0")
-        cat("benefit score:", bene.text, bene.txt2, "\n")
-        trt.rec.text <- paste0("maxval = max(", paste(paste0("f_", (x$comparison.trts), "(x)"), collapse = ", "), ")")
-        cat(trt.rec.text, "\n")
-        cat("which.max(maxval) = The trt level which maximizes maxval\n")
-        cat("Trt recomm = which.max(maxval)*I(maxval > c) +", paste0(x$reference.trt, "*I(maxval <= c) where c is 'cutpoint'\n") )
+        if (x$larger.outcome.better)
+        {
+            bene.text <- paste(paste0("f_", (x$comparison.trts), "(x): ",
+                                      paste(x$comparison.trts, "vs", x$reference.trt)),
+                               collapse = ",  ")
+            bene.txt2 <- paste0("\n               f_", x$reference.trt,  "(x): 0")
+            cat("benefit score:", bene.text, bene.txt2, "\n")
+            trt.rec.text <- paste0("maxval = max(", paste(paste0("f_", (x$comparison.trts), "(x)"), collapse = ", "), ")")
+            cat(trt.rec.text, "\n")
+            cat("which.max(maxval) = The trt level which maximizes maxval\n")
+            cat("Trt recomm = which.max(maxval)*I(maxval > c) +", paste0(x$reference.trt, "*I(maxval <= c) where c is 'cutpoint'\n") )
+        } else
+        {
+            bene.text <- paste(paste0("f_", (x$comparison.trts), "(x): ",
+                                      paste(x$comparison.trts, "vs", x$reference.trt)),
+                               collapse = ",  ")
+            bene.txt2 <- paste0("\n               f_", x$reference.trt,  "(x): 0")
+            cat("benefit score:", bene.text, bene.txt2, "\n")
+            trt.rec.text <- paste0("minval = min(", paste(paste0("f_", (x$comparison.trts), "(x)"), collapse = ", "), ")")
+            cat(trt.rec.text, "\n")
+            cat("which.min(minval) = The trt level which mininizes minval\n")
+            cat("Trt recomm = which.min(minval)*I(minval < c) +", paste0(x$reference.trt, "*I(minval >= c) where c is 'cutpoint'\n") )
+        }
     }
 
 
@@ -180,15 +194,30 @@ print.subgroup_validated <- function(x, digits = max(getOption('digits')-3, 3), 
 
             } else
             {
-                bene.text <- paste(paste0("f_", (x$comparison.trts), "(x): ",
-                                          paste(x$comparison.trts, "vs", x$reference.trt)),
-                                   collapse = ",  ")
-                bene.txt2 <- paste0("\n               f_", x$reference.trt,  "(x): 0")
-                cat("benefit score:", bene.text, bene.txt2, "\n")
-                trt.rec.text <- paste0("maxval = max(", paste(paste0("f_", (x$comparison.trts), "(x)"), collapse = ", "), ")")
-                cat(trt.rec.text, "\n")
-                cat("which.max(maxval) = The trt level which maximizes maxval\n")
-                cat("Trt recomm = which.max(maxval)*I(maxval > c) +", paste0(x$reference.trt, "*I(maxval <= c) where c is 'cutpoint'\n") )
+                if (x$larger.outcome.better)
+                {
+                    bene.text <- paste(paste0("f_", (x$comparison.trts), "(x): ",
+                                              paste(x$comparison.trts, "vs", x$reference.trt)),
+                                       collapse = ",  ")
+                    bene.txt2 <- paste0("\n               f_", x$reference.trt,  "(x): 0")
+                    cat("benefit score:", bene.text, bene.txt2, "\n")
+                    trt.rec.text <- paste0("maxval = max(", paste(paste0("f_", (x$comparison.trts), "(x)"), collapse = ", "), ")")
+                    cat(trt.rec.text, "\n")
+                    cat("which.max(maxval) = The trt level which maximizes maxval\n")
+                    cat("Trt recomm = which.max(maxval)*I(maxval > c) +", paste0(x$reference.trt, "*I(maxval <= c) where c is 'cutpoint'\n") )
+                } else
+                {
+                    bene.text <- paste(paste0("f_", (x$comparison.trts), "(x): ",
+                                              paste(x$comparison.trts, "vs", x$reference.trt)),
+                                       collapse = ",  ")
+                    bene.txt2 <- paste0("\n               f_", x$reference.trt,  "(x): 0")
+                    cat("benefit score:", bene.text, bene.txt2, "\n")
+                    trt.rec.text <- paste0("minval = min(", paste(paste0("f_", (x$comparison.trts), "(x)"), collapse = ", "), ")")
+                    cat(trt.rec.text, "\n")
+                    cat("which.min(minval) = The trt level which minimizes minval\n")
+                    cat("Trt recomm = which.min(minval)*I(minval < c) +", paste0(x$reference.trt, "*I(minval >= c) where c is 'cutpoint'\n") )
+                }
+                cat("\n")
             }
 
 
@@ -293,15 +322,30 @@ print.subgroup_validated <- function(x, digits = max(getOption('digits')-3, 3), 
 
         } else
         {
-            bene.text <- paste(paste0("f_", (x$comparison.trts), "(x): ",
-                                      paste(x$comparison.trts, "vs", x$reference.trt)),
-                               collapse = ",  ")
-            bene.txt2 <- paste0("\n               f_", x$reference.trt,  "(x): 0")
-            cat("benefit score:", bene.text, bene.txt2, "\n")
-            trt.rec.text <- paste0("maxval = max(", paste(paste0("f_", (x$comparison.trts), "(x)"), collapse = ", "), ")")
-            cat(trt.rec.text, "\n")
-            cat("which.max(maxval) = The trt level which maximizes maxval\n")
-            cat("Trt recomm = which.max(maxval)*I(maxval > c) +", paste0(x$reference.trt, "*I(maxval <= c) where c is 'cutpoint'\n") )
+            if (x$larger.outcome.better)
+            {
+                bene.text <- paste(paste0("f_", (x$comparison.trts), "(x): ",
+                                          paste(x$comparison.trts, "vs", x$reference.trt)),
+                                   collapse = ",  ")
+                bene.txt2 <- paste0("\n               f_", x$reference.trt,  "(x): 0")
+                cat("benefit score:", bene.text, bene.txt2, "\n")
+                trt.rec.text <- paste0("maxval = max(", paste(paste0("f_", (x$comparison.trts), "(x)"), collapse = ", "), ")")
+                cat(trt.rec.text, "\n")
+                cat("which.max(maxval) = The trt level which maximizes maxval\n")
+                cat("Trt recomm = which.max(maxval)*I(maxval > c) +", paste0(x$reference.trt, "*I(maxval <= c) where c is 'cutpoint'\n") )
+            } else
+            {
+                bene.text <- paste(paste0("f_", (x$comparison.trts), "(x): ",
+                                          paste(x$comparison.trts, "vs", x$reference.trt)),
+                                   collapse = ",  ")
+                bene.txt2 <- paste0("\n               f_", x$reference.trt,  "(x): 0")
+                cat("benefit score:", bene.text, bene.txt2, "\n")
+                trt.rec.text <- paste0("minval = min(", paste(paste0("f_", (x$comparison.trts), "(x)"), collapse = ", "), ")")
+                cat(trt.rec.text, "\n")
+                cat("which.min(minval) = The trt level which minimizes minval\n")
+                cat("Trt recomm = which.min(minval)*I(minval < c) +", paste0(x$reference.trt, "*I(minval >= c) where c is 'cutpoint'\n") )
+            }
+            cat("\n")
         }
 
 
