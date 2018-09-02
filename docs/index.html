@@ -166,29 +166,31 @@
 ##       the expected outcomes conditional on subgroups. 
 ##       Use 'validate.subgroup()' to obtain unbiased estimates.
 ## 
-## Benefit score quantiles: 
+## ---------------------------------------------------
+## 
+## Benefit score quantiles (Trt vs Ctrl): 
 ##        0%       25%       50%       75%      100% 
 ## -14.15602  -3.58120   0.04648   3.51676  14.78106 
 ## 
+## ---------------------------------------------------
+## 
 ## Summary of individual treatment effects: 
-## E[Y|T=1, X] - E[Y|T=-1, X]
+## E[Y|T=Trt, X] - E[Y|T=Ctrl, X]
 ## 
 ##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
 ## -28.31203  -7.16240   0.09296   0.27303   7.03352  29.56212 
 ## 
-## 9 out of 50 variables selected in total by the lasso (cross validation criterion).
+## ---------------------------------------------------
 ## 
-##     Estimate
-## Trt   0.3389
-## V2    1.3120
-## V11  -0.8576
-## V17  -0.3681
-## V32   0.2421
-## V35   0.3570
-## V39  -0.1401
-## V40   0.0275
-## V45   0.0945
-## V50  -0.0422</code></pre>
+## 9 out of 50 interactions selected in total by the lasso (cross validation criterion).
+## 
+## The first estimate is the treatment main effect, which is always selected. 
+## Any other variables selected represent treatment-covariate interactions.
+## 
+##             Trt    V2     V11     V17    V32   V35     V39    V40    V45
+## Estimate 0.3389 1.312 -0.8576 -0.3681 0.2421 0.357 -0.1401 0.0275 0.0945
+##              V50
+## Estimate -0.0422</code></pre>
 </div>
 <div id="use-repeated-train-and-test-splitting-to-estimate-subgroup-treatment-effects" class="section level3">
 <h3 class="hasAnchor">

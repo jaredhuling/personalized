@@ -82,7 +82,7 @@
       <h1>Usage of the Personalized Package</h1>
                         <h4 class="author">Jared Huling</h4>
             
-            <h4 class="date">2018-08-29</h4>
+            <h4 class="date">2018-09-01</h4>
       
       
       <div class="hidden name"><code>usage_of_the_personalized_package.Rmd</code></div>
@@ -272,28 +272,29 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ##       the expected outcomes conditional on subgroups. 
 ##       Use 'validate.subgroup()' to obtain unbiased estimates.
 ## 
-## Benefit score quantiles: 
+## ---------------------------------------------------
+## 
+## Benefit score quantiles (1 vs 0): 
 ##       0%      25%      50%      75%     100% 
 ## -10.9672  -1.8897   0.3569   2.2806  10.0196 
 ## 
+## ---------------------------------------------------
+## 
 ## Summary of individual treatment effects: 
-## E[Y|T=1, X] - E[Y|T=-1, X]
+## E[Y|T=1, X] - E[Y|T=0, X]
 ## 
 ##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
 ## -21.9345  -3.7794   0.7138   0.4061   4.5611  20.0392 
 ## 
-## 8 out of 50 variables selected in total by the lasso (cross validation criterion).
+## ---------------------------------------------------
 ## 
-##      Estimate
-## Trt1   0.2231
-## V1     0.0577
-## V2     0.6558
-## V3    -0.4550
-## V6    -0.1070
-## V11   -0.4036
-## V13    0.3108
-## V17    0.2491
-## V37   -0.1768</code></pre>
+## 8 out of 50 interactions selected in total by the lasso (cross validation criterion).
+## 
+## The first estimate is the treatment main effect, which is always selected. 
+## Any other variables selected represent treatment-covariate interactions.
+## 
+##            Trt1     V1     V2     V3     V6     V11    V13    V17     V37
+## Estimate 0.2231 0.0577 0.6558 -0.455 -0.107 -0.4036 0.3108 0.2491 -0.1768</code></pre>
 <p>We can then plot the outcomes of patients in the different subgroups:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">plot</span>(subgrp.model)</a></code></pre></div>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_model-1.png" width="700"></p>
@@ -513,15 +514,22 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ##       the expected outcomes conditional on subgroups. 
 ##       Use 'validate.subgroup()' to obtain unbiased estimates.
 ## 
-## Benefit score quantiles: 
+## ---------------------------------------------------
+## 
+## Benefit score quantiles (1 vs 0): 
 ##       0%      25%      50%      75%     100% 
 ## -21.2251  -4.1385   0.1479   4.4585  22.4945 
 ## 
+## ---------------------------------------------------
+## 
 ## Summary of individual treatment effects: 
-## E[Y|T=1, X] - E[Y|T=-1, X]
+## E[Y|T=1, X] - E[Y|T=0, X]
 ## 
 ##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-## -42.4502  -8.2769   0.2958   0.3248   8.9169  44.9889</code></pre>
+## -42.4502  -8.2769   0.2958   0.3248   8.9169  44.9889 
+## 
+## ---------------------------------------------------
+## The following summary pertains to estimated treatment-covariate interactions:</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -594,12 +602,16 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ##       the expected outcomes conditional on subgroups. 
 ##       Use 'validate.subgroup()' to obtain unbiased estimates.
 ## 
-## Benefit score quantiles: 
+## ---------------------------------------------------
+## 
+## Benefit score quantiles (1 vs 0): 
 ##       0%      25%      50%      75%     100% 
 ## -1.31720 -0.24199  0.06729  0.38384  1.48203 
 ## 
+## ---------------------------------------------------
+## 
 ## Summary of individual treatment effects: 
-## E[Y|T=1, X] - E[Y|T=-1, X]
+## E[Y|T=1, X] - E[Y|T=0, X]
 ## 
 ##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
 ## -0.57743 -0.12041  0.03363  0.02991  0.18960  0.62976</code></pre>
@@ -648,33 +660,34 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ##       the expected outcomes conditional on subgroups. 
 ##       Use 'validate.subgroup()' to obtain unbiased estimates.
 ## 
-## Benefit score quantiles: 
+## ---------------------------------------------------
+## 
+## Benefit score quantiles (1 vs 0): 
 ##       0%      25%      50%      75%     100% 
 ## -0.56536 -0.17097 -0.05576  0.06300  0.63843 
 ## 
+## ---------------------------------------------------
+## 
 ## Summary of individual treatment effects: 
-## E[Y|T=1, X] / E[Y|T=-1, X]
+## E[Y|T=1, X] / E[Y|T=0, X]
 ## 
 ## Note: for survival outcomes, the above ratio is 
-## E[g(Y)|T=1, X] / E[g(Y)|T=-1, X], 
+## E[g(Y)|T=1, X] / E[g(Y)|T=0, X], 
 ## where g() is a monotone increasing function of Y, 
 ## the survival time
 ## 
 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ##  0.5281  0.9389  1.0573  1.0701  1.1865  1.7601 
 ## 
-## 7 out of 49 variables selected in total by the lasso (cross validation criterion).
+## ---------------------------------------------------
 ## 
-##      Estimate
-## Trt1   0.0490
-## V2     0.0496
-## V3    -0.0070
-## V8    -0.0034
-## V11   -0.0228
-## V13    0.0075
-## V17    0.0014
-## V47   -0.0015
-## V50    0.0113</code></pre>
+## 7 out of 49 interactions selected in total by the lasso (cross validation criterion).
+## 
+## The first estimate is the treatment main effect, which is always selected. 
+## Any other variables selected represent treatment-covariate interactions.
+## 
+##           Trt1     V2     V3      V8     V11    V13    V17     V47    V50
+## Estimate 0.049 0.0496 -0.007 -0.0034 -0.0228 0.0075 0.0014 -0.0015 0.0113</code></pre>
 </div>
 <div id="efficiency-augmentation" class="section level3">
 <h3 class="hasAnchor">
@@ -724,26 +737,29 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ##       the expected outcomes conditional on subgroups. 
 ##       Use 'validate.subgroup()' to obtain unbiased estimates.
 ## 
-## Benefit score quantiles: 
+## ---------------------------------------------------
+## 
+## Benefit score quantiles (1 vs 0): 
 ##        0%       25%       50%       75%      100% 
 ## -11.70152  -2.57836   0.04442   2.53750  10.44856 
 ## 
+## ---------------------------------------------------
+## 
 ## Summary of individual treatment effects: 
-## E[Y|T=1, X] - E[Y|T=-1, X]
+## E[Y|T=1, X] - E[Y|T=0, X]
 ## 
 ##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
 ## -23.40304  -5.15672   0.08885  -0.04936   5.07500  20.89711 
 ## 
-## 6 out of 50 variables selected in total by the lasso (cross validation criterion).
+## ---------------------------------------------------
 ## 
-##      Estimate
-## Trt1  -0.0815
-## V2     0.8629
-## V3    -0.5513
-## V11   -0.7276
-## V20   -0.0104
-## V30   -0.0367
-## V47   -0.1321</code></pre>
+## 6 out of 50 interactions selected in total by the lasso (cross validation criterion).
+## 
+## The first estimate is the treatment main effect, which is always selected. 
+## Any other variables selected represent treatment-covariate interactions.
+## 
+##             Trt1     V2      V3     V11     V20     V30     V47
+## Estimate -0.0815 0.8629 -0.5513 -0.7276 -0.0104 -0.0367 -0.1321</code></pre>
 </div>
 <div id="plotting-fitted-models" class="section level3">
 <h3 class="hasAnchor">

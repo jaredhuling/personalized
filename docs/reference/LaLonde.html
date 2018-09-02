@@ -201,22 +201,29 @@ evaluate the effectiveness of an employment trainining program on wage increases
 #&gt;       the expected outcomes conditional on subgroups. 
 #&gt;       Use 'validate.subgroup()' to obtain unbiased estimates.
 #&gt; 
-#&gt; Benefit score quantiles: 
+#&gt; ---------------------------------------------------
+#&gt; 
+#&gt; Benefit score quantiles (Trt vs Ctrl): 
 #&gt;       0%      25%      50%      75%     100% 
 #&gt; 0.005158 0.140502 0.140502 0.140502 0.149550 
 #&gt; 
+#&gt; ---------------------------------------------------
+#&gt; 
 #&gt; Summary of individual treatment effects: 
-#&gt; E[Y|T=1, X] - E[Y|T=-1, X]
+#&gt; E[Y|T=Trt, X] - E[Y|T=Ctrl, X]
 #&gt; 
 #&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
 #&gt; 0.002579 0.070136 0.070136 0.063754 0.070136 0.074636 
 #&gt; 
-#&gt; 2 out of 10 variables selected in total by the lasso (cross validation criterion).
+#&gt; ---------------------------------------------------
 #&gt; 
-#&gt;         Estimate
-#&gt; Trt       0.1405
-#&gt; hispYes  -0.1353
-#&gt; marrYes   0.0090</div></pre>
+#&gt; 2 out of 10 interactions selected in total by the lasso (cross validation criterion).
+#&gt; 
+#&gt; The first estimate is the treatment main effect, which is always selected. 
+#&gt; Any other variables selected represent treatment-covariate interactions.
+#&gt; 
+#&gt;             Trt hispYes marrYes
+#&gt; Estimate 0.1405 -0.1353   0.009</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

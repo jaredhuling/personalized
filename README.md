@@ -112,7 +112,7 @@ summary(subgrp.model)
     ## 
     ## ---------------------------------------------------
     ## 
-    ## Benefit score quantiles: 
+    ## Benefit score quantiles (Trt vs Ctrl): 
     ##        0%       25%       50%       75%      100% 
     ## -14.15602  -3.58120   0.04648   3.51676  14.78106 
     ## 

@@ -60,7 +60,8 @@ print.subgroup_fitted <- function(x, digits = max(getOption('digits')-3, 3), ...
 
     if (is.null(ncol.bs) || ncol.bs == 1)
     {
-        cat("\nBenefit score quantiles: \n")
+        cname <- paste0(x$comparison.trts, " vs ", x$reference.trt)
+        cat("\nBenefit score", paste0("quantiles (", cname, "): \n") )
         print(quantile(x$benefit.scores), digits = digits)
     } else
     {

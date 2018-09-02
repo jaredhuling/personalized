@@ -228,10 +228,12 @@ i.e. \(E[Y|T=1, X] / E[Y|T=-1, X]\))</p>
 <span class='no'>trt_eff</span> <span class='kw'>&lt;-</span> <span class='fu'>treatment.effects</span>(<span class='no'>subgrp.model</span>)
 <span class='fu'>str</span>(<span class='no'>trt_eff</span>)</div><div class='output co'>#&gt; List of 2
 #&gt;  $ delta: num [1:1000] -11.55 -9.8 4.52 -7.03 -26.16 ...
+#&gt;   ..- attr(*, "comparison.trts")= int 1
+#&gt;   ..- attr(*, "reference.trt")= int 0
 #&gt;  $ gamma: logi NA
 #&gt;  - attr(*, "class")= chr [1:2] "individual_treatment_effects" "list"</div><div class='input'>
 <span class='no'>trt_eff</span></div><div class='output co'>#&gt; Summary of individual treatment effects: 
-#&gt; E[Y|T=1, X] - E[Y|T=-1, X]
+#&gt; E[Y|T=1, X] - E[Y|T=0, X]
 #&gt; 
 #&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 #&gt; -57.436 -13.833  -2.261  -1.396  10.513  49.163 </div><div class='input'>
@@ -247,12 +249,14 @@ i.e. \(E[Y|T=1, X] / E[Y|T=-1, X]\))</p>
 <span class='fu'>str</span>(<span class='no'>trt_eff_c</span>)</div><div class='output co'>#&gt; List of 2
 #&gt;  $ delta: logi NA
 #&gt;  $ gamma: num [1:1000] 0.618 0.772 1.112 0.863 0.393 ...
+#&gt;   ..- attr(*, "comparison.trts")= int 1
+#&gt;   ..- attr(*, "reference.trt")= int 0
 #&gt;  - attr(*, "class")= chr [1:2] "individual_treatment_effects" "list"</div><div class='input'>
 <span class='no'>trt_eff_c</span></div><div class='output co'>#&gt; Summary of individual treatment effects: 
-#&gt; E[Y|T=1, X] / E[Y|T=-1, X]
+#&gt; E[Y|T=1, X] / E[Y|T=0, X]
 #&gt; 
 #&gt; Note: for survival outcomes, the above ratio is 
-#&gt; E[g(Y)|T=1, X] / E[g(Y)|T=-1, X], 
+#&gt; E[g(Y)|T=1, X] / E[g(Y)|T=0, X], 
 #&gt; where g() is a monotone increasing function of Y, 
 #&gt; the survival time
 #&gt; 

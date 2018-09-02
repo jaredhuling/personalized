@@ -233,8 +233,18 @@ augmentation functions are:</p>
 <p>Example 1: <code>augment.func &lt;- function(x, y) {lmod &lt;- lm(y ~ x); return(fitted(lmod))}</code></p>
 <p>Example 2:</p><pre>
 augment.func &lt;- function(x, y, trt) {
-    lmod &lt;- lm(y ~ x + trt)
-    return(fitted(lmod))
+    data &lt;- data.frame(x, y, trt)
+    lmod &lt;- lm(y ~ x * trt)
+    ## get predictions when trt = 1
+    data$trt &lt;- 1
+    preds_1  &lt;- predict(lmod, data)
+
+    ## get predictions when trt = -1
+    data$trt &lt;- -1
+    preds_n1 &lt;- predict(lmod, data)
+
+    ## return predictions averaged over trt
+    return(0.5 * (preds_1 + preds_n1))
 }
 </pre>
 
@@ -249,8 +259,7 @@ augment.func &lt;- function(x, y, trt) {
       <th>fit.custom.loss</th>
       <td><p>A user-specified custom loss function to be used in model fitting. If provided, this function should
 take the modified design matrix as an argument and the responses and optimize a custom weighted loss function.</p>
-<p>The
-provided function <strong>MUST</strong> return a list with the following elements:</p><ul>
+<p>The provided function <strong>MUST</strong> return a list with the following elements:</p><ul>
 <li><p><code>predict</code> a function that inputs a design matrix and a 'type' argument for the type of predictions and outputs
 a vector of predictions on the scale of the linear predictor. Note that the matrix provided to 'fit.custom.loss'
 has a column appended to the first column of <code>x</code> corresponding to the treatment main effect.
@@ -282,7 +291,8 @@ as a means of incorporating the efficiency augmentation model's predictions</p><
      df &lt;- data.frame(y = y, x)
 
      # minimize squared error loss with NO lasso penalty
-     lmf &lt;- lm(y ~ x - 1, weights = weights, ...)
+     lmf &lt;- lm(y ~ x - 1, weights = weights,
+               data = df, ...)
 
      # save coefficients
      cfs = coef(lmf)
@@ -293,9 +303,9 @@ as a means of incorporating the efficiency augmentation model's predictions</p><
      # in predictions
      prd = function(x, type = "response")
      {
-         # roxygen2 removes the below, so
-         # using tcrossprod instead
-         tcrossprod(cbind(1, x), t(cfs))
+         dfte &lt;- cbind(1, x)
+         colnames(dfte) &lt;- names(cfs)
+         predict(lmf, data.frame(dfte))
      }
      # return lost of required components
      list(predict = prd, model = lmf, coefficients = cfs)
@@ -310,6 +320,7 @@ as a means of incorporating the efficiency augmentation model's predictions</p><
      # with allowance for efficiency augmentation
      glmf &lt;- glm(y ~ x - 1, weights = weights,
                 offset = offset, # offset term allows for efficiency augmentation
+                data = df,
                 family = binomial(), ...)
 
      # save coefficients
@@ -318,7 +329,11 @@ as a means of incorporating the efficiency augmentation model's predictions</p><
      # create prediction function.
      prd = function(x, type = "response")
      {
-         tcrossprod(cbind(1, x), t(cfs))
+         dfte &lt;- cbind(1, x)
+         colnames(dfte) &lt;- names(cfs)
+         ## predictions must be returned on the scale
+         ## of the linear predictor
+         predict(glmf, data.frame(dfte), type = "link")
      }
      # return lost of required components
      list(predict = prd, model = glmf, coefficients = cfs)
@@ -436,6 +451,7 @@ from <code>fit.subgroup</code>.</p></div>
 <span class='no'>trt</span>      <span class='kw'>&lt;-</span> <span class='fl'>2</span> * <span class='no'>trt01</span> - <span class='fl'>1</span>
 
 <span class='co'># simulate response</span>
+<span class='co'># delta below drives treatment effect heterogeneity</span>
 <span class='no'>delta</span> <span class='kw'>&lt;-</span> <span class='fl'>2</span> * (<span class='fl'>0.5</span> + <span class='no'>x</span>[,<span class='fl'>2</span>] - <span class='no'>x</span>[,<span class='fl'>3</span>] - <span class='no'>x</span>[,<span class='fl'>11</span>] + <span class='no'>x</span>[,<span class='fl'>1</span>] * <span class='no'>x</span>[,<span class='fl'>12</span>] )
 <span class='no'>xbeta</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>[,<span class='fl'>1</span>] + <span class='no'>x</span>[,<span class='fl'>11</span>] - <span class='fl'>2</span> * <span class='no'>x</span>[,<span class='fl'>12</span>]^<span class='fl'>2</span> + <span class='no'>x</span>[,<span class='fl'>13</span>] + <span class='fl'>0.5</span> * <span class='no'>x</span>[,<span class='fl'>15</span>] ^ <span class='fl'>2</span>
 <span class='no'>xbeta</span> <span class='kw'>&lt;-</span> <span class='no'>xbeta</span> + <span class='no'>delta</span> * <span class='no'>trt</span>
@@ -466,6 +482,10 @@ from <code>fit.subgroup</code>.</p></div>
     <span class='no'>pi.x</span>
 }
 
+
+<span class='co'>####################  Continuous outcomes ################################</span>
+
+
 <span class='no'>subgrp.model</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>,
                            <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
                            <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>,
@@ -491,32 +511,33 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt;       the expected outcomes conditional on subgroups. 
 #&gt;       Use 'validate.subgroup()' to obtain unbiased estimates.
 #&gt; 
-#&gt; Benefit score quantiles: 
+#&gt; ---------------------------------------------------
+#&gt; 
+#&gt; Benefit score quantiles (1 vs 0): 
 #&gt;      0%     25%     50%     75%    100% 
 #&gt; -27.548  -3.989   2.619   8.564  24.586 
 #&gt; 
+#&gt; ---------------------------------------------------
+#&gt; 
 #&gt; Summary of individual treatment effects: 
-#&gt; E[Y|T=1, X] - E[Y|T=-1, X]
+#&gt; E[Y|T=1, X] - E[Y|T=0, X]
 #&gt; 
 #&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 #&gt; -55.095  -7.977   5.237   4.856  17.128  49.171 
 #&gt; 
-#&gt; 8 out of 15 variables selected in total by the lasso (cross validation criterion).
+#&gt; ---------------------------------------------------
 #&gt; 
-#&gt;      Estimate
-#&gt; Trt1   2.6841
-#&gt; V2     2.0546
-#&gt; V3    -1.8871
-#&gt; V6     0.2005
-#&gt; V8     0.3490
-#&gt; V10    0.3310
-#&gt; V11   -0.6036
-#&gt; V13    1.2472
-#&gt; V15    0.3743</div><div class='input'>
+#&gt; 8 out of 15 interactions selected in total by the lasso (cross validation criterion).
+#&gt; 
+#&gt; The first estimate is the treatment main effect, which is always selected. 
+#&gt; Any other variables selected represent treatment-covariate interactions.
+#&gt; 
+#&gt;            Trt1     V2      V3     V6    V8   V10     V11    V13    V15
+#&gt; Estimate 2.6841 2.0546 -1.8871 0.2005 0.349 0.331 -0.6036 1.2472 0.3743</div><div class='input'>
 <span class='co'># estimates of the individual-specific</span>
 <span class='co'># treatment effect estimates:</span>
 <span class='no'>subgrp.model</span>$<span class='no'>individual.trt.effects</span></div><div class='output co'>#&gt; Summary of individual treatment effects: 
-#&gt; E[Y|T=1, X] - E[Y|T=-1, X]
+#&gt; E[Y|T=1, X] - E[Y|T=0, X]
 #&gt; 
 #&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 #&gt; -55.095  -7.977   5.237   4.856  17.128  49.171 </div><div class='input'>
@@ -548,15 +569,97 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt;       the expected outcomes conditional on subgroups. 
 #&gt;       Use 'validate.subgroup()' to obtain unbiased estimates.
 #&gt; 
-#&gt; Benefit score quantiles: 
+#&gt; ---------------------------------------------------
+#&gt; 
+#&gt; Benefit score quantiles (1 vs 0): 
 #&gt;      0%     25%     50%     75%    100% 
 #&gt; -58.022 -11.497  -2.069   9.130  45.392 
 #&gt; 
+#&gt; ---------------------------------------------------
+#&gt; 
 #&gt; Summary of individual treatment effects: 
-#&gt; E[Y|T=1, X] - E[Y|T=-1, X]
+#&gt; E[Y|T=1, X] - E[Y|T=0, X]
 #&gt; 
 #&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
 #&gt; -116.043  -22.994   -4.138   -2.356   18.260   90.785 </div><div class='input'>
+<span class='co'>####################  Using an augmentation function #####################</span>
+<span class='co'>## augmentation funcions involve modeling the conditional mean E[Y|T, X]</span>
+<span class='co'>## and returning predictions that are averaged over the treatment values</span>
+<span class='co'>## return &lt;- 1/2 * (hat{E}[Y|T=1, X] + hat{E}[Y|T=-1, X])</span>
+<span class='co'>##########################################################################</span>
+
+<span class='no'>augment.func</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>trt</span>) {
+    <span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>trt</span>)
+    <span class='no'>xm</span> <span class='kw'>&lt;-</span> <span class='fu'>model.matrix</span>(<span class='no'>y</span>~<span class='no'>trt</span>*<span class='no'>x</span>-<span class='fl'>1</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data</span>)
+
+    <span class='no'>lmod</span> <span class='kw'>&lt;-</span> <span class='fu'>cv.glmnet</span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>xm</span>)
+    <span class='co'>## get predictions when trt = 1</span>
+    <span class='no'>data</span>$<span class='no'>trt</span> <span class='kw'>&lt;-</span> <span class='fl'>1</span>
+    <span class='no'>xm</span> <span class='kw'>&lt;-</span> <span class='fu'>model.matrix</span>(<span class='no'>y</span>~<span class='no'>trt</span>*<span class='no'>x</span>-<span class='fl'>1</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data</span>)
+    <span class='no'>preds_1</span>  <span class='kw'>&lt;-</span> <span class='fu'>predict</span>(<span class='no'>lmod</span>, <span class='no'>xm</span>, <span class='kw'>s</span> <span class='kw'>=</span> <span class='st'>"lambda.min"</span>)
+
+    <span class='co'>## get predictions when trt = -1</span>
+    <span class='no'>data</span>$<span class='no'>trt</span> <span class='kw'>&lt;-</span> -<span class='fl'>1</span>
+    <span class='no'>xm</span> <span class='kw'>&lt;-</span> <span class='fu'>model.matrix</span>(<span class='no'>y</span>~<span class='no'>trt</span>*<span class='no'>x</span>-<span class='fl'>1</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data</span>)
+    <span class='no'>preds_n1</span>  <span class='kw'>&lt;-</span> <span class='fu'>predict</span>(<span class='no'>lmod</span>, <span class='no'>xm</span>, <span class='kw'>s</span> <span class='kw'>=</span> <span class='st'>"lambda.min"</span>)
+
+    <span class='co'>## return predictions averaged over trt</span>
+    <span class='fu'>return</span>(<span class='fl'>0.5</span> * (<span class='no'>preds_1</span> + <span class='no'>preds_n1</span>))
+}
+
+<span class='no'>subgrp.model.aug</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>,
+                           <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
+                           <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>,
+                           <span class='kw'>augment.func</span>    <span class='kw'>=</span> <span class='no'>augment.func</span>,
+                           <span class='kw'>loss</span>   <span class='kw'>=</span> <span class='st'>"sq_loss_lasso"</span>,
+                           <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>10</span>)              <span class='co'># option for cv.glmnet</span>
+
+<span class='fu'>summary</span>(<span class='no'>subgrp.model.aug</span>)</div><div class='output co'>#&gt; family:  gaussian 
+#&gt; loss:    sq_loss_lasso 
+#&gt; method:  weighting 
+#&gt; augmentation 
+#&gt; function: augment.func 
+#&gt; propensity 
+#&gt; function: propensity.func 
+#&gt; 
+#&gt; Average Outcomes:
+#&gt;                 Recommended 0      Recommended 1
+#&gt; Received 0   -8.3084 (n = 82) -23.4351 (n = 119)
+#&gt; Received 1 -26.5609 (n = 116)  -2.4744 (n = 183)
+#&gt; 
+#&gt; Treatment effects conditional on subgroups:
+#&gt; 0 effect among recommended 0 1 effect among recommended 1 
+#&gt;            18.2525 (n = 198)            20.9606 (n = 302) 
+#&gt; 
+#&gt; NOTE: The above average outcomes are biased estimates of
+#&gt;       the expected outcomes conditional on subgroups. 
+#&gt;       Use 'validate.subgroup()' to obtain unbiased estimates.
+#&gt; 
+#&gt; ---------------------------------------------------
+#&gt; 
+#&gt; Benefit score quantiles (1 vs 0): 
+#&gt;      0%     25%     50%     75%    100% 
+#&gt; -29.635  -4.645   2.712   9.598  33.270 
+#&gt; 
+#&gt; ---------------------------------------------------
+#&gt; 
+#&gt; Summary of individual treatment effects: 
+#&gt; E[Y|T=1, X] - E[Y|T=0, X]
+#&gt; 
+#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#&gt; -59.270  -9.289   5.423   5.839  19.195  66.540 
+#&gt; 
+#&gt; ---------------------------------------------------
+#&gt; 
+#&gt; 9 out of 15 interactions selected in total by the lasso (cross validation criterion).
+#&gt; 
+#&gt; The first estimate is the treatment main effect, which is always selected. 
+#&gt; Any other variables selected represent treatment-covariate interactions.
+#&gt; 
+#&gt;            Trt1    V2      V3    V6     V8      V9    V10     V11    V13    V15
+#&gt; Estimate 3.0734 1.977 -2.2989 0.502 0.7772 -0.1928 0.4402 -0.9236 1.1415 0.9552</div><div class='input'>
+<span class='co'>####################  Binary outcomes ####################################</span>
+
 <span class='co'># use logistic loss for binary outcomes</span>
 <span class='no'>subgrp.model.bin</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y.binary</span>,
                            <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
@@ -573,26 +676,32 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;               Recommended 0    Recommended 1
-#&gt; Received 0  0.5005 (n = 86) 0.1791 (n = 115)
-#&gt; Received 1 0.1625 (n = 133)  0.578 (n = 166)
+#&gt; Received 0  0.5271 (n = 83) 0.1744 (n = 118)
+#&gt; Received 1 0.1856 (n = 127)  0.546 (n = 172)
 #&gt; 
 #&gt; Treatment effects conditional on subgroups:
 #&gt; 0 effect among recommended 0 1 effect among recommended 1 
-#&gt;              0.338 (n = 219)             0.3989 (n = 281) 
+#&gt;             0.3414 (n = 210)             0.3716 (n = 290) 
 #&gt; 
 #&gt; NOTE: The above average outcomes are biased estimates of
 #&gt;       the expected outcomes conditional on subgroups. 
 #&gt;       Use 'validate.subgroup()' to obtain unbiased estimates.
 #&gt; 
-#&gt; Benefit score quantiles: 
+#&gt; ---------------------------------------------------
+#&gt; 
+#&gt; Benefit score quantiles (1 vs 0): 
 #&gt;      0%     25%     50%     75%    100% 
-#&gt; -2.3230 -0.4497  0.1443  0.7103  2.6055 
+#&gt; -1.9448 -0.3378  0.1509  0.6138  2.1915 
+#&gt; 
+#&gt; ---------------------------------------------------
 #&gt; 
 #&gt; Summary of individual treatment effects: 
-#&gt; E[Y|T=1, X] - E[Y|T=-1, X]
+#&gt; E[Y|T=1, X] - E[Y|T=0, X]
 #&gt; 
 #&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-#&gt; -0.82152 -0.22114  0.07201  0.06720  0.34092  0.86243 </div><div class='input'>
+#&gt; -0.74976 -0.16730  0.07530  0.06992  0.29760  0.79896 </div><div class='input'>
+
+<span class='co'>####################  Count outcomes #####################################</span>
 
 <span class='co'># use poisson loss for count/poisson outcomes</span>
 <span class='no'>subgrp.model.poisson</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y.count</span>,
@@ -609,34 +718,34 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; function: propensity.func 
 #&gt; 
 #&gt; Average Outcomes:
-#&gt;                Recommended 0    Recommended 1
-#&gt; Received 0 27.5574 (n = 150) 18.1547 (n = 51)
-#&gt; Received 1 21.3632 (n = 217) 24.3561 (n = 82)
+#&gt;                Recommended 0     Recommended 1
+#&gt; Received 0  26.996 (n = 130)  19.5423 (n = 71)
+#&gt; Received 1 18.5265 (n = 186) 27.7822 (n = 113)
 #&gt; 
 #&gt; Treatment effects conditional on subgroups:
 #&gt; 0 effect among recommended 0 1 effect among recommended 1 
-#&gt;             6.1942 (n = 367)             6.2015 (n = 133) 
+#&gt;             8.4695 (n = 316)             8.2399 (n = 184) 
 #&gt; 
 #&gt; NOTE: The above average outcomes are biased estimates of
 #&gt;       the expected outcomes conditional on subgroups. 
 #&gt;       Use 'validate.subgroup()' to obtain unbiased estimates.
 #&gt; 
-#&gt; Benefit score quantiles: 
-#&gt;       0%      25%      50%      75%     100% 
-#&gt; -2.56965 -1.00854 -0.41805  0.03301  1.98044 
+#&gt; ---------------------------------------------------
+#&gt; 
+#&gt; Benefit score quantiles (1 vs 0): 
+#&gt;      0%     25%     50%     75%    100% 
+#&gt; -2.8807 -1.0340 -0.3018  0.2388  2.8825 
+#&gt; 
+#&gt; ---------------------------------------------------
 #&gt; 
 #&gt; Summary of individual treatment effects: 
-#&gt; E[Y|T=1, X] - E[Y|T=-1, X]
+#&gt; E[Y|T=1, X] - E[Y|T=0, X]
 #&gt; 
-#&gt;      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
-#&gt; -12.98475  -2.37684  -0.86066  -1.22890   0.06604   7.10794 </div><div class='input'>
-<span class='co'># estimates of the individual-specific</span>
-<span class='co'># treatment effect estimates:</span>
-<span class='no'>subgrp.model.poisson</span>$<span class='no'>individual.trt.effects</span></div><div class='output co'>#&gt; Summary of individual treatment effects: 
-#&gt; E[Y|T=1, X] - E[Y|T=-1, X]
-#&gt; 
-#&gt;      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
-#&gt; -12.98475  -2.37684  -0.86066  -1.22890   0.06604   7.10794 </div><div class='input'>
+#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+#&gt; -17.7706  -2.4567  -0.6127  -1.1499   0.4822  17.8026 </div><div class='input'>
+
+<span class='co'>####################  Time-to-event outcomes #############################</span>
+
 <span class='fu'>library</span>(<span class='no'>survival</span>)
 <span class='no'>subgrp.model.cox</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/survival/topics/Surv'>Surv</a></span>(<span class='no'>y.time.to.event</span>, <span class='no'>status</span>),
                            <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
@@ -652,44 +761,37 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;                 Recommended 0     Recommended 1
-#&gt; Received 0 173.9976 (n = 143)   8.8318 (n = 58)
-#&gt; Received 1 181.5029 (n = 206) 136.6715 (n = 93)
+#&gt; Received 0 175.2226 (n = 140)   8.4595 (n = 61)
+#&gt; Received 1 180.6631 (n = 203) 134.9956 (n = 96)
 #&gt; 
 #&gt; Treatment effects conditional on subgroups:
 #&gt; 0 effect among recommended 0 1 effect among recommended 1 
-#&gt;            -7.5053 (n = 349)           127.8397 (n = 151) 
+#&gt;            -5.4405 (n = 343)           126.5361 (n = 157) 
 #&gt; 
 #&gt; NOTE: The above average outcomes are biased estimates of
 #&gt;       the expected outcomes conditional on subgroups. 
 #&gt;       Use 'validate.subgroup()' to obtain unbiased estimates.
 #&gt; 
-#&gt; Benefit score quantiles: 
+#&gt; ---------------------------------------------------
+#&gt; 
+#&gt; Benefit score quantiles (1 vs 0): 
 #&gt;       0%      25%      50%      75%     100% 
-#&gt; -0.84649 -0.34304 -0.15214  0.04893  0.83324 
+#&gt; -0.87626 -0.34859 -0.14888  0.06438  0.87688 
+#&gt; 
+#&gt; ---------------------------------------------------
 #&gt; 
 #&gt; Summary of individual treatment effects: 
-#&gt; E[Y|T=1, X] / E[Y|T=-1, X]
+#&gt; E[Y|T=1, X] / E[Y|T=0, X]
 #&gt; 
 #&gt; Note: for survival outcomes, the above ratio is 
-#&gt; E[g(Y)|T=1, X] / E[g(Y)|T=-1, X], 
+#&gt; E[g(Y)|T=1, X] / E[g(Y)|T=0, X], 
 #&gt; where g() is a monotone increasing function of Y, 
 #&gt; the survival time
 #&gt; 
 #&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-#&gt;  0.4346  0.9522  1.1643  1.2116  1.4092  2.3314 </div><div class='input'>
-<span class='co'># estimates of the individual-specific</span>
-<span class='co'># treatment effect estimates:</span>
-<span class='no'>subgrp.model.cox</span>$<span class='no'>individual.trt.effects</span></div><div class='output co'>#&gt; Summary of individual treatment effects: 
-#&gt; E[Y|T=1, X] / E[Y|T=-1, X]
-#&gt; 
-#&gt; Note: for survival outcomes, the above ratio is 
-#&gt; E[g(Y)|T=1, X] / E[g(Y)|T=-1, X], 
-#&gt; where g() is a monotone increasing function of Y, 
-#&gt; the survival time
-#&gt; 
-#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-#&gt;  0.4346  0.9522  1.1643  1.2116  1.4092  2.3314 </div><div class='input'>
+#&gt;  0.4161  0.9376  1.1605  1.2129  1.4171  2.4019 </div><div class='input'>
 
+<span class='co'>####################  Using custom loss functions ########################</span>
 
 <span class='co'>## Use custom loss function for binary outcomes</span>
 
@@ -706,9 +808,12 @@ from <code>fit.subgroup</code>.</p></div>
     <span class='no'>cfs</span> <span class='kw'>=</span> <span class='fu'>coef</span>(<span class='no'>glmf</span>)
 
     <span class='co'># create prediction function.</span>
-    <span class='no'>prd</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>type</span> <span class='kw'>=</span> <span class='st'>"response"</span>)
-    {
-        <span class='fu'>tcrossprod</span>(<span class='fu'>cbind</span>(<span class='fl'>1</span>, <span class='no'>x</span>), <span class='fu'>t</span>(<span class='no'>cfs</span>))
+    <span class='no'>prd</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>type</span> <span class='kw'>=</span> <span class='st'>"response"</span>) {
+         <span class='no'>dfte</span> <span class='kw'>&lt;-</span> <span class='fu'>cbind</span>(<span class='fl'>1</span>, <span class='no'>x</span>)
+         <span class='fu'>colnames</span>(<span class='no'>dfte</span>) <span class='kw'>&lt;-</span> <span class='fu'>names</span>(<span class='no'>cfs</span>)
+         <span class='co'>## predictions must be returned on the scale</span>
+         <span class='co'>## of the linear predictor</span>
+         <span class='fu'>predict</span>(<span class='no'>glmf</span>, <span class='fu'>data.frame</span>(<span class='no'>dfte</span>), <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"link"</span>)
     }
     <span class='co'># return lost of required components</span>
     <span class='fu'>list</span>(<span class='kw'>predict</span> <span class='kw'>=</span> <span class='no'>prd</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='no'>glmf</span>, <span class='kw'>coefficients</span> <span class='kw'>=</span> <span class='no'>cfs</span>)
@@ -726,20 +831,24 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;               Recommended 0    Recommended 1
-#&gt; Received 0  0.4743 (n = 81) 0.1858 (n = 120)
-#&gt; Received 1 0.1822 (n = 164) 0.6117 (n = 135)
+#&gt; Received 0 0.1919 (n = 121)   0.471 (n = 80)
+#&gt; Received 1 0.1819 (n = 164) 0.6108 (n = 135)
 #&gt; 
 #&gt; Treatment effects conditional on subgroups:
 #&gt; 0 effect among recommended 0 1 effect among recommended 1 
-#&gt;             0.2921 (n = 245)             0.4258 (n = 255) 
+#&gt;               0.01 (n = 285)             0.1397 (n = 215) 
 #&gt; 
 #&gt; NOTE: The above average outcomes are biased estimates of
 #&gt;       the expected outcomes conditional on subgroups. 
 #&gt;       Use 'validate.subgroup()' to obtain unbiased estimates.
 #&gt; 
-#&gt; Benefit score quantiles: 
-#&gt;       0%      25%      50%      75%     100% 
-#&gt; -4.22578 -0.90985  0.03891  1.20601  5.19151 
+#&gt; ---------------------------------------------------
+#&gt; 
+#&gt; Benefit score quantiles (1 vs 0): 
+#&gt;      0%     25%     50%     75%    100% 
+#&gt; -5.1588 -1.2724 -0.3145  0.7797  4.0227 
+#&gt; 
+#&gt; ---------------------------------------------------
 #&gt; </div><div class='input'>
 
 <span class='co'>## try exponential loss for</span>
@@ -778,20 +887,24 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;                Recommended 0     Recommended 1
-#&gt; Received 0  29.786 (n = 155)  13.1373 (n = 46)
-#&gt; Received 1 16.1079 (n = 104) 26.6315 (n = 195)
+#&gt; Received 0 30.4423 (n = 142)  15.3946 (n = 59)
+#&gt; Received 1 15.0464 (n = 112) 27.9179 (n = 187)
 #&gt; 
 #&gt; Treatment effects conditional on subgroups:
 #&gt; 0 effect among recommended 0 1 effect among recommended 1 
-#&gt;            13.6781 (n = 259)            13.4942 (n = 241) 
+#&gt;            15.3959 (n = 254)            12.5233 (n = 246) 
 #&gt; 
 #&gt; NOTE: The above average outcomes are biased estimates of
 #&gt;       the expected outcomes conditional on subgroups. 
 #&gt;       Use 'validate.subgroup()' to obtain unbiased estimates.
 #&gt; 
-#&gt; Benefit score quantiles: 
-#&gt;       0%      25%      50%      75%     100% 
-#&gt; -1.58085 -0.36471 -0.04896  0.32519  1.85048 
+#&gt; ---------------------------------------------------
+#&gt; 
+#&gt; Benefit score quantiles (1 vs 0): 
+#&gt;        0%       25%       50%       75%      100% 
+#&gt; -1.414203 -0.326411 -0.003262  0.379219  1.989184 
+#&gt; 
+#&gt; ---------------------------------------------------
 #&gt; </div><div class='input'>
 
 </div></pre>
