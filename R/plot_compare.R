@@ -134,8 +134,8 @@ plotCompare <- function(...,
 
         types.vec[l] <- obj.type
 
-        avg.res.2.plot <- data.frame(Recommended = rep(colnames(avg.res$avg.outcomes),
-                                                       each = ncol(avg.res$avg.outcomes)),
+        avg.res.2.plot <- data.frame(Recommended = gsub("^Recommended ", "", rep(colnames(avg.res$avg.outcomes),
+                                                       each = ncol(avg.res$avg.outcomes))),
                                      Received    = gsub("^Received ", "", rep(rownames(avg.res$avg.outcomes),
                                                        ncol(avg.res$avg.outcomes))),
                                      Value       = as.vector(avg.res$avg.outcomes),
