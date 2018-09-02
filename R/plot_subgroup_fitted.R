@@ -100,11 +100,15 @@ plot.subgroup_fitted <- function(x,
     }
 
 
-    avg.res.2.plot <- data.frame(Recommended = gsub("^Recommended ", "", rep(colnames(avg.res$avg.outcomes),
-                                                   each = ncol(avg.res$avg.outcomes))),
+    avg.res.2.plot <- data.frame(Recommended = rep(colnames(avg.res$avg.outcomes),
+                                                   each = ncol(avg.res$avg.outcomes)),
                                  Received    = as.factor(gsub("^Received ", "", rep(rownames(avg.res$avg.outcomes),
                                                    ncol(avg.res$avg.outcomes)))),
                                  Value       = as.vector(avg.res$avg.outcomes))
+
+    avg.res.2.plot.dens <- avg.res.2.plot
+
+    avg.res.2.plot$Recommended <- gsub("^Recommended ", "", avg.res.2.plot$Recommended)
 
     Recommended <- Received <- Value <- bs <- Outcome <- NULL
 
@@ -123,10 +127,10 @@ plot.subgroup_fitted <- function(x,
             ggtitle("Individual Observations Among Subgroups")
         if (avg.line)
         {
-            pl.obj <- pl.obj + geom_vline(data = avg.res.2.plot,
+            pl.obj <- pl.obj + geom_vline(data = avg.res.2.plot.dens,
                                           aes(xintercept = Value),
                                           size = 1.25) +
-                geom_vline(data = avg.res.2.plot,
+                geom_vline(data = avg.res.2.plot.dens,
                            aes(xintercept = Value, colour = Received))
         }
     } else if (type == "boxplot")

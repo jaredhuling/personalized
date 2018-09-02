@@ -134,14 +134,18 @@ plotCompare <- function(...,
 
         types.vec[l] <- obj.type
 
-        avg.res.2.plot <- data.frame(Recommended = gsub("^Recommended ", "", rep(colnames(avg.res$avg.outcomes),
-                                                       each = ncol(avg.res$avg.outcomes))),
+        avg.res.2.plot <- data.frame(Recommended = rep(colnames(avg.res$avg.outcomes),
+                                                       each = ncol(avg.res$avg.outcomes)),
                                      Received    = gsub("^Received ", "", rep(rownames(avg.res$avg.outcomes),
                                                        ncol(avg.res$avg.outcomes))),
                                      Value       = as.vector(avg.res$avg.outcomes),
                                      Model       = obj.names[l])
 
         avg.res.2.plot$Received <- as.factor(avg.res.2.plot$Received)
+
+        avg.res.2.plot.dens <- avg.res.2.plot
+
+        avg.res.2.plot$Recommended <- gsub("^Recommended ", "", avg.res.2.plot$Recommended)
 
         avg.list[[l]] <- avg.res.2.plot
 
@@ -280,10 +284,10 @@ plotCompare <- function(...,
             xlab("Outcome")
         if (avg.line)
         {
-            pl.obj <- pl.obj + geom_vline(data = avg.res.2.plot,
+            pl.obj <- pl.obj + geom_vline(data = avg.res.2.plot.dens,
                                           aes(xintercept = Value),
                                           size = 1.25) +
-                geom_vline(data = avg.res.2.plot,
+                geom_vline(data = avg.res.2.plot.dens,
                            aes(xintercept = Value, colour = Received))
         }
     } else if (type == "conditional")
