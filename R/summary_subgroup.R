@@ -103,7 +103,7 @@ summary.subgroup_fitted <- function(object, digits = max(getOption('digits')-3, 
                     coefmat <- matrix(coefs.cur[sel.idx], ncol = 1)
 
                     rownames(coefmat) <- sel.varnames.cur
-                    colnames(coefmat) <- paste0("Estimates for delta(",
+                    colnames(coefmat) <- paste0("Estimates for delta (",
                                                 object$comparison.trts[t], " vs ", object$reference.trt, ")" )
 
                     print.default(t(round(coefmat, digits)), quote = FALSE, right = TRUE, na.print = "NA", ...)
