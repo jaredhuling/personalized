@@ -141,7 +141,7 @@ test_that("test validate.subgroup for binary outcomes and various losses", {
                                    x = x, family = "binomial")
         pi.x <- predict(propens.model, s = "lambda.min",
                         newx = x, type = "response")[,1]
-        pi.x
+        pmin(pmax(pi.x, 1e-5), 1 - 1e-05)
     }
 
     subgrp.model <- fit.subgroup(x = x, y = y.binary,
@@ -247,11 +247,15 @@ test_that("test validate.subgroup for binary outcomes and various losses", {
 
     expect_is(subgrp.val, "subgroup_validated")
 
+    print(subgrp.val)
+
 
     subgrp.val <- validate.subgroup(subgrp.model, B = 10,
                                     method = "boot")
 
     expect_is(subgrp.val, "subgroup_validated")
+
+    print(subgrp.val)
 
 
 
