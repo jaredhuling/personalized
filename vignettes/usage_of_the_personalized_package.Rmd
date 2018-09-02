@@ -52,12 +52,13 @@ The general analysis pipeline is as follows:
 
 The available subgroup identification models are those under the purview of the general subgroup identification framework proposed by Chen, et al. (2017). In this section we will give a brief summary of this framework and what elements of it are available in the `personalized` package.
 
-In general we are interested in understanding the impact of a treatment on an outcome and in particular determining if and how different patients respond differently to a treatment in terms of their expected outcome. Assume the outcome we observe $Y$ is such that larger values are preferable. In addition to the outcome, we also observe patient covariate information $X \in \mathbb{R}^p$ and the treatment status $T \in \{-1,1\}$, where $T = 1$ indicates that a patient received the treatment, and $T = -1$ indicates a patient received the control. For the purposes of this package, we assume that the expected outcome conditional on the covariate and treatment status information can be represented by 
-$$E(Y|X, T) = g(X) + T\Delta(X).$$ Here, $\Delta(X)$ represents the interaction between treatment and covariates and $g(X)$ represents the main effects of the patient covariate information on the outcome. 
+In general we are interested in understanding the impact of a treatment on an outcome and in particular determining if and how different patients respond differently to a treatment in terms of their expected outcome. Assume the outcome we observe $Y$ is such that larger values are preferable. In addition to the outcome, we also observe patient covariate information $X \in \mathbb{R}^p$ and the treatment status $T \in \{-1,1\}$, where $T = 1$ indicates that a patient received the treatment, and $T = -1$ indicates a patient received the control. For the purposes of this package, we consider an unspecified form for the expected outcome conditional on the covariate and treatment status information:
+$$E(Y|T, X) = g(X) + T\Delta(X)/2,$$
+where $\Delta(X) \equiv E(Y|T=1, X) - E(Y|T=-1, X)$ is of primary interest and $g(X) \equiv \frac{1}{2}\{E(Y|T=1, X) + E(Y|T=-1, X) \}$ represents covariate main effects. Here, $\Delta(X)$ represents the interaction between treatment and covariates and thus drives heterogeneity of main effect. The purpose of the \texttt{personalized} package is in estimation of  $\Delta(X)$ or monotone transformations of $\Delta(X)$ which can be used to stratify the population into subgroups (e.g. a subgroup of patients who benefit from the treatment and a subgroup who does not benefit).
 
 We call the term $\Delta(X)$ a benefit score, as it reflects how much a patient is expected to benefit from a treatment in terms of their outcome. For a patient with $X = x$, if $\Delta(x) > 0$ (assuming larger outcomes are better), the treatment is beneficial in terms of the expected outcome, and if $\Delta(X) \leq 0$, the control is better than the treatment. Hence to identify which subgroup of patients benefits from a treatment, we seek to estimate $\Delta(X)$.
 
-In the framework of Chen, et al. (2017), there are two main methods for estimating subgroups. The first is called the weighting method. The weighting method estimates $\Delta(X)$ by minimizing the following objective function with respect to $f(X)$:
+In the framework of Chen, et al. (2017), there are two main methods for estimating subgroups. The first is called the weighting method. The weighting method estimates $\Delta(X)$ (or monotone transformations of it) by minimizing the following objective function with respect to $f(X)$:
 $$L_W(f) = \frac{1}{n}\sum_{i = 1}^n\frac{M(Y_i, T_i\times f(x_i)) }{ {T_i\pi(x_i)+(1-T_i)/2} },$$
 where $\pi(x) = Pr(T = 1|X = x)$ is the propensity score function. Here, $\hat{f}$ is our estimated benefit score. Hence $\hat{f} = \mbox{argmin}_f L_W(f)$ is our estimate of $\Delta(X)$. If we want a simple functional form for the estimate $\hat{f}$, we can restrict the form of $f$ such that it is a linear combination of the covariates, i.e. $f(X) = X^T\beta$. Hence $\hat{f}(X) = X^T\hat{\beta}$.
 
@@ -175,7 +176,7 @@ We then need to make sure the propensity scores have sufficient overlap between 
 check.overlap(x, trt, prop.func)
 ```
 
-We can see that our propensity scores have common support. 
+We can see that the propensity scores mostly have common support except a small region near 0 where there are no propensity scores for the treatment arm. 
 
 ## Fitting Subgroup Identification Models
 
@@ -416,6 +417,15 @@ We can see that at least on the training data, the performance of the gradient-b
 ```{r plotcompare_bin}
 subgrp.bin
 ```
+
+### Count Outcomes
+
+The `loss` argument options that are available for count outcomes are all of the losses for continuous outcomes plus:
+
+- `'poisson_loss_lasso'`
+- `'poisson_loss_lasso_gam'`
+- `'poisson_loss_gam'`
+- `'poisson_loss_gbm'`
 
 ### Time-to-event Outcomes
 
