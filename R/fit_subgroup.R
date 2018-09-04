@@ -103,8 +103,20 @@
 #'         return(predict(bmod, type = "link"))
 #'     }
 #'  }
-#' @param fit.custom.loss A user-specified custom loss function to be used in model fitting. If provided, this function should
-#' take the modified design matrix as an argument and the responses and optimize a custom weighted loss function.
+#' @param fit.custom.loss A function which \emph{minimizes} a user-specified
+#' custom loss function M(y,v) to be used in model fitting.
+#' If provided, \code{fit.custom.loss} should take the modified
+#' design matrix (which includes an intercept term)
+#' as an argument and the responses and optimize a
+#' custom weighted loss function.
+#'
+#' The loss function M(y, v) to be minimized \strong{MUST} meet
+#' the following two criteria:
+#' \enumerate{
+#' \item{}{ \eqn{D_M(y, v) = \partial M(y, v)/\partial v } must be increasing in v for each fixed y. \eqn{D_M(y, v)} is the partial
+#' derivative of the loss function M(y, v) with respect to v}
+#' \item{}{ \eqn{D_M(y, 0)} is monotone in y}
+#' }
 #'
 #' The provided function \strong{MUST} return a list with the following elements:
 #' \itemize{
@@ -116,6 +128,7 @@
 #' \item{\code{model} }{ a fitted model object returned by the underlying fitting function}
 #' \item{\code{coefficients}}{ if the underlying fitting function yields a vector of coefficient estimates, they should be provided here}
 #' }
+#'
 #' The provided function \strong{MUST} be a function
 #' with the following arguments:
 #' \enumerate{
@@ -127,7 +140,7 @@
 #' underlying fitting function if so desired.}
 #' }
 #' The provided function can also optionally take the following arguments:
-#' \enumerate{
+#' \itemize{
 #' \item{\code{match.id}}{ vector of case/control cluster IDs. This is useful if cross validation is used in the underlying fitting function
 #' in which case it is advisable to sample whole clusters randomly instead of individual observations.}
 #' \item{\code{offset}}{ if efficiency augmentation is used, the predictions from the outcome model from \code{augment.func}
