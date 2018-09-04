@@ -498,7 +498,7 @@ setMethod("ipop_conditioned",signature(H="matrix"),
           if(smw == 0){
               AP[xp,xp] <- -H.x
               AP[xp == FALSE, xp== FALSE] <- H.y
-              s1.tmp <- solve(AP,c(c.x,c.y))
+              s1.tmp <- solve(AP + eps * diag(NCOL(AP)), c(c.x,c.y))
               delta.x<-s1.tmp[1:n] ; delta.y <- s1.tmp[-(1:n)]
           }
           else
@@ -548,7 +548,7 @@ setMethod("ipop_conditioned",signature(H="matrix"),
           {
               AP[xp,xp] <- -H.x
               AP[xp == FALSE, xp== FALSE] <- H.y
-              s1.tmp <- solve(AP,c(c.x,c.y))
+              s1.tmp <- solve(AP + eps * diag(NCOL(AP)), c(c.x,c.y))
               delta.x<-s1.tmp[1:n] ; delta.y<-s1.tmp[-(1:n)]
           }
           else if (smw == 1)
