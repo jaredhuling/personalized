@@ -5,8 +5,8 @@ Title: Estimation and Validation Methods for Subgroup Identification and
 Version: 0.2.0
 Authors@R: c(
     person("Jared", "Huling",  role = c("aut", "cre"), email = "jaredhuling@gmail.com"),
-    person("Aaron", "Potvien", role = "ctb")
-    person("Alexandros", "Karatzoglou", role = "cph")
+    person("Aaron", "Potvien", role = "ctb"),
+    person("Alexandros", "Karatzoglou", role = "cph"),
     person("Alex", "Smola", role = "cph")
     )
 Description: Provides functions for fitting and validation of subgroup
