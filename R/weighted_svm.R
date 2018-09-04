@@ -202,14 +202,15 @@ weighted.ksvm <- function(y,
             for (l in 1:length(C))
             {
 
-                fitsub <- kernlab::ipop(c = rep(-1, nsub),
-                                        H = Hsub,
-                                        A = A[,-which.test],
-                                        b = 0,
-                                        r = 0,
-                                        l = rep(0, nsub),
-                                        u = drop(C[l] * weights[-which.test]),
-                                        ...)
+                cat <- try(fitsub <- kernlab::ipop(c = rep(-1, nsub),
+                                                   H = Hsub,
+                                                   A = A[,-which.test],
+                                                   b = 0,
+                                                   r = 0,
+                                                   l = rep(0, nsub),
+                                                   u = drop(C[l] * weights[-which.test]),
+                                                   ...), silent = TRUE)
+
                 prim <- kernlab::primal(fitsub)
                 du   <- kernlab::dual(fitsub)
 
