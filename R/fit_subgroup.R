@@ -165,30 +165,23 @@
 #'  }
 #'
 #'  Example 2: \preformatted{
-#'  fit.custom.loss.bin <- function(x, y, weights, offset, ...) {
-#'      df <- data.frame(y = y, x)
-#'
-#'      # minimize logistic loss with NO lasso penalty
-#'      # with allowance for efficiency augmentation
-#'      glmf <- glm(y ~ x - 1, weights = weights,
-#'                 offset = offset, # offset term allows for efficiency augmentation
-#'                 data = df,
-#'                 family = binomial(), ...)
-#'
-#'      # save coefficients
-#'      cfs = coef(glmf)
-#'
-#'      # create prediction function.
-#'      prd = function(x, type = "response")
-#'      {
-#'          dfte <- cbind(1, x)
-#'          colnames(dfte) <- names(cfs)
-#'          ## predictions must be returned on the scale
-#'          ## of the linear predictor
-#'          predict(glmf, data.frame(dfte), type = "link")
+#'  fit.expo.loss <- function(x, y, weights, ...)
+#'  {
+#'      expo.loss <- function(beta, x, y, weights) {
+#'          sum(weights * y * exp(-drop(x %*% beta)))
 #'      }
-#'      # return lost of required components
-#'      list(predict = prd, model = glmf, coefficients = cfs)
+#'
+#'      # use optim() to minimize loss function
+#'      opt <- optim(rep(0, NCOL(x)), fn = expo.loss, x = x, y = y, weights = weights)
+#'
+#'      coefs <- opt$par
+#'
+#'      pred <- function(x, type = "response") {
+#'          tcrossprod(cbind(1, x), t(coefs))
+#'      }
+#'
+#'      # return list of required components
+#'      list(predict = pred, model = opt, coefficients = coefs)
 #'  }
 #'  }
 #' @param cutpoint numeric value for patients with benefit scores above which
