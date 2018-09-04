@@ -342,9 +342,9 @@ summary.wksvm <- function(object, digits = max(getOption('digits')-3, 3), ...)
 
 
 
-setGeneric("ipop_conditioned",function(c, H, A, b, l, u, r, sigf=7, maxiter=40, margin=0.05, bound=10, verb=0) standardGeneric("ipop_conditioned"))
+setGeneric("ipop_conditioned",function(c, H, A, b, l, u, r, sigf=7, maxiter=40, margin=0.05, bound=10, eps = 1e-6, verb=0) standardGeneric("ipop_conditioned"))
 setMethod("ipop_conditioned",signature(H="matrix"),
-  function(c, H, A, b, l, u, r, sigf=7, maxiter=40, margin=0.05, bound=10, verb=0)
+  function(c, H, A, b, l, u, r, sigf=7, maxiter=40, margin=0.05, bound=10, eps = 1e-6, verb=0)
   {
 
       if(!is.matrix(H)) stop("H must be a matrix")
@@ -352,8 +352,6 @@ setMethod("ipop_conditioned",signature(H="matrix"),
       if(!is.matrix(c)&&!is.vector(c)) stop("c must be a matrix or a vector")
       if(!is.matrix(l)&&!is.vector(l)) stop("l must be a matrix or a vector")
       if(!is.matrix(u)&&!is.vector(u)) stop("u must be a matrix or a vector")
-
-      eps <- 1e-8
 
       n <- dim(H)[1]
 
