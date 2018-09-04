@@ -211,16 +211,22 @@ weighted.ksvm <- function(y,
                                                    u = drop(C[l] * weights[-which.test]),
                                                    ...), silent = TRUE)
 
-                prim <- kernlab::primal(fitsub)
-                du   <- kernlab::dual(fitsub)
+                if (exists("fitsub"))
+                {
+                    prim <- kernlab::primal(fitsub)
+                    du   <- kernlab::dual(fitsub)
 
-                pred.test <- sign(unname(colSums(prim * y.vec[-which.test] * K.test) - du))
+                    pred.test <- sign(unname(colSums(prim * y.vec[-which.test] * K.test) - du))
 
 
-                cv.mat[l, k] <- mean(weights[which.test] * (y.vec[which.test] == pred.test))
+                    cv.mat[l, k] <- mean(weights[which.test] * (y.vec[which.test] == pred.test))
+                } else
+                {
+                    cv.mat[l, k] <- NA
+                }
             }
         }
-        cv.res   <- rowMeans(cv.mat)
+        cv.res   <- rowMeans(cv.mat, na.rm = TRUE)
         best.idx <- which.max(cv.res)
         best.C   <- C[best.idx]
     }
