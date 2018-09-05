@@ -117,7 +117,8 @@
 #' derivative of the loss function M(y, v) with respect to v}
 #' \item{}{ \eqn{D_M(y, 0)} is monotone in y}
 #' }
-#' An example of a valid loss function is \eqn{M(y, v) = (y - v)^2}. See Chen et al. (2017) for more details on the
+#' An example of a valid loss function is \eqn{M(y, v) = (y - v)^2}. In this case \eqn{D_M(y, v) = -2(y - v)}.
+#' See Chen et al. (2017) for more details on the
 #' restrictions on the loss function \eqn{M(y, v)}.
 #'
 #' The provided function \strong{MUST} return a list with the following elements:

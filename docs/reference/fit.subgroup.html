@@ -256,8 +256,20 @@ augment.func &lt;- function(x, y, trt) {
     </tr>
     <tr>
       <th>fit.custom.loss</th>
-      <td><p>A user-specified custom loss function to be used in model fitting. If provided, this function should
-take the modified design matrix as an argument and the responses and optimize a custom weighted loss function.</p>
+      <td><p>A function which <em>minimizes</em> a user-specified
+custom loss function M(y,v) to be used in model fitting.
+If provided, <code>fit.custom.loss</code> should take the modified
+design matrix (which includes an intercept term)
+as an argument and the responses and optimize a
+custom weighted loss function.</p>
+<p>The loss function \(M(y, v)\) to be minimized <strong>MUST</strong> meet
+the following two criteria:</p><ol>
+<li><p>\(D_M(y, v) = \partial M(y, v)/\partial v \) must be increasing in v for each fixed y. \(D_M(y, v)\) is the partial
+derivative of the loss function M(y, v) with respect to v</p></li>
+<li><p>\(D_M(y, 0)\) is monotone in y</p></li>
+</ol><p>An example of a valid loss function is \(M(y, v) = (y - v)^2\). In this case \(D_M(y, v) = -2(y - v)\).
+See Chen et al. (2017) for more details on the
+restrictions on the loss function \(M(y, v)\).</p>
 <p>The provided function <strong>MUST</strong> return a list with the following elements:</p><ul>
 <li><p><code>predict</code> a function that inputs a design matrix and a 'type' argument for the type of predictions and outputs
 a vector of predictions on the scale of the linear predictor. Note that the matrix provided to 'fit.custom.loss'
@@ -266,15 +278,17 @@ Thus, the prediction function should deal with this,
 e.g. <code>predict(model, cbind(1, x))</code></p></li>
 <li><p><code>model</code>  a fitted model object returned by the underlying fitting function</p></li>
 <li><p><code>coefficients</code> if the underlying fitting function yields a vector of coefficient estimates, they should be provided here</p></li>
-</ul><p>The provided function <strong>MUST</strong> be a function
+</ul>
+
+<p>The provided function <strong>MUST</strong> be a function
 with the following arguments:</p><ol>
 <li><p><code>x</code> design matrix</p></li>
 <li><p><code>y</code> vector of responses</p></li>
 <li><p><code>weights</code> vector for observations weights. The underlying loss function <strong>MUST</strong> have samples weighted according
 to this vector. See below example</p></li>
-<li><p><code>...</code> additional arguments passed via '...'. This can be used so that users can specify more arguments to the
+<li><p><code>...</code> additional arguments passed via '<code>...</code>'. This can be used so that users can specify more arguments to the
 underlying fitting function if so desired.</p></li>
-</ol><p>The provided function can also optionally take the following arguments:</p><ol>
+</ol><p>The provided function can also optionally take the following arguments:</p><ul>
 <li><p><code>match.id</code> vector of case/control cluster IDs. This is useful if cross validation is used in the underlying fitting function
 in which case it is advisable to sample whole clusters randomly instead of individual observations.</p></li>
 <li><p><code>offset</code> if efficiency augmentation is used, the predictions from the outcome model from <code>augment.func</code>
@@ -283,9 +297,9 @@ as a means of incorporating the efficiency augmentation model's predictions</p><
 <li><p><code>trt</code> vector of treatment statuses</p></li>
 <li><p><code>family</code> family of outcome</p></li>
 <li><p><code>n.trts</code> numer of treatment levels. Can be useful if there are more than 2 treatment levels</p></li>
-</ol>
+</ul>
 
-<p>Example 1:</p><pre>
+<p>Example 1: Here we minimize \(M(y, v) = (y - v)^2\)</p><pre>
  fit.custom.loss &lt;- function(x, y, weights, ...) {
      df &lt;- data.frame(y = y, x)
 
@@ -311,31 +325,25 @@ as a means of incorporating the efficiency augmentation model's predictions</p><
  }
  </pre>
 
-<p>Example 2:</p><pre>
- fit.custom.loss.bin &lt;- function(x, y, weights, offset, ...) {
-     df &lt;- data.frame(y = y, x)
-
-     # minimize logistic loss with NO lasso penalty
-     # with allowance for efficiency augmentation
-     glmf &lt;- glm(y ~ x - 1, weights = weights,
-                offset = offset, # offset term allows for efficiency augmentation
-                data = df,
-                family = binomial(), ...)
-
-     # save coefficients
-     cfs = coef(glmf)
-
-     # create prediction function.
-     prd = function(x, type = "response")
-     {
-         dfte &lt;- cbind(1, x)
-         colnames(dfte) &lt;- names(cfs)
-         ## predictions must be returned on the scale
-         ## of the linear predictor
-         predict(glmf, data.frame(dfte), type = "link")
+<p>Example 2: \(M(y, v) = y\exp(-v)\)</p><pre>
+ fit.expo.loss &lt;- function(x, y, weights, ...)
+ {
+     ## define loss function to be minimized
+     expo.loss &lt;- function(beta, x, y, weights) {
+         sum(weights * y * exp(-drop(tcrossprod(x, t(beta) )))
      }
-     # return lost of required components
-     list(predict = prd, model = glmf, coefficients = cfs)
+
+     # use optim() to minimize loss function
+     opt &lt;- optim(rep(0, NCOL(x)), fn = expo.loss, x = x, y = y, weights = weights)
+
+     coefs &lt;- opt$par
+
+     pred &lt;- function(x, type = "response") {
+         tcrossprod(cbind(1, x), t(coefs))
+     }
+
+     # return list of required components
+     list(predict = pred, model = opt, coefficients = coefs)
  }
  </pre></td>
     </tr>
