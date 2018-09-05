@@ -52,6 +52,11 @@ for all quantile levels.}
 of averages of the values from \code{boot.results.quantiles}}
 \item{family}{Family of the outcome. For example, \code{"gaussian"} for continuous outcomes}
 \item{method}{Method used for subgroup identification model. Weighting or A-learning}
+\item{n.trts}{The number of treatment levels}
+\item{comparison.trts}{All treatment levels other than the reference level}
+\item{reference.trt}{The reference level for the treatment. This should usually be the control group/level}
+\item{larger.outcome.better}{If larger outcomes are preferred for this model}
+\item{cutpoint}{Benefit score cutoff value used for determining subgroups}
 \item{val.method}{Method used for validation}
 \item{iterations}{Number of replications used in the validation process}
 }
