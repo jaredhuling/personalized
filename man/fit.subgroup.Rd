@@ -134,13 +134,15 @@ design matrix (which includes an intercept term)
 as an argument and the responses and optimize a
 custom weighted loss function.
 
-The loss function M(y, v) to be minimized \strong{MUST} meet
+The loss function \eqn{M(y, v)} to be minimized \strong{MUST} meet
 the following two criteria:
 \enumerate{
 \item{}{ \eqn{D_M(y, v) = \partial M(y, v)/\partial v } must be increasing in v for each fixed y. \eqn{D_M(y, v)} is the partial
 derivative of the loss function M(y, v) with respect to v}
 \item{}{ \eqn{D_M(y, 0)} is monotone in y}
 }
+An example of a valid loss function is \eqn{M(y, v) = (y - v)^2}. See Chen et al. (2017) for more details on the
+restrictions on the loss function \eqn{M(y, v)}.
 
 The provided function \strong{MUST} return a list with the following elements:
 \itemize{
@@ -160,7 +162,7 @@ with the following arguments:
 \item{\code{y}}{ vector of responses}
 \item{\code{weights}}{ vector for observations weights. The underlying loss function \strong{MUST} have samples weighted according
 to this vector. See below example}
-\item{\code{...}}{ additional arguments passed via '...'. This can be used so that users can specify more arguments to the
+\item{\code{...}}{ additional arguments passed via '\code{...}'. This can be used so that users can specify more arguments to the
 underlying fitting function if so desired.}
 }
 The provided function can also optionally take the following arguments:
@@ -175,7 +177,8 @@ as a means of incorporating the efficiency augmentation model's predictions}
 \item{\code{n.trts}}{ numer of treatment levels. Can be useful if there are more than 2 treatment levels}
 }
 
- Example 1: \preformatted{
+ Example 1: Here we minimize \eqn{M(y, v) = (y - v)^2}
+ \preformatted{
  fit.custom.loss <- function(x, y, weights, ...) {
      df <- data.frame(y = y, x)
 
@@ -201,11 +204,13 @@ as a means of incorporating the efficiency augmentation model's predictions}
  }
  }
 
- Example 2: \preformatted{
+ Example 2: \eqn{M(y, v) = y\exp(-v)}
+ \preformatted{
  fit.expo.loss <- function(x, y, weights, ...)
  {
+     ## define loss function to be minimized
      expo.loss <- function(beta, x, y, weights) {
-         sum(weights * y * exp(-drop(x %*% beta)))
+         sum(weights * y * exp(-drop(tcrossprod(x, t(beta) )))
      }
 
      # use optim() to minimize loss function
