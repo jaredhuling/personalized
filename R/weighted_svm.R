@@ -204,7 +204,7 @@ weighted.ksvm <- function(y,
             {
 
                 cat <- try(fitsub <- ipop_conditioned(c = rep(-1, nsub),
-                                                      H = Hsub,
+                                                      H = Hsub + eps * diag(NCOL(Hsub)),
                                                       A = A[,-which.test],
                                                       b = 0,
                                                       r = 0,
@@ -232,8 +232,9 @@ weighted.ksvm <- function(y,
         best.C   <- C[best.idx]
     }
 
+    eps <- 1e-8
     fit <- ipop_conditioned(c = rep(-1, n),
-                            H = outer(y.vec, y.vec, FUN = "*") * K,
+                            H = outer(y.vec, y.vec, FUN = "*") * K + eps * diag(NCOL(K)),
                             A = A,
                             b = 0,
                             r = 0,
