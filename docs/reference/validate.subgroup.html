@@ -190,6 +190,11 @@ for all quantile levels.</p></dd>
 of averages of the values from <code>boot.results.quantiles</code></p></dd>
 <dt>family</dt><dd><p>Family of the outcome. For example, <code>"gaussian"</code> for continuous outcomes</p></dd>
 <dt>method</dt><dd><p>Method used for subgroup identification model. Weighting or A-learning</p></dd>
+<dt>n.trts</dt><dd><p>The number of treatment levels</p></dd>
+<dt>comparison.trts</dt><dd><p>All treatment levels other than the reference level</p></dd>
+<dt>reference.trt</dt><dd><p>The reference level for the treatment. This should usually be the control group/level</p></dd>
+<dt>larger.outcome.better</dt><dd><p>If larger outcomes are preferred for this model</p></dd>
+<dt>cutpoint</dt><dd><p>Benefit score cutoff value used for determining subgroups</p></dd>
 <dt>val.method</dt><dd><p>Method used for validation</p></dd>
 <dt>iterations</dt><dd><p>Number of replications used in the validation process</p></dd>
 
@@ -320,7 +325,7 @@ doi:10.1002/(SICI)1097-0258(19960229)15:4&lt;361::AID-SIM168&gt;3.0.CO;2-4</p>
 #&gt; replications:       10 
 #&gt; 
 #&gt; benefit score: f(x), 
-#&gt; Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
+#&gt; Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
 #&gt; 
 #&gt; Average Test Set Outcomes:
 #&gt;                                Recommended 0                   Recommended 1
@@ -345,7 +350,7 @@ doi:10.1002/(SICI)1097-0258(19960229)15:4&lt;361::AID-SIM168&gt;3.0.CO;2-4</p>
 #&gt; replications:       10 
 #&gt; 
 #&gt; benefit score: f(x), 
-#&gt; Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
+#&gt; Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
 #&gt; 
 #&gt; Average Test Set Outcomes:
 #&gt;                               Recommended 0                    Recommended 1
@@ -372,7 +377,7 @@ doi:10.1002/(SICI)1097-0258(19960229)15:4&lt;361::AID-SIM168&gt;3.0.CO;2-4</p>
 #&gt; replications:       10 
 #&gt; 
 #&gt; benefit score: f(x), 
-#&gt; Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
+#&gt; Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
 #&gt; 
 #&gt; Average Test Set Outcomes:
 #&gt;                               Recommended 0                    Recommended 1
