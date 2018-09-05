@@ -79,6 +79,16 @@ weighted.ksvm <- function(y,
         y.vals <- sort(unique(y))
     }
 
+    dots <- list(...)
+
+    if (any(names(dots) == "eps"))
+    {
+        epsil <- dots$eps
+    } else
+    {
+        epsil <- 1e-8
+    }
+
     if (length(y.vals) != 2)
     {
         stop("y must contain only two distinct values.")
@@ -204,7 +214,7 @@ weighted.ksvm <- function(y,
             {
 
                 cat <- try(fitsub <- ipop_conditioned(c = rep(-1, nsub),
-                                                      H = Hsub + eps * diag(NCOL(Hsub)),
+                                                      H = Hsub + epsil * diag(NCOL(Hsub)),
                                                       A = A[,-which.test],
                                                       b = 0,
                                                       r = 0,
@@ -232,9 +242,8 @@ weighted.ksvm <- function(y,
         best.C   <- C[best.idx]
     }
 
-    eps <- 1e-8
     fit <- ipop_conditioned(c = rep(-1, n),
-                            H = outer(y.vec, y.vec, FUN = "*") * K + eps * diag(NCOL(K)),
+                            H = outer(y.vec, y.vec, FUN = "*") * K + epsil * diag(NCOL(K)),
                             A = A,
                             b = 0,
                             r = 0,
@@ -382,9 +391,9 @@ setMethod("ipop_conditioned",signature(H="matrix"),
       if (m != length(b))
           stop("A and b are incompatible!")
       if(n !=length(u))
-          stop("u is incopatible with H")
+          stop("u is incompatible with H")
       if(n !=length(l))
-          stop("l is incopatible with H")
+          stop("l is incompatible with H")
 
       c <- matrix(c)
       l <- matrix(l)
