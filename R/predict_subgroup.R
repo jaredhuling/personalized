@@ -1,7 +1,7 @@
 
-#' Predict function for fitted subgroup identification models
+#' Function to predict either benefit scores or treatment recommendations
 #'
-#' @description Predicts benefit score based on a fitted subgroup identification model
+#' @description Predicts benefit scores or treatment recommendations based on a fitted subgroup identification model
 #'
 #' @param object fitted object returned by \code{validate.subgrp()} function.
 #'

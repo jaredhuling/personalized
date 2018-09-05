@@ -3,7 +3,7 @@
 \name{predict.subgroup_fitted}
 \alias{predict.subgroup_fitted}
 \alias{predict.wksvm}
-\title{Predict function for fitted subgroup identification models}
+\title{Function to predict either benefit scores or treatment recommendations}
 \usage{
 \method{predict}{subgroup_fitted}(object, newx, type = c("benefit.score",
   "trt.group"), cutpoint = 0, ...)
@@ -34,7 +34,7 @@ will use the 75th perent upper quantile of the benefit scores as the quantile.}
 \item{...}{not used}
 }
 \description{
-Predicts benefit score based on a fitted subgroup identification model
+Predicts benefit scores or treatment recommendations based on a fitted subgroup identification model
 
 Function to obtain predictions for weighted ksvm objects
 }

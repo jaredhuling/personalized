@@ -6,6 +6,7 @@
 * Added options for count outcomes via Poisson negative log-likelihood as the loss
 * Added treatment effect calculation based on estimated benefit scores
 * Clarified/improved printing
+* Improved numerical stability of weighted.ksvm
 
 # personalized 0.1.5
 
