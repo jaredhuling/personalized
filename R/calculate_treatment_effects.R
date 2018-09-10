@@ -244,7 +244,9 @@ print.individual_treatment_effects <- function(x, digits = max(getOption('digits
             print(summary(x$delta), digits = digits, ...)
         } else
         {
-            cat("Summary of individual treatment effects: \nE[Y|T=1, X] - E[Y|T=-1, X] (-1 is reference lvl)\n\n")
+            comp <- attr(x$delta, "comparison.trts")
+            ref  <- attr(x$delta, "reference.trt")
+            cat(paste0("Summary of individual treatment effects: \nE[Y|T=", "trt", ", X] - E[Y|T=", ref, ", X]\nwhere 'trt' is ", paste(comp, collapse = " and "), "\n\n"))
 
             print(summary(x$delta), digits = digits, ...)
         }
@@ -264,7 +266,9 @@ print.individual_treatment_effects <- function(x, digits = max(getOption('digits
             print(summary(x$gamma), digits = digits, ...)
         } else
         {
-            cat("Summary of individual treatment effects: \nE[Y|T=1, X] / E[Y|T=-1, X] (-1 is reference lvl)\n\n")
+            comp <- attr(x$gamma, "comparison.trts")
+            ref  <- attr(x$gamma, "reference.trt")
+            cat(paste0("Summary of individual treatment effects: \nE[Y|T=", "trt", ", X] / E[Y|T=", ref, ", X]\nwhere 'trt' is ", paste(comp, collapse = " and "), "\n\n"))
 
             cat("Note: for survival outcomes, the above ratio is \nE[g(Y)|T=1, X] / E[g(Y)|T=-1, X], \nwhere g() is a monotone increasing function of Y, \nthe survival time\n\n")
 

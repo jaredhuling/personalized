@@ -401,5 +401,4 @@ print.subgroup_validated <- function(x, digits = max(getOption('digits')-3, 3), 
                       ...)
     }
 
-
 }
