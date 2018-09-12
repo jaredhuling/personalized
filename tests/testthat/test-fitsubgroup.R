@@ -418,85 +418,87 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
         list(predict = prd, model = glmf, coefficients = cfs)
     }
 
+    if (Sys.info()[[1]] != "windows")
+    {
+        subgrp.model <- fit.subgroup(x = x, y = y,
+                                     trt = trt01,
+                                     propensity.func = prop.func,
+                                     fit.custom.loss = fit.custom.loss,
+                                     loss   = "custom")
 
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = trt01,
-                                 propensity.func = prop.func,
-                                 fit.custom.loss = fit.custom.loss,
-                                 loss   = "custom")
+        expect_is(subgrp.model, "subgroup_fitted")
 
-    expect_is(subgrp.model, "subgroup_fitted")
+        invisible(capture.output(print(subgrp.model, digits = 2)))
 
-    invisible(capture.output(print(subgrp.model, digits = 2)))
+        invisible(capture.output(summary(subgrp.model)))
 
-    invisible(capture.output(summary(subgrp.model)))
+        trt01_bad <- trt01
+        trt01_bad[4] <- "THE TRTMENT"
+        expect_error(subgrp.model <- fit.subgroup(x = x, y = y,
+                                                  trt = trt01_bad,
+                                                  propensity.func = prop.func,
+                                                  fit.custom.loss = fit.custom.loss,
+                                                  loss   = "custom"))
 
-    trt01_bad <- trt01
-    trt01_bad[4] <- "THE TRTMENT"
-    expect_error(subgrp.model <- fit.subgroup(x = x, y = y,
-                                              trt = trt01_bad,
-                                              propensity.func = prop.func,
-                                              fit.custom.loss = fit.custom.loss,
-                                              loss   = "custom"))
+        subgrp.model <- fit.subgroup(x = x, y = y,
+                                     trt = trt01,
+                                     propensity.func = prop.func,
+                                     loss = "custom",
+                                     fit.custom.loss = fit.custom.loss)
 
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = trt01,
-                                 propensity.func = prop.func,
-                                 loss = "custom",
-                                 fit.custom.loss = fit.custom.loss)
-
-    # use loss with all possible args provided
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = trt01,
-                                 propensity.func = prop.func,
-                                 loss = "custom",
-                                 fit.custom.loss = fit.custom.loss2)
+        # use loss with all possible args provided
+        subgrp.model <- fit.subgroup(x = x, y = y,
+                                     trt = trt01,
+                                     propensity.func = prop.func,
+                                     loss = "custom",
+                                     fit.custom.loss = fit.custom.loss2)
 
 
-    expect_error(fit.subgroup(x = x, y = y,
-                              trt = trt01,
-                              propensity.func = prop.func,
-                              loss = "custom"))
+        expect_error(fit.subgroup(x = x, y = y,
+                                  trt = trt01,
+                                  propensity.func = prop.func,
+                                  loss = "custom"))
 
-    expect_error(fit.subgroup(x = x, y = y,
-                              trt = trt01,
-                              propensity.func = prop.func,
-                              fit.custom.loss = fit.custom.loss.bad))
+        expect_error(fit.subgroup(x = x, y = y,
+                                  trt = trt01,
+                                  propensity.func = prop.func,
+                                  fit.custom.loss = fit.custom.loss.bad))
 
-    expect_error(fit.subgroup(x = x, y = y,
-                              trt = trt01,
-                              propensity.func = prop.func,
-                              fit.custom.loss = fit.custom.loss.bad2))
+        expect_error(fit.subgroup(x = x, y = y,
+                                  trt = trt01,
+                                  propensity.func = prop.func,
+                                  fit.custom.loss = fit.custom.loss.bad2))
 
-    expect_error(fit.subgroup(x = x, y = y,
-                              trt = trt01,
-                              propensity.func = prop.func,
-                              fit.custom.loss = fit.custom.loss.bad3))
+        expect_error(fit.subgroup(x = x, y = y,
+                                  trt = trt01,
+                                  propensity.func = prop.func,
+                                  fit.custom.loss = fit.custom.loss.bad3))
 
-    expect_error(fit.subgroup(x = x, y = y,
-                              trt = trt01,
-                              propensity.func = prop.func,
-                              fit.custom.loss = fit.custom.loss.bad4))
+        expect_error(fit.subgroup(x = x, y = y,
+                                  trt = trt01,
+                                  propensity.func = prop.func,
+                                  fit.custom.loss = fit.custom.loss.bad4))
 
-    expect_error(fit.subgroup(x = x, y = y,
-                              trt = trt01,
-                              propensity.func = prop.func,
-                              fit.custom.loss = fit.custom.loss.bad5))
+        expect_error(fit.subgroup(x = x, y = y,
+                                  trt = trt01,
+                                  propensity.func = prop.func,
+                                  fit.custom.loss = fit.custom.loss.bad5))
 
-    expect_error(fit.subgroup(x = x, y = y,
-                              trt = trt01,
-                              propensity.func = prop.func,
-                              fit.custom.loss = fit.custom.loss.bad6))
+        expect_error(fit.subgroup(x = x, y = y,
+                                  trt = trt01,
+                                  propensity.func = prop.func,
+                                  fit.custom.loss = fit.custom.loss.bad6))
 
-    expect_error(fit.subgroup(x = x, y = y,
-                              trt = trt01,
-                              propensity.func = prop.func,
-                              fit.custom.loss = fit.custom.loss.bad7))
+        expect_error(fit.subgroup(x = x, y = y,
+                                  trt = trt01,
+                                  propensity.func = prop.func,
+                                  fit.custom.loss = fit.custom.loss.bad7))
 
-    expect_warning(expect_error(fit.subgroup(x = x, y = y,
-                              trt = trt01,
-                              propensity.func = prop.func,
-                              fit.custom.loss = fit.custom.loss.bad8)))
+        expect_warning(expect_error(fit.subgroup(x = x, y = y,
+                                  trt = trt01,
+                                  propensity.func = prop.func,
+                                  fit.custom.loss = fit.custom.loss.bad8)))
+    }
 
     ###############################
 
@@ -549,128 +551,131 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
 
     expect_is(subgrp.model, "subgroup_fitted")
 
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = trt01,
-                                 propensity.func = prop.func,
-                                 loss   = "owl_hinge_flip_loss",
-                                 nfolds = 5)
 
-    expect_is(subgrp.model, "subgroup_fitted")
+    if (Sys.info()[[1]] != "windows")
+    {
+        subgrp.model <- fit.subgroup(x = x, y = y,
+                                     trt = trt01,
+                                     propensity.func = prop.func,
+                                     loss   = "owl_hinge_flip_loss",
+                                     nfolds = 5)
 
-
-    trt01_bad <- trt01
-    trt01_bad[4] <- "third_trt_level"
-    expect_error(subgrp.model <- fit.subgroup(x = x, y = y,
-                                              trt = trt01_bad,
-                                              propensity.func = prop.func,
-                                              loss   = "owl_hinge_flip_loss",
-                                              nfolds = 5))
+        expect_is(subgrp.model, "subgroup_fitted")
 
 
-    expect_is(subgrp.model, "subgroup_fitted")
-
-    invisible(capture.output(print(subgrp.model, digits = 2)))
-
-    invisible(capture.output(summary(subgrp.model)))
-
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = trt01,
-                                 propensity.func = prop.func,
-                                 loss   = "owl_hinge_loss",
-                                 nfolds = 5)
-
-    expect_is(subgrp.model, "subgroup_fitted")
-
-    invisible(capture.output(print(subgrp.model, digits = 2)))
-
-    invisible(capture.output(summary(subgrp.model)))
-
-    expect_error(fit.subgroup(x = x, y = y,
-                              trt = trt01,
-                              propensity.func = prop.func,
-                              loss   = "owl_hinge_loss",
-                              nfolds = -5) )
-
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = trt01,
-                                 propensity.func = prop.func,
-                                 loss   = "owl_hinge_flip_loss",
-                                 kernel = "vanilladot")
-
-    expect_is(subgrp.model, "subgroup_fitted")
-
-    invisible(capture.output(print(subgrp.model, digits = 2)))
-
-    invisible(capture.output(summary(subgrp.model)))
+        trt01_bad <- trt01
+        trt01_bad[4] <- "third_trt_level"
+        expect_error(subgrp.model <- fit.subgroup(x = x, y = y,
+                                                  trt = trt01_bad,
+                                                  propensity.func = prop.func,
+                                                  loss   = "owl_hinge_flip_loss",
+                                                  nfolds = 5))
 
 
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = trt01,
-                                 propensity.func = prop.func,
-                                 loss   = "owl_hinge_flip_loss",
-                                 kernel = "polydot",
-                                 kpar = list(degree = 3),
-                                 nfolds = 5)              # option for cv.glmnet
+        expect_is(subgrp.model, "subgroup_fitted")
 
-    expect_is(subgrp.model, "subgroup_fitted")
+        invisible(capture.output(print(subgrp.model, digits = 2)))
 
-    invisible(capture.output(print(subgrp.model, digits = 2)))
+        invisible(capture.output(summary(subgrp.model)))
 
-    invisible(capture.output(summary(subgrp.model)))
+        subgrp.model <- fit.subgroup(x = x, y = y,
+                                     trt = trt01,
+                                     propensity.func = prop.func,
+                                     loss   = "owl_hinge_loss",
+                                     nfolds = 5)
 
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = trt01,
-                                 propensity.func = prop.func,
-                                 loss   = "owl_hinge_flip_loss",
-                                 kernel = "laplacedot",
-                                 nfolds = 5)              # option for cv.glmnet
+        expect_is(subgrp.model, "subgroup_fitted")
 
-    expect_is(subgrp.model, "subgroup_fitted")
+        invisible(capture.output(print(subgrp.model, digits = 2)))
 
-    invisible(capture.output(print(subgrp.model, digits = 2)))
+        invisible(capture.output(summary(subgrp.model)))
 
-    invisible(capture.output(summary(subgrp.model)))
+        expect_error(fit.subgroup(x = x, y = y,
+                                  trt = trt01,
+                                  propensity.func = prop.func,
+                                  loss   = "owl_hinge_loss",
+                                  nfolds = -5) )
 
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = trt01,
-                                 propensity.func = prop.func,
-                                 loss   = "owl_hinge_flip_loss",
-                                 kernel = "besseldot",
-                                 nfolds = 5)              # option for cv.glmnet
+        subgrp.model <- fit.subgroup(x = x, y = y,
+                                     trt = trt01,
+                                     propensity.func = prop.func,
+                                     loss   = "owl_hinge_flip_loss",
+                                     kernel = "vanilladot")
 
-    expect_is(subgrp.model, "subgroup_fitted")
+        expect_is(subgrp.model, "subgroup_fitted")
 
-    invisible(capture.output(print(subgrp.model, digits = 2)))
+        invisible(capture.output(print(subgrp.model, digits = 2)))
 
-    invisible(capture.output(summary(subgrp.model)))
+        invisible(capture.output(summary(subgrp.model)))
 
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = trt01,
-                                 propensity.func = prop.func,
-                                 loss   = "owl_hinge_flip_loss",
-                                 kernel = "anovadot",
-                                 nfolds = 5)              # option for cv.glmnet
 
-    expect_is(subgrp.model, "subgroup_fitted")
+        subgrp.model <- fit.subgroup(x = x, y = y,
+                                     trt = trt01,
+                                     propensity.func = prop.func,
+                                     loss   = "owl_hinge_flip_loss",
+                                     kernel = "polydot",
+                                     kpar = list(degree = 3),
+                                     nfolds = 5)              # option for cv.glmnet
 
-    invisible(capture.output(print(subgrp.model, digits = 2)))
+        expect_is(subgrp.model, "subgroup_fitted")
 
-    invisible(capture.output(summary(subgrp.model)))
+        invisible(capture.output(print(subgrp.model, digits = 2)))
 
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = as.factor(trt01),
-                                 propensity.func = prop.func,
-                                 loss   = "owl_hinge_flip_loss",
-                                 kernel = "splinedot",
-                                 margin = 0.2,
-                                 nfolds = 5)              # option for cv.glmnet
+        invisible(capture.output(summary(subgrp.model)))
 
-    expect_is(subgrp.model, "subgroup_fitted")
+        subgrp.model <- fit.subgroup(x = x, y = y,
+                                     trt = trt01,
+                                     propensity.func = prop.func,
+                                     loss   = "owl_hinge_flip_loss",
+                                     kernel = "laplacedot",
+                                     nfolds = 5)              # option for cv.glmnet
 
-    invisible(capture.output(print(subgrp.model, digits = 2)))
+        expect_is(subgrp.model, "subgroup_fitted")
 
-    invisible(capture.output(summary(subgrp.model)))
+        invisible(capture.output(print(subgrp.model, digits = 2)))
 
+        invisible(capture.output(summary(subgrp.model)))
+
+        subgrp.model <- fit.subgroup(x = x, y = y,
+                                     trt = trt01,
+                                     propensity.func = prop.func,
+                                     loss   = "owl_hinge_flip_loss",
+                                     kernel = "besseldot",
+                                     nfolds = 5)              # option for cv.glmnet
+
+        expect_is(subgrp.model, "subgroup_fitted")
+
+        invisible(capture.output(print(subgrp.model, digits = 2)))
+
+        invisible(capture.output(summary(subgrp.model)))
+
+        subgrp.model <- fit.subgroup(x = x, y = y,
+                                     trt = trt01,
+                                     propensity.func = prop.func,
+                                     loss   = "owl_hinge_flip_loss",
+                                     kernel = "anovadot",
+                                     nfolds = 5)              # option for cv.glmnet
+
+        expect_is(subgrp.model, "subgroup_fitted")
+
+        invisible(capture.output(print(subgrp.model, digits = 2)))
+
+        invisible(capture.output(summary(subgrp.model)))
+
+        subgrp.model <- fit.subgroup(x = x, y = y,
+                                     trt = as.factor(trt01),
+                                     propensity.func = prop.func,
+                                     loss   = "owl_hinge_flip_loss",
+                                     kernel = "splinedot",
+                                     margin = 0.2,
+                                     nfolds = 5)              # option for cv.glmnet
+
+        expect_is(subgrp.model, "subgroup_fitted")
+
+        invisible(capture.output(print(subgrp.model, digits = 2)))
+
+        invisible(capture.output(summary(subgrp.model)))
+    }
 
 
     subgrp.model <- fit.subgroup(x = x, y = y,
@@ -728,50 +733,53 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
     invisible(capture.output(print(subgrp.model)))
     invisible(capture.output(summary(subgrp.model)))
 
+    if (Sys.info()[[1]] != "windows")
+    {
 
-    ## tests for gam argument specification
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = trt01,
-                                 propensity.func = prop.func,
-                                 method.gam = "REML",
-                                 loss   = "sq_loss_gam")
+        ## tests for gam argument specification
+        subgrp.model <- fit.subgroup(x = x, y = y,
+                                     trt = trt01,
+                                     propensity.func = prop.func,
+                                     method.gam = "REML",
+                                     loss   = "sq_loss_gam")
 
-    expect_is(subgrp.model, "subgroup_fitted")
+        expect_is(subgrp.model, "subgroup_fitted")
 
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = trt01,
-                                 propensity.func = prop.func,
-                                 method.gam = "REML",
-                                 loss   = "sq_loss_lasso_gam")
+        subgrp.model <- fit.subgroup(x = x, y = y,
+                                     trt = trt01,
+                                     propensity.func = prop.func,
+                                     method.gam = "REML",
+                                     loss   = "sq_loss_lasso_gam")
 
-    expect_is(subgrp.model, "subgroup_fitted")
+        expect_is(subgrp.model, "subgroup_fitted")
 
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = trt01,
-                                 propensity.func = prop.func,
-                                 control = gam.control(epsilon = 1e-10),
-                                 loss   = "sq_loss_gam")
+        subgrp.model <- fit.subgroup(x = x, y = y,
+                                     trt = trt01,
+                                     propensity.func = prop.func,
+                                     control = gam.control(epsilon = 1e-10),
+                                     loss   = "sq_loss_gam")
 
-    expect_is(subgrp.model, "subgroup_fitted")
+        expect_is(subgrp.model, "subgroup_fitted")
 
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = trt01,
-                                 propensity.func = prop.func,
-                                 optimizer = "bfgs",
-                                 loss   = "sq_loss_lasso_gam")
+        subgrp.model <- fit.subgroup(x = x, y = y,
+                                     trt = trt01,
+                                     propensity.func = prop.func,
+                                     optimizer = "bfgs",
+                                     loss   = "sq_loss_lasso_gam")
 
-    expect_is(subgrp.model, "subgroup_fitted")
+        expect_is(subgrp.model, "subgroup_fitted")
 
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = trt01,
-                                 propensity.func = prop.func,
-                                 loss   = "sq_loss_gbm",
-                                 n.trees = 5,
-                                 n.cores = 1)
+        subgrp.model <- fit.subgroup(x = x, y = y,
+                                     trt = trt01,
+                                     propensity.func = prop.func,
+                                     loss   = "sq_loss_gbm",
+                                     n.trees = 5,
+                                     n.cores = 1)
 
-    invisible(capture.output(print(subgrp.model)))
-    invisible(capture.output(summary(subgrp.model)))
-    expect_is(subgrp.model, "subgroup_fitted")
+        invisible(capture.output(print(subgrp.model)))
+        invisible(capture.output(summary(subgrp.model)))
+        expect_is(subgrp.model, "subgroup_fitted")
+    }
 
     # subgrp.model <- fit.subgroup(x = x, y = y,
     #                              trt = trt01,
@@ -1079,24 +1087,27 @@ test_that("test fit.subgroup with augment.func for continuous outcomes and vario
                               cv.folds = 1,
                               n.cores = 1))
 
-    subgrp.model <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
-                                 trt = trt01,
-                                 propensity.func = prop.func,
-                                 loss   = "cox_loss_gbm",
-                                 n.trees = 5,
-                                 n.cores = 1)
+    if (Sys.info()[[1]] != "windows")
+    {
+        subgrp.model <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
+                                     trt = trt01,
+                                     propensity.func = prop.func,
+                                     loss   = "cox_loss_gbm",
+                                     n.trees = 5,
+                                     n.cores = 1)
 
-    invisible(capture.output(print(subgrp.model)))
-    invisible(capture.output(summary(subgrp.model)))
-    expect_is(subgrp.model, "subgroup_fitted")
+        invisible(capture.output(print(subgrp.model)))
+        invisible(capture.output(summary(subgrp.model)))
+        expect_is(subgrp.model, "subgroup_fitted")
 
-    expect_warning(fit.subgroup(x = x, y = Surv(y.time.to.event, status),
-                              trt = trt01,
-                              propensity.func = prop.func,
-                              loss   = "cox_loss_gbm",
-                              n.trees = 5,
-                              cv.folds = 1,
-                              n.cores = 1))
+        expect_warning(fit.subgroup(x = x, y = Surv(y.time.to.event, status),
+                                  trt = trt01,
+                                  propensity.func = prop.func,
+                                  loss   = "cox_loss_gbm",
+                                  n.trees = 5,
+                                  cv.folds = 1,
+                                  n.cores = 1))
+    }
 })
 
 

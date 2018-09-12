@@ -315,44 +315,47 @@ test_that("test validate.subgroup for binary outcomes and various losses", {
         probs
     }
 
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = trt,
-                                 propensity.func = propensity.multinom.lasso,
-                                 loss   = "sq_loss_lasso",
-                                 nfolds = 3)              # option for cv.glmnet
+    if (Sys.info()[[1]] != "windows")
+    {
+        subgrp.model <- fit.subgroup(x = x, y = y,
+                                     trt = trt,
+                                     propensity.func = propensity.multinom.lasso,
+                                     loss   = "sq_loss_lasso",
+                                     nfolds = 3)              # option for cv.glmnet
 
-    expect_is(subgrp.model, "subgroup_fitted")
+        expect_is(subgrp.model, "subgroup_fitted")
 
-    print(subgrp.model)
+        print(subgrp.model)
 
-    subgrp.val <- validate.subgroup(subgrp.model, B = 4,
-                                    method = "train")
+        subgrp.val <- validate.subgroup(subgrp.model, B = 4,
+                                        method = "train")
 
-    expect_is(subgrp.val, "subgroup_validated")
+        expect_is(subgrp.val, "subgroup_validated")
 
-    print(subgrp.val)
+        print(subgrp.val)
 
-    print(subgrp.val, which.quant = c(2,4))
+        print(subgrp.val, which.quant = c(2,4))
 
 
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = trt,
-                                 propensity.func = propensity.multinom.lasso,
-                                 larger.outcome.better = FALSE,
-                                 loss   = "sq_loss_lasso",
-                                 nfolds = 3)              # option for cv.glmnet
+        subgrp.model <- fit.subgroup(x = x, y = y,
+                                     trt = trt,
+                                     propensity.func = propensity.multinom.lasso,
+                                     larger.outcome.better = FALSE,
+                                     loss   = "sq_loss_lasso",
+                                     nfolds = 3)              # option for cv.glmnet
 
-    expect_is(subgrp.model, "subgroup_fitted")
+        expect_is(subgrp.model, "subgroup_fitted")
 
-    print(subgrp.model)
+        print(subgrp.model)
 
-    subgrp.val <- validate.subgroup(subgrp.model, B = 4,
-                                    method = "train")
+        subgrp.val <- validate.subgroup(subgrp.model, B = 4,
+                                        method = "train")
 
-    expect_is(subgrp.val, "subgroup_validated")
+        expect_is(subgrp.val, "subgroup_validated")
 
-    print(subgrp.val)
+        print(subgrp.val)
 
-    print(subgrp.val, which.quant = c(2,4))
+        print(subgrp.val, which.quant = c(2,4))
+    }
 
 })

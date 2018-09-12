@@ -123,13 +123,16 @@ test_that("weighted.ksvm fitting", {
 
     expect_is(wk, "wksvm")
 
-    wk <- weighted.ksvm(x = x[1:25,], y = as.character(y[1:25]), C = c(1, 10),
-                        kernel = "tanhdot", maxiter = 500, bound = 10,
-                        weights = weights[1:25])
+    if (Sys.info()[[1]] != "windows")
+    {
+        wk <- weighted.ksvm(x = x[1:25,], y = as.character(y[1:25]), C = c(1, 10),
+                            kernel = "tanhdot", maxiter = 500, bound = 10,
+                            weights = weights[1:25])
 
-    expect_is(wk, "wksvm")
+        expect_is(wk, "wksvm")
 
-    summary(wk)
+        summary(wk)
+    }
 
 
     wk <- weighted.ksvm(x = x[1:100,], y = as.character(y[1:100]), C = c(1, 10),
