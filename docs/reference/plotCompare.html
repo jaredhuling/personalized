@@ -201,12 +201,12 @@ value in addition to the density (only valid for <code>type = "density"</code>)<
                            <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>5</span>)              <span class='co'># option for cv.glmnet</span>
 
 
-<span class='no'>subgrp.modelg</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='fit.subgroup.html'>fit.subgroup</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>,
+<span class='no'>subgrp.model.o</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='fit.subgroup.html'>fit.subgroup</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>,
                            <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
                            <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>,
-                           <span class='kw'>loss</span>   <span class='kw'>=</span> <span class='st'>"sq_loss_lasso_gam"</span>)
+                           <span class='kw'>loss</span>   <span class='kw'>=</span> <span class='st'>"owl_logistic_flip_loss_lasso"</span>)
 
-<span class='fu'>plotCompare</span>(<span class='no'>subgrp.model</span>, <span class='no'>subgrp.modelg</span>)</div><div class='img'><img src='plotCompare-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>plotCompare</span>(<span class='no'>subgrp.model</span>, <span class='no'>subgrp.model.o</span>)</div><div class='img'><img src='plotCompare-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

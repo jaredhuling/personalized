@@ -555,9 +555,9 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; 
 #&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 #&gt; -55.095  -7.977   5.237   4.856  17.128  49.171 </div><div class='input'>
-<span class='co'># fit lasso + gam model with REML option for gam</span>
+# fit lasso + gam model with REML option for gam
 
-<span class='no'>subgrp.modelg</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>,
+</div><div class='input'><span class='no'>subgrp.modelg</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>,
                             <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
                             <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>,
                             <span class='kw'>loss</span>   <span class='kw'>=</span> <span class='st'>"sq_loss_lasso_gam"</span>,
@@ -625,9 +625,7 @@ from <code>fit.subgroup</code>.</p></div>
 
     <span class='co'>## return predictions averaged over trt</span>
     <span class='fu'>return</span>(<span class='fl'>0.5</span> * (<span class='no'>preds_1</span> + <span class='no'>preds_n1</span>))
-}
-
-<span class='no'>subgrp.model.aug</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>,
+}</div><div class='input'><span class='no'>subgrp.model.aug</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>,
                            <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
                            <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>,
                            <span class='kw'>augment.func</span>    <span class='kw'>=</span> <span class='no'>augment.func</span>,
@@ -784,8 +782,7 @@ from <code>fit.subgroup</code>.</p></div>
 
 <span class='co'>####################  Time-to-event outcomes #############################</span>
 
-<span class='fu'>library</span>(<span class='no'>survival</span>)
-<span class='no'>subgrp.model.cox</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/survival/topics/Surv'>Surv</a></span>(<span class='no'>y.time.to.event</span>, <span class='no'>status</span>),
+<span class='fu'>library</span>(<span class='no'>survival</span>)</div><div class='input'><span class='no'>subgrp.model.cox</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/survival/topics/Surv'>Surv</a></span>(<span class='no'>y.time.to.event</span>, <span class='no'>status</span>),
                            <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
                            <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>,
                            <span class='kw'>loss</span>   <span class='kw'>=</span> <span class='st'>"cox_loss_lasso"</span>,
@@ -861,9 +858,7 @@ from <code>fit.subgroup</code>.</p></div>
     }
     <span class='co'># return lost of required components</span>
     <span class='fu'>list</span>(<span class='kw'>predict</span> <span class='kw'>=</span> <span class='no'>prd</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='no'>glmf</span>, <span class='kw'>coefficients</span> <span class='kw'>=</span> <span class='no'>cfs</span>)
-}
-
-<span class='no'>subgrp.model.bin.cust</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y.binary</span>,
+}</div><div class='input'><span class='no'>subgrp.model.bin.cust</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y.binary</span>,
                                  <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
                                  <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>,
                                  <span class='kw'>fit.custom.loss</span> <span class='kw'>=</span> <span class='no'>fit.custom.loss.bin</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: non-integer #successes in a binomial glm!</span></div><div class='input'>
@@ -921,9 +916,7 @@ from <code>fit.subgroup</code>.</p></div>
 
     <span class='co'># return list of required components</span>
     <span class='fu'>list</span>(<span class='kw'>predict</span> <span class='kw'>=</span> <span class='no'>pred</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='no'>opt</span>, <span class='kw'>coefficients</span> <span class='kw'>=</span> <span class='no'>coefs</span>)
-}
-
-<span class='co'># use exponential loss for positive outcomes</span>
+}</div><div class='input'><span class='co'># use exponential loss for positive outcomes</span>
 <span class='no'>subgrp.model.expo</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y.count</span>,
                                   <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
                                   <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>,
