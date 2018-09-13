@@ -146,22 +146,13 @@ xbeta.test <- xbeta.test + delta.test * trt.test
 
 y.test <- drop(xbeta.test) + rnorm(10 * n.obs, sd = 2)
 
-valmod <- validate.subgroup(subgrp.model, B = 10,
+valmod <- validate.subgroup(subgrp.model, B = 3,
                             method = "training_test",
                             train.fraction = 0.75)
 valmod
 
 print(valmod, which.quant = c(4, 5))
 
-bene.score.test <- subgrp.model$predict(x.test)
-
-mean(y.test[bene.score.test > 0 & trt01.test == 1]) -
-       mean(y.test[bene.score.test > 0 & trt01.test == 0])
-mean(y.test[bene.score.test <= 0 & trt01.test == 0]) -
-       mean(y.test[bene.score.test <= 0 & trt01.test == 1])
-
-quantile(valmod$boot.results[[1]][,1], c(0.025, 0.975))
-quantile(valmod$boot.results[[1]][,2], c(0.025, 0.975))
 }
 \references{
 Chen, S., Tian, L., Cai, T. and Yu, M. (2017), A general statistical framework for subgroup identification

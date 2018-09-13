@@ -61,12 +61,12 @@
 #'                            nfolds = 5)              # option for cv.glmnet
 #'
 #'
-#' subgrp.modelg <- fit.subgroup(x = x, y = y,
+#' subgrp.model.o <- fit.subgroup(x = x, y = y,
 #'                            trt = trt01,
 #'                            propensity.func = prop.func,
-#'                            loss   = "sq_loss_lasso_gam")
+#'                            loss   = "owl_logistic_flip_loss_lasso")
 #'
-#' plotCompare(subgrp.model, subgrp.modelg)
+#' plotCompare(subgrp.model, subgrp.model.o)
 #'
 #' @export
 plotCompare <- function(...,

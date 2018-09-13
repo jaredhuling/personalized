@@ -340,6 +340,7 @@
 #'
 #' # fit lasso + gam model with REML option for gam
 #'
+#' \donttest{
 #' subgrp.modelg <- fit.subgroup(x = x, y = y,
 #'                             trt = trt01,
 #'                             propensity.func = prop.func,
@@ -348,6 +349,7 @@
 #'                             nfolds = 5)              # option for cv.glmnet
 #'
 #' subgrp.modelg
+#' }
 #'
 #' ####################  Using an augmentation function #####################
 #' ## augmentation funcions involve modeling the conditional mean E[Y|T, X]
@@ -374,6 +376,7 @@
 #'     return(0.5 * (preds_1 + preds_n1))
 #' }
 #'
+#' \donttest{
 #' subgrp.model.aug <- fit.subgroup(x = x, y = y,
 #'                            trt = trt01,
 #'                            propensity.func = prop.func,
@@ -382,6 +385,7 @@
 #'                            nfolds = 10)              # option for cv.glmnet
 #'
 #' summary(subgrp.model.aug)
+#' }
 #'
 #' ####################  Binary outcomes ####################################
 #'
@@ -412,6 +416,7 @@
 #' ####################  Time-to-event outcomes #############################
 #'
 #' library(survival)
+#' \donttest{
 #' subgrp.model.cox <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
 #'                            trt = trt01,
 #'                            propensity.func = prop.func,
@@ -419,6 +424,7 @@
 #'                            nfolds = 5)              # option for cv.glmnet
 #'
 #' subgrp.model.cox
+#' }
 #'
 #'
 #' ####################  Using custom loss functions ########################
@@ -449,12 +455,14 @@
 #'     list(predict = prd, model = glmf, coefficients = cfs)
 #' }
 #'
+#' \donttest{
 #' subgrp.model.bin.cust <- fit.subgroup(x = x, y = y.binary,
 #'                                  trt = trt01,
 #'                                  propensity.func = prop.func,
 #'                                  fit.custom.loss = fit.custom.loss.bin)
 #'
 #' subgrp.model.bin.cust
+#' }
 #'
 #'
 #' ## try exponential loss for
@@ -479,6 +487,7 @@
 #'     list(predict = pred, model = opt, coefficients = coefs)
 #' }
 #'
+#' \donttest{
 #' # use exponential loss for positive outcomes
 #' subgrp.model.expo <- fit.subgroup(x = x, y = y.count,
 #'                                   trt = trt01,
@@ -486,6 +495,7 @@
 #'                                   fit.custom.loss = fit.expo.loss)
 #'
 #' subgrp.model.expo
+#' }
 #'
 #'
 #' @export
