@@ -42,7 +42,7 @@ Plots validation results for estimated subgroup treatment effects
 library(personalized)
 
 set.seed(123)
-n.obs  <- 500
+n.obs  <- 250
 n.vars <- 15
 x <- matrix(rnorm(n.obs * n.vars, sd = 3), n.obs, n.vars)
 

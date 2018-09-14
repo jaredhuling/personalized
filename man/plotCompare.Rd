@@ -31,13 +31,13 @@ Plots comparison of results for estimated subgroup treatment effects
 library(personalized)
 
 set.seed(123)
-n.obs  <- 1000
-n.vars <- 50
+n.obs  <- 100
+n.vars <- 15
 x <- matrix(rnorm(n.obs * n.vars, sd = 3), n.obs, n.vars)
 
 
 # simulate non-randomized treatment
-xbetat   <- 0.5 + 0.5 * x[,21] - 0.5 * x[,41]
+xbetat   <- 0.5 + 0.5 * x[,1] - 0.5 * x[,4]
 trt.prob <- exp(xbetat) / (1 + exp(xbetat))
 trt01    <- rbinom(n.obs, 1, prob = trt.prob)
 
@@ -72,7 +72,8 @@ subgrp.model <- fit.subgroup(x = x, y = y,
 subgrp.model.o <- fit.subgroup(x = x, y = y,
                            trt = trt01,
                            propensity.func = prop.func,
-                           loss   = "owl_logistic_flip_loss_lasso")
+                           loss   = "owl_logistic_flip_loss_lasso",
+                           nfolds = 5)
 
 plotCompare(subgrp.model, subgrp.model.o)
 
