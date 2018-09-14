@@ -12,7 +12,7 @@
 
 <meta name="author" content="Jared Huling" />
 
-<meta name="date" content="2018-09-02" />
+<meta name="date" content="2018-09-14" />
 
 <title>Usage of the Personalized Package</title>
 
@@ -278,7 +278,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Usage of the Personalized Package</h1>
 <h4 class="author"><em>Jared Huling</em></h4>
-<h4 class="date"><em>2018-09-02</em></h4>
+<h4 class="date"><em>2018-09-14</em></h4>
 
 
 <div id="TOC">
@@ -355,27 +355,27 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <tbody>
 <tr class="odd">
 <td>Squared Error</td>
-<td>C/B</td>
+<td>C/B/CT</td>
 <td align="left"><span class="math inline">\(M(y, v) = (v - y) ^ 2\)</span></td>
 </tr>
 <tr class="even">
 <td>OWL Logistic</td>
-<td>C/B</td>
+<td>C/B/CT</td>
 <td align="left"><span class="math inline">\(M(y, v) = y\log(1 + \exp\{-v\})\)</span></td>
 </tr>
 <tr class="odd">
 <td>OWL Logistic Flip</td>
-<td>C/B</td>
+<td>C/B/CT</td>
 <td align="left"><span class="math inline">\(M(y, v) = \vert y\vert \log(1 + \exp\{-\mbox{sign}(y)v\})\)</span></td>
 </tr>
 <tr class="even">
 <td>OWL Hinge</td>
-<td>C/B</td>
+<td>C/B/CT</td>
 <td align="left"><span class="math inline">\(M(y, v) = y\max(0, 1 - v)\)</span></td>
 </tr>
 <tr class="odd">
 <td>OWL Hinge Flip</td>
-<td>C/B</td>
+<td>C/B/CT</td>
 <td align="left"><span class="math inline">\(M(y, v) = \vert y\vert\max(0, 1 - \mbox{sign}(y)v)\)</span></td>
 </tr>
 <tr class="even">
@@ -483,7 +483,7 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## function:  propensity.func 
 ## 
 ## benefit score: f(x), 
-## Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
+## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
 ## 
 ## Average Outcomes:
 ##                 Recommended 0      Recommended 1
@@ -549,7 +549,7 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## replications:       25 
 ## 
 ## benefit score: f(x), 
-## Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
+## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
 ## 
 ## Average Test Set Outcomes:
 ##                                Recommended 0
@@ -708,7 +708,7 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## function:  propensity.func 
 ## 
 ## benefit score: f(x), 
-## Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
+## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
 ## 
 ## Average Outcomes:
 ##                 Recommended 0      Recommended 1
@@ -801,7 +801,7 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## function:  propensity.func 
 ## 
 ## benefit score: f(x), 
-## Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
+## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
 ## 
 ## Average Outcomes:
 ##               Recommended 0    Recommended 1
@@ -874,7 +874,7 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## function:  propensity.func 
 ## 
 ## benefit score: f(x), 
-## Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
+## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
 ## 
 ## Average Outcomes:
 ##                 Recommended 0      Recommended 1
@@ -956,7 +956,7 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## function:  propensity.func 
 ## 
 ## benefit score: f(x), 
-## Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
+## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
 ## 
 ## Average Outcomes:
 ##                 Recommended 0      Recommended 1
@@ -1071,7 +1071,7 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## replications:       25 
 ## 
 ## benefit score: f(x), 
-## Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
+## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
 ## 
 ## Average Test Set Outcomes:
 ##                               Recommended 0
@@ -1116,7 +1116,7 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## replications:       25 
 ## 
 ## benefit score: f(x), 
-## Trt recomm = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
+## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
 ## 
 ## Average Bootstrap Bias-Corrected Outcomes:
 ##                                 Recommended 0

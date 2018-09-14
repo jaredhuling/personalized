@@ -70,11 +70,11 @@ The `personalized` package offers a flexible range of choices both for the form 
 
 | Name          | Outcomes      | Loss          |
 | ------------- | ------------- |:--------------|
-| Squared Error           | C/B           | $M(y, v) = (v - y) ^ 2$ |
-| OWL Logistic           | C/B           | $M(y, v) = y\log(1 + \exp\{-v\})$ |
-| OWL Logistic Flip          | C/B           | $M(y, v) = \vert y\vert \log(1 + \exp\{-\mbox{sign}(y)v\})$ |
-| OWL Hinge           | C/B           | $M(y, v) = y\max(0, 1 - v)$ |
-| OWL Hinge Flip           | C/B           | $M(y, v) = \vert y\vert\max(0, 1 - \mbox{sign}(y)v)$ |
+| Squared Error           | C/B/CT           | $M(y, v) = (v - y) ^ 2$ |
+| OWL Logistic           | C/B/CT           | $M(y, v) = y\log(1 + \exp\{-v\})$ |
+| OWL Logistic Flip          | C/B/CT           | $M(y, v) = \vert y\vert \log(1 + \exp\{-\mbox{sign}(y)v\})$ |
+| OWL Hinge           | C/B/CT           | $M(y, v) = y\max(0, 1 - v)$ |
+| OWL Hinge Flip           | C/B/CT           | $M(y, v) = \vert y\vert\max(0, 1 - \mbox{sign}(y)v)$ |
 | Logistic             | B           | $M(y, v) = -[yv - \log(1 + \mbox{exp}\{-v\})]$ |
 | Poisson           | CT           | $M(y, v) = -[yv - \exp(v)]$ |
 | Cox             | TTE           | $M(y, v) = -\left\{ \int_0^\tau\left(  v - \log[E\{ e^vI(X \geq u) \}]  \right)\mathrm{d} N(u) \right\}$ |       
