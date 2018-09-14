@@ -61,8 +61,3 @@ environment:
   - R_VERSION: devel
     R_ARCH: x64
 
-  - R_VERSION: devel
-    R_ARCH: x86
-
-  - R_VERSION: stable
-    R_ARCH: x86
