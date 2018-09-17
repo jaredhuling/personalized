@@ -207,59 +207,73 @@ fit_sq_loss_lasso <- function(x, y, trt, n.trts, wts, family, match.id, intercep
     }
     list.dots$nfolds <- nfolds
 
-    ## Establish foldid for cv.glmnet()
-    ## if match.id was supplied, foldid will be structured around the clusters
-    if (!is.null(match.id))
-    {
-        if ("foldid" %in% dot.names)
-        {
-            warning("User-supplied foldid will be ignored since match.id was detected.
-                    Folds will be randomly assigned to clusters according to match.id.")
-        }
-        # Assign a fold ID for each cluster level
-        df.folds <- data.frame(match.id = sample(levels(match.id)),
-                               fold.id = 1:length(levels(match.id)) %% nfolds)
-        # Obtain vector of fold IDs with respect to the data
-        foldid <- sapply(match.id, function(z) {df.folds[which(z == df.folds$match.id),"fold.id"]}) + 1
-    } else
-    {
-        if ("foldid" %in% dot.names)
-        {
-            foldid <- list.dots$foldid
-        } else
-        {
-            foldid <- sample(rep(seq(nfolds), length = nrow(x)))
-        }
-    }
-    list.dots$foldid <- foldid
+    nsel <- 0
+    ct   <- 0
+    ntry <- 4
 
-    # fit a model with a lasso
-    # penalty and desired loss
-    model <- do.call(cv.glmnet, c(list(x = x, y = y, weights = wts, family = family), list.dots))
-
-    # this is needed for OWL losses, as glmnet
-    # no longer allows constant columns (ie an intercept)
-    # to have estimated coefficients
-    if (intercept)
+    while(nsel == 0 & ct <= ntry)
     {
-        if (family != "multinomial")
+        ct <- ct + 1
+        ## Establish foldid for cv.glmnet()
+        ## if match.id was supplied, foldid will be structured around the clusters
+        if (!is.null(match.id))
         {
-            model$glmnet.fit$beta[1,] <- unname(model$glmnet.fit$a0)
-            model$glmnet.fit$a0       <- rep(0, length(model$glmnet.fit$a0))
-        } else
-        {
-            for (cl in 1:nrow(model$glmnet.fit$a0))
+            if ("foldid" %in% dot.names)
             {
-                model$glmnet.fit$beta[[cl]][1,] <- unname(model$glmnet.fit$a0[cl,])
-                model$glmnet.fit$a0[cl,]        <- rep(0, length(model$glmnet.fit$a0[cl,]))
+                warning("User-supplied foldid will be ignored since match.id was detected.
+                        Folds will be randomly assigned to clusters according to match.id.")
+            }
+            # Assign a fold ID for each cluster level
+            df.folds <- data.frame(match.id = sample(levels(match.id)),
+                                   fold.id = 1:length(levels(match.id)) %% nfolds)
+            # Obtain vector of fold IDs with respect to the data
+            foldid <- sapply(match.id, function(z) {df.folds[which(z == df.folds$match.id),"fold.id"]}) + 1
+        } else
+        {
+            if ("foldid" %in% dot.names)
+            {
+                foldid <- list.dots$foldid
+            } else
+            {
+                foldid <- sample(rep(seq(nfolds), length = nrow(x)))
             }
         }
+        list.dots$foldid <- foldid
+
+        # fit a model with a lasso
+        # penalty and desired loss
+        model <- do.call(cv.glmnet, c(list(x = x, y = y, weights = wts, family = family), list.dots))
+
+        # this is needed for OWL losses, as glmnet
+        # no longer allows constant columns (ie an intercept)
+        # to have estimated coefficients
+        if (intercept)
+        {
+            if (family != "multinomial")
+            {
+                model$glmnet.fit$beta[1,] <- unname(model$glmnet.fit$a0)
+                model$glmnet.fit$a0       <- rep(0, length(model$glmnet.fit$a0))
+            } else
+            {
+                for (cl in 1:nrow(model$glmnet.fit$a0))
+                {
+                    model$glmnet.fit$beta[[cl]][1,] <- unname(model$glmnet.fit$a0[cl,])
+                    model$glmnet.fit$a0[cl,]        <- rep(0, length(model$glmnet.fit$a0[cl,]))
+                }
+            }
+        }
+
+        coefs <- get.coef.func("fit_sq_loss_lasso")(model)
+
+        nsel  <- sum(coefs != 0) - (n.trts - 1)
     }
+
+
 
     # Return fitted model and extraction methods
     list(predict      = get.pred.func("fit_sq_loss_lasso", model),
          model        = model,
-         coefficients = get.coef.func("fit_sq_loss_lasso")(model))
+         coefficients = coefs)
 }
 
 
@@ -300,20 +314,27 @@ fit_cox_loss_lasso <- function(x, y, trt, n.trts, wts, family, match.id, ...)
     }
     list.dots$nfolds <- nfolds
 
-    ## Establish foldid for cv.glmnet()
-    ## if match.id was supplied, foldid will be structured around the clusters
-    if (!is.null(match.id))
+    nsel <- 0
+    ct   <- 0
+    ntry <- 4
+
+    while(nsel == 0 & ct <= ntry)
     {
-        if ("foldid" %in% dot.names)
+        ct <- ct + 1
+        ## Establish foldid for cv.glmnet()
+        ## if match.id was supplied, foldid will be structured around the clusters
+        if (!is.null(match.id))
         {
-            warning("User-supplied foldid will be ignored since match.id was detected.
-                    Folds will be randomly assigned to clusters according to match.id.")
-        }
-        # Assign a fold ID for each cluster level
-        df.folds <- data.frame(match.id = sample(levels(match.id)),
-                               fold.id = 1:length(levels(match.id)) %% nfolds)
-        # Obtain vector of fold IDs with respect to the data
-        foldid <- sapply(match.id, function(z) {df.folds[which(z == df.folds$match.id),"fold.id"]}) +1
+            if ("foldid" %in% dot.names)
+            {
+                warning("User-supplied foldid will be ignored since match.id was detected.
+                        Folds will be randomly assigned to clusters according to match.id.")
+            }
+            # Assign a fold ID for each cluster level
+            df.folds <- data.frame(match.id = sample(levels(match.id)),
+                                   fold.id = 1:length(levels(match.id)) %% nfolds)
+            # Obtain vector of fold IDs with respect to the data
+            foldid <- sapply(match.id, function(z) {df.folds[which(z == df.folds$match.id),"fold.id"]}) +1
         } else
         {
             if ("foldid" %in% dot.names)
@@ -324,16 +345,23 @@ fit_cox_loss_lasso <- function(x, y, trt, n.trts, wts, family, match.id, ...)
                 foldid <- sample(rep(seq(nfolds), length = nrow(x)))
             }
         }
-    list.dots$foldid <- foldid
+        list.dots$foldid <- foldid
 
-    # fit a model with a lasso
-    # penalty and desired loss
-    model <- do.call(cv.glmnet, c(list(x = x, y = y, weights = wts, family = "cox"), list.dots))
+        # fit a model with a lasso
+        # penalty and desired loss
+        model <- do.call(cv.glmnet, c(list(x = x, y = y, weights = wts, family = "cox"), list.dots))
+
+        coefs <- get.coef.func("fit_cox_loss_lasso")(model)
+
+        nsel  <- sum(coefs != 0) - (n.trts - 1)
+    }
+
+
 
     # Return fitted model and extraction methods
     list(predict      = get.pred.func("fit_cox_loss_lasso", model),
          model        = model,
-         coefficients = get.coef.func("fit_cox_loss_lasso")(model))
+         coefficients = coefs)
 }
 
 
