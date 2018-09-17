@@ -662,6 +662,8 @@ validate.subgroup <- function(model,
     names(boot.list)[c(1:3, 5)] <- names(summary.stats)
     names(boot.list)[4] <- "coefficients"
 
+    colnames(boot.list[[1]]) <- names(model$subgroup.trt.effects$subgroup.effects)
+
     summary.stats.quantile <- summary.stats.quantile.se <- vector(mode = "list", length = n.quantiles)
     for (q in 1:n.quantiles)
     {
@@ -688,6 +690,8 @@ validate.subgroup <- function(model,
         names(boot.list.quantiles[[q]]) <- 1:length(names(boot.list))
         names(boot.list.quantiles[[q]])[c(1:3, 5)] <- names(summary.stats)
         names(boot.list.quantiles[[q]])[4] <- "coefficients"
+
+        colnames(boot.list.quantiles[[q]][[1]]) <- names(model$subgroup.trt.effects$subgroup.effects)
     }
 
     names(summary.stats.quantile) <- names(summary.stats.quantile.se) <-
