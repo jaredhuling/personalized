@@ -80,20 +80,34 @@ subgroup.effects <- function(benefit.scores, y, trt,
         # meaning of larger vs smaller benefit score
         # is different depending on whether larger means
         # better or not for the outcome
-        if (larger.outcome.better)
+        if (NCOL(benefit.scores) < n.trts)
         {
-            best.comp.idx   <- apply(benefit.scores, 1, which.max)
-            recommended.trt <- 1 * (benefit.scores > cutpoint)
-            rec.ref         <- rowSums(recommended.trt) == 0
+            if (larger.outcome.better)
+            {
+                best.comp.idx   <- apply(benefit.scores, 1, which.max)
+                recommended.trt <- 1 * (benefit.scores > cutpoint)
+                rec.ref         <- rowSums(recommended.trt) == 0
 
-            recommended.trt <- ifelse(rec.ref, reference.trt, comparison.trts[best.comp.idx])
-        } else
+                recommended.trt <- ifelse(rec.ref, reference.trt, comparison.trts[best.comp.idx])
+            } else
+            {
+                best.comp.idx   <- apply(benefit.scores, 1, which.min)
+                recommended.trt <- 1 * (benefit.scores < cutpoint)
+                rec.ref         <- rowSums(recommended.trt) == 0
+
+                recommended.trt <- ifelse(rec.ref, reference.trt, comparison.trts[best.comp.idx])
+            }
+        } else ## else it's an overparameterized multinomial logistic regr model
         {
-            best.comp.idx   <- apply(benefit.scores, 1, which.min)
-            recommended.trt <- 1 * (benefit.scores < cutpoint)
-            rec.ref         <- rowSums(recommended.trt) == 0
-
-            recommended.trt <- ifelse(rec.ref, reference.trt, comparison.trts[best.comp.idx])
+            if (larger.outcome.better)
+            {
+                best.comp.idx   <- apply(benefit.scores, 1, which.max)
+                recommended.trt <- unique.trts[best.comp.idx]
+            } else
+            {
+                best.comp.idx   <- apply(benefit.scores, 1, which.min)
+                recommended.trt <- unique.trts[best.comp.idx]
+            }
         }
     } else
     {
