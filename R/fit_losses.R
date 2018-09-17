@@ -265,7 +265,13 @@ fit_sq_loss_lasso <- function(x, y, trt, n.trts, wts, family, match.id, intercep
 
         coefs <- get.coef.func("fit_sq_loss_lasso")(model)
 
-        nsel  <- sum(coefs != 0) - (n.trts - 1)
+        if (is.list(coefs))
+        {
+            nsel  <- sum(sapply(coefs, function(cfs) sum(cfs != 0))) - (n.trts - 1)
+        } else
+        {
+            nsel  <- sum(coefs != 0) - (n.trts - 1)
+        }
     }
 
 
@@ -353,7 +359,13 @@ fit_cox_loss_lasso <- function(x, y, trt, n.trts, wts, family, match.id, ...)
 
         coefs <- get.coef.func("fit_cox_loss_lasso")(model)
 
-        nsel  <- sum(coefs != 0) - (n.trts - 1)
+        if (is.list(coefs))
+        {
+            nsel  <- sum(sapply(coefs, function(cfs) sum(cfs != 0))) - (n.trts - 1)
+        } else
+        {
+            nsel  <- sum(coefs != 0) - (n.trts - 1)
+        }
     }
 
 
