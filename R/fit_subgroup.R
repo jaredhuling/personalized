@@ -1189,17 +1189,27 @@ fit.subgroup <- function(x,
     {
         cnames <- 1:NCOL(bene.scores)
 
-        for (t in 1:(n.trts - 1))
+        if (NCOL(bene.scores) == length(unique.trts))
         {
-            cnames[t] <- paste0(comparison.trts[t], "-vs-", reference.trt)
+            for (t in 1:(n.trts))
+            {
+                cnames[t] <- paste0(unique.trts[t])
+            }
+        } else
+        {
+            for (t in 1:(n.trts - 1))
+            {
+                cnames[t] <- paste0(comparison.trts[t], "-vs-", reference.trt)
+            }
         }
         colnames(bene.scores) <- cnames
     }
 
     attr(bene.scores, "comparison.trts") <- comparison.trts
     attr(bene.scores, "reference.trt")   <- reference.trt
+    attr(bene.scores, "trts")            <- unique.trts
 
-    fitted.model$benefit.scores        <- bene.scores
+    fitted.model$benefit.scores          <- bene.scores
 
 
 

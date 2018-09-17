@@ -136,5 +136,10 @@ predict.subgroup_fitted <- function(object,
         }
 
     }
+
+    attr(retval, "comparison.trts") <- object$comparison.trts
+    attr(retval, "reference.trt")   <- object$reference.trt
+    attr(retval, "trts")            <- object$trts
+
     retval
 }

@@ -48,6 +48,29 @@ print.subgroup_fitted <- function(x, digits = max(getOption('digits')-3, 3), ...
                        x$reference.trt, "*I(f(x)>=c)"), "where c is 'cutpoint'\n")
         }
 
+    } else if (x$n.trts == NCOL(x$benefit.scores)) ## multinomial model case
+    {
+        if (x$larger.outcome.better)
+        {
+            bene.text <- paste(paste0("f_", (x$trts), "(x): ",
+                                      paste(x$trts)),
+                               collapse = ",  ")
+            cat("benefit scores:", bene.text, "\n")
+            trt.rec.text <- paste0("maxval = max(", paste(paste0("f_", (x$trts), "(x)"), collapse = ", "), ")")
+            cat(trt.rec.text, "\n")
+            cat("which.max(maxval) = The trt level which maximizes maxval\n")
+            cat("Trt recom = which.max(maxval)\n")
+        } else
+        {
+            bene.text <- paste(paste0("f_", (x$trts), "(x): ",
+                                      paste(x$trts)),
+                               collapse = ",  ")
+            cat("benefit scores:", bene.text, "\n")
+            trt.rec.text <- paste0("maxval = min(", paste(paste0("f_", (x$trts), "(x)"), collapse = ", "), ")")
+            cat(trt.rec.text, "\n")
+            cat("which.min(minval) = The trt level which mininizes minval\n")
+            cat("Trt recom = which.min(minval)\n")
+        }
     } else
     {
         if (x$larger.outcome.better)
@@ -106,6 +129,14 @@ print.subgroup_fitted <- function(x, digits = max(getOption('digits')-3, 3), ...
         cname <- paste0(x$comparison.trts, " vs ", x$reference.trt)
         cat("\nBenefit score", paste0("quantiles (f(X) for ", cname, "): \n") )
         print(quantile(x$benefit.scores), digits = digits)
+    } else if (ncol.bs == length(x$trts))
+    {
+        for (cc in 1:ncol.bs)
+        {
+            cname <- paste0(x$trts[cc])
+            cat("\nBenefit score", cc, paste0("quantiles (f(X) for ", cname, "): \n") )
+            print(quantile(x$benefit.scores[,cc]), digits = digits)
+        }
     } else
     {
         for (cc in 1:ncol.bs)
