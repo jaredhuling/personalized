@@ -82,7 +82,7 @@
       <h1>Usage of the Personalized Package</h1>
                         <h4 class="author">Jared Huling</h4>
             
-            <h4 class="date">2018-09-17</h4>
+            <h4 class="date">2018-09-18</h4>
       
       
       <div class="hidden name"><code>usage_of_the_personalized_package.Rmd</code></div>
@@ -332,21 +332,21 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## 
 ## Average Test Set Outcomes:
 ##                                Recommended 0
-## Received 0 -12.4224 (SE = 4.1278, n = 49.92)
-## Received 1 -15.4275 (SE = 2.7319, n = 74.44)
-##                              Recommended 1
-## Received 0 -14.5556 (SE = 2.58, n = 50.44)
-## Received 1 -9.3676 (SE = 3.4986, n = 75.2)
+## Received 0 -12.2348 (SE = 4.3752, n = 48.12)
+## Received 1 -15.9437 (SE = 3.2222, n = 73.84)
+##                               Recommended 1
+## Received 0   -14.6937 (SE = 2.8059, n = 51)
+## Received 1 -9.5496 (SE = 3.5861, n = 77.04)
 ## 
 ## Treatment effects conditional on subgroups:
 ## Est of E[Y|T=0,T=Recom]-E[Y|T=/=0,T=Recom] 
-##            3.005 (SE = 4.6473, n = 124.36) 
+##           3.7089 (SE = 5.5846, n = 121.96) 
 ## Est of E[Y|T=1,T=Recom]-E[Y|T=/=1,T=Recom] 
-##           5.1881 (SE = 4.5859, n = 125.64) 
+##           5.1441 (SE = 4.8517, n = 128.04) 
 ## 
 ## Est of 
-## E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:                    
-## 3.442 (SE = 3.3063)</code></pre>
+## E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:                     
+## 3.9569 (SE = 3.4501)</code></pre>
 <p>We can then plot the average outcomes averaged over all replications of the training and testing partition procedure:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">plot</span>(validation)</a></code></pre></div>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_validation-1.png" width="700"> From the above plot we can evaluate what the impact of the subgroups is. Among patients for whom the model recommends the control is more effective than the treatment, we can see that those who instead take the treatment are worse off than patients who take the control. Similarly, among patients who are recommended the treatment, patients who take the treatment are better off on average than patients who do not take the treatment.</p>
@@ -520,14 +520,14 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## 
 ## Average Outcomes:
 ##                 Recommended 0      Recommended 1
-## Received 0 -12.0824 (n = 201) -14.7591 (n = 209)
-## Received 1  -20.517 (n = 288)  -5.5316 (n = 302)
+## Received 0  -7.8948 (n = 200) -18.5592 (n = 210)
+## Received 1 -20.1436 (n = 288)  -5.7529 (n = 302)
 ## 
 ## Treatment effects conditional on subgroups:
 ## Est of E[Y|T=0,T=Recom]-E[Y|T=/=0,T=Recom] 
-##                           8.4346 (n = 489) 
+##                          12.2487 (n = 488) 
 ## Est of E[Y|T=1,T=Recom]-E[Y|T=/=1,T=Recom] 
-##                           9.2275 (n = 511) 
+##                          12.8064 (n = 512) 
 ## 
 ## NOTE: The above average outcomes are biased estimates of
 ##       the expected outcomes conditional on subgroups. 
@@ -537,7 +537,7 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## 
 ## Benefit score quantiles (f(X) for 1 vs 0): 
 ##       0%      25%      50%      75%     100% 
-## -21.2251  -4.1385   0.1479   4.4585  22.4945 
+## -28.0887  -4.5974   0.2698   5.1089  27.1812 
 ## 
 ## ---------------------------------------------------
 ## 
@@ -545,7 +545,7 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## E[Y|T=1, X] - E[Y|T=0, X]
 ## 
 ##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-## -42.4502  -8.2769   0.2958   0.3248   8.9169  44.9889 
+## -56.1774  -9.1948   0.5396   0.3954  10.2178  54.3624 
 ## 
 ## ---------------------------------------------------
 ## The following summary pertains to estimated treatment-covariate interactions:</code></pre>
@@ -554,24 +554,32 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## Link function: identity 
 ## 
 ## Formula:
-## y ~ -1 + Trt1 + s(V1) + s(V2) + s(V3) + s(V11) + s(V13)
+## y ~ -1 + Trt1 + s(V1) + s(V2) + s(V3) + s(V8) + s(V11) + s(V13) + 
+##     s(V17) + s(V27) + s(V37) + s(V40) + s(V42) + s(V50)
 ## 
 ## Parametric coefficients:
 ##      Estimate Std. Error t value Pr(&gt;|t|)
-## Trt1  0.08914    0.89547     0.1    0.921
+## Trt1  0.05318    0.89386   0.059    0.953
 ## 
 ## Approximate significance of smooth terms:
-##          edf Ref.df     F  p-value    
-## s(V1)  2.894  3.680 2.363 0.078723 .  
-## s(V2)  2.934  3.743 4.947 0.000785 ***
-## s(V3)  1.000  1.000 8.232 0.004201 ** 
-## s(V11) 6.402  7.584 1.925 0.048012 *  
-## s(V13) 1.000  1.000 5.418 0.020126 *  
+##          edf Ref.df      F  p-value    
+## s(V1)  2.975  3.782  2.540 0.057086 .  
+## s(V2)  3.124  3.977  4.774 0.000786 ***
+## s(V3)  1.000  1.000 10.034 0.001583 ** 
+## s(V8)  1.000  1.000  2.357 0.125059    
+## s(V11) 1.000  1.000  7.409 0.006603 ** 
+## s(V13) 1.000  1.000  7.000 0.008278 ** 
+## s(V17) 1.000  1.000  2.115 0.146215    
+## s(V27) 1.000  1.000  2.014 0.156148    
+## s(V37) 1.000  1.000  4.525 0.033650 *  
+## s(V40) 1.000  1.000  1.178 0.278052    
+## s(V42) 1.000  1.000  2.635 0.104822    
+## s(V50) 1.000  1.000  5.072 0.024531 *  
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## R-sq.(adj) =  0.051   Deviance explained =  6.3%
-## GCV =   1520  Scale est. = 1496.9    n = 1000</code></pre>
+## R-sq.(adj) =  0.0607   Deviance explained = 7.23%
+## GCV = 1510.6  Scale est. = 1484.8    n = 1000</code></pre>
 </div>
 <div id="binary-outcomes" class="section level3">
 <h3 class="hasAnchor">
@@ -614,14 +622,14 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## 
 ## Average Outcomes:
 ##               Recommended 0    Recommended 1
-## Received 0 0.4377 (n = 181) 0.2059 (n = 229)
-## Received 1 0.2293 (n = 270) 0.4367 (n = 320)
+## Received 0 0.4408 (n = 178) 0.1979 (n = 232)
+## Received 1 0.2014 (n = 275) 0.4745 (n = 315)
 ## 
 ## Treatment effects conditional on subgroups:
 ## Est of E[Y|T=0,T=Recom]-E[Y|T=/=0,T=Recom] 
-##                           0.2084 (n = 451) 
+##                           0.2394 (n = 453) 
 ## Est of E[Y|T=1,T=Recom]-E[Y|T=/=1,T=Recom] 
-##                           0.2308 (n = 549) 
+##                           0.2765 (n = 547) 
 ## 
 ## NOTE: The above average outcomes are biased estimates of
 ##       the expected outcomes conditional on subgroups. 
@@ -631,7 +639,7 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## 
 ## Benefit score quantiles (f(X) for 1 vs 0): 
 ##       0%      25%      50%      75%     100% 
-## -1.31720 -0.24199  0.06729  0.38384  1.48203 
+## -1.68412 -0.33269  0.08148  0.45960  1.65334 
 ## 
 ## ---------------------------------------------------
 ## 
@@ -639,7 +647,7 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## E[Y|T=1, X] - E[Y|T=0, X]
 ## 
 ##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-## -0.57743 -0.12041  0.03363  0.02991  0.18960  0.62976</code></pre>
+## -0.68690 -0.16483  0.04072  0.03348  0.22584  0.67868</code></pre>
 </div>
 <div id="count-outcomes" class="section level3">
 <h3 class="hasAnchor">
@@ -688,15 +696,15 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
 ## 
 ## Average Outcomes:
-##                 Recommended 0      Recommended 1
-## Received 0 511.0578 (n = 260)  48.5139 (n = 150)
-## Received 1 136.5828 (n = 369) 182.7359 (n = 221)
+##                 Recommended 0     Recommended 1
+## Received 0  92.1092 (n = 254) 30.2408 (n = 156)
+## Received 1 280.5498 (n = 359) 74.1632 (n = 231)
 ## 
 ## Treatment effects conditional on subgroups:
 ## Est of E[Y|T=0,T=Recom]-E[Y|T=/=0,T=Recom] 
-##                          374.475 (n = 629) 
+##                        -188.4406 (n = 613) 
 ## Est of E[Y|T=1,T=Recom]-E[Y|T=/=1,T=Recom] 
-##                          134.222 (n = 371) 
+##                          43.9225 (n = 387) 
 ## 
 ## NOTE: The above average outcomes are biased estimates of
 ##       the expected outcomes conditional on subgroups. 
@@ -706,7 +714,7 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## 
 ## Benefit score quantiles (f(X) for 1 vs 0): 
 ##       0%      25%      50%      75%     100% 
-## -0.56536 -0.17097 -0.05576  0.06300  0.63843 
+## -0.53494 -0.16578 -0.05368  0.07284  0.67085 
 ## 
 ## ---------------------------------------------------
 ## 
@@ -719,17 +727,19 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## the survival time
 ## 
 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##  0.5281  0.9389  1.0573  1.0701  1.1865  1.7601 
+##  0.5113  0.9297  1.0551  1.0638  1.1803  1.7073 
 ## 
 ## ---------------------------------------------------
 ## 
-## 7 out of 49 interactions selected in total by the lasso (cross validation criterion).
+## 8 out of 49 interactions selected in total by the lasso (cross validation criterion).
 ## 
 ## The first estimate is the treatment main effect, which is always selected. 
 ## Any other variables selected represent treatment-covariate interactions.
 ## 
-##           Trt1     V2     V3      V8     V11    V13    V17     V47    V50
-## Estimate 0.049 0.0496 -0.007 -0.0034 -0.0228 0.0075 0.0014 -0.0015 0.0113</code></pre>
+##            Trt1     V1     V2      V3     V4     V8     V11    V12    V13
+## Estimate 0.0415 0.0057 0.0484 -0.0091 -6e-04 -0.001 -0.0218 -1e-04 0.0073
+##             V50
+## Estimate 0.0152</code></pre>
 </div>
 <div id="efficiency-augmentation" class="section level3">
 <h3 class="hasAnchor">

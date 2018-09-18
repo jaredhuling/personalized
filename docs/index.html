@@ -221,19 +221,19 @@
 ## Trt recom = Trt*I(f(x)&gt;c)+Ctrl*I(f(x)&lt;=c) where c is 'cutpoint'
 ## 
 ## Average Test Set Outcomes:
-##                         Recommended Ctrl            Recommended Trt
-## Received Ctrl -10.85 (SE = 7.88, 20.74%)  -18.64 (SE = 6.5, 25.81%)
-## Received Trt   -15.81 (SE = 5.9, 24.18%) -15.36 (SE = 9.02, 29.26%)
+##                         Recommended Ctrl             Recommended Trt
+## Received Ctrl  -9.47 (SE = 8.58, 20.49%)  -18.36 (SE = 7.57, 25.34%)
+## Received Trt  -17.47 (SE = 6.54, 24.74%) -15.12 (SE = 13.31, 29.43%)
 ## 
 ## Treatment effects conditional on subgroups:
 ## Est of E[Y|T=Ctrl,T=Recom]-E[Y|T=/=Ctrl,T=Recom] 
-##                        4.97 (SE = 11.23, 44.93%) 
+##                           8 (SE = 12.23, 45.22%) 
 ##   Est of E[Y|T=Trt,T=Recom]-E[Y|T=/=Trt,T=Recom] 
-##                        3.27 (SE = 11.73, 55.07%) 
+##                        3.48 (SE = 16.58, 54.78%) 
 ## 
 ## Est of 
-## E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:                
-## 1.2 (SE = 8.77)</code></pre>
+## E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:                 
+## 2.88 (SE = 7.98)</code></pre>
 <p>Visualize subgroup-specific treatment effect estimates across training/testing iterations:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">plot</span>(val.model)</a></code></pre></div>
 <p><img src="articles/vis_val-1.png" width="75%" style="display: block; margin: auto;"></p>
