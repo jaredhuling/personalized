@@ -63,7 +63,7 @@ test_that("test validate.subgroup for continuous outcomes with various options",
     invisible(capture.output(print(summarize.subgroups(subgrp.model),
                                    digits = 2, p.value = 0.25)))
 
-    subgrp.val <- validate.subgroup(subgrp.model, B = 10,
+    subgrp.val <- validate.subgroup(subgrp.model, B = 3,
                                     method = "training")
 
     expect_is(subgrp.val, "subgroup_validated")
@@ -72,7 +72,7 @@ test_that("test validate.subgroup for continuous outcomes with various options",
 
     invisible(capture.output(print(subgrp.val, digits = 2, sample.pct = TRUE)))
 
-    subgrp.val <- validate.subgroup(subgrp.model, B = 10,
+    subgrp.val <- validate.subgroup(subgrp.model, B = 3,
                                     method = "boot")
 
     expect_is(subgrp.val, "subgroup_validated")
@@ -80,19 +80,19 @@ test_that("test validate.subgroup for continuous outcomes with various options",
     invisible(capture.output(print(subgrp.val, digits = 2)))
 
 
-    expect_error(validate.subgroup(x, B = 10,
+    expect_error(validate.subgroup(x, B = 3,
                                    method = "training"))
 
     ## parallel
 
-    subgrp.val <- validate.subgroup(subgrp.model, B = 10,
+    subgrp.val <- validate.subgroup(subgrp.model, B = 3,
                                     parallel = TRUE,
                                     method = "training")
 
     expect_is(subgrp.val, "subgroup_validated")
 
 
-    subgrp.val <- validate.subgroup(subgrp.model, B = 10,
+    subgrp.val <- validate.subgroup(subgrp.model, B = 3,
                                     parallel = TRUE,
                                     method = "boot")
 
@@ -169,32 +169,32 @@ test_that("test validate.subgroup for binary outcomes and various losses", {
                                  loss   = "sq_loss_lasso",
                                  nfolds = 5)              # option for cv.glmnet
 
-    subgrp.val <- validate.subgroup(subgrp.model, B = 10,
+    subgrp.val <- validate.subgroup(subgrp.model, B = 3,
                                     benefit.score.quantiles = NULL,
                                     method = "training")
 
-    subgrp.val <- validate.subgroup(subgrp.model, B = 10,
+    subgrp.val <- validate.subgroup(subgrp.model, B = 3,
                                     benefit.score.quantiles = numeric(0),
                                     method = "training")
 
     if (Sys.info()[[1]] != "windows")
     {
 
-        subgrp.val <- validate.subgroup(subgrp.model, B = 10,
+        subgrp.val <- validate.subgroup(subgrp.model, B = 3,
                                         method = "training")
 
-        subgrp.val2 <- validate.subgroup(subgrp.model2, B = 10,
+        subgrp.val2 <- validate.subgroup(subgrp.model2, B = 3,
                                         method = "training")
 
         print(subgrp.val)
         print(subgrp.val2)
 
-        expect_error(validate.subgroup(subgrp.val, B = 10, method = "training"))
+        expect_error(validate.subgroup(subgrp.val, B = 3, method = "training"))
 
-        expect_error(validate.subgroup(subgrp.model, B = 10, train.fraction = -1,
+        expect_error(validate.subgroup(subgrp.model, B = 3, train.fraction = -1,
                                        method = "training"))
 
-        expect_error(validate.subgroup(subgrp.model, B = 10, train.fraction = 2,
+        expect_error(validate.subgroup(subgrp.model, B = 3, train.fraction = 2,
                                        method = "training"))
 
         expect_error(print(subgrp.val, which.quant = 99))
@@ -214,7 +214,7 @@ test_that("test validate.subgroup for binary outcomes and various losses", {
                                      nfolds = 5)
 
         # retcall must be true
-        expect_error(validate.subgroup(subgrp.model2, B = 10,
+        expect_error(validate.subgroup(subgrp.model2, B = 3,
                                        method = "training"))
 
         expect_is(subgrp.val, "subgroup_validated")
@@ -222,12 +222,12 @@ test_that("test validate.subgroup for binary outcomes and various losses", {
         invisible(capture.output(print(subgrp.val, digits = 2)))
 
 
-        subgrp.val <- validate.subgroup(subgrp.model, B = 10,
+        subgrp.val <- validate.subgroup(subgrp.model, B = 3,
                                         method = "train")
 
         expect_is(subgrp.val, "subgroup_validated")
 
-        subgrp.val <- validate.subgroup(subgrp.model, B = 10,
+        subgrp.val <- validate.subgroup(subgrp.model, B = 3,
                                         method = "boot")
 
         expect_is(subgrp.val, "subgroup_validated")
@@ -245,7 +245,7 @@ test_that("test validate.subgroup for binary outcomes and various losses", {
 
         expect_is(subgrp.model, "subgroup_fitted")
 
-        subgrp.val <- validate.subgroup(subgrp.model, B = 10,
+        subgrp.val <- validate.subgroup(subgrp.model, B = 3,
                                         method = "train")
 
         expect_is(subgrp.val, "subgroup_validated")
@@ -253,7 +253,7 @@ test_that("test validate.subgroup for binary outcomes and various losses", {
         print(subgrp.val)
 
 
-        subgrp.val <- validate.subgroup(subgrp.model, B = 10,
+        subgrp.val <- validate.subgroup(subgrp.model, B = 3,
                                         method = "boot")
 
         expect_is(subgrp.val, "subgroup_validated")
@@ -329,7 +329,7 @@ test_that("test validate.subgroup for binary outcomes and various losses", {
 
         print(subgrp.model)
 
-        subgrp.val <- validate.subgroup(subgrp.model, B = 4,
+        subgrp.val <- validate.subgroup(subgrp.model, B = 2,
                                         method = "train")
 
         expect_is(subgrp.val, "subgroup_validated")
@@ -350,7 +350,7 @@ test_that("test validate.subgroup for binary outcomes and various losses", {
 
         print(subgrp.model)
 
-        subgrp.val <- validate.subgroup(subgrp.model, B = 4,
+        subgrp.val <- validate.subgroup(subgrp.model, B = 2,
                                         method = "train")
 
         expect_is(subgrp.val, "subgroup_validated")
