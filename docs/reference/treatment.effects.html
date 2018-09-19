@@ -61,7 +61,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">personalized</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.0</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.1</span>
       </span>
     </div>
 
@@ -128,7 +128,15 @@
 <span class='co'># S3 method for default</span>
 <span class='fu'>treatment.effects</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-<span class='fu'>treat.effects</span>(<span class='no'>benefit.scores</span>, <span class='kw'>loss</span> <span class='kw'>=</span> <span class='no'>all_losses</span>,
+<span class='fu'>treat.effects</span>(<span class='no'>benefit.scores</span>, <span class='kw'>loss</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"sq_loss_lasso"</span>,
+  <span class='st'>"logistic_loss_lasso"</span>, <span class='st'>"poisson_loss_lasso"</span>, <span class='st'>"cox_loss_lasso"</span>,
+  <span class='st'>"owl_logistic_loss_lasso"</span>, <span class='st'>"owl_logistic_flip_loss_lasso"</span>,
+  <span class='st'>"owl_hinge_loss"</span>, <span class='st'>"owl_hinge_flip_loss"</span>, <span class='st'>"sq_loss_lasso_gam"</span>,
+  <span class='st'>"poisson_loss_lasso_gam"</span>, <span class='st'>"logistic_loss_lasso_gam"</span>, <span class='st'>"sq_loss_gam"</span>,
+  <span class='st'>"poisson_loss_gam"</span>, <span class='st'>"logistic_loss_gam"</span>, <span class='st'>"owl_logistic_loss_gam"</span>,
+  <span class='st'>"owl_logistic_flip_loss_gam"</span>, <span class='st'>"owl_logistic_loss_lasso_gam"</span>,
+  <span class='st'>"owl_logistic_flip_loss_lasso_gam"</span>, <span class='st'>"sq_loss_gbm"</span>, <span class='st'>"poisson_loss_gbm"</span>,
+  <span class='st'>"logistic_loss_gbm"</span>, <span class='st'>"cox_loss_gbm"</span>,      <span class='st'>"custom"</span>),
   <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"weighting"</span>, <span class='st'>"a_learning"</span>), <span class='kw'>pi.x</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for subgroup_fitted</span>
