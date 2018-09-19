@@ -1,3 +1,6 @@
+# personalized 0.2.2
+
+
 # personalized 0.2.1
 
 * Fixes default argument bug for r-oldrel + windows
