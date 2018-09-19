@@ -1,3 +1,7 @@
+# personalized 0.2.1
+
+* Fixes default argument bug for r-oldrel + windows
+
 # personalized 0.2.0
 
 * Simplified plot labeling
