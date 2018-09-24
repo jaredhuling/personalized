@@ -1,0 +1,31 @@
+citHeader("To cite personalized in publications use:")
+
+citEntry(,
+  entry        = "Article",
+  author       = "Jared D. Huling and Menggang Yu",
+  title        = "Subgroup Identification Using the personalized Package",
+  year         = "2018",
+  url          = "https://arxiv.org/abs/1809.07905",
+  textVersion  = paste("Huling, J.D., Yu, M. (2018) ",
+      "Subgroup Identification Using the personalized Package, ",
+      "URL: https://arxiv.org/abs/1809.07905.")
+)
+
+citEntry(,
+  entry        = "Article",
+  author       = "Shuai Chen and Lu Tian and Tianxi Cai and Menggang Yu",
+  title        = "A General Statistical Framework for Subgroup Identification and Comparative Treatment Scoring",
+  journal      = "Biometrics",
+  year         = "2017",
+  volume       = "73",
+  issue        = "4",
+  pages        = "1199--1209",
+  doi          = "10.1111/biom.12676",
+  url          = "http://dx.doi.org/10.1111/biom.12676",
+  textVersion  = paste("Chen, S., Tian, L., Cai, T., Yu, M. (2017) ",
+      "A General Statistical Framework for Subgroup Identification and Comparative Treatment Scoring, ",
+      "Biometrics, Volume 73, Issue 4, Pages 1199-1209,",
+      "http://dx.doi.org/10.1111/biom.12676.")
+)
+
+
