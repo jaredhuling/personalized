@@ -1,10 +1,11 @@
 citHeader("To cite personalized in publications use:")
 
 citEntry(,
-  entry        = "Article",
+  entry        = "Unpublished",
   author       = "Jared D. Huling and Menggang Yu",
   title        = "Subgroup Identification Using the personalized Package",
   year         = "2018",
+  note         = "submitted",
   url          = "https://arxiv.org/abs/1809.07905",
   textVersion  = paste("Huling, J.D., Yu, M. (2018) ",
       "Subgroup Identification Using the personalized Package, ",
