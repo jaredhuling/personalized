@@ -308,7 +308,8 @@ subgroup.effects <- function(benefit.scores, y, trt,
     #                             "Ctrl Effect Among Recommended Ctrl")
 
     #names(subgroup.effects) <- paste(unique.trts, "effect among recommended", unique.trts)
-    names(subgroup.effects) <- paste0("Est of E[Y|T=", unique.trts, ",T=Recom]-", "E[Y|T=/=", unique.trts, ",T=Recom]")
+    names(subgroup.effects) <- paste0("Est of E[Y|T=", unique.trts, ",Recom=", unique.trts, "]-",
+                                      "E[Y|T=/=", unique.trts, ",Recom=", unique.trts, "]")
 
     list(subgroup.effects = subgroup.effects, # subgroup-specific effects
                                               # (trt effect among those recommended trt and

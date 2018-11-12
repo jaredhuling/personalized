@@ -127,6 +127,9 @@ summarize.subgroups.default <- function(x, subgroup, ...)
                 colnames(compare.mat)[n.trts + ct] <- paste0(unique.trts[t], " - ", unique.trts[k])
                 colnames(compare.mat)[n.trts + choose(n.trts,2) + ct] <-
                     paste0("pval ", unique.trts[t], " - ", unique.trts[k])
+
+                compare.mat[,n.trts + choose(n.trts,2) + ct] <- stats::p.adjust(compare.mat[,n.trts + choose(n.trts,2) + ct],
+                                                                                "hommel")
             }
         }
     }
@@ -217,13 +220,14 @@ summarize.subgroups.subgroup_fitted <- function(x, ...)
 #'
 #' @description Prints summary results for estimated subgroup treatment effects
 #'
-#' @param p.value a p-value threshold for mean differences below which covariates will be displayed. For example,
+#' @param p.value a p-value threshold for mean differences below which covariates will be displayed. P-values are adjusted for
+#' multiple comparisons by the Hommel approach. For example,
 #' setting \code{p.value = 0.05} will display all covariates that have a significant difference between subgroups
-#'  with p-value less than 0.05. Defaults to 1, which displays all covariates
+#'  with p-value less than 0.05. Defaults to 0.001.
 #' @seealso \code{\link[personalized]{summarize.subgroups}} for function which summarizes subgroup covariate values
 #' @rdname print
 #' @export
-print.subgroup_summary <- function(x, p.value = 1, digits = max(getOption('digits')-3, 3), ...)
+print.subgroup_summary <- function(x, p.value = 0.001, digits = max(getOption('digits')-3, 3), ...)
 {
     pidx <- grep("pval", colnames(x))
     lessthan <- x[,pidx,drop = FALSE] <= p.value
@@ -235,6 +239,6 @@ print.subgroup_summary <- function(x, p.value = 1, digits = max(getOption('digit
     {
         compare.mat <- x[lessthan > 0,]
     }
-    print.data.frame(compare.mat, digits = digits, quote = FALSE, right = TRUE, na.print = "NA", ...)
+    print.data.frame(compare.mat[,-pidx], digits = digits, quote = FALSE, right = TRUE, na.print = "NA", ...)
 }
 

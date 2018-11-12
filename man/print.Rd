@@ -12,7 +12,7 @@
 \method{print}{subgroup_validated}(x, digits = max(getOption("digits") -
   3, 3), sample.pct = FALSE, which.quant = NULL, ...)
 
-\method{print}{subgroup_summary}(x, p.value = 1,
+\method{print}{subgroup_summary}(x, p.value = 0.001,
   digits = max(getOption("digits") - 3, 3), ...)
 }
 \arguments{
@@ -31,9 +31,10 @@ i.e. \code{benefit.score.quantiles = c(0.25, 0.5, 0.75)}, the argument \code{whi
 quantile cutoff value validation results to display, i.e. \code{which.quant = c(1,3)} in the above example results in the display of
 validation results for subgroups defined by cutoff values of the benefit score defined by the 25th abnd 75th quantiles of the benefit score}
 
-\item{p.value}{a p-value threshold for mean differences below which covariates will be displayed. For example,
+\item{p.value}{a p-value threshold for mean differences below which covariates will be displayed. P-values are adjusted for
+multiple comparisons by the Hommel approach. For example,
 setting \code{p.value = 0.05} will display all covariates that have a significant difference between subgroups
- with p-value less than 0.05. Defaults to 1, which displays all covariates}
+ with p-value less than 0.05. Defaults to 0.001.}
 }
 \description{
 Prints results for estimated subgroup treatment effects
