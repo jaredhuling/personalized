@@ -1,6 +1,6 @@
 ## New version for 'personalized'
 
-* 
+* Various small improvements/fixes
 
 ## Test environments
 

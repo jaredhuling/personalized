@@ -1,5 +1,7 @@
 # personalized 0.2.2
 
+* Fixes model printing error 
+* Improves subgroup.summarize() output
 
 # personalized 0.2.1
 
