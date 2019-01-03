@@ -1,3 +1,7 @@
+# personalized 0.2.3
+
+* Fixes trt factor level reordering issue for plots
+
 # personalized 0.2.2
 
 * Fixes model printing error 

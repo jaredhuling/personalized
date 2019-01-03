@@ -76,11 +76,30 @@ plot.subgroup_validated <- function(x,
                                                    ncol(avg.res$avg.outcomes))),
                                  Value       = as.vector(avg.res$avg.outcomes))
 
-    avg.res.2.plot$Received <- as.factor(avg.res.2.plot$Received)
+
 
     avg.res.2.plot.dens <- avg.res.2.plot
 
-    avg.res.2.plot$Recommended <- gsub("^Recommended ", "", avg.res.2.plot$Recommended)
+    if (type == "interaction")
+    {
+        avg.res.2.plot$Recommended <- gsub("^Recommended ", "", avg.res.2.plot$Recommended)
+    }
+
+    avg.res.2.plot$Received <- as.factor(avg.res.2.plot$Received)
+    avg.res.2.plot.dens$Received <- as.factor(avg.res.2.plot.dens$Received)
+
+    avg.res.2.plot$Recommended <- as.factor(avg.res.2.plot$Recommended)
+    avg.res.2.plot.dens$Recommended <- as.factor(avg.res.2.plot.dens$Recommended)
+
+    ## reorder factors how they were ordered originally
+    avg.res.2.plot$Received <- factor(avg.res.2.plot$Received,
+                                      levels = levels(avg.res.2.plot$Received)[match(x$trts, sort(x$trts))])
+
+    avg.res.2.plot$Recommended <- factor(avg.res.2.plot$Recommended,
+                                         levels = levels(avg.res.2.plot$Recommended)[match(x$trts, sort(x$trts))])
+
+    avg.res.2.plot.dens$Received <- factor(avg.res.2.plot.dens$Received,
+                                           levels = levels(avg.res.2.plot.dens$Received)[match(x$trts, sort(x$trts))])
 
     Recommended <- Received <- Value <- bs <- Quantile <- Outcome <- NULL
 
@@ -127,6 +146,13 @@ plot.subgroup_validated <- function(x,
     }
 
     res.2.plot$Received <- as.factor(res.2.plot$Received)
+    res.2.plot$Recommended <- as.factor(res.2.plot$Recommended)
+
+    res.2.plot$Received <- factor(res.2.plot$Received,
+                                  levels = levels(res.2.plot$Received)[match(x$trts, sort(x$trts))])
+
+    res.2.plot$Recommended <- factor(res.2.plot$Recommended,
+                                     levels = levels(res.2.plot$Recommended)[match(x$trts, sort(x$trts))])
 
 
     title.text <- NULL

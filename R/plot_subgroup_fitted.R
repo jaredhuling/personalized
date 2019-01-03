@@ -97,7 +97,20 @@ plot.subgroup_fitted <- function(x,
         {
             res.2.plot[, 3] <- x$call$y
         }
+
+        res.2.plot <- as.data.frame(res.2.plot)
+
+        res.2.plot$Received <- as.factor(res.2.plot$Received)
+        res.2.plot$Recommended <- as.factor(res.2.plot$Recommended)
+
+        res.2.plot$Received <- factor(res.2.plot$Received,
+                                      levels = levels(res.2.plot$Received)[match(x$trts, sort(x$trts))])
+
+        res.2.plot$Recommended <- factor(res.2.plot$Recommended,
+                                         levels = levels(res.2.plot$Recommended)[match(x$trts, sort(x$trts))])
     }
+
+
 
 
     avg.res.2.plot <- data.frame(Recommended = rep(colnames(avg.res$avg.outcomes),
@@ -112,6 +125,15 @@ plot.subgroup_fitted <- function(x,
 
     Recommended <- Received <- Value <- bs <- Outcome <- NULL
 
+
+    avg.res.2.plot$Recommended <- as.factor(avg.res.2.plot$Recommended)
+
+    ## reorder factors how they were ordered originally
+    avg.res.2.plot$Received <- factor(avg.res.2.plot$Received,
+                                      levels = levels(avg.res.2.plot$Received)[match(x$trts, sort(x$trts))])
+
+    avg.res.2.plot$Recommended <- factor(avg.res.2.plot$Recommended,
+                                         levels = levels(avg.res.2.plot$Recommended)[match(x$trts, sort(x$trts))])
 
 
     if (type == "density")
