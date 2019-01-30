@@ -173,12 +173,12 @@ test_that("test validate.subgroup for binary outcomes and various losses", {
                                     benefit.score.quantiles = NULL,
                                     method = "training")
 
-    subgrp.val <- validate.subgroup(subgrp.model, B = 3,
-                                    benefit.score.quantiles = numeric(0),
-                                    method = "training")
-
     if (Sys.info()[[1]] != "windows")
     {
+
+        subgrp.val <- validate.subgroup(subgrp.model, B = 3,
+                                        benefit.score.quantiles = numeric(0),
+                                        method = "training")
 
         subgrp.val <- validate.subgroup(subgrp.model, B = 3,
                                         method = "training")

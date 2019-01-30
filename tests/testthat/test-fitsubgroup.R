@@ -866,17 +866,19 @@ test_that("test fit.subgroup for time-to-event outcomes and various losses", {
 
     invisible(capture.output(summary(subgrp.model)))
 
-    # test for factor trt
-    subgrp.model <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
-                                 trt = as.factor(trt01),
-                                 propensity.func = prop.func,
-                                 loss   = "cox_loss_lasso",
-                                 nfolds = 5)              # option for cv.glmnet
-
-    expect_is(subgrp.model, "subgroup_fitted")
 
     if (Sys.info()[[1]] != "windows")
     {
+
+        # test for factor trt
+        subgrp.model <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
+                                     trt = as.factor(trt01),
+                                     propensity.func = prop.func,
+                                     loss   = "cox_loss_lasso",
+                                     nfolds = 5)              # option for cv.glmnet
+
+        expect_is(subgrp.model, "subgroup_fitted")
+
 
         subgrp.model <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
                                      trt = trt01,
@@ -981,46 +983,47 @@ test_that("test fit.subgroup with augment.func for continuous outcomes and vario
     invisible(capture.output(summary(subgrp.model)))
 
 
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = trt01,
-                                 augment.func = augment.func2,
-                                 propensity.func = prop.func,
-                                 loss   = "sq_loss_lasso",
-                                 nfolds = 5)              # option for cv.glmnet
-
-    expect_is(subgrp.model, "subgroup_fitted")
-
-    expect_error(fit.subgroup(x = x, y = y,
-                              trt = trt01,
-                              augment.func = augment.func.bad,
-                              propensity.func = prop.func,
-                              loss   = "sq_loss_lasso",
-                              nfolds = 5))
-
-    expect_error(fit.subgroup(x = x, y = y,
-                              trt = trt01,
-                              augment.func = augment.func.bad2,
-                              propensity.func = prop.func,
-                              loss   = "sq_loss_lasso",
-                              nfolds = 5))
-
-    expect_error(fit.subgroup(x = x, y = y,
-                              trt = trt01,
-                              augment.func = augment.func.bad3,
-                              propensity.func = prop.func,
-                              loss   = "sq_loss_lasso",
-                              nfolds = 5))
-
-    expect_error(fit.subgroup(x = x, y = y,
-                              trt = trt01,
-                              augment.func = augment.func.bad4,
-                              propensity.func = prop.func,
-                              loss   = "sq_loss_lasso",
-                              nfolds = 5))
-
-
     if (Sys.info()[[1]] != "windows")
     {
+
+        subgrp.model <- fit.subgroup(x = x, y = y,
+                                     trt = trt01,
+                                     augment.func = augment.func2,
+                                     propensity.func = prop.func,
+                                     loss   = "sq_loss_lasso",
+                                     nfolds = 5)              # option for cv.glmnet
+
+        expect_is(subgrp.model, "subgroup_fitted")
+
+        expect_error(fit.subgroup(x = x, y = y,
+                                  trt = trt01,
+                                  augment.func = augment.func.bad,
+                                  propensity.func = prop.func,
+                                  loss   = "sq_loss_lasso",
+                                  nfolds = 5))
+
+        expect_error(fit.subgroup(x = x, y = y,
+                                  trt = trt01,
+                                  augment.func = augment.func.bad2,
+                                  propensity.func = prop.func,
+                                  loss   = "sq_loss_lasso",
+                                  nfolds = 5))
+
+        expect_error(fit.subgroup(x = x, y = y,
+                                  trt = trt01,
+                                  augment.func = augment.func.bad3,
+                                  propensity.func = prop.func,
+                                  loss   = "sq_loss_lasso",
+                                  nfolds = 5))
+
+        expect_error(fit.subgroup(x = x, y = y,
+                                  trt = trt01,
+                                  augment.func = augment.func.bad4,
+                                  propensity.func = prop.func,
+                                  loss   = "sq_loss_lasso",
+                                  nfolds = 5))
+
+
         subgrp.model <- fit.subgroup(x = x, y = y,
                                      trt = trt01,
                                      propensity.func = prop.func,
@@ -1483,188 +1486,193 @@ test_that("test fit.subgroup for continuous outcomes and match.id provided", {
     expect_is(subgrp.model.m, "subgroup_fitted")
 
 
-    subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
-                                   trt = trt.m,
-                                   match.id = match.id,
-                                   loss   = "owl_hinge_loss",
-                                   margin = 5,
-                                   nfolds = 5)              # option for cv.glmnet
+    if (Sys.info()[[1]] != "windows")
+    {
+        subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
+                                       trt = trt.m,
+                                       match.id = match.id,
+                                       loss   = "owl_hinge_loss",
+                                       margin = 5,
+                                       nfolds = 5)              # option for cv.glmnet
 
-    expect_is(subgrp.model.m, "subgroup_fitted")
+        expect_is(subgrp.model.m, "subgroup_fitted")
 
-    subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
-                                   trt = trt.m,
-                                   match.id = match.id,
-                                   loss   = "owl_hinge_flip_loss",
-                                   margin = 5,
-                                   nfolds = 5)              # option for cv.glmnet
+        subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
+                                       trt = trt.m,
+                                       match.id = match.id,
+                                       loss   = "owl_hinge_flip_loss",
+                                       margin = 5,
+                                       nfolds = 5)              # option for cv.glmnet
 
-    expect_is(subgrp.model.m, "subgroup_fitted")
+        expect_is(subgrp.model.m, "subgroup_fitted")
 
-    subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
-                                   trt = trt.m,
-                                   match.id = match.id,
-                                   penlty.factor = rep(1, ncol(x.m) + 1),
-                                   loss   = "sq_loss_lasso_gam",
-                                   nfolds = 5)              # option for cv.glmnet
+        subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
+                                       trt = trt.m,
+                                       match.id = match.id,
+                                       penlty.factor = rep(1, ncol(x.m) + 1),
+                                       loss   = "sq_loss_lasso_gam",
+                                       nfolds = 5)              # option for cv.glmnet
 
-    expect_is(subgrp.model.m, "subgroup_fitted")
+        expect_is(subgrp.model.m, "subgroup_fitted")
 
-    expect_error(fit.subgroup(x = x.m, y = y.m,
-                              trt = trt.m,
-                              match.id = match.id,
-                              loss   = "sq_loss_lasso_gam",
-                              nfolds = 2))
+        expect_error(fit.subgroup(x = x.m, y = y.m,
+                                  trt = trt.m,
+                                  match.id = match.id,
+                                  loss   = "sq_loss_lasso_gam",
+                                  nfolds = 2))
 
-    expect_warning(fit.subgroup(x = x.m, y = y.m,
-                                trt = trt.m,
-                                match.id = match.id,
-                                loss   = "sq_loss_lasso_gam",
-                                foldid = sample(1:5, nrow(x.m), replace = TRUE)))
+        expect_warning(fit.subgroup(x = x.m, y = y.m,
+                                    trt = trt.m,
+                                    match.id = match.id,
+                                    loss   = "sq_loss_lasso_gam",
+                                    foldid = sample(1:5, nrow(x.m), replace = TRUE)))
 
-    subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
-                                   trt = trt.m,
-                                   match.id = match.id,
-                                   loss   = "sq_loss_gbm", n.trees = 5, n.cores = 1)
+        subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
+                                       trt = trt.m,
+                                       match.id = match.id,
+                                       loss   = "sq_loss_gbm", n.trees = 5, n.cores = 1)
 
-    expect_is(subgrp.model.m, "subgroup_fitted")
+        expect_is(subgrp.model.m, "subgroup_fitted")
 
-    # subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
-    #                                trt = trt.m,
-    #                                match.id = match.id,
-    #                                loss   = "abs_loss_gbm", n.trees = 5, n.cores = 1)
-    #
-    # expect_is(subgrp.model.m, "subgroup_fitted")
+        # subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
+        #                                trt = trt.m,
+        #                                match.id = match.id,
+        #                                loss   = "abs_loss_gbm", n.trees = 5, n.cores = 1)
+        #
+        # expect_is(subgrp.model.m, "subgroup_fitted")
 
-    subgrp.model.m <- fit.subgroup(x = x.m, y = y.binary.m,
-                                   trt = trt.m,
-                                   match.id = match.id,
-                                   loss   = "logistic_loss_gbm", n.trees = 5, n.cores = 1)
+        subgrp.model.m <- fit.subgroup(x = x.m, y = y.binary.m,
+                                       trt = trt.m,
+                                       match.id = match.id,
+                                       loss   = "logistic_loss_gbm", n.trees = 5, n.cores = 1)
 
-    expect_is(subgrp.model.m, "subgroup_fitted")
+        expect_is(subgrp.model.m, "subgroup_fitted")
 
-    subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
-                                   trt = trt.m,
-                                   match.id = as.factor(match.id),
-                                   loss   = "sq_loss_lasso_gam")
+        subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
+                                       trt = trt.m,
+                                       match.id = as.factor(match.id),
+                                       loss   = "sq_loss_lasso_gam")
 
-    expect_is(subgrp.model.m, "subgroup_fitted")
+        expect_is(subgrp.model.m, "subgroup_fitted")
 
-    subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
-                                   trt = trt.m,
-                                   propensity.func = prop.func,
-                                   match.id = as.factor(match.id),
-                                   loss   = "sq_loss_lasso",
-                                   nfolds = 5)              # option for cv.glmnet
+        subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
+                                       trt = trt.m,
+                                       propensity.func = prop.func,
+                                       match.id = as.factor(match.id),
+                                       loss   = "sq_loss_lasso",
+                                       nfolds = 5)              # option for cv.glmnet
 
-    expect_is(subgrp.model.m, "subgroup_fitted")
+        expect_is(subgrp.model.m, "subgroup_fitted")
 
-    subgrp.val <- validate.subgroup(subgrp.model.m, B = 10,
-                                    method = "train")
+        subgrp.val <- validate.subgroup(subgrp.model.m, B = 10,
+                                        method = "train")
 
-    expect_is(subgrp.val, "subgroup_validated")
+        expect_is(subgrp.val, "subgroup_validated")
 
-    invisible(capture.output(print(subgrp.val, digits = 2)))
+        invisible(capture.output(print(subgrp.val, digits = 2)))
 
-    subgrp.val <- validate.subgroup(subgrp.model.m, B = 10,
-                                    method = "boot")
+        subgrp.val <- validate.subgroup(subgrp.model.m, B = 10,
+                                        method = "boot")
 
-    expect_is(subgrp.val, "subgroup_validated")
+        expect_is(subgrp.val, "subgroup_validated")
 
-    invisible(capture.output(print(subgrp.val, digits = 2)))
-
-
-    expect_warning(subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
-                                   trt = trt.m,
-                                   match.id = as.factor(match.id),
-                                   loss   = "sq_loss_lasso",
-                                   foldid = sample(1:5, nrow(x.m), replace = TRUE)))
-
-    expect_is(subgrp.model.m, "subgroup_fitted")
+        invisible(capture.output(print(subgrp.val, digits = 2)))
 
 
-    expect_warning(subgrp.model.m <- fit.subgroup(x = x.m, y = Surv(y.time.to.event.m, status.m),
-                                                  trt = trt.m,
-                                                  match.id = as.factor(match.id),
-                                                  loss   = "cox_loss_lasso",
-                                                  foldid = sample(1:5, nrow(x.m), replace = TRUE)))
+        expect_warning(subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
+                                       trt = trt.m,
+                                       match.id = as.factor(match.id),
+                                       loss   = "sq_loss_lasso",
+                                       foldid = sample(1:5, nrow(x.m), replace = TRUE)))
 
-    expect_is(subgrp.model.m, "subgroup_fitted")
-
-
+        expect_is(subgrp.model.m, "subgroup_fitted")
 
 
-    expect_error(fit.subgroup(x = x.m, y = y.m,
-                                   trt = trt.m,
-                                   match.id = as.factor(match.id),
-                                   loss   = "sq_loss_lasso",
-                              nfolds = 2) )
+        expect_warning(subgrp.model.m <- fit.subgroup(x = x.m, y = Surv(y.time.to.event.m, status.m),
+                                                      trt = trt.m,
+                                                      match.id = as.factor(match.id),
+                                                      loss   = "cox_loss_lasso",
+                                                      foldid = sample(1:5, nrow(x.m), replace = TRUE)))
 
-    expect_error(fit.subgroup(x = x.m, y = y.m,
-                              trt = trt.m,
-                              propensity.func = prop.func,
-                              match.id = rep(1, length(y.m)), # provide bad match.id (only 1 level)
-                              loss   = "sq_loss_lasso",
-                              nfolds = 5) )
-
-    expect_error(fit.subgroup(x = x.m, y = Surv(y.time.to.event.m, status.m),
-                              trt = trt.m,
-                              match.id = as.factor(match.id),
-                              loss   = "cox_loss_lasso",
-                              nfolds = 2) )
-
-    subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
-                                                  trt = trt.m,
-                                                  match.id = as.factor(match.id),
-                                                  loss   = "sq_loss_lasso")
-
-    expect_is(subgrp.model.m, "subgroup_fitted")
-
-    subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
-                                   trt = trt.m,
-                                   match.id = as.factor(match.id),
-                                   penalty.factor = rep(1, ncol(x.m) + 1),
-                                   loss   = "sq_loss_lasso")
-
-    expect_is(subgrp.model.m, "subgroup_fitted")
-
-    subgrp.model.m <- fit.subgroup(x = x.m, y = Surv(y.time.to.event.m, status.m),
-                                   trt = trt.m,
-                                   match.id = as.factor(match.id),
-                                   loss   = "cox_loss_lasso")
-
-    expect_is(subgrp.model.m, "subgroup_fitted")
-
-    subgrp.model.m <- fit.subgroup(x = x.m, y = Surv(y.time.to.event.m, status.m),
-                                   trt = trt.m,
-                                   match.id = as.factor(match.id),
-                                   loss   = "cox_loss_gbm", n.trees = 5, n.cores = 1)
-
-    expect_is(subgrp.model.m, "subgroup_fitted")
+        expect_is(subgrp.model.m, "subgroup_fitted")
 
 
 
-    subgrp.model.m <- fit.subgroup(x = x.m, y = Surv(y.time.to.event.m, status.m),
-                                   trt = trt.m,
-                                   augment.func = function(x,y,trt) {return(rep(1, NROW(x)))},
-                                   match.id = as.factor(match.id),
-                                   penalty.factor = rep(1, ncol(x.m) + 1),
-                                   loss   = "cox_loss_lasso")
 
-    expect_is(subgrp.model.m, "subgroup_fitted")
+        expect_error(fit.subgroup(x = x.m, y = y.m,
+                                       trt = trt.m,
+                                       match.id = as.factor(match.id),
+                                       loss   = "sq_loss_lasso",
+                                  nfolds = 2) )
+
+        expect_error(fit.subgroup(x = x.m, y = y.m,
+                                  trt = trt.m,
+                                  propensity.func = prop.func,
+                                  match.id = rep(1, length(y.m)), # provide bad match.id (only 1 level)
+                                  loss   = "sq_loss_lasso",
+                                  nfolds = 5) )
+
+        expect_error(fit.subgroup(x = x.m, y = Surv(y.time.to.event.m, status.m),
+                                  trt = trt.m,
+                                  match.id = as.factor(match.id),
+                                  loss   = "cox_loss_lasso",
+                                  nfolds = 2) )
+
+        subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
+                                                      trt = trt.m,
+                                                      match.id = as.factor(match.id),
+                                                      loss   = "sq_loss_lasso")
+
+        expect_is(subgrp.model.m, "subgroup_fitted")
+
+        subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
+                                       trt = trt.m,
+                                       match.id = as.factor(match.id),
+                                       penalty.factor = rep(1, ncol(x.m) + 1),
+                                       loss   = "sq_loss_lasso")
+
+        expect_is(subgrp.model.m, "subgroup_fitted")
+
+        subgrp.model.m <- fit.subgroup(x = x.m, y = Surv(y.time.to.event.m, status.m),
+                                       trt = trt.m,
+                                       match.id = as.factor(match.id),
+                                       loss   = "cox_loss_lasso")
+
+        expect_is(subgrp.model.m, "subgroup_fitted")
+
+        subgrp.model.m <- fit.subgroup(x = x.m, y = Surv(y.time.to.event.m, status.m),
+                                       trt = trt.m,
+                                       match.id = as.factor(match.id),
+                                       loss   = "cox_loss_gbm", n.trees = 5, n.cores = 1)
+
+        expect_is(subgrp.model.m, "subgroup_fitted")
 
 
 
-    ## parallel
+        subgrp.model.m <- fit.subgroup(x = x.m, y = Surv(y.time.to.event.m, status.m),
+                                       trt = trt.m,
+                                       augment.func = function(x,y,trt) {return(rep(1, NROW(x)))},
+                                       match.id = as.factor(match.id),
+                                       penalty.factor = rep(1, ncol(x.m) + 1),
+                                       loss   = "cox_loss_lasso")
 
-    subgrp.val <- validate.subgroup(subgrp.model.m, B = 10,
-                                    parallel = TRUE,
-                                    method = "training")
+        expect_is(subgrp.model.m, "subgroup_fitted")
 
 
-    subgrp.val <- validate.subgroup(subgrp.model.m, B = 10,
-                                    parallel = TRUE,
-                                    method = "boot")
+
+        ## parallel
+
+        subgrp.val <- validate.subgroup(subgrp.model.m, B = 10,
+                                        parallel = TRUE,
+                                        method = "training")
+
+
+        subgrp.val <- validate.subgroup(subgrp.model.m, B = 10,
+                                        parallel = TRUE,
+                                        method = "boot")
+
+
+    }
 
 })
 
@@ -1814,58 +1822,62 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
 
     expect_is(subgrp.model, "subgroup_fitted")
 
-    expect_error(fit.subgroup(x = x, y = y,
-                              trt = trt,
-                              propensity.func = propensity.multinom.lasso.bad,
-                              reference.trt = 3,
-                              loss   = "sq_loss_lasso",
-                              nfolds = 5) )
 
-    # provide incorrect reference trt
-    expect_error(fit.subgroup(x = x, y = y,
-                              trt = trt,
-                              propensity.func = propensity.multinom.lasso,
-                              reference.trt = "something_wrong",
-                              loss   = "sq_loss_lasso",
-                              nfolds = 5) )
+    if (Sys.info()[[1]] != "windows")
+    {
+        expect_error(fit.subgroup(x = x, y = y,
+                                  trt = trt,
+                                  propensity.func = propensity.multinom.lasso.bad,
+                                  reference.trt = 3,
+                                  loss   = "sq_loss_lasso",
+                                  nfolds = 5) )
 
-    # no prop func
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = trt,
-                                 reference.trt = 3,
-                                 loss   = "sq_loss_lasso",
-                                 nfolds = 5)              # option for cv.glmnet
+        # provide incorrect reference trt
+        expect_error(fit.subgroup(x = x, y = y,
+                                  trt = trt,
+                                  propensity.func = propensity.multinom.lasso,
+                                  reference.trt = "something_wrong",
+                                  loss   = "sq_loss_lasso",
+                                  nfolds = 5) )
 
-    expect_is(subgrp.model, "subgroup_fitted")
+        # no prop func
+        subgrp.model <- fit.subgroup(x = x, y = y,
+                                     trt = trt,
+                                     reference.trt = 3,
+                                     loss   = "sq_loss_lasso",
+                                     nfolds = 5)              # option for cv.glmnet
 
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = as.factor(trt),
-                                 propensity.func = propensity.multinom.lasso,
-                                 loss   = "sq_loss_lasso",
-                                 nfolds = 5)              # option for cv.glmnet
+        expect_is(subgrp.model, "subgroup_fitted")
 
-    expect_is(subgrp.model, "subgroup_fitted")
+        subgrp.model <- fit.subgroup(x = x, y = y,
+                                     trt = as.factor(trt),
+                                     propensity.func = propensity.multinom.lasso,
+                                     loss   = "sq_loss_lasso",
+                                     nfolds = 5)              # option for cv.glmnet
 
-
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = as.factor(trt),
-                                 reference.trt = "2",
-                                 propensity.func = propensity.multinom.lasso,
-                                 loss   = "sq_loss_lasso",
-                                 nfolds = 5)              # option for cv.glmnet
-
-    expect_is(subgrp.model, "subgroup_fitted")
+        expect_is(subgrp.model, "subgroup_fitted")
 
 
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = as.factor(trt),
-                                 reference.trt = "2",
-                                 larger.outcome.better = FALSE,
-                                 propensity.func = propensity.multinom.lasso,
-                                 loss   = "sq_loss_lasso",
-                                 nfolds = 5)              # option for cv.glmnet
+        subgrp.model <- fit.subgroup(x = x, y = y,
+                                     trt = as.factor(trt),
+                                     reference.trt = "2",
+                                     propensity.func = propensity.multinom.lasso,
+                                     loss   = "sq_loss_lasso",
+                                     nfolds = 5)              # option for cv.glmnet
 
-    expect_is(subgrp.model, "subgroup_fitted")
+        expect_is(subgrp.model, "subgroup_fitted")
+
+
+        subgrp.model <- fit.subgroup(x = x, y = y,
+                                     trt = as.factor(trt),
+                                     reference.trt = "2",
+                                     larger.outcome.better = FALSE,
+                                     propensity.func = propensity.multinom.lasso,
+                                     loss   = "sq_loss_lasso",
+                                     nfolds = 5)              # option for cv.glmnet
+
+        expect_is(subgrp.model, "subgroup_fitted")
+    }
 
 
     # use multinomial logistic regression model with lasso penalty for propensity
@@ -1905,108 +1917,113 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
     invisible(capture.output(print(summ, digits = 2, p.value = 0.25)))
 
 
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = trt,
-                                 propensity.func = propensity.multinom.lasso,
-                                 reference.trt = 3,
-                                 loss   = "sq_loss_lasso",
-                                 nfolds = 5)              # option for cv.glmnet
-
-    expect_is(subgrp.model, "subgroup_fitted")
-
-
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = as.factor(trt),
-                                 propensity.func = propensity.multinom.lasso,
-                                 loss   = "sq_loss_lasso",
-                                 nfolds = 5)              # option for cv.glmnet
-
-    expect_is(subgrp.model, "subgroup_fitted")
-
-
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = as.factor(trt),
-                                 reference.trt = "2",
-                                 propensity.func = propensity.multinom.lasso,
-                                 loss   = "sq_loss_lasso",
-                                 nfolds = 5)              # option for cv.glmnet
-
-    expect_is(subgrp.model, "subgroup_fitted")
-
-
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = as.factor(trt),
-                                 reference.trt = "2",
-                                 larger.outcome.better = FALSE,
-                                 propensity.func = propensity.multinom.lasso,
-                                 loss   = "sq_loss_lasso",
-                                 nfolds = 5)              # option for cv.glmnet
-
-    expect_is(subgrp.model, "subgroup_fitted")
-
-
-
-
-    expect_error(fit.subgroup(x = x, y = y,
-                                 trt = trt,
-                                 propensity.func = prop.func,
-                                 loss   = "sq_loss_lasso_gam",
-                                 nfolds = 5))
-
-
-    # different outcomes
-
-    subgrp.model <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
-                                 trt = as.factor(trt),
-                                 propensity.func = propensity.multinom.lasso,
-                                 loss   = "cox_loss_lasso",
-                                 nfolds = 5)              # option for cv.glmnet
-
-    expect_is(subgrp.model, "subgroup_fitted")
-
-    subgrp.model <- fit.subgroup(x = x, y = y.binary,
-                                 trt = as.factor(trt),
-                                 propensity.func = propensity.multinom.lasso,
-                                 loss   = "logistic_loss_lasso",
-                                 nfolds = 5)              # option for cv.glmnet
-
-    expect_is(subgrp.model, "subgroup_fitted")
-
-    expect_error(fit.subgroup(x = x, y = Surv(y.time.to.event, status),
-                              trt = as.factor(trt),
-                              propensity.func = propensity.multinom.lasso,
-                              loss   = "sq_loss_lasso",
-                              nfolds = 5) )
-
-    expect_error(fit.subgroup(x = x, y = y,
-                              trt = as.factor(trt),
-                              propensity.func = propensity.multinom.lasso,
-                              loss   = "cox_loss_lasso",
-                              nfolds = 5) )
-
-
-    propensity.multinom.lasso.array <- function(x, trt)
+    if (Sys.info()[[1]] != "windows")
     {
-        if (!is.factor(trt)) trt <- as.factor(trt)
-        gfit <- cv.glmnet(y = trt, x = x, family = "multinomial")
 
-        # predict returns a matrix of probabilities:
-        # one column for each treatment level
-        propens <- drop(predict(gfit, newx = x, type = "response", s = "lambda.min",
-                                nfolds = 5, alpha = 0))
+        subgrp.model <- fit.subgroup(x = x, y = y,
+                                     trt = trt,
+                                     propensity.func = propensity.multinom.lasso,
+                                     reference.trt = 3,
+                                     loss   = "sq_loss_lasso",
+                                     nfolds = 5)              # option for cv.glmnet
 
-        # return the probability corresponding to the
-        # treatment that was observed
-        probs <- array(dim = c(dim(propens), 2, 4))
-        probs[is.na(probs)] <- 0.5
-        probs
+        expect_is(subgrp.model, "subgroup_fitted")
+
+
+        subgrp.model <- fit.subgroup(x = x, y = y,
+                                     trt = as.factor(trt),
+                                     propensity.func = propensity.multinom.lasso,
+                                     loss   = "sq_loss_lasso",
+                                     nfolds = 5)              # option for cv.glmnet
+
+        expect_is(subgrp.model, "subgroup_fitted")
+
+
+        subgrp.model <- fit.subgroup(x = x, y = y,
+                                     trt = as.factor(trt),
+                                     reference.trt = "2",
+                                     propensity.func = propensity.multinom.lasso,
+                                     loss   = "sq_loss_lasso",
+                                     nfolds = 5)              # option for cv.glmnet
+
+        expect_is(subgrp.model, "subgroup_fitted")
+
+
+        subgrp.model <- fit.subgroup(x = x, y = y,
+                                     trt = as.factor(trt),
+                                     reference.trt = "2",
+                                     larger.outcome.better = FALSE,
+                                     propensity.func = propensity.multinom.lasso,
+                                     loss   = "sq_loss_lasso",
+                                     nfolds = 5)              # option for cv.glmnet
+
+        expect_is(subgrp.model, "subgroup_fitted")
+
+
+
+
+        expect_error(fit.subgroup(x = x, y = y,
+                                     trt = trt,
+                                     propensity.func = prop.func,
+                                     loss   = "sq_loss_lasso_gam",
+                                     nfolds = 5))
+
+
+        # different outcomes
+
+        subgrp.model <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
+                                     trt = as.factor(trt),
+                                     propensity.func = propensity.multinom.lasso,
+                                     loss   = "cox_loss_lasso",
+                                     nfolds = 5)              # option for cv.glmnet
+
+        expect_is(subgrp.model, "subgroup_fitted")
+
+        subgrp.model <- fit.subgroup(x = x, y = y.binary,
+                                     trt = as.factor(trt),
+                                     propensity.func = propensity.multinom.lasso,
+                                     loss   = "logistic_loss_lasso",
+                                     nfolds = 5)              # option for cv.glmnet
+
+        expect_is(subgrp.model, "subgroup_fitted")
+
+        expect_error(fit.subgroup(x = x, y = Surv(y.time.to.event, status),
+                                  trt = as.factor(trt),
+                                  propensity.func = propensity.multinom.lasso,
+                                  loss   = "sq_loss_lasso",
+                                  nfolds = 5) )
+
+        expect_error(fit.subgroup(x = x, y = y,
+                                  trt = as.factor(trt),
+                                  propensity.func = propensity.multinom.lasso,
+                                  loss   = "cox_loss_lasso",
+                                  nfolds = 5) )
+
+
+        propensity.multinom.lasso.array <- function(x, trt)
+        {
+            if (!is.factor(trt)) trt <- as.factor(trt)
+            gfit <- cv.glmnet(y = trt, x = x, family = "multinomial")
+
+            # predict returns a matrix of probabilities:
+            # one column for each treatment level
+            propens <- drop(predict(gfit, newx = x, type = "response", s = "lambda.min",
+                                    nfolds = 5, alpha = 0))
+
+            # return the probability corresponding to the
+            # treatment that was observed
+            probs <- array(dim = c(dim(propens), 2, 4))
+            probs[is.na(probs)] <- 0.5
+            probs
+        }
+
+        expect_error(fit.subgroup(x = x, y = y,
+                                  trt = as.factor(trt),
+                                  propensity.func = propensity.multinom.lasso.array,
+                                  loss   = "cox_loss_lasso",
+                                  nfolds = 5) )
+
     }
-
-    expect_error(fit.subgroup(x = x, y = y,
-                              trt = as.factor(trt),
-                              propensity.func = propensity.multinom.lasso.array,
-                              loss   = "cox_loss_lasso",
-                              nfolds = 5) )
 
 
 })
