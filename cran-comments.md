@@ -1,12 +1,12 @@
 ## New version for 'personalized'
 
-* Various small improvements/fixes
+* Various small improvements/bug fixes
 
 ## Test environments
 
 * Debian Linux, (R-devel)
 * local Mac OSX Sierra (R 3.5.1)
-* Ubuntu 14.04.5 LTS (on travis-ci), (R 3.5.0)
+* Ubuntu 14.04.5 LTS (on travis-ci), (R 3.5.2)
 
 ## R CMD check results
 
