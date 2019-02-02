@@ -895,7 +895,7 @@ fit.subgroup <- function(x,
         y.adj <- y
         if (augment.method == "offset_notdots")
         {
-            extra.args <- list(offset = rep(1, NROW(y)))
+            extra.args <- list(offset = rep(0, NROW(y)))
         }
     }
 
