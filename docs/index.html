@@ -35,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">personalized</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.1</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.3</span>
       </span>
     </div>
 
@@ -112,7 +112,7 @@
 <p>Install from CRAN using:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">install.packages</span>(<span class="st">"personalized"</span>)</a></code></pre></div>
 <p>or install the development version using the <strong>devtools</strong> package:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"jaredhuling/personalized"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"jaredhuling/personalized"</span>)</a></code></pre></div>
 <p>or by cloning and building using <code>R CMD INSTALL</code></p>
 </div>
 <div id="quick-usage-overview" class="section level1">
@@ -163,10 +163,10 @@
 ## Received Trt  -23.6902 (n = 132)  -6.7605 (n = 137)
 ## 
 ## Treatment effects conditional on subgroups:
-## Est of E[Y|T=Ctrl,T=Recom]-E[Y|T=/=Ctrl,T=Recom] 
-##                                19.4474 (n = 249) 
-##   Est of E[Y|T=Trt,T=Recom]-E[Y|T=/=Trt,T=Recom] 
-##                                15.1972 (n = 251) 
+## Est of E[Y|T=Ctrl,Recom=Ctrl]-E[Y|T=/=Ctrl,Recom=Ctrl] 
+##                                      19.4474 (n = 249) 
+##     Est of E[Y|T=Trt,Recom=Trt]-E[Y|T=/=Trt,Recom=Trt] 
+##                                      15.1972 (n = 251) 
 ## 
 ## NOTE: The above average outcomes are biased estimates of
 ##       the expected outcomes conditional on subgroups. 
@@ -226,10 +226,10 @@
 ## Received Trt  -17.47 (SE = 6.54, 24.74%) -15.12 (SE = 13.31, 29.43%)
 ## 
 ## Treatment effects conditional on subgroups:
-## Est of E[Y|T=Ctrl,T=Recom]-E[Y|T=/=Ctrl,T=Recom] 
-##                           8 (SE = 12.23, 45.22%) 
-##   Est of E[Y|T=Trt,T=Recom]-E[Y|T=/=Trt,T=Recom] 
-##                        3.48 (SE = 16.58, 54.78%) 
+## Est of E[Y|T=Ctrl,Recom=Ctrl]-E[Y|T=/=Ctrl,Recom=Ctrl] 
+##                                 8 (SE = 12.23, 45.22%) 
+##     Est of E[Y|T=Trt,Recom=Trt]-E[Y|T=/=Trt,Recom=Trt] 
+##                              3.48 (SE = 16.58, 54.78%) 
 ## 
 ## Est of 
 ## E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:                 
@@ -244,22 +244,16 @@
 <p>Here we only display covariates with a significantly different mean value (at level 0.05)</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">summ &lt;-<span class="st"> </span><span class="kw"><a href="reference/summarize.subgroups.html">summarize.subgroups</a></span>(subgrp.model)</a>
 <a class="sourceLine" id="cb12-2" data-line-number="2"><span class="kw">print</span>(summ, <span class="dt">p.value =</span> <span class="fl">0.05</span>)</a></code></pre></div>
-<pre><code>##     Avg (recom Ctrl) Avg (recom Trt) Ctrl - Trt pval Ctrl - Trt
-## V2           -1.8994          1.8703    -3.7697       6.746e-55
-## V11           1.2394         -1.1216     2.3610       1.325e-21
-## V17           0.9566         -0.6530     1.6096       3.814e-09
-## V32          -0.4991          0.1747    -0.6738       9.574e-03
-## V35          -0.7170          0.4642    -1.1812       1.356e-05
-## V39           0.3090         -0.3552     0.6643       1.700e-02
-## V43          -0.2931          0.3787    -0.6718       1.706e-02
-##     SE (recom Ctrl) SE (recom Trt)
-## V2           0.1469         0.1536
-## V11          0.1753         0.1577
-## V17          0.1989         0.1800
-## V32          0.1715         0.1941
-## V35          0.1825         0.1973
-## V39          0.1906         0.2016
-## V43          0.2091         0.1872</code></pre>
+<pre><code>##     Avg (recom Ctrl) Avg (recom Trt) Ctrl - Trt SE (recom Ctrl)
+## V2           -1.8994          1.8703     -3.770          0.1469
+## V11           1.2394         -1.1216      2.361          0.1753
+## V17           0.9566         -0.6530      1.610          0.1989
+## V35          -0.7170          0.4642     -1.181          0.1825
+##     SE (recom Trt)
+## V2          0.1536
+## V11         0.1577
+## V17         0.1800
+## V35         0.1973</code></pre>
 </div>
 <div id="accessing-help-files-for-main-functions-of-personalized" class="section level2">
 <h2 class="hasAnchor">
@@ -288,10 +282,16 @@
 <li><a href="https://www.r-project.org/Licenses/GPL-2">GPL-2</a></li>
 </ul>
 </div>
+<div class="citation">
+<h2>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html">Citing personalized</a></li>
+</ul>
+</div>
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
-<li>Jared Huling <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Jared Huling <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-0670-4845" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" height="16"></a> </li>
 <li><a href="authors.html">All authors...</a></li>
 </ul>
 </div>

@@ -62,7 +62,7 @@ Prints summary results for estimated subgroup treatment effects" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">personalized</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.1</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.3</span>
       </span>
     </div>
 
@@ -134,7 +134,7 @@ Prints summary results for estimated subgroup treatment effects" />
   <span class='fl'>3</span>, <span class='fl'>3</span>), <span class='kw'>sample.pct</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>which.quant</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for subgroup_summary</span>
-<span class='fu'>print</span>(<span class='no'>x</span>, <span class='kw'>p.value</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+<span class='fu'>print</span>(<span class='no'>x</span>, <span class='kw'>p.value</span> <span class='kw'>=</span> <span class='fl'>0.001</span>,
   <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fu'>max</span>(<span class='fu'>getOption</span>(<span class='st'>"digits"</span>) - <span class='fl'>3</span>, <span class='fl'>3</span>), <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -167,9 +167,10 @@ validation results for subgroups defined by cutoff values of the benefit score d
     </tr>
     <tr>
       <th>p.value</th>
-      <td><p>a p-value threshold for mean differences below which covariates will be displayed. For example,
+      <td><p>a p-value threshold for mean differences below which covariates will be displayed. P-values are adjusted for
+multiple comparisons by the Hommel approach. For example,
 setting <code>p.value = 0.05</code> will display all covariates that have a significant difference between subgroups
- with p-value less than 0.05. Defaults to 1, which displays all covariates</p></td>
+ with p-value less than 0.05. Defaults to 0.001.</p></td>
     </tr>
     </table>
     

@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">personalized</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.1</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.3</span>
       </span>
     </div>
 
@@ -82,7 +82,7 @@
       <h1>Usage of the Personalized Package</h1>
                         <h4 class="author">Jared Huling</h4>
             
-            <h4 class="date">2018-09-19</h4>
+            <h4 class="date">2019-02-07</h4>
       
       
       <div class="hidden name"><code>usage_of_the_personalized_package.Rmd</code></div>
@@ -269,9 +269,9 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## Received 1 -18.5664 (n = 272)  -7.6255 (n = 318)
 ## 
 ## Treatment effects conditional on subgroups:
-## Est of E[Y|T=0,T=Recom]-E[Y|T=/=0,T=Recom] 
+## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] 
 ##                           8.6609 (n = 462) 
-## Est of E[Y|T=1,T=Recom]-E[Y|T=/=1,T=Recom] 
+## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] 
 ##                           8.8877 (n = 538) 
 ## 
 ## NOTE: The above average outcomes are biased estimates of
@@ -339,9 +339,9 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## Received 1 -9.5496 (SE = 3.5861, n = 77.04)
 ## 
 ## Treatment effects conditional on subgroups:
-## Est of E[Y|T=0,T=Recom]-E[Y|T=/=0,T=Recom] 
+## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] 
 ##           3.7089 (SE = 5.5846, n = 121.96) 
-## Est of E[Y|T=1,T=Recom]-E[Y|T=/=1,T=Recom] 
+## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] 
 ##           5.1441 (SE = 4.8517, n = 128.04) 
 ## 
 ## Est of 
@@ -520,14 +520,14 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## 
 ## Average Outcomes:
 ##                 Recommended 0      Recommended 1
-## Received 0  -7.8948 (n = 200) -18.5592 (n = 210)
-## Received 1 -20.1436 (n = 288)  -5.7529 (n = 302)
+## Received 0  -7.9896 (n = 197) -18.1199 (n = 213)
+## Received 1 -20.3335 (n = 285)  -5.7089 (n = 305)
 ## 
 ## Treatment effects conditional on subgroups:
-## Est of E[Y|T=0,T=Recom]-E[Y|T=/=0,T=Recom] 
-##                          12.2487 (n = 488) 
-## Est of E[Y|T=1,T=Recom]-E[Y|T=/=1,T=Recom] 
-##                          12.8064 (n = 512) 
+## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] 
+##                          12.3439 (n = 482) 
+## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] 
+##                          12.4111 (n = 518) 
 ## 
 ## NOTE: The above average outcomes are biased estimates of
 ##       the expected outcomes conditional on subgroups. 
@@ -537,7 +537,7 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## 
 ## Benefit score quantiles (f(X) for 1 vs 0): 
 ##       0%      25%      50%      75%     100% 
-## -28.0887  -4.5974   0.2698   5.1089  27.1812 
+## -28.8595  -4.6063   0.3222   5.1211  24.4454 
 ## 
 ## ---------------------------------------------------
 ## 
@@ -545,7 +545,7 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## E[Y|T=1, X] - E[Y|T=0, X]
 ## 
 ##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-## -56.1774  -9.1948   0.5396   0.3954  10.2178  54.3624 
+## -57.7189  -9.2126   0.6443   0.4016  10.2422  48.8908 
 ## 
 ## ---------------------------------------------------
 ## The following summary pertains to estimated treatment-covariate interactions:</code></pre>
@@ -559,27 +559,27 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## 
 ## Parametric coefficients:
 ##      Estimate Std. Error t value Pr(&gt;|t|)
-## Trt1  0.05318    0.89386   0.059    0.953
+## Trt1  0.05754    0.89371   0.064    0.949
 ## 
 ## Approximate significance of smooth terms:
 ##          edf Ref.df      F  p-value    
-## s(V1)  2.975  3.782  2.540 0.057086 .  
-## s(V2)  3.124  3.977  4.774 0.000786 ***
-## s(V3)  1.000  1.000 10.034 0.001583 ** 
-## s(V8)  1.000  1.000  2.357 0.125059    
-## s(V11) 1.000  1.000  7.409 0.006603 ** 
-## s(V13) 1.000  1.000  7.000 0.008278 ** 
-## s(V17) 1.000  1.000  2.115 0.146215    
-## s(V27) 1.000  1.000  2.014 0.156148    
-## s(V37) 1.000  1.000  4.525 0.033650 *  
-## s(V40) 1.000  1.000  1.178 0.278052    
-## s(V42) 1.000  1.000  2.635 0.104822    
-## s(V50) 1.000  1.000  5.072 0.024531 *  
+## s(V1)  2.975  3.782  2.541 0.056982 .  
+## s(V2)  3.471  4.285  4.571 0.000896 ***
+## s(V3)  1.000  1.000 10.005 0.001608 ** 
+## s(V8)  1.000  1.000  2.353 0.125320    
+## s(V11) 1.000  1.000  7.447 0.006465 ** 
+## s(V13) 1.000  1.000  7.057 0.008020 ** 
+## s(V17) 1.000  1.000  2.151 0.142802    
+## s(V27) 1.000  1.000  2.003 0.157321    
+## s(V37) 1.000  1.000  4.591 0.032378 *  
+## s(V40) 1.000  1.000  1.181 0.277471    
+## s(V42) 1.000  1.000  2.648 0.103985    
+## s(V50) 1.000  1.000  5.145 0.023531 *  
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## R-sq.(adj) =  0.0607   Deviance explained = 7.23%
-## GCV = 1510.6  Scale est. = 1484.8    n = 1000</code></pre>
+## R-sq.(adj) =  0.0613   Deviance explained =  7.3%
+## GCV = 1510.6  Scale est. = 1484.2    n = 1000</code></pre>
 </div>
 <div id="binary-outcomes" class="section level3">
 <h3 class="hasAnchor">
@@ -626,9 +626,9 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## Received 1 0.2014 (n = 275) 0.4745 (n = 315)
 ## 
 ## Treatment effects conditional on subgroups:
-## Est of E[Y|T=0,T=Recom]-E[Y|T=/=0,T=Recom] 
+## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] 
 ##                           0.2394 (n = 453) 
-## Est of E[Y|T=1,T=Recom]-E[Y|T=/=1,T=Recom] 
+## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] 
 ##                           0.2765 (n = 547) 
 ## 
 ## NOTE: The above average outcomes are biased estimates of
@@ -701,9 +701,9 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## Received 1 280.5498 (n = 359) 74.1632 (n = 231)
 ## 
 ## Treatment effects conditional on subgroups:
-## Est of E[Y|T=0,T=Recom]-E[Y|T=/=0,T=Recom] 
+## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] 
 ##                        -188.4406 (n = 613) 
-## Est of E[Y|T=1,T=Recom]-E[Y|T=/=1,T=Recom] 
+## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] 
 ##                          43.9225 (n = 387) 
 ## 
 ## NOTE: The above average outcomes are biased estimates of
@@ -786,9 +786,9 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## Received 1 -15.8012 (n = 292)  -9.7736 (n = 298)
 ## 
 ## Treatment effects conditional on subgroups:
-## Est of E[Y|T=0,T=Recom]-E[Y|T=/=0,T=Recom] 
+## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] 
 ##                            7.917 (n = 494) 
-## Est of E[Y|T=1,T=Recom]-E[Y|T=/=1,T=Recom] 
+## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] 
 ##                           9.3337 (n = 506) 
 ## 
 ## NOTE: The above average outcomes are biased estimates of
@@ -840,28 +840,14 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1">comp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/summarize.subgroups.html">summarize.subgroups</a></span>(subgrp.model)</a></code></pre></div>
 <p>The user can optionally print only the covariates which have significant differences between subgroups with a p-value below a given threshold like the following:</p>
 <div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="kw">print</span>(comp, <span class="dt">p.value =</span> <span class="fl">0.01</span>)</a></code></pre></div>
-<pre><code>##     Avg (recom 0) Avg (recom 1)   0 - 1 pval 0 - 1 SE (recom 0)
-## V1        -0.3561        0.3957 -0.7518  6.564e-05       0.1386
-## V2        -1.5303        1.5509 -3.0812  2.128e-66       0.1211
-## V3         1.0502       -1.0140  2.0642  1.650e-30       0.1246
-## V6         0.4025       -0.1534  0.5559  3.241e-03       0.1405
-## V11        1.2063       -0.8904  2.0967  1.095e-29       0.1300
-## V13       -0.9325        0.4492 -1.3818  2.738e-13       0.1358
-## V14       -0.1832        0.3555 -0.5387  4.690e-03       0.1399
-## V17       -0.8114        0.4091 -1.2206  1.618e-10       0.1328
-## V19        0.1809       -0.3086  0.4895  8.898e-03       0.1361
-## V37        0.5381       -0.5264  1.0645  2.390e-08       0.1376
-##     SE (recom 1)
-## V1        0.1263
-## V2        0.1129
-## V3        0.1212
-## V6        0.1254
-## V11       0.1234
-## V13       0.1278
-## V14       0.1287
-## V17       0.1343
-## V19       0.1279
-## V37       0.1298</code></pre>
+<pre><code>##     Avg (recom 0) Avg (recom 1)   0 - 1 SE (recom 0) SE (recom 1)
+## V1        -0.3561        0.3957 -0.7518       0.1386       0.1263
+## V2        -1.5303        1.5509 -3.0812       0.1211       0.1129
+## V3         1.0502       -1.0140  2.0642       0.1246       0.1212
+## V11        1.2063       -0.8904  2.0967       0.1300       0.1234
+## V13       -0.9325        0.4492 -1.3818       0.1358       0.1278
+## V17       -0.8114        0.4091 -1.2206       0.1328       0.1343
+## V37        0.5381       -0.5264  1.0645       0.1376       0.1298</code></pre>
 <p>The covariate values and estimated subgroups can be directly used by the <code><a href="../reference/summarize.subgroups.html">summarize.subgroups()</a></code> function:</p>
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1">comp2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/summarize.subgroups.html">summarize.subgroups</a></span>(x, <span class="dt">subgroup =</span> subgrp.model<span class="op">$</span>benefit.scores <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</a></code></pre></div>
 </div>
@@ -909,9 +895,9 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## Received 1 -9.4263 (SE = 3.2005, n = 73.68)
 ## 
 ## Treatment effects conditional on subgroups:
-## Est of E[Y|T=0,T=Recom]-E[Y|T=/=0,T=Recom] 
+## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] 
 ##            6.1723 (SE = 5.5794, n = 123.6) 
-## Est of E[Y|T=1,T=Recom]-E[Y|T=/=1,T=Recom] 
+## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] 
 ##            8.9827 (SE = 4.0441, n = 126.4) 
 ## 
 ## Est of 
@@ -957,9 +943,9 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 ## Received 1  -9.2469 (SE = 1.6187, n = 326.6)
 ## 
 ## Treatment effects conditional on subgroups:
-## Est of E[Y|T=0,T=Recom]-E[Y|T=/=0,T=Recom] 
+## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] 
 ##            4.5142 (SE = 2.2994, n = 460.8) 
-## Est of E[Y|T=1,T=Recom]-E[Y|T=/=1,T=Recom] 
+## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] 
 ##            5.7964 (SE = 2.3648, n = 539.2) 
 ## 
 ## Est of 

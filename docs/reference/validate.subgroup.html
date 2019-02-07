@@ -62,7 +62,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">personalized</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.1</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.3</span>
       </span>
     </div>
 
@@ -278,9 +278,9 @@ doi:10.1002/(SICI)1097-0258(19960229)15:4&lt;361::AID-SIM168&gt;3.0.CO;2-4</p>
                              <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>5</span>)    <span class='co'># option for cv.glmnet</span>
 
 <span class='no'>subgrp.model</span>$<span class='no'>subgroup.trt.effects</span></div><div class='output co'>#&gt; $subgroup.effects
-#&gt; Est of E[Y|T=0,T=Recom]-E[Y|T=/=0,T=Recom] 
+#&gt; Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] 
 #&gt;                                   19.75833 
-#&gt; Est of E[Y|T=1,T=Recom]-E[Y|T=/=1,T=Recom] 
+#&gt; Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] 
 #&gt;                                   18.26168 
 #&gt; 
 #&gt; $avg.outcomes
@@ -336,9 +336,9 @@ doi:10.1002/(SICI)1097-0258(19960229)15:4&lt;361::AID-SIM168&gt;3.0.CO;2-4</p>
 #&gt; Received 1 -15.8673 (SE = 4.6548, n = 33.6667)
 #&gt; 
 #&gt; Treatment effects conditional on subgroups:
-#&gt; Est of E[Y|T=0,T=Recom]-E[Y|T=/=0,T=Recom] 
+#&gt; Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] 
 #&gt;               7.7355 (SE = 1.9336, n = 49) 
-#&gt; Est of E[Y|T=1,T=Recom]-E[Y|T=/=1,T=Recom] 
+#&gt; Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] 
 #&gt;              3.7638 (SE = 10.6273, n = 76) 
 #&gt; 
 #&gt; Est of 
@@ -361,9 +361,9 @@ doi:10.1002/(SICI)1097-0258(19960229)15:4&lt;361::AID-SIM168&gt;3.0.CO;2-4</p>
 #&gt; Received 1 -16.8603 (SE = 2.6588, n = 56)  -18.6776 (SE = 8.966, n = 14.3333)
 #&gt; 
 #&gt; Treatment effects conditional on subgroups:
-#&gt; Est of E[Y|T=0,T=Recom]-E[Y|T=/=0,T=Recom] 
+#&gt; Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] 
 #&gt;                5.691 (SE = 2.6139, n = 84) 
-#&gt; Est of E[Y|T=1,T=Recom]-E[Y|T=/=1,T=Recom] 
+#&gt; Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] 
 #&gt;               9.3713 (SE = 9.1035, n = 41) 
 #&gt; 
 #&gt; Est of E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:                     
@@ -388,9 +388,9 @@ doi:10.1002/(SICI)1097-0258(19960229)15:4&lt;361::AID-SIM168&gt;3.0.CO;2-4</p>
 #&gt; Received 1 -18.2239 (SE = 2.7948, n = 65) -12.6309 (SE = 17.4583, n = 5.3333)
 #&gt; 
 #&gt; Treatment effects conditional on subgroups:
-#&gt; Est of E[Y|T=0,T=Recom]-E[Y|T=/=0,T=Recom] 
+#&gt; Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] 
 #&gt;              6.1051 (SE = 2.6341, n = 103) 
-#&gt; Est of E[Y|T=1,T=Recom]-E[Y|T=/=1,T=Recom] 
+#&gt; Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] 
 #&gt;             23.8828 (SE = 23.9782, n = 22) 
 #&gt; 
 #&gt; Est of E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:                      
