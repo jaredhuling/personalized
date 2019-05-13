@@ -39,7 +39,7 @@
 weighted.ksvm <- function(y,
                           x,
                           weights,
-                          C = c(0.1, 0.5, 1, 5, 10),
+                          C = c(0.1, 0.5, 1, 2, 10),
                           kernel = "rbfdot",
                           kpar = "automatic",
                           nfolds = 10,
