@@ -4,7 +4,7 @@
 \alias{weighted.ksvm}
 \title{Fit weighted kernel svm model.}
 \usage{
-weighted.ksvm(y, x, weights, C = c(0.1, 0.5, 1, 5, 10),
+weighted.ksvm(y, x, weights, C = c(0.1, 0.5, 1, 2, 10),
   kernel = "rbfdot", kpar = "automatic", nfolds = 10,
   foldid = NULL, ...)
 }
