@@ -2,6 +2,7 @@
 
 * Added warning for use of Harrell's procedure in high dimensions
 * Changed default value for 'train.fraction' to 0.75 from 0.5 in 'validate.subgroup'
+* Minor improvements to plotting for 'subgroup_validated' objects
 
 # personalized 0.2.3
 
