@@ -6,7 +6,7 @@
 \usage{
 validate.subgroup(model, B = 50L,
   method = c("training_test_replication", "boot_bias_correction"),
-  train.fraction = 0.5, benefit.score.quantiles = c(0.1666667,
+  train.fraction = 0.75, benefit.score.quantiles = c(0.1666667,
   0.3333333, 0.5, 0.6666667, 0.8333333), parallel = FALSE)
 }
 \arguments{
@@ -59,6 +59,8 @@ of averages of the values from \code{boot.results.quantiles}}
 \item{cutpoint}{Benefit score cutoff value used for determining subgroups}
 \item{val.method}{Method used for validation}
 \item{iterations}{Number of replications used in the validation process}
+\item{nobs}{Number of observations in \code{x} provided to \code{\link[personalized]{fit.subgroup}}}
+\item{nvars}{Number of variables in \code{x} provided to \code{\link[personalized]{fit.subgroup}}}
 }
 \description{
 Validates subgroup treatment effects for fitted

@@ -1,3 +1,8 @@
+# personalized 0.2.4
+
+* Added warning for use of Harrell's procedure in high dimensions
+* Changed default value for 'train.fraction' to 0.75 from 0.5 in 'validate.subgroup'
+
 # personalized 0.2.3
 
 * Fixes trt factor level reordering issue for plots

@@ -74,6 +74,8 @@
 #' \item{cutpoint}{Benefit score cutoff value used for determining subgroups}
 #' \item{val.method}{Method used for validation}
 #' \item{iterations}{Number of replications used in the validation process}
+#' \item{nobs}{Number of observations in \code{x} provided to \code{\link[personalized]{fit.subgroup}}}
+#' \item{nvars}{Number of variables in \code{x} provided to \code{\link[personalized]{fit.subgroup}}}
 #' @importFrom stats predict sd
 #' @import foreach
 #' @examples
@@ -148,11 +150,24 @@ validate.subgroup <- function(model,
                               B              = 50L,
                               method         = c("training_test_replication",
                                                  "boot_bias_correction"),
-                              train.fraction = 0.5,
+                              train.fraction = 0.75,
                               benefit.score.quantiles = c(0.1666667, 0.3333333, 0.5000000, 0.6666667, 0.8333333),
                               parallel       = FALSE)
 {
     method <- match.arg(method)
+
+
+    if (method == "boot_bias_correction")
+    {
+        if (!is.null(model$nobs) & !is.null(model$vars))
+        {
+            if (model$nobs < model$vars)
+            {
+                warning("method='boot_bias_correction' not recommended for high-dimensional data.
+                        Use method='training_test_replication' instead.")
+            }
+        }
+    }
 
 
     if (class(model)[1] != "subgroup_fitted")
@@ -724,7 +739,9 @@ validate.subgroup <- function(model,
                 larger.outcome.better = model$larger.outcome.better,
                 cutpoint              = model$cutpoint,
                 val.method   = method,
-                iterations   = B)
+                iterations   = B,
+                nobs         = n.obs,
+                nvars        = NCOL(x))
     class(ret) <- "subgroup_validated"
     ret
 }
