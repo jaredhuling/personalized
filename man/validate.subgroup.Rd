@@ -129,7 +129,6 @@ subgrp.model <- fit.subgroup(x = x, y = y,
                              loss   = "sq_loss_lasso",
                              nfolds = 5)    # option for cv.glmnet
 
-subgrp.model$subgroup.trt.effects
 
 x.test <- matrix(rnorm(10 * n.obs * n.vars, sd = 3), 10 * n.obs, n.vars)
 

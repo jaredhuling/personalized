@@ -21,7 +21,8 @@ across iterations of either the bootstrap or training/test re-fitting. For the l
 case the test results will be plotted. \code{"boxplot"} results in boxplots across all observations/iterations of either
 the bootstrap or training/test re-fitting. For the latter
 case the test results will be plotted. \code{"interaction"} creates an
-interaction plot for the different subgroups (crossing lines here means a meaningful subgroup).
+interaction plot for the different subgroups (crossing lines here means a meaningful subgroup). For the interaction plot,
+the intervals around each point represent +1 one SE
 \code{"conditional"} For subgroup_fitted objects, plots smoothed (via a GAM smoother) means of the outcomes as a function of the estimated benefit score
 separately for the treated and untreated groups. For subgroup_validated objects, boxplots of summary statistics
 within subgroups will be plotted as subgroups are defined by different cutoffs of the benefit scores.
@@ -93,7 +94,6 @@ valmod <- validate.subgroup(subgrp.model, B = 3,
                           method = "training_test",
                           benefit.score.quantiles = c(0.25, 0.5, 0.75),
                           train.fraction = 0.75)
-valmod$avg.results
 
 plot(valmod)
 

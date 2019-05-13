@@ -9,7 +9,8 @@
 #' case the test results will be plotted. \code{"boxplot"} results in boxplots across all observations/iterations of either
 #' the bootstrap or training/test re-fitting. For the latter
 #' case the test results will be plotted. \code{"interaction"} creates an
-#' interaction plot for the different subgroups (crossing lines here means a meaningful subgroup).
+#' interaction plot for the different subgroups (crossing lines here means a meaningful subgroup). For the interaction plot,
+#' the intervals around each point represent +1 one SE
 #' \code{"conditional"} For subgroup_fitted objects, plots smoothed (via a GAM smoother) means of the outcomes as a function of the estimated benefit score
 #' separately for the treated and untreated groups. For subgroup_validated objects, boxplots of summary statistics
 #' within subgroups will be plotted as subgroups are defined by different cutoffs of the benefit scores.
@@ -32,7 +33,6 @@
 #'                           method = "training_test",
 #'                           benefit.score.quantiles = c(0.25, 0.5, 0.75),
 #'                           train.fraction = 0.75)
-#' valmod$avg.results
 #'
 #' plot(valmod)
 #'
@@ -74,7 +74,8 @@ plot.subgroup_validated <- function(x,
                                                    each = ncol(avg.res$avg.outcomes)),
                                  Received    = gsub("^Received ", "", rep(rownames(avg.res$avg.outcomes),
                                                    ncol(avg.res$avg.outcomes))),
-                                 Value       = as.vector(avg.res$avg.outcomes))
+                                 Value       = as.vector(avg.res$avg.outcomes),
+                                 SE          = as.vector(x$se.results$SE.avg.outcomes))
 
 
 
@@ -101,7 +102,7 @@ plot.subgroup_validated <- function(x,
     avg.res.2.plot.dens$Received <- factor(avg.res.2.plot.dens$Received,
                                            levels = levels(avg.res.2.plot.dens$Received)[match(x$trts, sort(x$trts))])
 
-    Recommended <- Received <- Value <- bs <- Quantile <- Outcome <- NULL
+    Recommended <- Received <- Value <- bs <- Quantile <- Outcome <- SE <- NULL
 
     if (type == "conditional")
     {
@@ -321,6 +322,10 @@ plot.subgroup_validated <- function(x,
                          aes(x = Recommended, y = Value, group = Received)) +
             geom_line(aes(colour = Received), size = 1.25, na.rm = TRUE) +
             geom_point(aes(colour = Received), size = 2, na.rm = TRUE) +
+            geom_errorbar(aes(ymin   = Value - SE,
+                              ymax   = Value + SE,
+                              colour = Received),
+                          width = 0.2) +
             theme(legend.position = "bottom") +
             scale_x_discrete(expand = c(0.25, 0.25)) +
             ylab(ylab.text) +
