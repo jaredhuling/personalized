@@ -24,7 +24,7 @@
 #' @rdname plot
 #' @import plotly
 #' @importFrom ggplot2 ggplot aes geom_density geom_rug coord_flip facet_grid theme xlab
-#' @importFrom ggplot2 ylab ggtitle geom_vline geom_boxplot geom_line geom_point geom_smooth
+#' @importFrom ggplot2 ylab ggtitle geom_vline geom_boxplot geom_line geom_point geom_smooth geom_errorbar
 #' @importFrom ggplot2 scale_x_discrete scale_color_discrete geom_histogram geom_rect geom_hline xlim geom_bar
 #'
 #' @examples
