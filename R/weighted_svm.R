@@ -220,7 +220,6 @@ weighted.ksvm <- function(y,
                                                       r = 0,
                                                       l = rep(0, nsub),
                                                       u = drop(C[l] * weights[-which.test]),
-                                                      eps = epsil,
                                                       ...), silent = TRUE)
 
                 if (exists("fitsub"))
@@ -250,7 +249,6 @@ weighted.ksvm <- function(y,
                             r = 0,
                             l = rep(0, n),
                             u = drop(best.C * weights),
-                            eps = epsil,
                             ...)
 
     if (fit@how != "converged")
