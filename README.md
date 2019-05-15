@@ -5,7 +5,7 @@ Status](https://travis-ci.org/jaredhuling/personalized.svg?branch=master)](https
 [![Appveyor Build
 Status](https://ci.appveyor.com/api/projects/status/github/jaredhuling/personalized?branch=master&svg=true)](https://ci.appveyor.com/project/jaredhuling/personalized)
 [![codecov](https://codecov.io/gh/jaredhuling/personalized/branch/master/graph/badge.svg)](https://codecov.io/gh/jaredhuling/personalized)
-[![](http://cranlogs.r-pkg.org/badges/personalized)](http://cran.rstudio.com/web/packages/personalized/index.html)
+[![](http://cranlogs.r-pkg.org/badges/personalized)](https://cran.r-project.org/package=personalized)
 
 <img src="man/figures/sticker.png" align="right" width="15%" height="15%" />
 
@@ -101,18 +101,18 @@ summary(subgrp.model)
     ## function:  propensity.func 
     ## 
     ## benefit score: f(x), 
-    ## Trt recomm = Trt*I(f(x)>c)+Ctrl*I(f(x)<=c) where c is 'cutpoint'
+    ## Trt recom = Trt*I(f(x)>c)+Ctrl*I(f(x)<=c) where c is 'cutpoint'
     ## 
     ## Average Outcomes:
-    ##                 Recommended Ctrl    Recommended Trt
-    ## Received Ctrl  -4.2429 (n = 117) -21.9576 (n = 114)
-    ## Received Trt  -23.6902 (n = 132)  -6.7605 (n = 137)
+    ##                Recommended Ctrl    Recommended Trt
+    ## Received Ctrl -3.9319 (n = 109) -21.2055 (n = 122)
+    ## Received Trt  -25.078 (n = 112)   -8.326 (n = 157)
     ## 
     ## Treatment effects conditional on subgroups:
-    ## Est of E[Y|T=Ctrl,T=Recom]-E[Y|T=/=Ctrl,T=Recom] 
-    ##                                19.4474 (n = 249) 
-    ##   Est of E[Y|T=Trt,T=Recom]-E[Y|T=/=Trt,T=Recom] 
-    ##                                15.1972 (n = 251) 
+    ## Est of E[Y|T=Ctrl,Recom=Ctrl]-E[Y|T=/=Ctrl,Recom=Ctrl] 
+    ##                                      21.1461 (n = 221) 
+    ##     Est of E[Y|T=Trt,Recom=Trt]-E[Y|T=/=Trt,Recom=Trt] 
+    ##                                      12.8795 (n = 279) 
     ## 
     ## NOTE: The above average outcomes are biased estimates of
     ##       the expected outcomes conditional on subgroups. 
@@ -121,28 +121,26 @@ summary(subgrp.model)
     ## ---------------------------------------------------
     ## 
     ## Benefit score quantiles (f(X) for Trt vs Ctrl): 
-    ##        0%       25%       50%       75%      100% 
-    ## -14.15602  -3.58120   0.04648   3.51676  14.78106 
+    ##      0%     25%     50%     75%    100% 
+    ## -9.2792 -1.8237  0.5011  2.5977  9.6376 
     ## 
     ## ---------------------------------------------------
     ## 
     ## Summary of individual treatment effects: 
     ## E[Y|T=Trt, X] - E[Y|T=Ctrl, X]
     ## 
-    ##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
-    ## -28.31203  -7.16240   0.09296   0.27303   7.03352  29.56212 
+    ##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+    ## -18.5583  -3.6474   1.0023   0.9507   5.1954  19.2753 
     ## 
     ## ---------------------------------------------------
     ## 
-    ## 9 out of 50 interactions selected in total by the lasso (cross validation criterion).
+    ## 5 out of 50 interactions selected in total by the lasso (cross validation criterion).
     ## 
     ## The first estimate is the treatment main effect, which is always selected. 
     ## Any other variables selected represent treatment-covariate interactions.
     ## 
-    ##             Trt    V2     V11     V17    V32   V35     V39    V40    V45
-    ## Estimate 0.3389 1.312 -0.8576 -0.3681 0.2421 0.357 -0.1401 0.0275 0.0945
-    ##              V50
-    ## Estimate -0.0422
+    ##             Trt     V2     V11     V17    V32    V35
+    ## Estimate 0.5463 0.9827 -0.4356 -0.1532 0.0326 0.1007
 
 ### Use repeated train and test splitting to estimate subgroup treatment effects:
 
@@ -167,22 +165,22 @@ print(val.model, digits = 2, sample.pct = TRUE)
     ## replications:       100 
     ## 
     ## benefit score: f(x), 
-    ## Trt recomm = Trt*I(f(x)>c)+Ctrl*I(f(x)<=c) where c is 'cutpoint'
+    ## Trt recom = Trt*I(f(x)>c)+Ctrl*I(f(x)<=c) where c is 'cutpoint'
     ## 
     ## Average Test Set Outcomes:
-    ##                         Recommended Ctrl            Recommended Trt
-    ## Received Ctrl -10.85 (SE = 7.88, 20.74%)  -18.64 (SE = 6.5, 25.81%)
-    ## Received Trt   -15.81 (SE = 5.9, 24.18%) -15.36 (SE = 9.02, 29.26%)
+    ##                         Recommended Ctrl           Recommended Trt
+    ## Received Ctrl  -9.56 (SE = 7.98, 19.88%) -18.62 (SE = 6.72, 26.5%)
+    ## Received Trt  -16.64 (SE = 6.85, 23.23%) -13.41 (SE = 7.8, 30.39%)
     ## 
     ## Treatment effects conditional on subgroups:
-    ## Est of E[Y|T=Ctrl,T=Recom]-E[Y|T=/=Ctrl,T=Recom] 
-    ##                        4.97 (SE = 11.23, 44.93%) 
-    ##   Est of E[Y|T=Trt,T=Recom]-E[Y|T=/=Trt,T=Recom] 
-    ##                        3.27 (SE = 11.73, 55.07%) 
+    ## Est of E[Y|T=Ctrl,Recom=Ctrl]-E[Y|T=/=Ctrl,Recom=Ctrl] 
+    ##                              6.54 (SE = 10.49, 43.11%) 
+    ##     Est of E[Y|T=Trt,Recom=Trt]-E[Y|T=/=Trt,Recom=Trt] 
+    ##                              5.21 (SE = 11.06, 56.89%) 
     ## 
     ## Est of 
-    ## E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:                
-    ## 1.2 (SE = 8.77)
+    ## E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:                 
+    ## 2.91 (SE = 8.29)
 
 Visualize subgroup-specific treatment effect estimates across
 training/testing
@@ -204,22 +202,14 @@ summ <- summarize.subgroups(subgrp.model)
 print(summ, p.value = 0.05)
 ```
 
-    ##     Avg (recom Ctrl) Avg (recom Trt) Ctrl - Trt pval Ctrl - Trt
-    ## V2           -1.8994          1.8703    -3.7697       6.746e-55
-    ## V11           1.2394         -1.1216     2.3610       1.325e-21
-    ## V17           0.9566         -0.6530     1.6096       3.814e-09
-    ## V32          -0.4991          0.1747    -0.6738       9.574e-03
-    ## V35          -0.7170          0.4642    -1.1812       1.356e-05
-    ## V39           0.3090         -0.3552     0.6643       1.700e-02
-    ## V43          -0.2931          0.3787    -0.6718       1.706e-02
-    ##     SE (recom Ctrl) SE (recom Trt)
-    ## V2           0.1469         0.1536
-    ## V11          0.1753         0.1577
-    ## V17          0.1989         0.1800
-    ## V32          0.1715         0.1941
-    ## V35          0.1825         0.1973
-    ## V39          0.1906         0.2016
-    ## V43          0.2091         0.1872
+    ##     Avg (recom Ctrl) Avg (recom Trt) Ctrl - Trt SE (recom Ctrl)
+    ## V2           -2.4161          1.9013     -4.317          0.1423
+    ## V11           1.1279         -0.7963      1.924          0.1914
+    ## V17           0.8053         -0.3715      1.177          0.2170
+    ##     SE (recom Trt)
+    ## V2          0.1298
+    ## V11         0.1572
+    ## V17         0.1736
 
 ## Accessing Help Files for Main Functions of `personalized`
 

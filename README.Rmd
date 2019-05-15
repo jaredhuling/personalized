@@ -15,7 +15,7 @@ opts_chunk$set(message = FALSE, warning=FALSE)
 [![Appveyor Build
 Status](https://ci.appveyor.com/api/projects/status/github/jaredhuling/personalized?branch=master&svg=true)](https://ci.appveyor.com/project/jaredhuling/personalized)
 [![codecov](https://codecov.io/gh/jaredhuling/personalized/branch/master/graph/badge.svg)](https://codecov.io/gh/jaredhuling/personalized)
-[![](http://cranlogs.r-pkg.org/badges/personalized)](http://cran.rstudio.com/web/packages/personalized/index.html)
+[![](http://cranlogs.r-pkg.org/badges/personalized)](https://cran.r-project.org/package=personalized)
 
 ```{r make_sticker, echo = FALSE, out.width= "100%"}
 library(hexSticker)
