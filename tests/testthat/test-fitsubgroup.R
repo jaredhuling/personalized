@@ -780,16 +780,16 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
 
         expect_is(subgrp.model, "subgroup_fitted")
 
-        subgrp.model <- fit.subgroup(x = x, y = y,
-                                     trt = trt01,
-                                     propensity.func = prop.func,
-                                     loss   = "sq_loss_gbm",
-                                     n.trees = 5,
-                                     n.cores = 1)
-
-        invisible(capture.output(print(subgrp.model)))
-        invisible(capture.output(summary(subgrp.model)))
-        expect_is(subgrp.model, "subgroup_fitted")
+        # subgrp.model <- fit.subgroup(x = x, y = y,
+        #                              trt = trt01,
+        #                              propensity.func = prop.func,
+        #                              loss   = "sq_loss_gbm",
+        #                              n.trees = 5,
+        #                              n.cores = 1)
+        #
+        # invisible(capture.output(print(subgrp.model)))
+        # invisible(capture.output(summary(subgrp.model)))
+        # expect_is(subgrp.model, "subgroup_fitted")
     }
 
     # subgrp.model <- fit.subgroup(x = x, y = y,
@@ -1052,16 +1052,16 @@ test_that("test fit.subgroup with augment.func for continuous outcomes and vario
         invisible(capture.output(print(subgrp.model)))
         invisible(capture.output(summary(subgrp.model)))
 
-        subgrp.model <- fit.subgroup(x = x, y = y,
-                                     trt = trt01,
-                                     propensity.func = prop.func,
-                                     loss   = "sq_loss_gbm",
-                                     n.trees = 5,
-                                     n.cores = 1)
-
-        invisible(capture.output(print(subgrp.model)))
-        invisible(capture.output(summary(subgrp.model)))
-        expect_is(subgrp.model, "subgroup_fitted")
+        # subgrp.model <- fit.subgroup(x = x, y = y,
+        #                              trt = trt01,
+        #                              propensity.func = prop.func,
+        #                              loss   = "sq_loss_gbm",
+        #                              n.trees = 5,
+        #                              n.cores = 1)
+        #
+        # invisible(capture.output(print(subgrp.model)))
+        # invisible(capture.output(summary(subgrp.model)))
+        # expect_is(subgrp.model, "subgroup_fitted")
 
         # subgrp.model <- fit.subgroup(x = x, y = y,
         #                              trt = trt01,
@@ -1534,12 +1534,12 @@ test_that("test fit.subgroup for continuous outcomes and match.id provided", {
                                     loss   = "sq_loss_lasso_gam",
                                     foldid = sample(1:5, nrow(x.m), replace = TRUE)))
 
-        subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
-                                       trt = trt.m,
-                                       match.id = match.id,
-                                       loss   = "sq_loss_gbm", n.trees = 5, n.cores = 1)
-
-        expect_is(subgrp.model.m, "subgroup_fitted")
+        # subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
+        #                                trt = trt.m,
+        #                                match.id = match.id,
+        #                                loss   = "sq_loss_gbm", n.trees = 5, n.cores = 1)
+        #
+        # expect_is(subgrp.model.m, "subgroup_fitted")
 
         # subgrp.model.m <- fit.subgroup(x = x.m, y = y.m,
         #                                trt = trt.m,
