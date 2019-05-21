@@ -14,8 +14,11 @@ notifications:
     on_success: change
     on_failure: always
 
-os:
-  - linux
+matrix:
+  include:
+    - os: linux
+      env: BLAS=OpenBLAS
+    - os: linux
 
 
 r_packages:
