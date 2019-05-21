@@ -80,23 +80,26 @@ test_that("test validate.subgroup for continuous outcomes with various options",
     invisible(capture.output(print(subgrp.val, digits = 2)))
 
 
-    expect_error(validate.subgroup(x, B = 3,
-                                   method = "training"))
+    if (Sys.info()[[1]] != "windows")
+    {
+        expect_error(validate.subgroup(x, B = 3,
+                                       method = "training"))
 
-    ## parallel
+        ## parallel
 
-    subgrp.val <- validate.subgroup(subgrp.model, B = 3,
-                                    parallel = TRUE,
-                                    method = "training")
+        subgrp.val <- validate.subgroup(subgrp.model, B = 3,
+                                        parallel = TRUE,
+                                        method = "training")
 
-    expect_is(subgrp.val, "subgroup_validated")
+        expect_is(subgrp.val, "subgroup_validated")
 
 
-    subgrp.val <- validate.subgroup(subgrp.model, B = 3,
-                                    parallel = TRUE,
-                                    method = "boot")
+        subgrp.val <- validate.subgroup(subgrp.model, B = 3,
+                                        parallel = TRUE,
+                                        method = "boot")
 
-    expect_is(subgrp.val, "subgroup_validated")
+        expect_is(subgrp.val, "subgroup_validated")
+    }
 })
 
 

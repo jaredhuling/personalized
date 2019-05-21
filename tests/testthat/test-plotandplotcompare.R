@@ -53,54 +53,65 @@ test_that("test plotting for continuous outcomes with various options", {
 
     expect_is(subgrp.model, "subgroup_fitted")
 
-    expect_error(fit.subgroup(x = x, y = y,
-                              trt = trt01,
-                              propensity.func = prop.func,
-                              loss   = "sq_loss_lasso",
-                              cutpoint = "haha",
-                              nfolds = 5))
+    if (Sys.info()[[1]] != "windows")
+    {
+        expect_error(fit.subgroup(x = x, y = y,
+                                  trt = trt01,
+                                  propensity.func = prop.func,
+                                  loss   = "sq_loss_lasso",
+                                  cutpoint = "haha",
+                                  nfolds = 5))
 
-    expect_error(fit.subgroup(x = x, y = y,
-                              trt = trt01,
-                              propensity.func = prop.func,
-                              loss   = "sq_loss_lasso",
-                              cutpoint = list(x),
-                              nfolds = 5))
+        expect_error(fit.subgroup(x = x, y = y,
+                                  trt = trt01,
+                                  propensity.func = prop.func,
+                                  loss   = "sq_loss_lasso",
+                                  cutpoint = list(x),
+                                  nfolds = 5))
 
-    subgrp.model.bin <- fit.subgroup(x = x, y = y.binary,
-                                 trt = trt01,
-                                 propensity.func = prop.func,
-                                 loss   = "logistic_loss_lasso",
-                                 cutpoint = "median",
-                                 nfolds = 5)              # option for cv.glmnet
-
-    expect_is(subgrp.model.bin, "subgroup_fitted")
-
-    subgrp.model.bin2 <- fit.subgroup(x = x, y = y.binary,
+        subgrp.model.bin <- fit.subgroup(x = x, y = y.binary,
                                      trt = trt01,
                                      propensity.func = prop.func,
                                      loss   = "logistic_loss_lasso",
-                                     cutpoint = 0,
+                                     cutpoint = "median",
                                      nfolds = 5)              # option for cv.glmnet
 
-    expect_is(subgrp.model.bin2, "subgroup_fitted")
+        expect_is(subgrp.model.bin, "subgroup_fitted")
 
-    plot(subgrp.model.bin, type = "boxplot")
+        subgrp.model.bin2 <- fit.subgroup(x = x, y = y.binary,
+                                         trt = trt01,
+                                         propensity.func = prop.func,
+                                         loss   = "logistic_loss_lasso",
+                                         cutpoint = 0,
+                                         nfolds = 5)              # option for cv.glmnet
 
+        expect_is(subgrp.model.bin2, "subgroup_fitted")
+
+        plot(subgrp.model.bin, type = "boxplot")
+
+        pl <- plotCompare(subgrp.model.bin, subgrp.model.bin2, type = "density")
+
+        expect_is(pl, "ggplot")
+
+        pl <- plotCompare(subgrp.model.bin, subgrp.model.bin2, type = "boxplot")
+
+        expect_is(pl, "ggplot")
+
+    }
 
     subgrp.model2 <- fit.subgroup(x = x, y = y,
-                                 trt = trt01,
-                                 propensity.func = prop.func,
-                                 loss   = "owl_logistic_loss_lasso",
-                                 cutpoint = "quant50",
-                                 nfolds = 5)              # option for cv.glmnet
+                                  trt = trt01,
+                                  propensity.func = prop.func,
+                                  loss   = "owl_logistic_loss_lasso",
+                                  cutpoint = "quant50",
+                                  nfolds = 5)              # option for cv.glmnet
 
     expect_is(subgrp.model2, "subgroup_fitted")
 
-    subgrp.val <- validate.subgroup(subgrp.model, B = 10,
+    subgrp.val <- validate.subgroup(subgrp.model, B = 3,
                                     method = "training")
 
-    subgrp.val2 <- validate.subgroup(subgrp.model2, B = 10,
+    subgrp.val2 <- validate.subgroup(subgrp.model2, B = 3,
                                     method = "training")
 
     expect_is(subgrp.val, "subgroup_validated")
@@ -178,13 +189,7 @@ test_that("test plotting for continuous outcomes with various options", {
 
     expect_is(pl, "ggplot")
 
-    pl <- plotCompare(subgrp.model.bin, subgrp.model.bin2, type = "density")
 
-    expect_is(pl, "ggplot")
-
-    pl <- plotCompare(subgrp.model.bin, subgrp.model.bin2, type = "boxplot")
-
-    expect_is(pl, "ggplot")
 
 
     pl <- plotCompare(subgrp.model, subgrp.val, type = "boxplot")
@@ -242,7 +247,7 @@ test_that("test plotting for continuous outcomes with various options", {
 
     expect_is(subgrp.model, "subgroup_fitted")
 
-    subgrp.val <- validate.subgroup(subgrp.model, B = 10,
+    subgrp.val <- validate.subgroup(subgrp.model, B = 3,
                                     method = "train")
 
     expect_is(subgrp.val, "subgroup_validated")
@@ -257,7 +262,7 @@ test_that("test plotting for continuous outcomes with various options", {
     expect_is(pl, "ggplot")
 
 
-    subgrp.val2 <- validate.subgroup(subgrp.model, B = 10,
+    subgrp.val2 <- validate.subgroup(subgrp.model, B = 3,
                                     method = "boot")
 
     expect_is(subgrp.val2, "subgroup_validated")
