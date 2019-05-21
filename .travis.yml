@@ -18,6 +18,16 @@ matrix:
   include:
     - os: linux
       env: BLAS=OpenBLAS
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+             # compilers
+            - g++
+            - gfortran
+              # math libraries
+            - libopenblas-base
     - os: linux
 
 
