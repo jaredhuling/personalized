@@ -1,6 +1,8 @@
-## New version for 'personalized'
+## New version for 'personalized' -- 0.2.5
 
 * Various small improvements/bug fixes
+* Added a vignette for multi-category treatments
+* Added augmentation/propensity function utilities
 
 ## Test environments
 
