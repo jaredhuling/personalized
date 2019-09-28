@@ -3,13 +3,13 @@ library(personalized)
 
 ## ----sim_three_trt_data--------------------------------------------------
 set.seed(123)
-n.obs  <- 1000
-n.vars <- 100
+n.obs  <- 250
+n.vars <- 15
 x <- matrix(rnorm(n.obs * n.vars, sd = 3), n.obs, n.vars)
 
 # simulated non-randomized treatment with multiple levels
 # based off of a multinomial logistic model
-xbetat_1 <- 0.1 + 0.5 * x[,21] - 0.25 * x[,25]
+xbetat_1 <- 0.1 + 0.5 * x[,1]  - 0.25 * x[,5]
 xbetat_2 <- 0.1 - 0.5 * x[,11] + 0.25 * x[,15]
 trt.1.prob <- exp(xbetat_1) / (1 + exp(xbetat_1) + exp(xbetat_2))
 trt.2.prob <- exp(xbetat_2) / (1 + exp(xbetat_1) + exp(xbetat_2))
@@ -81,7 +81,7 @@ pl + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ## ----validate_multi_trt_model, eval = TRUE-------------------------------
 set.seed(123)
 validation.multi <- validate.subgroup(subgrp.multi, 
-    B = 100,  # specify the number of replications
+    B = 5,  # specify the number of replications
     method = "training_test_replication",
     train.fraction = 0.5)
 
