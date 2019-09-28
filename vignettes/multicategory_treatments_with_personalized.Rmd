@@ -1,5 +1,5 @@
 ---
-title: "Multicategory Treatments with `personalized`"
+title: "Multi-ccategory Treatments with `personalized`"
 author: "Jared Huling"
 date: "`r Sys.Date()`"
 output: 
