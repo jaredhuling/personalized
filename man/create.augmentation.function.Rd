@@ -11,7 +11,7 @@ create.augmentation.function(family, crossfit = TRUE,
 \item{family}{The response type (see options in \code{\link[glmnet]{glmnet}} help file)}
 
 \item{crossfit}{A logical value indicating whether to use cross-fitting (\code{TRUE}) or not (\code{FALSE}).
-Cross-fitting is more computationally intensive, but helps to prevent overfitting}
+Cross-fitting is more computationally intensive, but helps to prevent overfitting, see Chernozhukov, et al. (2018)}
 
 \item{nfolds.crossfit}{An integer specifying the number of folds to use for cross-fitting. Must be greater than 1}
 
@@ -58,7 +58,7 @@ aug.func <- create.augmentation.function(family = "gaussian",
 
 prop.func <- create.propensity.function(crossfit = TRUE,
                                         nfolds.crossfit = 10,
-                                        cv.glmnet.args = list(type.measure = "mae",
+                                        cv.glmnet.args = list(type.measure = "auc",
                                                               nfolds = 5))
 
 subgrp.model <- fit.subgroup(x = x, y = y,
@@ -70,6 +70,10 @@ subgrp.model <- fit.subgroup(x = x, y = y,
 
 summary(subgrp.model)
 
+}
+\references{
+Chernozhukov, V., Chetverikov, D., Demirer, M., Duflo, E., Hansen, C., Newey, W., & Robins, J. (2018).
+Double/debiased machine learning for treatment and structural parameters \url{https://arxiv.org/abs/1608.00060}
 }
 \seealso{
 \code{\link[personalized]{fit.subgroup}} for estimating ITRs and \code{\link[personalized]{create.propensity.function}} for creation of propensity functions

@@ -7,7 +7,7 @@
 #'
 #' @param family The response type (see options in \code{\link[glmnet]{glmnet}} help file)
 #' @param crossfit A logical value indicating whether to use cross-fitting (\code{TRUE}) or not (\code{FALSE}).
-#' Cross-fitting is more computationally intensive, but helps to prevent overfitting
+#' Cross-fitting is more computationally intensive, but helps to prevent overfitting, see Chernozhukov, et al. (2018)
 #' @param nfolds.crossfit An integer specifying the number of folds to use for cross-fitting. Must be greater than 1
 #' @param cv.glmnet.args A list of NAMED arguments to pass to the \code{\link[glmnet]{cv.glmnet}} function. For
 #' example, \code{cv.glmnet.args = list(type.measure = "mse", nfolds = 10)}. See \code{\link[glmnet]{cv.glmnet}} and \code{\link[glmnet]{glmnet}}
@@ -15,6 +15,8 @@
 #'
 #' @seealso \code{\link[personalized]{fit.subgroup}} for estimating ITRs and \code{\link[personalized]{create.propensity.function}} for creation of propensity functions
 #' @return A function which can be passed to the \code{augment.func} argument of the \code{\link[personalized]{fit.subgroup}} function.
+#' @references Chernozhukov, V., Chetverikov, D., Demirer, M., Duflo, E., Hansen, C., Newey, W., & Robins, J. (2018).
+#' Double/debiased machine learning for treatment and structural parameters \url{https://arxiv.org/abs/1608.00060}
 #'
 #' @examples
 #' library(personalized)
@@ -49,7 +51,7 @@
 #'
 #' prop.func <- create.propensity.function(crossfit = TRUE,
 #'                                         nfolds.crossfit = 10,
-#'                                         cv.glmnet.args = list(type.measure = "mae",
+#'                                         cv.glmnet.args = list(type.measure = "auc",
 #'                                                               nfolds = 5))
 #'
 #' subgrp.model <- fit.subgroup(x = x, y = y,
@@ -61,6 +63,7 @@
 #'
 #' summary(subgrp.model)
 #'
+#' @importFrom stats model.matrix
 #' @export
 create.augmentation.function <- function(family, crossfit = TRUE, nfolds.crossfit = 10, cv.glmnet.args = NULL)
 {
@@ -108,7 +111,7 @@ create.augmentation.function <- function(family, crossfit = TRUE, nfolds.crossfi
 #' @description Creates an propensity function that optionally utilizes cross-fitting
 #'
 #' @param crossfit A logical value indicating whether to use cross-fitting (\code{TRUE}) or not (\code{FALSE}).
-#' Cross-fitting is more computationally intensive, but helps to prevent overfitting
+#' Cross-fitting is more computationally intensive, but helps to prevent overfitting, see Chernozhukov, et al. (2018)
 #' @param nfolds.crossfit An integer specifying the number of folds to use for cross-fitting. Must be greater than 1
 #' @param cv.glmnet.args A list of NAMED arguments to pass to the \code{\link[glmnet]{cv.glmnet}} function. For
 #' example, \code{cv.glmnet.args = list(type.measure = "mse", nfolds = 10)}. See \code{\link[glmnet]{cv.glmnet}} and \code{\link[glmnet]{glmnet}}
@@ -116,6 +119,8 @@ create.augmentation.function <- function(family, crossfit = TRUE, nfolds.crossfi
 #'
 #' @seealso \code{\link[personalized]{fit.subgroup}} for estimating ITRs and \code{\link[personalized]{create.propensity.function}} for creation of propensity functions
 #' @return A function which can be passed to the \code{augment.func} argument of the \code{\link[personalized]{fit.subgroup}} function.
+#' @references Chernozhukov, V., Chetverikov, D., Demirer, M., Duflo, E., Hansen, C., Newey, W., & Robins, J. (2018).
+#' Double/debiased machine learning for treatment and structural parameters \url{https://arxiv.org/abs/1608.00060}
 #'
 #' @examples
 #' library(personalized)

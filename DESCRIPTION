@@ -24,7 +24,8 @@ LazyData: true
 Suggests:
     knitr,
     rmarkdown,
-    testthat
+    testthat,
+    nnet
 Imports:
     survival,
     methods,
