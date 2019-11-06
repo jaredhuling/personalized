@@ -8,9 +8,8 @@
 
 * Debian Linux, (R-devel, 2019-05-12 r76488)
 * local Mac OSX Sierra (R 3.6.0)
-* Ubuntu 14.04.5 LTS (on travis-ci), (R 3.6.0)
-* Windows Server 2012 R2 x64 (R version 3.6.0 Patched (2019-05-12 r76489))
-* Windows Server 2012 R2 x64 (R Under development (unstable) (2019-05-12 r76489))
+* Ubuntu 16.04.6 LTS (on travis-ci), (R-devel git2019-11-02 r77358)
+* Windows Server 2012 R2 x64 (R version 3.6.1 and 3.6.1 Patched (2019-10-31 r77367))
 
 ## R CMD check results
 
