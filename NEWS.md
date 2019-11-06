@@ -2,6 +2,7 @@
 
 * Adds utilities for construction of augmentation functions and propensity score fitting functions
 * Adds vignette for multi-category treatments and for usage of augmentation/propensity score utilities
+* Various bug fixes
 
 # personalized 0.2.4
 
