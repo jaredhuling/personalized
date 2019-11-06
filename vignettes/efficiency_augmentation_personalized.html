@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Jared Huling" />
+
+<meta name="date" content="2019-11-05" />
+
+<title>Improving Estimation Efficiency via Augmentation and Propensity Score Utilities</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Improving Estimation Efficiency via Augmentation and Propensity Score Utilities</h1>
+<h4 class="author">Jared Huling</h4>
+<h4 class="date">2019-11-05</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#efficiency-augmentation"><span class="toc-section-number">1</span> Efficiency augmentation</a></li>
+<li><a href="#propensity-score-utilities"><span class="toc-section-number">2</span> Propensity score utilities</a></li>
+<li><a href="#augmentation-utilities"><span class="toc-section-number">3</span> Augmentation utilities</a></li>
+<li><a href="#comparing-performance-with-augmentation"><span class="toc-section-number">4</span> Comparing performance with augmentation</a></li>
+</ul>
+</div>
+
+<div id="efficiency-augmentation" class="section level1">
+<h1><span class="header-section-number">1</span> Efficiency augmentation</h1>
+<p>To demonstrate how to use efficiency augmentation and the propensity score utilities available in the <code>personalized</code> package, we simulate data with two treatments. The treatment assignments are based on covariates and hence mimic an observational setting with no unmeasured confounders.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(personalized)</a></code></pre></div>
+<p>In this simulation, the treatment assignment depends on covariates and hence we must model the propensity score <span class="math inline">\(\pi(x) = Pr(T = 1 | X = x)\)</span>. In this simulation we will assume that larger values of the outcome are better.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">library</span>(personalized)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">set.seed</span>(<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">n.obs  &lt;-<span class="st"> </span><span class="dv">1000</span></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5">n.vars &lt;-<span class="st"> </span><span class="dv">50</span></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">x &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(n.obs <span class="op">*</span><span class="st"> </span>n.vars, <span class="dt">sd =</span> <span class="dv">3</span>), n.obs, n.vars)</a>
+<a class="sourceLine" id="cb2-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co"># simulate non-randomized treatment</span></a>
+<a class="sourceLine" id="cb2-9" data-line-number="9">xbetat   &lt;-<span class="st"> </span><span class="fl">0.5</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.25</span> <span class="op">*</span><span class="st"> </span>x[,<span class="dv">21</span>] <span class="op">-</span><span class="st"> </span><span class="fl">0.25</span> <span class="op">*</span><span class="st"> </span>x[,<span class="dv">41</span>]</a>
+<a class="sourceLine" id="cb2-10" data-line-number="10">trt.prob &lt;-<span class="st"> </span><span class="kw">exp</span>(xbetat) <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">exp</span>(xbetat))</a>
+<a class="sourceLine" id="cb2-11" data-line-number="11">trt      &lt;-<span class="st"> </span><span class="kw">rbinom</span>(n.obs, <span class="dv">1</span>, <span class="dt">prob =</span> trt.prob)</a>
+<a class="sourceLine" id="cb2-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb2-13" data-line-number="13"><span class="co"># simulate delta</span></a>
+<a class="sourceLine" id="cb2-14" data-line-number="14">delta &lt;-<span class="st"> </span>(<span class="fl">0.5</span> <span class="op">+</span><span class="st"> </span>x[,<span class="dv">2</span>] <span class="op">-</span><span class="st"> </span><span class="fl">0.5</span> <span class="op">*</span><span class="st"> </span>x[,<span class="dv">3</span>] <span class="op">-</span><span class="st"> </span><span class="dv">1</span> <span class="op">*</span><span class="st"> </span>x[,<span class="dv">11</span>] <span class="op">+</span><span class="st"> </span><span class="dv">1</span> <span class="op">*</span><span class="st"> </span>x[,<span class="dv">1</span>] <span class="op">*</span><span class="st"> </span>x[,<span class="dv">12</span>] )</a>
+<a class="sourceLine" id="cb2-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb2-16" data-line-number="16"><span class="co"># simulate main effects g(X)</span></a>
+<a class="sourceLine" id="cb2-17" data-line-number="17">xbeta &lt;-<span class="st"> </span>x[,<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>x[,<span class="dv">11</span>] <span class="op">-</span><span class="st"> </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>x[,<span class="dv">12</span>]<span class="op">^</span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span>x[,<span class="dv">13</span>] <span class="op">+</span><span class="st"> </span><span class="fl">0.5</span> <span class="op">*</span><span class="st"> </span>x[,<span class="dv">15</span>] <span class="op">^</span><span class="st"> </span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb2-18" data-line-number="18">xbeta &lt;-<span class="st"> </span>xbeta <span class="op">+</span><span class="st"> </span>delta <span class="op">*</span><span class="st"> </span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>trt <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb2-19" data-line-number="19"></a>
+<a class="sourceLine" id="cb2-20" data-line-number="20"><span class="co"># simulate continuous outcomes</span></a>
+<a class="sourceLine" id="cb2-21" data-line-number="21">y &lt;-<span class="st"> </span><span class="kw">drop</span>(xbeta) <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n.obs)</a></code></pre></div>
+</div>
+<div id="propensity-score-utilities" class="section level1">
+<h1><span class="header-section-number">2</span> Propensity score utilities</h1>
+<p>Estimation of the propensity score is a fundamental aspect of the estimation of individualized treatment rules (ITRs). The <code>personalized</code> package offers support tools for construction of the propensity score function used by the <code>fit.subgroup()</code> function. The support is via the <code>create.propensity.function()</code> function. This tool allows for estimation of the propensity score in high dimensions via <code>glmnet</code>. In high dimensions it can be important to account for regularization bias via cross-fitting (<a href="https://arxiv.org/abs/1608.00060" class="uri">https://arxiv.org/abs/1608.00060</a>); the <code>create.propensity.function()</code> offers a cross-fitting approach for high-dimensional propensity score estimation. A basic usage of this function with cross-fitting (with 10 folds) is as follows:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># arguments can be passed to cv.glmnet via `cv.glmnet.args`</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">prop.func &lt;-<span class="st"> </span><span class="kw">create.propensity.function</span>(<span class="dt">crossfit =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">                                        <span class="dt">nfolds.crossfit =</span> <span class="dv">10</span>,</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">                                        <span class="dt">cv.glmnet.args =</span> <span class="kw">list</span>(<span class="dt">type.measure =</span> <span class="st">&quot;auc&quot;</span>, <span class="dt">nfolds =</span> <span class="dv">5</span>))</a></code></pre></div>
+<p><code>prop.func</code> can then be passed to <code>fit.subgroup()</code> as follows:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">subgrp.model &lt;-<span class="st"> </span><span class="kw">fit.subgroup</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y,</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">                             <span class="dt">trt =</span> trt,</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">                             <span class="dt">propensity.func =</span> prop.func,</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">                             <span class="dt">loss   =</span> <span class="st">&quot;sq_loss_lasso&quot;</span>,</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">                             <span class="dt">nfolds =</span> <span class="dv">10</span>)    <span class="co"># option for cv.glmnet (for ITR estimation)</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="kw">summary</span>(subgrp.model)</a></code></pre></div>
+<pre><code>## family:    gaussian 
+## loss:      sq_loss_lasso 
+## method:    weighting 
+## cutpoint:  0 
+## propensity 
+## function:  propensity.func 
+## 
+## benefit score: f(x), 
+## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
+## 
+## Average Outcomes:
+##                 Recommended 0      Recommended 1
+## Received 0 -10.5061 (n = 116) -17.5969 (n = 284)
+## Received 1 -15.1773 (n = 371) -11.0091 (n = 229)
+## 
+## Treatment effects conditional on subgroups:
+## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] 
+##                           4.6712 (n = 487) 
+## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] 
+##                           6.5878 (n = 513) 
+## 
+## NOTE: The above average outcomes are biased estimates of
+##       the expected outcomes conditional on subgroups. 
+##       Use 'validate.subgroup()' to obtain unbiased estimates.
+## 
+## ---------------------------------------------------
+## 
+## Benefit score quantiles (f(X) for 1 vs 0): 
+##       0%      25%      50%      75%     100% 
+## -16.5151  -3.0487   0.2011   3.6675  14.8049 
+## 
+## ---------------------------------------------------
+## 
+## Summary of individual treatment effects: 
+## E[Y|T=1, X] - E[Y|T=0, X]
+## 
+##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+## -33.0302  -6.0975   0.4022   0.7844   7.3349  29.6098 
+## 
+## ---------------------------------------------------
+## 
+## 9 out of 50 interactions selected in total by the lasso (cross validation criterion).
+## 
+## The first estimate is the treatment main effect, which is always selected. 
+## Any other variables selected represent treatment-covariate interactions.
+## 
+##            Trt1     V2      V3     V4     V11     V12     V21     V29
+## Estimate 0.6624 0.6976 -0.3349 -0.003 -0.0212 -0.0435 -1.1087 -0.0102
+##             V36    V41
+## Estimate 0.2934 0.7411</code></pre>
+</div>
+<div id="augmentation-utilities" class="section level1">
+<h1><span class="header-section-number">3</span> Augmentation utilities</h1>
+<p>Efficiency in estimating ITRs can be improved by including an augmentation term. The optimal augmentation term generally is a function of the main effects of the full outcome regression model marginalized over the treatment. Especially in high dimensions, regularization bias can potentially have a negative impact on performance. Cross-fitting is again another reasonable approach to circumventing this issue. Augmentation functions can be constructed (with cross-fitting as an option) via the <code>create.augmentation.function()</code> function, which works similarly as the <code>create.propensity.function()</code> function. The basic usage is as follows:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">aug.func &lt;-<span class="st"> </span><span class="kw">create.augmentation.function</span>(<span class="dt">family =</span> <span class="st">&quot;gaussian&quot;</span>,</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">                                         <span class="dt">crossfit =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">                                         <span class="dt">nfolds.crossfit =</span> <span class="dv">10</span>,</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">                                         <span class="dt">cv.glmnet.args =</span> <span class="kw">list</span>(<span class="dt">type.measure =</span> <span class="st">&quot;mae&quot;</span>, <span class="dt">nfolds =</span> <span class="dv">5</span>))</a></code></pre></div>
+<p><code>aug.func</code> can be used for augmentation by passing it to <code>fit.subgroup()</code> like:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">subgrp.model.aug &lt;-<span class="st"> </span><span class="kw">fit.subgroup</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y,</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">                             <span class="dt">trt =</span> trt,</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">                             <span class="dt">propensity.func =</span> prop.func,</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">                             <span class="dt">augment.func =</span> aug.func,</a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">                             <span class="dt">loss   =</span> <span class="st">&quot;sq_loss_lasso&quot;</span>,</a>
+<a class="sourceLine" id="cb7-6" data-line-number="6">                             <span class="dt">nfolds =</span> <span class="dv">10</span>)    <span class="co"># option for cv.glmnet (for ITR estimation)</span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="kw">summary</span>(subgrp.model.aug)</a></code></pre></div>
+<pre><code>## family:    gaussian 
+## loss:      sq_loss_lasso 
+## method:    weighting 
+## cutpoint:  0 
+## augmentation 
+## function: augment.func 
+## propensity 
+## function:  propensity.func 
+## 
+## benefit score: f(x), 
+## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
+## 
+## Average Outcomes:
+##                 Recommended 0      Recommended 1
+## Received 0  -6.4022 (n = 135) -19.8831 (n = 265)
+## Received 1 -17.8593 (n = 202) -11.3133 (n = 398)
+## 
+## Treatment effects conditional on subgroups:
+## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] 
+##                          11.4572 (n = 337) 
+## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] 
+##                           8.5698 (n = 663) 
+## 
+## NOTE: The above average outcomes are biased estimates of
+##       the expected outcomes conditional on subgroups. 
+##       Use 'validate.subgroup()' to obtain unbiased estimates.
+## 
+## ---------------------------------------------------
+## 
+## Benefit score quantiles (f(X) for 1 vs 0): 
+##      0%     25%     50%     75%    100% 
+## -6.3155 -0.5672  0.9020  2.6326  9.1404 
+## 
+## ---------------------------------------------------
+## 
+## Summary of individual treatment effects: 
+## E[Y|T=1, X] - E[Y|T=0, X]
+## 
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+## -12.631  -1.134   1.804   1.886   5.265  18.281 
+## 
+## ---------------------------------------------------
+## 
+## 1 out of 50 interactions selected in total by the lasso (cross validation criterion).
+## 
+## The first estimate is the treatment main effect, which is always selected. 
+## Any other variables selected represent treatment-covariate interactions.
+## 
+##            Trt1     V2
+## Estimate 0.9793 0.7474</code></pre>
+</div>
+<div id="comparing-performance-with-augmentation" class="section level1">
+<h1><span class="header-section-number">4</span> Comparing performance with augmentation</h1>
+<p>We first run the training/testing procedure to assess the performance of the non-augmented estimator:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">valmod &lt;-<span class="st"> </span><span class="kw">validate.subgroup</span>(subgrp.model, <span class="dt">B =</span> <span class="dv">5</span>,</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">                            <span class="dt">method =</span> <span class="st">&quot;training_test&quot;</span>,</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">                            <span class="dt">train.fraction =</span> <span class="fl">0.75</span>)</a>
+<a class="sourceLine" id="cb9-4" data-line-number="4">valmod</a></code></pre></div>
+<pre><code>## family:  gaussian 
+## loss:    sq_loss_lasso 
+## method:  weighting 
+## 
+## validation method:  training_test_replication 
+## cutpoint:           0 
+## replications:       5 
+## 
+## benefit score: f(x), 
+## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
+## 
+## Average Test Set Outcomes:
+##                               Recommended 0
+## Received 0 -14.3377 (SE = 4.1142, n = 29.6)
+## Received 1 -13.2299 (SE = 1.3556, n = 93.2)
+##                               Recommended 1
+## Received 0 -15.5863 (SE = 3.2318, n = 67.8)
+## Received 1 -10.9153 (SE = 4.6092, n = 59.4)
+## 
+## Treatment effects conditional on subgroups:
+## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] 
+##           -1.1079 (SE = 4.6909, n = 122.8) 
+## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] 
+##             4.671 (SE = 6.9031, n = 127.2) 
+## 
+## Est of 
+## E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:                     
+## 1.9651 (SE = 5.1967)</code></pre>
+<p>Then we compare with the augmented estimator. Although this is based on just 5 replications, we can see that the augmented estimator is much better at discriminating between benefitting and non-benefitting patients, as evidenced by the large treatment effect among those predicted to benefit by the augmented estimator versus the smaller conditional treatment effect above.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">valmod.aug &lt;-<span class="st"> </span><span class="kw">validate.subgroup</span>(subgrp.model.aug, <span class="dt">B =</span> <span class="dv">5</span>,</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">                                <span class="dt">method =</span> <span class="st">&quot;training_test&quot;</span>,</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3">                                <span class="dt">train.fraction =</span> <span class="fl">0.75</span>)</a>
+<a class="sourceLine" id="cb11-4" data-line-number="4">valmod.aug</a></code></pre></div>
+<pre><code>## family:  gaussian 
+## loss:    sq_loss_lasso 
+## method:  weighting 
+## 
+## validation method:  training_test_replication 
+## cutpoint:           0 
+## replications:       5 
+## 
+## benefit score: f(x), 
+## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
+## 
+## Average Test Set Outcomes:
+##                               Recommended 0
+## Received 0 -10.2154 (SE = 4.8772, n = 39.8)
+## Received 1 -16.7413 (SE = 2.5499, n = 54.6)
+##                               Recommended 1
+## Received 0 -18.1801 (SE = 2.9749, n = 59.8)
+## Received 1 -11.1547 (SE = 1.9546, n = 95.8)
+## 
+## Treatment effects conditional on subgroups:
+## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] 
+##             6.5259 (SE = 6.4483, n = 94.4) 
+## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] 
+##            7.0254 (SE = 4.2785, n = 155.6) 
+## 
+## Est of 
+## E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:                     
+## 6.3519 (SE = 2.8961)</code></pre>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

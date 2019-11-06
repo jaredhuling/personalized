@@ -94,12 +94,11 @@ plv + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ## ----multinom_propens----------------------------------------------------
 propensity.func.multinom <- function(x, trt)
 {
-    require(nnet)
     df <- data.frame(trt = trt, x)
     mfit <- nnet::multinom(trt ~ . -trt, data = df)
     # predict returns a matrix of probabilities:
     # one column for each treatment level
-    propens <- predict(mfit, type = "probs")
+    propens <- nnet::predict.nnet(mfit, type = "probs")
 
     if (is.factor(trt))
     {

@@ -508,17 +508,20 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
 
 
 
-    # test for factor trt
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = as.factor(trt01),
-                                 propensity.func = prop.func,
-                                 loss   = "sq_loss_lasso",
-                                 nfolds = 5)
 
-    expect_is(subgrp.model, "subgroup_fitted")
 
     if (Sys.info()[[1]] != "windows")
     {
+        # test for factor trt
+        subgrp.model <- fit.subgroup(x = x, y = y,
+                                     trt = as.factor(trt01),
+                                     propensity.func = prop.func,
+                                     loss   = "sq_loss_lasso",
+                                     nfolds = 5)
+
+        expect_is(subgrp.model, "subgroup_fitted")
+
+
         subgrp.model <- fit.subgroup(x = x, y = y,
                                      trt = as.factor(trt01),
                                      propensity.func = prop.func,

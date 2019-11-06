@@ -24,10 +24,13 @@ test_that("weighted.ksvm fitting", {
 
     pr <- predict(wk, newx = x[1:n/2,])
 
-    wk <- weighted.ksvm(x = x[1:n/2,], y = y[1:n/2], C = 1,
-                        weights = weights[1:n/2])
+    if (Sys.info()[[1]] != "windows")
+    {
+        wk <- weighted.ksvm(x = x[1:n/2,], y = y[1:n/2], C = 1,
+                            weights = weights[1:n/2])
 
-    expect_is(wk, "wksvm")
+        expect_is(wk, "wksvm")
+    }
 
     expect_error(weighted.ksvm(x = x[1:(n/2+1),], y = y[1:n/2], C = c(10),
                         weights = weights[1:n/2]))
@@ -38,14 +41,16 @@ test_that("weighted.ksvm fitting", {
 
     foldid <- sample(rep(seq(3), length = n/2))
 
-    wk <- weighted.ksvm(x = x[1:n/2,], y = y[1:n/2], C = c(1, 3),
-                        foldid = foldid,
-                        weights = weights[1:n/2])
-
-    expect_is(wk, "wksvm")
-
     if (Sys.info()[[1]] != "windows")
     {
+
+        wk <- weighted.ksvm(x = x[1:n/2,], y = y[1:n/2], C = c(1, 3),
+                            foldid = foldid,
+                            weights = weights[1:n/2])
+
+        expect_is(wk, "wksvm")
+
+
 
         expect_error(weighted.ksvm(x = x[1:(n/2),], y = y[1:(n/2)], C = c(0.1),
                                    nfolds = 150,

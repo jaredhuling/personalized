@@ -1,0 +1,143 @@
+---
+title: "Improving Estimation Efficiency via Augmentation and Propensity Score Utilities"
+author: "Jared Huling"
+date: "`r Sys.Date()`"
+output: 
+    rmarkdown::html_vignette:
+        fig_width: 7
+        fig_height: 5
+        toc: true
+        toc_depth: 3
+        number_sections: true
+        self_contained: true
+preamble: >
+    \usepackage{amsmath,amssymb,amsfonts,bm,bbm,amsthm}
+    \usepackage{longtable}
+    \usepackage{booktabs}
+    \usepackage{bbm, bm}
+    \def\bsx {\boldsymbol x}
+    \def\bsX {\boldsymbol X}
+    \def\bsT {\boldsymbol T}
+    \def\bsbeta {\boldsymbol \beta}
+    \def\bsgamma {\boldsymbol \gamma}
+    \def\bsW {\boldsymbol W}
+    \def\bsy {\boldsymbol y}
+    \def\bsY {\boldsymbol Y}
+    \def\bsM {\boldsymbol M}
+    \def\bfx {\mathbf x}
+    \def\bfX {\mathbf X}
+    \def\bfT {\mathbf T}
+    \def\bfW {\mathbf W}
+    \def\bfy {\mathbf y}
+    \def\bfY {\mathbf Y}
+    \def\bfM {\mathbf M}
+    \def\bfU {\mathbf U}
+vignette: >
+  %\VignetteIndexEntry{Efficiency Augmentation and Propensity Score Construction}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+# Efficiency augmentation
+
+To demonstrate how to use efficiency augmentation and the propensity score utilities available in the `personalized` package, we simulate data with two treatments. The treatment assignments are based on covariates and hence mimic an observational setting with no unmeasured confounders.
+
+```{r loadpkg, message=FALSE, warning=FALSE}
+library(personalized)
+```
+
+In this simulation, the treatment assignment depends on covariates and hence we must model the propensity score $\pi(x) = Pr(T = 1 | X = x)$. In this simulation we will assume that larger values of the outcome are better. 
+
+```{r sim_data_1, message = FALSE, warning = FALSE}
+library(personalized)
+
+set.seed(1)
+n.obs  <- 1000
+n.vars <- 50
+x <- matrix(rnorm(n.obs * n.vars, sd = 3), n.obs, n.vars)
+
+# simulate non-randomized treatment
+xbetat   <- 0.5 + 0.25 * x[,21] - 0.25 * x[,41]
+trt.prob <- exp(xbetat) / (1 + exp(xbetat))
+trt      <- rbinom(n.obs, 1, prob = trt.prob)
+
+# simulate delta
+delta <- (0.5 + x[,2] - 0.5 * x[,3] - 1 * x[,11] + 1 * x[,1] * x[,12] )
+
+# simulate main effects g(X)
+xbeta <- x[,1] + x[,11] - 2 * x[,12]^2 + x[,13] + 0.5 * x[,15] ^ 2
+xbeta <- xbeta + delta * (2 * trt - 1)
+
+# simulate continuous outcomes
+y <- drop(xbeta) + rnorm(n.obs)
+```
+
+
+# Propensity score utilities
+
+Estimation of the propensity score is a fundamental aspect of the estimation of individualized treatment rules (ITRs). The `personalized` package offers support tools for construction of the propensity score function used by the `fit.subgroup()` function. The support is via the `create.propensity.function()` function. This tool allows for estimation of the propensity score in high dimensions via `glmnet`. In high dimensions it can be important to account for regularization bias via cross-fitting (<https://arxiv.org/abs/1608.00060>); the `create.propensity.function()` offers a cross-fitting approach for high-dimensional propensity score estimation. A basic usage of this function with cross-fitting (with 10 folds) is as follows:
+
+```{r}
+# arguments can be passed to cv.glmnet via `cv.glmnet.args`
+prop.func <- create.propensity.function(crossfit = TRUE,
+                                        nfolds.crossfit = 10,
+                                        cv.glmnet.args = list(type.measure = "auc", nfolds = 5))
+```
+
+`prop.func` can then be passed to `fit.subgroup()` as follows:
+
+
+
+
+```{r}
+subgrp.model <- fit.subgroup(x = x, y = y,
+                             trt = trt,
+                             propensity.func = prop.func,
+                             loss   = "sq_loss_lasso",
+                             nfolds = 10)    # option for cv.glmnet (for ITR estimation)
+
+summary(subgrp.model)
+```
+
+# Augmentation utilities
+
+Efficiency in estimating ITRs can be improved by including an augmentation term. The optimal augmentation term generally is a function of the main effects of the full outcome regression model marginalized over the treatment. Especially in high dimensions, regularization bias can potentially have a negative impact on performance. Cross-fitting is again another reasonable approach to circumventing this issue. Augmentation functions can be constructed (with cross-fitting as an option) via the `create.augmentation.function()` function, which works similarly as the `create.propensity.function()` function. The basic usage is as follows:
+
+```{r}
+aug.func <- create.augmentation.function(family = "gaussian",
+                                         crossfit = TRUE,
+                                         nfolds.crossfit = 10,
+                                         cv.glmnet.args = list(type.measure = "mae", nfolds = 5))
+```
+
+`aug.func` can be used for augmentation by passing it to `fit.subgroup()` like:
+
+```{r}
+subgrp.model.aug <- fit.subgroup(x = x, y = y,
+                             trt = trt,
+                             propensity.func = prop.func,
+                             augment.func = aug.func,
+                             loss   = "sq_loss_lasso",
+                             nfolds = 10)    # option for cv.glmnet (for ITR estimation)
+
+summary(subgrp.model.aug)
+```
+
+# Comparing performance with augmentation
+
+We first run the training/testing procedure to assess the performance of the non-augmented estimator:
+
+```{r}
+valmod <- validate.subgroup(subgrp.model, B = 5,
+                            method = "training_test",
+                            train.fraction = 0.75)
+valmod
+```
+
+Then we compare with the augmented estimator. Although this is based on just 5 replications, we can see that the augmented estimator is much better at discriminating between benefitting and non-benefitting patients, as evidenced by the large treatment effect among those predicted to benefit by the augmented estimator versus the smaller conditional treatment effect above.
+
+```{r}
+valmod.aug <- validate.subgroup(subgrp.model.aug, B = 5,
+                                method = "training_test",
+                                train.fraction = 0.75)
+valmod.aug
+```
