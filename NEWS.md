@@ -1,3 +1,8 @@
+# personalized 0.2.5
+
+* Adds utilities for construction of augmentation functions and propensity score fitting functions
+* Adds vignette for multi-category treatments and for usage of augmentation/propensity score utilities
+
 # personalized 0.2.4
 
 * Added warning for use of Harrell's procedure in high dimensions
