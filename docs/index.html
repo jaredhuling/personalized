@@ -8,8 +8,9 @@
 <title>Estimation and Validation Methods for Subgroup Identification and
     Personalized Medicine • personalized</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Estimation and Validation Methods for Subgroup Identification and
     Personalized Medicine">
 <meta property="og:description" content="Provides functions for fitting and validation of models for subgroup
@@ -24,7 +25,7 @@
 <![endif]-->
 </head>
 <body>
-    <div class="container template-article">
+    <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -36,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">personalized</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.5</span>
       </span>
     </div>
 
@@ -57,6 +58,12 @@
   <ul class="dropdown-menu" role="menu">
 <li>
       <a href="articles/usage_of_the_personalized_package.html">Usage of the personalized Package</a>
+    </li>
+    <li>
+      <a href="articles/efficiency_augmentation_personalized.html">Improving Estimation Efficiency via Augmentation and Propensity Score Utilities</a>
+    </li>
+    <li>
+      <a href="articles/multicategory_treatments_with_personalized.html">Multi-category Treatments with personalized</a>
     </li>
   </ul>
 </li>
@@ -83,12 +90,10 @@
 <!--/.navbar -->
 
       
-      </header><div class="row">
-  <div class="col-md-9 contents">
-    
 
-    
-    
+      </header><div class="row">
+  <div class="contents col-md-9">
+
 
 <p><img src="reference/figures/sticker.png" align="right" width="15%" height="15%"></p>
 <div id="overview-of-personalized" class="section level1">
@@ -102,8 +107,13 @@
 <a href="#documentation" class="anchor"></a>Documentation</h2>
 <p><a href="http://jaredhuling.org/personalized/">Documentation</a></p>
 <ul>
-<li><p><a href="http://jaredhuling.org/personalized/articles/usage_of_the_personalized_package.html">Tutorial / Vignette</a> - tutorial of statistical methodology and usage of the package</p></li>
-<li><p><a href="http://jaredhuling.org/personalized/reference/index.html">Function help files</a></p></li>
+<li>
+<a href="http://jaredhuling.org/personalized/articles/usage_of_the_personalized_package.html">Tutorial / Vignette</a>
+<ul>
+<li>tutorial of statistical methodology and usage of the package</li>
+</ul>
+</li>
+<li><a href="http://jaredhuling.org/personalized/reference/index.html">Function help files</a></li>
 </ul>
 </div>
 </div>
@@ -111,16 +121,16 @@
 <h1 class="hasAnchor">
 <a href="#installing-the-personalized-package" class="anchor"></a>Installing the ‘personalized’ package</h1>
 <p>Install from CRAN using:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"personalized"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"personalized"</span>)</a></code></pre></div>
 <p>or install the development version using the <strong>devtools</strong> package:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"jaredhuling/personalized"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/reexports.html">install_github</a></span>(<span class="st">"jaredhuling/personalized"</span>)</a></code></pre></div>
 <p>or by cloning and building using <code>R CMD INSTALL</code></p>
 </div>
 <div id="quick-usage-overview" class="section level1">
 <h1 class="hasAnchor">
 <a href="#quick-usage-overview" class="anchor"></a>Quick Usage Overview</h1>
 <p>Load the package:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(personalized)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(personalized)</a></code></pre></div>
 <div id="create-a-propensity-score-model" class="section level3">
 <h3 class="hasAnchor">
 <a href="#create-a-propensity-score-model" class="anchor"></a>Create a propensity score model</h3>
@@ -130,7 +140,7 @@
 <a class="sourceLine" id="cb4-3" data-line-number="3">    <span class="co"># fit propensity score model</span></a>
 <a class="sourceLine" id="cb4-4" data-line-number="4">    propens.model &lt;-<span class="st"> </span><span class="kw">cv.glmnet</span>(<span class="dt">y =</span> trt,</a>
 <a class="sourceLine" id="cb4-5" data-line-number="5">                               <span class="dt">x =</span> x, <span class="dt">family =</span> <span class="st">"binomial"</span>)</a>
-<a class="sourceLine" id="cb4-6" data-line-number="6">    pi.x &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(propens.model, <span class="dt">s =</span> <span class="st">"lambda.min"</span>,</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">    pi.x &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(propens.model, <span class="dt">s =</span> <span class="st">"lambda.min"</span>,</a>
 <a class="sourceLine" id="cb4-7" data-line-number="7">                    <span class="dt">newx =</span> x, <span class="dt">type =</span> <span class="st">"response"</span>)[,<span class="dv">1</span>]</a>
 <a class="sourceLine" id="cb4-8" data-line-number="8">    pi.x</a>
 <a class="sourceLine" id="cb4-9" data-line-number="9">}</a></code></pre></div>
@@ -147,55 +157,55 @@
 <div id="display-estimated-subgroups-and-variables-selected-which-determine-the-subgroups" class="section level3">
 <h3 class="hasAnchor">
 <a href="#display-estimated-subgroups-and-variables-selected-which-determine-the-subgroups" class="anchor"></a>Display estimated subgroups and variables selected which determine the subgroups:</h3>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(subgrp.model)</a></code></pre></div>
-<pre><code>## family:    gaussian 
-## loss:      sq_loss_lasso 
-## method:    weighting 
-## cutpoint:  0 
-## propensity 
-## function:  propensity.func 
-## 
-## benefit score: f(x), 
-## Trt recom = Trt*I(f(x)&gt;c)+Ctrl*I(f(x)&lt;=c) where c is 'cutpoint'
-## 
-## Average Outcomes:
-##                Recommended Ctrl    Recommended Trt
-## Received Ctrl -3.9319 (n = 109) -21.2055 (n = 122)
-## Received Trt  -25.078 (n = 112)   -8.326 (n = 157)
-## 
-## Treatment effects conditional on subgroups:
-## Est of E[Y|T=Ctrl,Recom=Ctrl]-E[Y|T=/=Ctrl,Recom=Ctrl] 
-##                                      21.1461 (n = 221) 
-##     Est of E[Y|T=Trt,Recom=Trt]-E[Y|T=/=Trt,Recom=Trt] 
-##                                      12.8795 (n = 279) 
-## 
-## NOTE: The above average outcomes are biased estimates of
-##       the expected outcomes conditional on subgroups. 
-##       Use 'validate.subgroup()' to obtain unbiased estimates.
-## 
-## ---------------------------------------------------
-## 
-## Benefit score quantiles (f(X) for Trt vs Ctrl): 
-##      0%     25%     50%     75%    100% 
-## -9.2792 -1.8237  0.5011  2.5977  9.6376 
-## 
-## ---------------------------------------------------
-## 
-## Summary of individual treatment effects: 
-## E[Y|T=Trt, X] - E[Y|T=Ctrl, X]
-## 
-##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-## -18.5583  -3.6474   1.0023   0.9507   5.1954  19.2753 
-## 
-## ---------------------------------------------------
-## 
-## 5 out of 50 interactions selected in total by the lasso (cross validation criterion).
-## 
-## The first estimate is the treatment main effect, which is always selected. 
-## Any other variables selected represent treatment-covariate interactions.
-## 
-##             Trt     V2     V11     V17    V32    V35
-## Estimate 0.5463 0.9827 -0.4356 -0.1532 0.0326 0.1007</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(subgrp.model)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co">## family:    gaussian </span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">## loss:      sq_loss_lasso </span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">## method:    weighting </span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">## cutpoint:  0 </span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">## propensity </span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">## function:  propensity.func </span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">## </span></a>
+<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">## benefit score: f(x), </span></a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">## Trt recom = Trt*I(f(x)&gt;c)+Ctrl*I(f(x)&lt;=c) where c is 'cutpoint'</span></a>
+<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">## </span></a>
+<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">## Average Outcomes:</span></a>
+<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">##                Recommended Ctrl    Recommended Trt</span></a>
+<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">## Received Ctrl -3.9319 (n = 109) -21.2055 (n = 122)</span></a>
+<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">## Received Trt  -25.078 (n = 112)   -8.326 (n = 157)</span></a>
+<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="co">## </span></a>
+<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="co">## Treatment effects conditional on subgroups:</span></a>
+<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co">## Est of E[Y|T=Ctrl,Recom=Ctrl]-E[Y|T=/=Ctrl,Recom=Ctrl] </span></a>
+<a class="sourceLine" id="cb7-18" data-line-number="18"><span class="co">##                                      21.1461 (n = 221) </span></a>
+<a class="sourceLine" id="cb7-19" data-line-number="19"><span class="co">##     Est of E[Y|T=Trt,Recom=Trt]-E[Y|T=/=Trt,Recom=Trt] </span></a>
+<a class="sourceLine" id="cb7-20" data-line-number="20"><span class="co">##                                      12.8795 (n = 279) </span></a>
+<a class="sourceLine" id="cb7-21" data-line-number="21"><span class="co">## </span></a>
+<a class="sourceLine" id="cb7-22" data-line-number="22"><span class="co">## </span><span class="al">NOTE</span><span class="co">: The above average outcomes are biased estimates of</span></a>
+<a class="sourceLine" id="cb7-23" data-line-number="23"><span class="co">##       the expected outcomes conditional on subgroups. </span></a>
+<a class="sourceLine" id="cb7-24" data-line-number="24"><span class="co">##       Use 'validate.subgroup()' to obtain unbiased estimates.</span></a>
+<a class="sourceLine" id="cb7-25" data-line-number="25"><span class="co">## </span></a>
+<a class="sourceLine" id="cb7-26" data-line-number="26"><span class="co">## ---------------------------------------------------</span></a>
+<a class="sourceLine" id="cb7-27" data-line-number="27"><span class="co">## </span></a>
+<a class="sourceLine" id="cb7-28" data-line-number="28"><span class="co">## Benefit score quantiles (f(X) for Trt vs Ctrl): </span></a>
+<a class="sourceLine" id="cb7-29" data-line-number="29"><span class="co">##      0%     25%     50%     75%    100% </span></a>
+<a class="sourceLine" id="cb7-30" data-line-number="30"><span class="co">## -9.2792 -1.8237  0.5011  2.5977  9.6376 </span></a>
+<a class="sourceLine" id="cb7-31" data-line-number="31"><span class="co">## </span></a>
+<a class="sourceLine" id="cb7-32" data-line-number="32"><span class="co">## ---------------------------------------------------</span></a>
+<a class="sourceLine" id="cb7-33" data-line-number="33"><span class="co">## </span></a>
+<a class="sourceLine" id="cb7-34" data-line-number="34"><span class="co">## Summary of individual treatment effects: </span></a>
+<a class="sourceLine" id="cb7-35" data-line-number="35"><span class="co">## E[Y|T=Trt, X] - E[Y|T=Ctrl, X]</span></a>
+<a class="sourceLine" id="cb7-36" data-line-number="36"><span class="co">## </span></a>
+<a class="sourceLine" id="cb7-37" data-line-number="37"><span class="co">##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span></a>
+<a class="sourceLine" id="cb7-38" data-line-number="38"><span class="co">## -18.5583  -3.6474   1.0023   0.9507   5.1954  19.2753 </span></a>
+<a class="sourceLine" id="cb7-39" data-line-number="39"><span class="co">## </span></a>
+<a class="sourceLine" id="cb7-40" data-line-number="40"><span class="co">## ---------------------------------------------------</span></a>
+<a class="sourceLine" id="cb7-41" data-line-number="41"><span class="co">## </span></a>
+<a class="sourceLine" id="cb7-42" data-line-number="42"><span class="co">## 5 out of 50 interactions selected in total by the lasso (cross validation criterion).</span></a>
+<a class="sourceLine" id="cb7-43" data-line-number="43"><span class="co">## </span></a>
+<a class="sourceLine" id="cb7-44" data-line-number="44"><span class="co">## The first estimate is the treatment main effect, which is always selected. </span></a>
+<a class="sourceLine" id="cb7-45" data-line-number="45"><span class="co">## Any other variables selected represent treatment-covariate interactions.</span></a>
+<a class="sourceLine" id="cb7-46" data-line-number="46"><span class="co">## </span></a>
+<a class="sourceLine" id="cb7-47" data-line-number="47"><span class="co">##             Trt     V2     V11     V17    V32    V35</span></a>
+<a class="sourceLine" id="cb7-48" data-line-number="48"><span class="co">## Estimate 0.5463 0.9827 -0.4356 -0.1532 0.0326 0.1007</span></a></code></pre></div>
 </div>
 <div id="use-repeated-train-and-test-splitting-to-estimate-subgroup-treatment-effects" class="section level3">
 <h3 class="hasAnchor">
@@ -207,34 +217,34 @@
 <div id="display-estimated-subgroup-treatment-effects" class="section level3">
 <h3 class="hasAnchor">
 <a href="#display-estimated-subgroup-treatment-effects" class="anchor"></a>Display estimated subgroup treatment effects:</h3>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(val.model, <span class="dt">digits =</span> <span class="dv">2</span>, <span class="dt">sample.pct =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
-<pre><code>## family:  gaussian 
-## loss:    sq_loss_lasso 
-## method:  weighting 
-## 
-## validation method:  training_test_replication 
-## cutpoint:           0 
-## replications:       100 
-## 
-## benefit score: f(x), 
-## Trt recom = Trt*I(f(x)&gt;c)+Ctrl*I(f(x)&lt;=c) where c is 'cutpoint'
-## 
-## Average Test Set Outcomes:
-##                         Recommended Ctrl           Recommended Trt
-## Received Ctrl  -9.56 (SE = 7.98, 19.88%) -18.62 (SE = 6.72, 26.5%)
-## Received Trt  -16.64 (SE = 6.85, 23.23%) -13.41 (SE = 7.8, 30.39%)
-## 
-## Treatment effects conditional on subgroups:
-## Est of E[Y|T=Ctrl,Recom=Ctrl]-E[Y|T=/=Ctrl,Recom=Ctrl] 
-##                              6.54 (SE = 10.49, 43.11%) 
-##     Est of E[Y|T=Trt,Recom=Trt]-E[Y|T=/=Trt,Recom=Trt] 
-##                              5.21 (SE = 11.06, 56.89%) 
-## 
-## Est of 
-## E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:                 
-## 2.91 (SE = 8.29)</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(val.model, <span class="dt">digits =</span> <span class="dv">2</span>, <span class="dt">sample.pct =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co">## family:  gaussian </span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="co">## loss:    sq_loss_lasso </span></a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">## method:  weighting </span></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">## </span></a>
+<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">## validation method:  training_test_replication </span></a>
+<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">## cutpoint:           0 </span></a>
+<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">## replications:       100 </span></a>
+<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">## </span></a>
+<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">## benefit score: f(x), </span></a>
+<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="co">## Trt recom = Trt*I(f(x)&gt;c)+Ctrl*I(f(x)&lt;=c) where c is 'cutpoint'</span></a>
+<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="co">## </span></a>
+<a class="sourceLine" id="cb10-12" data-line-number="12"><span class="co">## Average Test Set Outcomes:</span></a>
+<a class="sourceLine" id="cb10-13" data-line-number="13"><span class="co">##                         Recommended Ctrl           Recommended Trt</span></a>
+<a class="sourceLine" id="cb10-14" data-line-number="14"><span class="co">## Received Ctrl  -9.56 (SE = 7.98, 19.88%) -18.62 (SE = 6.72, 26.5%)</span></a>
+<a class="sourceLine" id="cb10-15" data-line-number="15"><span class="co">## Received Trt  -16.64 (SE = 6.85, 23.23%) -13.41 (SE = 7.8, 30.39%)</span></a>
+<a class="sourceLine" id="cb10-16" data-line-number="16"><span class="co">## </span></a>
+<a class="sourceLine" id="cb10-17" data-line-number="17"><span class="co">## Treatment effects conditional on subgroups:</span></a>
+<a class="sourceLine" id="cb10-18" data-line-number="18"><span class="co">## Est of E[Y|T=Ctrl,Recom=Ctrl]-E[Y|T=/=Ctrl,Recom=Ctrl] </span></a>
+<a class="sourceLine" id="cb10-19" data-line-number="19"><span class="co">##                              6.54 (SE = 10.49, 43.11%) </span></a>
+<a class="sourceLine" id="cb10-20" data-line-number="20"><span class="co">##     Est of E[Y|T=Trt,Recom=Trt]-E[Y|T=/=Trt,Recom=Trt] </span></a>
+<a class="sourceLine" id="cb10-21" data-line-number="21"><span class="co">##                              5.21 (SE = 11.06, 56.89%) </span></a>
+<a class="sourceLine" id="cb10-22" data-line-number="22"><span class="co">## </span></a>
+<a class="sourceLine" id="cb10-23" data-line-number="23"><span class="co">## Est of </span></a>
+<a class="sourceLine" id="cb10-24" data-line-number="24"><span class="co">## E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:                 </span></a>
+<a class="sourceLine" id="cb10-25" data-line-number="25"><span class="co">## 2.91 (SE = 8.29)</span></a></code></pre></div>
 <p>Visualize subgroup-specific treatment effect estimates across training/testing iterations:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(val.model)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(val.model)</a></code></pre></div>
 <p><img src="articles/vis_val-1.png" width="75%" style="display: block; margin: auto;"></p>
 </div>
 <div id="investigate-the-marginal-characteristics-of-the-two-estimated-subgroups" class="section level3">
@@ -242,15 +252,15 @@
 <a href="#investigate-the-marginal-characteristics-of-the-two-estimated-subgroups" class="anchor"></a>Investigate the marginal characteristics of the two estimated subgroups</h3>
 <p>Here we only display covariates with a significantly different mean value (at level 0.05)</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">summ &lt;-<span class="st"> </span><span class="kw"><a href="reference/summarize.subgroups.html">summarize.subgroups</a></span>(subgrp.model)</a>
-<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(summ, <span class="dt">p.value =</span> <span class="fl">0.05</span>)</a></code></pre></div>
-<pre><code>##     Avg (recom Ctrl) Avg (recom Trt) Ctrl - Trt SE (recom Ctrl)
-## V2           -2.4161          1.9013     -4.317          0.1423
-## V11           1.1279         -0.7963      1.924          0.1914
-## V17           0.8053         -0.3715      1.177          0.2170
-##     SE (recom Trt)
-## V2          0.1298
-## V11         0.1572
-## V17         0.1736</code></pre>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(summ, <span class="dt">p.value =</span> <span class="fl">0.05</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co">##     Avg (recom Ctrl) Avg (recom Trt) Ctrl - Trt SE (recom Ctrl)</span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="co">## V2           -2.4161          1.9013     -4.317          0.1423</span></a>
+<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="co">## V11           1.1279         -0.7963      1.924          0.1914</span></a>
+<a class="sourceLine" id="cb13-4" data-line-number="4"><span class="co">## V17           0.8053         -0.3715      1.177          0.2170</span></a>
+<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="co">##     SE (recom Trt)</span></a>
+<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="co">## V2          0.1298</span></a>
+<a class="sourceLine" id="cb13-7" data-line-number="7"><span class="co">## V11         0.1572</span></a>
+<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="co">## V17         0.1736</span></a></code></pre></div>
 </div>
 <div id="accessing-help-files-for-main-functions-of-personalized" class="section level2">
 <h2 class="hasAnchor">
@@ -261,6 +271,7 @@
 <a class="sourceLine" id="cb14-2" data-line-number="2">?validate.subgroup</a></code></pre></div>
 </div>
 </div>
+
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -288,12 +299,12 @@
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
-<li>Jared Huling <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-0670-4845" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
+<li>Jared Huling <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-0670-4845" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
 <li><a href="authors.html">All authors...</a></li>
 </ul>
 </div>
 
-      <div class="dev-status">
+  <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://cran.r-project.org/package=personalized"><img src="http://www.r-pkg.org/badges/version/personalized" alt="version"></a></li>
@@ -304,7 +315,6 @@
 </ul>
 </div>
 </div>
-
 </div>
 
 
@@ -313,12 +323,14 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>

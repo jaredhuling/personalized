@@ -12,6 +12,10 @@ navbar:
       menu:
       - text: Usage of the personalized Package
         href: articles/usage_of_the_personalized_package.html
+      - text: Improving Estimation Efficiency via Augmentation and Propensity Score Utilities
+        href: articles/efficiency_augmentation_personalized.html
+      - text: Multi-category Treatments with personalized
+        href: articles/multicategory_treatments_with_personalized.html
     - text: "Functions"
       href: reference/index.html
     - text: "News"

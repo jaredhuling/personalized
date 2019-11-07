@@ -1,6 +1,8 @@
 pandoc: 2.3.1
-pkgdown: 1.3.0
+pkgdown: 1.4.1
 pkgdown_sha: ~
 articles:
+  efficiency_augmentation_personalized: efficiency_augmentation_personalized.html
+  multicategory_treatments_with_personalized: multicategory_treatments_with_personalized.html
   usage_of_the_personalized_package: usage_of_the_personalized_package.html
 

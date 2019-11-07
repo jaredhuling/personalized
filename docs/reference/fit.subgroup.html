@@ -16,13 +16,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -47,6 +49,7 @@
 <![endif]-->
 
 
+
   </head>
 
   <body>
@@ -63,7 +66,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">personalized</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.5</span>
       </span>
     </div>
 
@@ -84,6 +87,12 @@
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="../articles/usage_of_the_personalized_package.html">Usage of the personalized Package</a>
+    </li>
+    <li>
+      <a href="../articles/efficiency_augmentation_personalized.html">Improving Estimation Efficiency via Augmentation and Propensity Score Utilities</a>
+    </li>
+    <li>
+      <a href="../articles/multicategory_treatments_with_personalized.html">Multi-category Treatments with personalized</a>
     </li>
   </ul>
 </li>
@@ -109,6 +118,7 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -126,7 +136,7 @@
     </div>
 
     <pre class="usage"><span class='fu'>fit.subgroup</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>trt</span>, <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>loss</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"sq_loss_lasso"</span>, <span class='st'>"logistic_loss_lasso"</span>, <span class='st'>"poisson_loss_lasso"</span>,
+  <span class='kw'>loss</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"sq_loss_lasso"</span>, <span class='st'>"logistic_loss_lasso"</span>, <span class='st'>"poisson_loss_lasso"</span>,
   <span class='st'>"cox_loss_lasso"</span>, <span class='st'>"owl_logistic_loss_lasso"</span>,
   <span class='st'>"owl_logistic_flip_loss_lasso"</span>, <span class='st'>"owl_hinge_loss"</span>, <span class='st'>"owl_hinge_flip_loss"</span>,
   <span class='st'>"sq_loss_lasso_gam"</span>, <span class='st'>"poisson_loss_lasso_gam"</span>, <span class='st'>"logistic_loss_lasso_gam"</span>,
@@ -134,7 +144,7 @@
   <span class='st'>"owl_logistic_loss_gam"</span>, <span class='st'>"owl_logistic_flip_loss_gam"</span>,
   <span class='st'>"owl_logistic_loss_lasso_gam"</span>, <span class='st'>"owl_logistic_flip_loss_lasso_gam"</span>,
   <span class='st'>"sq_loss_gbm"</span>, <span class='st'>"poisson_loss_gbm"</span>, <span class='st'>"logistic_loss_gbm"</span>, <span class='st'>"cox_loss_gbm"</span>,
-     <span class='st'>"custom"</span>), <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"weighting"</span>, <span class='st'>"a_learning"</span>), <span class='kw'>match.id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+     <span class='st'>"custom"</span>), <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"weighting"</span>, <span class='st'>"a_learning"</span>), <span class='kw'>match.id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>augment.func</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fit.custom.loss</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>cutpoint</span> <span class='kw'>=</span> <span class='fl'>0</span>,
   <span class='kw'>larger.outcome.better</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>reference.trt</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>retcall</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='no'>...</span>)</pre>
@@ -277,7 +287,7 @@ restrictions on the loss function \(M(y, v)\).</p>
 a vector of predictions on the scale of the linear predictor. Note that the matrix provided to 'fit.custom.loss'
 has a column appended to the first column of <code>x</code> corresponding to the treatment main effect.
 Thus, the prediction function should deal with this,
-e.g. <code><a href='https://www.rdocumentation.org/packages/stats/topics/predict'>predict(model, cbind(1, x))</a></code></p></li>
+e.g. <code><a href='https://rdrr.io/r/stats/predict.html'>predict(model, cbind(1, x))</a></code></p></li>
 <li><p><code>model</code>  a fitted model object returned by the underlying fitting function</p></li>
 <li><p><code>coefficients</code> if the underlying fitting function yields a vector of coefficient estimates, they should be provided here</p></li>
 </ul>
@@ -377,14 +387,14 @@ if memory is limited as setting to <code>TRUE</code> saves the design matrix to 
     <tr>
       <th>...</th>
       <td><p>options to be passed to underlying fitting function. For all <code>loss</code> options with 'lasso',
-this will be passed to <code><a href='https://www.rdocumentation.org/packages/glmnet/topics/cv.glmnet'>cv.glmnet</a></code>. For all <code>loss</code> options with 'gam', this will
-be passed to <code><a href='https://www.rdocumentation.org/packages/mgcv/topics/gam'>gam</a></code> from the <span class="pkg">mgcv</span> package
+this will be passed to <code><a href='https://rdrr.io/pkg/glmnet/man/cv.glmnet.html'>cv.glmnet</a></code>. For all <code>loss</code> options with 'gam', this will
+be passed to <code><a href='https://rdrr.io/pkg/mgcv/man/gam.html'>gam</a></code> from the <span class="pkg">mgcv</span> package
 Note that for all <code>loss</code> options that use <code>gam()</code>
 from the <span class="pkg">mgcv</span> package,
 the user cannot supply the <code>gam</code> argument <code>method</code> because it is also an argument of <code>fit.subgroup</code>, so
 instead, to change the <code>gam method</code> argument, supply <code>method.gam</code>, ie <code>method.gam = "REML"</code>.</p>
 <p>For all <code>loss</code> options with 'hinge', this will be passed to both <code><a href='weighted.ksvm.html'>weighted.ksvm</a></code> and
-<code><a href='https://www.rdocumentation.org/packages/kernlab/topics/ipop'>ipop</a></code> from the <span class="pkg">kernlab</span> package</p></td>
+<code><a href='https://rdrr.io/pkg/kernlab/man/ipop.html'>ipop</a></code> from the <span class="pkg">kernlab</span> package</p></td>
     </tr>
     </table>
     
@@ -445,18 +455,18 @@ from <code>fit.subgroup</code>.</p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>personalized</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>personalized</span>)
 
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Random'>set.seed</a></span>(<span class='fl'>123</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>123</span>)
 <span class='no'>n.obs</span>  <span class='kw'>&lt;-</span> <span class='fl'>500</span>
 <span class='no'>n.vars</span> <span class='kw'>&lt;-</span> <span class='fl'>15</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='no'>n.obs</span> * <span class='no'>n.vars</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>3</span>), <span class='no'>n.obs</span>, <span class='no'>n.vars</span>)
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>n.obs</span> * <span class='no'>n.vars</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>3</span>), <span class='no'>n.obs</span>, <span class='no'>n.vars</span>)
 
 
 <span class='co'># simulate non-randomized treatment</span>
 <span class='no'>xbetat</span>   <span class='kw'>&lt;-</span> <span class='fl'>0.5</span> + <span class='fl'>0.5</span> * <span class='no'>x</span>[,<span class='fl'>7</span>] - <span class='fl'>0.5</span> * <span class='no'>x</span>[,<span class='fl'>9</span>]
-<span class='no'>trt.prob</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>exp</a></span>(<span class='no'>xbetat</span>) / (<span class='fl'>1</span> + <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>exp</a></span>(<span class='no'>xbetat</span>))
-<span class='no'>trt01</span>    <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Binomial'>rbinom</a></span>(<span class='no'>n.obs</span>, <span class='fl'>1</span>, <span class='kw'>prob</span> <span class='kw'>=</span> <span class='no'>trt.prob</span>)
+<span class='no'>trt.prob</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span>(<span class='no'>xbetat</span>) / (<span class='fl'>1</span> + <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span>(<span class='no'>xbetat</span>))
+<span class='no'>trt01</span>    <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span>(<span class='no'>n.obs</span>, <span class='fl'>1</span>, <span class='kw'>prob</span> <span class='kw'>=</span> <span class='no'>trt.prob</span>)
 
 <span class='no'>trt</span>      <span class='kw'>&lt;-</span> <span class='fl'>2</span> * <span class='no'>trt01</span> - <span class='fl'>1</span>
 
@@ -467,18 +477,18 @@ from <code>fit.subgroup</code>.</p></div>
 <span class='no'>xbeta</span> <span class='kw'>&lt;-</span> <span class='no'>xbeta</span> + <span class='no'>delta</span> * <span class='no'>trt</span>
 
 <span class='co'># continuous outcomes</span>
-<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/drop'>drop</a></span>(<span class='no'>xbeta</span>) + <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='no'>n.obs</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/drop.html'>drop</a></span>(<span class='no'>xbeta</span>) + <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>n.obs</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>2</span>)
 
 <span class='co'># binary outcomes</span>
-<span class='no'>y.binary</span> <span class='kw'>&lt;-</span> <span class='fl'>1</span> * (<span class='no'>xbeta</span> + <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='no'>n.obs</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>2</span>) <span class='kw'>&gt;</span> <span class='fl'>0</span> )
+<span class='no'>y.binary</span> <span class='kw'>&lt;-</span> <span class='fl'>1</span> * (<span class='no'>xbeta</span> + <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>n.obs</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>2</span>) <span class='kw'>&gt;</span> <span class='fl'>0</span> )
 
 <span class='co'># count outcomes</span>
-<span class='no'>y.count</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Round'>round</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/MathFun'>abs</a></span>(<span class='no'>xbeta</span> + <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='no'>n.obs</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>2</span>)))
+<span class='no'>y.count</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>abs</a></span>(<span class='no'>xbeta</span> + <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>n.obs</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>2</span>)))
 
 <span class='co'># time-to-event outcomes</span>
-<span class='no'>surv.time</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>exp</a></span>(-<span class='fl'>20</span> - <span class='no'>xbeta</span> + <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='no'>n.obs</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>1</span>))
-<span class='no'>cens.time</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>exp</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='no'>n.obs</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>3</span>))
-<span class='no'>y.time.to.event</span>  <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Extremes'>pmin</a></span>(<span class='no'>surv.time</span>, <span class='no'>cens.time</span>)
+<span class='no'>surv.time</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span>(-<span class='fl'>20</span> - <span class='no'>xbeta</span> + <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>n.obs</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>1</span>))
+<span class='no'>cens.time</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>n.obs</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>3</span>))
+<span class='no'>y.time.to.event</span>  <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>pmin</a></span>(<span class='no'>surv.time</span>, <span class='no'>cens.time</span>)
 <span class='no'>status</span>           <span class='kw'>&lt;-</span> <span class='fl'>1</span> * (<span class='no'>surv.time</span> <span class='kw'>&lt;=</span> <span class='no'>cens.time</span>)
 
 <span class='co'># create function for fitting propensity score model</span>
@@ -487,7 +497,7 @@ from <code>fit.subgroup</code>.</p></div>
     <span class='co'># fit propensity score model</span>
     <span class='no'>propens.model</span> <span class='kw'>&lt;-</span> <span class='fu'>cv.glmnet</span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>trt</span>,
                                <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"binomial"</span>)
-    <span class='no'>pi.x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/predict'>predict</a></span>(<span class='no'>propens.model</span>, <span class='kw'>s</span> <span class='kw'>=</span> <span class='st'>"lambda.min"</span>,
+    <span class='no'>pi.x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>propens.model</span>, <span class='kw'>s</span> <span class='kw'>=</span> <span class='st'>"lambda.min"</span>,
                     <span class='kw'>newx</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"response"</span>)[,<span class='fl'>1</span>]
     <span class='no'>pi.x</span>
 }
@@ -502,7 +512,7 @@ from <code>fit.subgroup</code>.</p></div>
                            <span class='kw'>loss</span>   <span class='kw'>=</span> <span class='st'>"sq_loss_lasso"</span>,
                            <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>10</span>)              <span class='co'># option for cv.glmnet</span>
 
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>subgrp.model</span>)</div><div class='output co'>#&gt; family:    gaussian 
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>subgrp.model</span>)</div><div class='output co'>#&gt; family:    gaussian 
 #&gt; loss:      sq_loss_lasso 
 #&gt; method:    weighting 
 #&gt; cutpoint:  0 
@@ -559,9 +569,10 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; 
 #&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 #&gt; -64.004  -9.993   4.846   4.793  18.502  58.274 </div><div class='input'>
-# fit lasso + gam model with REML option for gam
+<span class='co'># fit lasso + gam model with REML option for gam</span>
 
-</div><div class='input'><span class='no'>subgrp.modelg</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>,
+<span class='co'># \donttest{</span>
+<span class='no'>subgrp.modelg</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>,
                             <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
                             <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>,
                             <span class='kw'>loss</span>   <span class='kw'>=</span> <span class='st'>"sq_loss_lasso_gam"</span>,
@@ -605,7 +616,8 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; E[Y|T=1, X] - E[Y|T=0, X]
 #&gt; 
 #&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-#&gt; -116.043  -22.994   -4.138   -2.356   18.260   90.785 </div><div class='input'>
+#&gt; -116.043  -22.994   -4.138   -2.356   18.260   90.785 </div><div class='input'><span class='co'># }</span>
+
 <span class='co'>####################  Using an augmentation function #####################</span>
 <span class='co'>## augmentation funcions involve modeling the conditional mean E[Y|T, X]</span>
 <span class='co'>## and returning predictions that are averaged over the treatment values</span>
@@ -613,30 +625,33 @@ from <code>fit.subgroup</code>.</p></div>
 <span class='co'>##########################################################################</span>
 
 <span class='no'>augment.func</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>trt</span>) {
-    <span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>trt</span>)
-    <span class='no'>xm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/model.matrix'>model.matrix</a></span>(<span class='no'>y</span>~<span class='no'>trt</span>*<span class='no'>x</span>-<span class='fl'>1</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data</span>)
+    <span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>trt</span>)
+    <span class='no'>xm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/model.matrix.html'>model.matrix</a></span>(<span class='no'>y</span>~<span class='no'>trt</span>*<span class='no'>x</span>-<span class='fl'>1</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data</span>)
 
     <span class='no'>lmod</span> <span class='kw'>&lt;-</span> <span class='fu'>cv.glmnet</span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>xm</span>)
     <span class='co'>## get predictions when trt = 1</span>
     <span class='no'>data</span>$<span class='no'>trt</span> <span class='kw'>&lt;-</span> <span class='fl'>1</span>
-    <span class='no'>xm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/model.matrix'>model.matrix</a></span>(<span class='no'>y</span>~<span class='no'>trt</span>*<span class='no'>x</span>-<span class='fl'>1</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data</span>)
-    <span class='no'>preds_1</span>  <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/predict'>predict</a></span>(<span class='no'>lmod</span>, <span class='no'>xm</span>, <span class='kw'>s</span> <span class='kw'>=</span> <span class='st'>"lambda.min"</span>)
+    <span class='no'>xm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/model.matrix.html'>model.matrix</a></span>(<span class='no'>y</span>~<span class='no'>trt</span>*<span class='no'>x</span>-<span class='fl'>1</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data</span>)
+    <span class='no'>preds_1</span>  <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>lmod</span>, <span class='no'>xm</span>, <span class='kw'>s</span> <span class='kw'>=</span> <span class='st'>"lambda.min"</span>)
 
     <span class='co'>## get predictions when trt = -1</span>
     <span class='no'>data</span>$<span class='no'>trt</span> <span class='kw'>&lt;-</span> -<span class='fl'>1</span>
-    <span class='no'>xm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/model.matrix'>model.matrix</a></span>(<span class='no'>y</span>~<span class='no'>trt</span>*<span class='no'>x</span>-<span class='fl'>1</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data</span>)
-    <span class='no'>preds_n1</span>  <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/predict'>predict</a></span>(<span class='no'>lmod</span>, <span class='no'>xm</span>, <span class='kw'>s</span> <span class='kw'>=</span> <span class='st'>"lambda.min"</span>)
+    <span class='no'>xm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/model.matrix.html'>model.matrix</a></span>(<span class='no'>y</span>~<span class='no'>trt</span>*<span class='no'>x</span>-<span class='fl'>1</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data</span>)
+    <span class='no'>preds_n1</span>  <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>lmod</span>, <span class='no'>xm</span>, <span class='kw'>s</span> <span class='kw'>=</span> <span class='st'>"lambda.min"</span>)
 
     <span class='co'>## return predictions averaged over trt</span>
-    <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/function'>return</a></span>(<span class='fl'>0.5</span> * (<span class='no'>preds_1</span> + <span class='no'>preds_n1</span>))
-}</div><div class='input'><span class='no'>subgrp.model.aug</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>,
+    <span class='fu'><a href='https://rdrr.io/r/base/function.html'>return</a></span>(<span class='fl'>0.5</span> * (<span class='no'>preds_1</span> + <span class='no'>preds_n1</span>))
+}
+
+<span class='co'># \donttest{</span>
+<span class='no'>subgrp.model.aug</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>,
                            <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
                            <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>,
                            <span class='kw'>augment.func</span>    <span class='kw'>=</span> <span class='no'>augment.func</span>,
                            <span class='kw'>loss</span>   <span class='kw'>=</span> <span class='st'>"sq_loss_lasso"</span>,
                            <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>10</span>)              <span class='co'># option for cv.glmnet</span>
 
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>subgrp.model.aug</span>)</div><div class='output co'>#&gt; family:    gaussian 
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>subgrp.model.aug</span>)</div><div class='output co'>#&gt; family:    gaussian 
 #&gt; loss:      sq_loss_lasso 
 #&gt; method:    weighting 
 #&gt; cutpoint:  0 
@@ -687,7 +702,8 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt;           Trt1     V2      V3      V5     V6     V8      V9    V10     V11
 #&gt; Estimate 3.061 2.1429 -2.4738 -0.0522 0.6815 0.9514 -0.3491 0.6354 -1.0507
 #&gt;             V13    V15
-#&gt; Estimate 1.2763 1.0572</div><div class='input'>
+#&gt; Estimate 1.2763 1.0572</div><div class='input'><span class='co'># }</span>
+
 <span class='co'>####################  Binary outcomes ####################################</span>
 
 <span class='co'># use logistic loss for binary outcomes</span>
@@ -759,14 +775,14 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;                Recommended 0     Recommended 1
-#&gt; Received 0 31.4653 (n = 114)  16.6262 (n = 87)
-#&gt; Received 1  17.704 (n = 149) 26.8445 (n = 150)
+#&gt; Received 0 31.2336 (n = 113)   17.191 (n = 88)
+#&gt; Received 1 17.2722 (n = 140) 26.9694 (n = 159)
 #&gt; 
 #&gt; Treatment effects conditional on subgroups:
 #&gt; Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] 
-#&gt;                          13.7613 (n = 263) 
+#&gt;                          13.9615 (n = 253) 
 #&gt; Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] 
-#&gt;                          10.2183 (n = 237) 
+#&gt;                           9.7785 (n = 247) 
 #&gt; 
 #&gt; NOTE: The above average outcomes are biased estimates of
 #&gt;       the expected outcomes conditional on subgroups. 
@@ -776,19 +792,21 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; 
 #&gt; Benefit score quantiles (f(X) for 1 vs 0): 
 #&gt;       0%      25%      50%      75%     100% 
-#&gt; -3.80104 -1.09890 -0.08857  0.85665  3.87282 
+#&gt; -4.09981 -1.18199 -0.01039  0.90901  4.15009 
 #&gt; 
 #&gt; ---------------------------------------------------
 #&gt; 
 #&gt; Summary of individual treatment effects: 
 #&gt; E[Y|T=1, X] - E[Y|T=0, X]
 #&gt; 
-#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-#&gt; -44.7252  -2.6676  -0.1774  -0.7502   1.9307  48.0569 </div><div class='input'>
+#&gt;      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+#&gt; -60.31246  -2.95433  -0.02079  -0.81282   2.07903  63.42390 </div><div class='input'>
 
 <span class='co'>####################  Time-to-event outcomes #############################</span>
 
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>survival</span>)</div><div class='input'><span class='no'>subgrp.model.cox</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/Surv'>Surv</a></span>(<span class='no'>y.time.to.event</span>, <span class='no'>status</span>),
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>survival</span>)
+<span class='co'># \donttest{</span>
+<span class='no'>subgrp.model.cox</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='no'>y.time.to.event</span>, <span class='no'>status</span>),
                            <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
                            <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>,
                            <span class='kw'>loss</span>   <span class='kw'>=</span> <span class='st'>"cox_loss_lasso"</span>,
@@ -806,14 +824,14 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;                 Recommended 0     Recommended 1
-#&gt; Received 0 176.2019 (n = 140)   8.4812 (n = 61)
-#&gt; Received 1 178.1993 (n = 206) 308.5627 (n = 93)
+#&gt; Received 0 175.2226 (n = 140)   8.4595 (n = 61)
+#&gt; Received 1 180.6631 (n = 203) 134.9956 (n = 96)
 #&gt; 
 #&gt; Treatment effects conditional on subgroups:
 #&gt; Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] 
-#&gt;                          -1.9974 (n = 346) 
+#&gt;                          -5.4405 (n = 343) 
 #&gt; Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] 
-#&gt;                         300.0814 (n = 154) 
+#&gt;                         126.5361 (n = 157) 
 #&gt; 
 #&gt; NOTE: The above average outcomes are biased estimates of
 #&gt;       the expected outcomes conditional on subgroups. 
@@ -823,7 +841,7 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; 
 #&gt; Benefit score quantiles (f(X) for 1 vs 0): 
 #&gt;       0%      25%      50%      75%     100% 
-#&gt; -0.88656 -0.35685 -0.15405  0.06625  0.88574 
+#&gt; -0.87626 -0.34859 -0.14888  0.06438  0.87688 
 #&gt; 
 #&gt; ---------------------------------------------------
 #&gt; 
@@ -836,35 +854,39 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; the survival time
 #&gt; 
 #&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-#&gt;  0.4124  0.9359  1.1665  1.2189  1.4288  2.4268 </div><div class='input'>
+#&gt;  0.4161  0.9376  1.1605  1.2129  1.4171  2.4019 </div><div class='input'><span class='co'># }</span>
+
 
 <span class='co'>####################  Using custom loss functions ########################</span>
 
 <span class='co'>## Use custom loss function for binary outcomes</span>
 
 <span class='no'>fit.custom.loss.bin</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>weights</span>, <span class='no'>offset</span>, <span class='no'>...</span>) {
-    <span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>, <span class='no'>x</span>)
+    <span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>, <span class='no'>x</span>)
 
     <span class='co'># minimize logistic loss with NO lasso penalty</span>
     <span class='co'># with allowance for efficiency augmentation</span>
-    <span class='no'>glmf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>y</span> ~ <span class='no'>x</span> - <span class='fl'>1</span>, <span class='kw'>weights</span> <span class='kw'>=</span> <span class='no'>weights</span>,
+    <span class='no'>glmf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='no'>y</span> ~ <span class='no'>x</span> - <span class='fl'>1</span>, <span class='kw'>weights</span> <span class='kw'>=</span> <span class='no'>weights</span>,
                 <span class='kw'>offset</span> <span class='kw'>=</span> <span class='no'>offset</span>, <span class='co'># offset term allows for efficiency augmentation</span>
-                <span class='kw'>family</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/family'>binomial</a></span>(), <span class='no'>...</span>)
+                <span class='kw'>family</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span>(), <span class='no'>...</span>)
 
     <span class='co'># save coefficients</span>
-    <span class='no'>cfs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/coef'>coef</a></span>(<span class='no'>glmf</span>)
+    <span class='no'>cfs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/coef.html'>coef</a></span>(<span class='no'>glmf</span>)
 
     <span class='co'># create prediction function.</span>
     <span class='no'>prd</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>type</span> <span class='kw'>=</span> <span class='st'>"response"</span>) {
-         <span class='no'>dfte</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></span>(<span class='fl'>1</span>, <span class='no'>x</span>)
-         <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/colnames'>colnames</a></span>(<span class='no'>dfte</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>cfs</span>)
+         <span class='no'>dfte</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='fl'>1</span>, <span class='no'>x</span>)
+         <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>dfte</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>cfs</span>)
          <span class='co'>## predictions must be returned on the scale</span>
          <span class='co'>## of the linear predictor</span>
-         <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/predict'>predict</a></span>(<span class='no'>glmf</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='no'>dfte</span>), <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"link"</span>)
+         <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>glmf</span>, <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='no'>dfte</span>), <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"link"</span>)
     }
     <span class='co'># return lost of required components</span>
-    <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>predict</span> <span class='kw'>=</span> <span class='no'>prd</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='no'>glmf</span>, <span class='kw'>coefficients</span> <span class='kw'>=</span> <span class='no'>cfs</span>)
-}</div><div class='input'><span class='no'>subgrp.model.bin.cust</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y.binary</span>,
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>predict</span> <span class='kw'>=</span> <span class='no'>prd</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='no'>glmf</span>, <span class='kw'>coefficients</span> <span class='kw'>=</span> <span class='no'>cfs</span>)
+}
+
+<span class='co'># \donttest{</span>
+<span class='no'>subgrp.model.bin.cust</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y.binary</span>,
                                  <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
                                  <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>,
                                  <span class='kw'>fit.custom.loss</span> <span class='kw'>=</span> <span class='no'>fit.custom.loss.bin</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: non-integer #successes in a binomial glm!</span></div><div class='input'>
@@ -880,14 +902,14 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;               Recommended 0    Recommended 1
-#&gt; Received 0 0.1813 (n = 109)  0.4712 (n = 92)
-#&gt; Received 1 0.1836 (n = 151) 0.5956 (n = 148)
+#&gt; Received 0 0.1761 (n = 109)  0.4712 (n = 92)
+#&gt; Received 1 0.1818 (n = 149) 0.5965 (n = 150)
 #&gt; 
 #&gt; Treatment effects conditional on subgroups:
 #&gt; Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] 
-#&gt;                          -0.0023 (n = 260) 
+#&gt;                          -0.0057 (n = 258) 
 #&gt; Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] 
-#&gt;                           0.1244 (n = 240) 
+#&gt;                           0.1254 (n = 242) 
 #&gt; 
 #&gt; NOTE: The above average outcomes are biased estimates of
 #&gt;       the expected outcomes conditional on subgroups. 
@@ -897,10 +919,11 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; 
 #&gt; Benefit score quantiles (f(X) for 1 vs 0): 
 #&gt;       0%      25%      50%      75%     100% 
-#&gt; -3.29246 -0.83294 -0.04922  0.69440  2.99266 
+#&gt; -3.32689 -0.83519 -0.03229  0.72308  3.06675 
 #&gt; 
 #&gt; ---------------------------------------------------
-#&gt; </div><div class='input'>
+#&gt; </div><div class='input'><span class='co'># }</span>
+
 
 <span class='co'>## try exponential loss for</span>
 <span class='co'>## positive outcomes</span>
@@ -908,21 +931,24 @@ from <code>fit.subgroup</code>.</p></div>
 <span class='no'>fit.expo.loss</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>weights</span>, <span class='no'>...</span>)
 {
     <span class='no'>expo.loss</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>beta</span>, <span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>weights</span>) {
-        <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sum'>sum</a></span>(<span class='no'>weights</span> * <span class='no'>y</span> * <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>exp</a></span>(-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/drop'>drop</a></span>(<span class='no'>x</span> <span class='kw'>%*%</span> <span class='no'>beta</span>)))
+        <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='no'>weights</span> * <span class='no'>y</span> * <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span>(-<span class='fu'><a href='https://rdrr.io/r/base/drop.html'>drop</a></span>(<span class='no'>x</span> <span class='kw'>%*%</span> <span class='no'>beta</span>)))
     }
 
     <span class='co'># use optim() to minimize loss function</span>
-    <span class='no'>opt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/optim'>optim</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='fl'>0</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>NCOL</a></span>(<span class='no'>x</span>)), <span class='kw'>fn</span> <span class='kw'>=</span> <span class='no'>expo.loss</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>, <span class='kw'>weights</span> <span class='kw'>=</span> <span class='no'>weights</span>)
+    <span class='no'>opt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/optim.html'>optim</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>0</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>NCOL</a></span>(<span class='no'>x</span>)), <span class='kw'>fn</span> <span class='kw'>=</span> <span class='no'>expo.loss</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>, <span class='kw'>weights</span> <span class='kw'>=</span> <span class='no'>weights</span>)
 
     <span class='no'>coefs</span> <span class='kw'>&lt;-</span> <span class='no'>opt</span>$<span class='no'>par</span>
 
     <span class='no'>pred</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>type</span> <span class='kw'>=</span> <span class='st'>"response"</span>) {
-        <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/crossprod'>tcrossprod</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></span>(<span class='fl'>1</span>, <span class='no'>x</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/t'>t</a></span>(<span class='no'>coefs</span>))
+        <span class='fu'><a href='https://rdrr.io/r/base/crossprod.html'>tcrossprod</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='fl'>1</span>, <span class='no'>x</span>), <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='no'>coefs</span>))
     }
 
     <span class='co'># return list of required components</span>
-    <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>predict</span> <span class='kw'>=</span> <span class='no'>pred</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='no'>opt</span>, <span class='kw'>coefficients</span> <span class='kw'>=</span> <span class='no'>coefs</span>)
-}</div><div class='input'><span class='co'># use exponential loss for positive outcomes</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>predict</span> <span class='kw'>=</span> <span class='no'>pred</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='no'>opt</span>, <span class='kw'>coefficients</span> <span class='kw'>=</span> <span class='no'>coefs</span>)
+}
+
+<span class='co'># \donttest{</span>
+<span class='co'># use exponential loss for positive outcomes</span>
 <span class='no'>subgrp.model.expo</span> <span class='kw'>&lt;-</span> <span class='fu'>fit.subgroup</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y.count</span>,
                                   <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
                                   <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>,
@@ -940,14 +966,14 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; 
 #&gt; Average Outcomes:
 #&gt;                Recommended 0     Recommended 1
-#&gt; Received 0 30.7436 (n = 134)  16.3185 (n = 67)
-#&gt; Received 1 14.9077 (n = 107) 27.8108 (n = 192)
+#&gt; Received 0 30.2422 (n = 143)  15.1636 (n = 58)
+#&gt; Received 1 14.8942 (n = 102) 27.2527 (n = 197)
 #&gt; 
 #&gt; Treatment effects conditional on subgroups:
 #&gt; Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] 
-#&gt;                          15.8359 (n = 241) 
+#&gt;                          15.3481 (n = 245) 
 #&gt; Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] 
-#&gt;                          11.4923 (n = 259) 
+#&gt;                          12.0891 (n = 255) 
 #&gt; 
 #&gt; NOTE: The above average outcomes are biased estimates of
 #&gt;       the expected outcomes conditional on subgroups. 
@@ -957,10 +983,11 @@ from <code>fit.subgroup</code>.</p></div>
 #&gt; 
 #&gt; Benefit score quantiles (f(X) for 1 vs 0): 
 #&gt;       0%      25%      50%      75%     100% 
-#&gt; -1.03892 -0.26051  0.02761  0.35173  1.62744 
+#&gt; -1.41061 -0.30465  0.01095  0.36604  1.82677 
 #&gt; 
 #&gt; ---------------------------------------------------
-#&gt; </div><div class='input'>
+#&gt; </div><div class='input'># }
+
 
 </div></pre>
   </div>
@@ -981,19 +1008,23 @@ from <code>fit.subgroup</code>.</p></div>
   </div>
 </div>
 
+
       <footer>
       <div class="copyright">
   <p>Developed by Jared Huling.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

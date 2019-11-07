@@ -16,13 +16,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -48,6 +50,7 @@ evaluate the effectiveness of an employment trainining program on wage increases
 <![endif]-->
 
 
+
   </head>
 
   <body>
@@ -64,7 +67,7 @@ evaluate the effectiveness of an employment trainining program on wage increases
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">personalized</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.5</span>
       </span>
     </div>
 
@@ -85,6 +88,12 @@ evaluate the effectiveness of an employment trainining program on wage increases
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="../articles/usage_of_the_personalized_package.html">Usage of the personalized Package</a>
+    </li>
+    <li>
+      <a href="../articles/efficiency_augmentation_personalized.html">Improving Estimation Efficiency via Augmentation and Propensity Score Utilities</a>
+    </li>
+    <li>
+      <a href="../articles/multicategory_treatments_with_personalized.html">Multi-category Treatments with personalized</a>
     </li>
   </ul>
 </li>
@@ -110,6 +119,7 @@ evaluate the effectiveness of an employment trainining program on wage increases
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -144,6 +154,7 @@ evaluate the effectiveness of an employment trainining program on wage increases
   <dt>log.re75</dt><dd><p>log of earnings in 1975</p></dd>
   <dt>u75</dt><dd><p>unemployed in 1975; factor with levels "Yes" or "No"</p></dd>
   <dt>wts.extrap</dt><dd><p>extrapolation weights to the 1978 Panel Study for Income Dynamics dataset</p></dd>
+
 </dl>
     
     <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
@@ -157,24 +168,24 @@ evaluate the effectiveness of an employment trainining program on wage increases
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>LaLonde</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>LaLonde</span>)
 <span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='no'>LaLonde</span>$<span class='no'>outcome</span>
 
 <span class='no'>trt</span> <span class='kw'>&lt;-</span> <span class='no'>LaLonde</span>$<span class='no'>treat</span>
 
-<span class='no'>x.varnames</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"educ"</span>, <span class='st'>"black"</span>, <span class='st'>"hisp"</span>, <span class='st'>"white"</span>,
+<span class='no'>x.varnames</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"educ"</span>, <span class='st'>"black"</span>, <span class='st'>"hisp"</span>, <span class='st'>"white"</span>,
                 <span class='st'>"marr"</span>, <span class='st'>"nodegr"</span>, <span class='st'>"log.re75"</span>, <span class='st'>"u75"</span>)
 
 <span class='co'># covariates</span>
 <span class='no'>data.x</span> <span class='kw'>&lt;-</span> <span class='no'>LaLonde</span>[, <span class='no'>x.varnames</span>]
 
 <span class='co'># construct design matrix (with no intercept)</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/model.matrix'>model.matrix</a></span>(~ -<span class='fl'>1</span> + <span class='no'>.</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data.x</span>)
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/model.matrix.html'>model.matrix</a></span>(~ -<span class='fl'>1</span> + <span class='no'>.</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data.x</span>)
 
 <span class='no'>const.propens</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>trt</span>)
 {
-    <span class='no'>mean.trt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/mean'>mean</a></span>(<span class='no'>trt</span> <span class='kw'>==</span> <span class='st'>"Trt"</span>)
-    <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='no'>mean.trt</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/length'>length</a></span>(<span class='no'>trt</span>))
+    <span class='no'>mean.trt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>trt</span> <span class='kw'>==</span> <span class='st'>"Trt"</span>)
+    <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='no'>mean.trt</span>, <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>trt</span>))
 }
 
 <span class='no'>subgrp_fit_w</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='fit.subgroup.html'>fit.subgroup</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>, <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt</span>,
@@ -184,7 +195,7 @@ evaluate the effectiveness of an employment trainining program on wage increases
     <span class='kw'>type.measure</span> <span class='kw'>=</span> <span class='st'>"auc"</span>,
     <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>10</span>)
 
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>subgrp_fit_w</span>)</div><div class='output co'>#&gt; family:    binomial 
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>subgrp_fit_w</span>)</div><div class='output co'>#&gt; family:    binomial 
 #&gt; loss:      logistic_loss_lasso 
 #&gt; method:    weighting 
 #&gt; cutpoint:  0 
@@ -213,7 +224,7 @@ evaluate the effectiveness of an employment trainining program on wage increases
 #&gt; 
 #&gt; Benefit score quantiles (f(X) for Trt vs Ctrl): 
 #&gt;      0%     25%     50%     75%    100% 
-#&gt; -0.2593  0.1315  0.1315  0.1315  0.3606 
+#&gt; -0.1811  0.1341  0.1341  0.1341  0.2980 
 #&gt; 
 #&gt; ---------------------------------------------------
 #&gt; 
@@ -221,7 +232,7 @@ evaluate the effectiveness of an employment trainining program on wage increases
 #&gt; E[Y|T=Trt, X] - E[Y|T=Ctrl, X]
 #&gt; 
 #&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-#&gt; -0.12891  0.06563  0.06563  0.06344  0.06563  0.17836 
+#&gt; -0.09029  0.06696  0.06696  0.06353  0.06696  0.14790 
 #&gt; 
 #&gt; ---------------------------------------------------
 #&gt; 
@@ -231,7 +242,7 @@ evaluate the effectiveness of an employment trainining program on wage increases
 #&gt; Any other variables selected represent treatment-covariate interactions.
 #&gt; 
 #&gt;             Trt hispYes marrYes
-#&gt; Estimate 0.1315 -0.3907  0.2291</div></pre>
+#&gt; Estimate 0.1341 -0.3152  0.1639</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -249,19 +260,23 @@ evaluate the effectiveness of an employment trainining program on wage increases
   </div>
 </div>
 
+
       <footer>
       <div class="copyright">
   <p>Developed by Jared Huling.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 
