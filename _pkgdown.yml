@@ -53,4 +53,6 @@ reference:
 
   - title: Utilities
     contents:
+    - create.propensity.function
+    - create.augmentation.function
     - weighted.ksvm
