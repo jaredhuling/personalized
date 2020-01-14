@@ -573,20 +573,23 @@ fit_sq_loss_lasso_gam <- function(x, y, trt, n.trts, wts, family, match.id, inte
 
     vnames <- sel.vnames
 
+
+    oversmoothing_factor <- sqrt(ncol(x) / (length(contin.vars) + 1))
+
     # fit gam model:
     # only add in dots calls if they exist
     if (length(dots.idx.glmnet) > 0)
     {
         model <- do.call(gam, c(list(formula = gam.formula, data = df,
                                      weights = wts, family = family.func,
-                                     gamma = 5, ## oversmooth since we're in a post-selection scenario
+                                     gamma = oversmoothing_factor, ## oversmooth since we're in a post-selection scenario
                                      drop.intercept = TRUE),
                                 list.dots[dots.idx.gam]))
     } else
     {
         model <- do.call(gam, list(formula = gam.formula, data = df,
                                    weights = wts, family = family.func,
-                                   gamma = 5, ## oversmooth since we're in a post-selection scenario
+                                   gamma = oversmoothing_factor, ## oversmooth since we're in a post-selection scenario
                                    drop.intercept = TRUE))
     }
 
