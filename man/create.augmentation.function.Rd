@@ -4,8 +4,12 @@
 \alias{create.augmentation.function}
 \title{Creation of augmentation functions}
 \usage{
-create.augmentation.function(family, crossfit = TRUE,
-  nfolds.crossfit = 10, cv.glmnet.args = NULL)
+create.augmentation.function(
+  family,
+  crossfit = TRUE,
+  nfolds.crossfit = 10,
+  cv.glmnet.args = NULL
+)
 }
 \arguments{
 \item{family}{The response type (see options in \code{\link[glmnet]{glmnet}} help file)}

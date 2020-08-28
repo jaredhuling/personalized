@@ -4,19 +4,29 @@
 \alias{fit.subgroup}
 \title{Fitting subgroup identification models}
 \usage{
-fit.subgroup(x, y, trt, propensity.func = NULL,
+fit.subgroup(
+  x,
+  y,
+  trt,
+  propensity.func = NULL,
   loss = c("sq_loss_lasso", "logistic_loss_lasso", "poisson_loss_lasso",
-  "cox_loss_lasso", "owl_logistic_loss_lasso",
-  "owl_logistic_flip_loss_lasso", "owl_hinge_loss", "owl_hinge_flip_loss",
-  "sq_loss_lasso_gam", "poisson_loss_lasso_gam", "logistic_loss_lasso_gam",
-  "sq_loss_gam", "poisson_loss_gam", "logistic_loss_gam",
-  "owl_logistic_loss_gam", "owl_logistic_flip_loss_gam",
-  "owl_logistic_loss_lasso_gam", "owl_logistic_flip_loss_lasso_gam",
-  "sq_loss_gbm", "poisson_loss_gbm", "logistic_loss_gbm", "cox_loss_gbm",  
-     "custom"), method = c("weighting", "a_learning"), match.id = NULL,
-  augment.func = NULL, fit.custom.loss = NULL, cutpoint = 0,
-  larger.outcome.better = TRUE, reference.trt = NULL, retcall = TRUE,
-  ...)
+    "cox_loss_lasso", "owl_logistic_loss_lasso", "owl_logistic_flip_loss_lasso",
+    "owl_hinge_loss", "owl_hinge_flip_loss", "sq_loss_lasso_gam",
+    "poisson_loss_lasso_gam", "logistic_loss_lasso_gam", "sq_loss_gam",
+    "poisson_loss_gam", "logistic_loss_gam", "owl_logistic_loss_gam",
+    "owl_logistic_flip_loss_gam", "owl_logistic_loss_lasso_gam",
+    "owl_logistic_flip_loss_lasso_gam", "sq_loss_gbm", "poisson_loss_gbm",
+    "logistic_loss_gbm", "cox_loss_gbm",      "custom"),
+  method = c("weighting", "a_learning"),
+  match.id = NULL,
+  augment.func = NULL,
+  fit.custom.loss = NULL,
+  cutpoint = 0,
+  larger.outcome.better = TRUE,
+  reference.trt = NULL,
+  retcall = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{The design matrix (not including intercept term)}

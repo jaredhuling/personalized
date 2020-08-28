@@ -5,11 +5,15 @@
 \alias{predict.wksvm}
 \title{Function to predict either benefit scores or treatment recommendations}
 \usage{
-\method{predict}{subgroup_fitted}(object, newx, type = c("benefit.score",
-  "trt.group"), cutpoint = 0, ...)
+\method{predict}{subgroup_fitted}(
+  object,
+  newx,
+  type = c("benefit.score", "trt.group"),
+  cutpoint = 0,
+  ...
+)
 
-\method{predict}{wksvm}(object, newx, type = c("class",
-  "linear.predictor"), ...)
+\method{predict}{wksvm}(object, newx, type = c("class", "linear.predictor"), ...)
 }
 \arguments{
 \item{object}{fitted object returned by \code{validate.subgrp()} function.

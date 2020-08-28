@@ -4,7 +4,8 @@
 \name{LaLonde}
 \alias{LaLonde}
 \title{National Supported Work Study Data}
-\format{A data frame with 722 observations and 12 variables:
+\format{
+A data frame with 722 observations and 12 variables:
 \describe{
   \item{outcome}{whether earnings in 1978 are larger than in 1975; 1 for yes, 0 for no}
   \item{treat}{whether the individual received the treatment; "Yes" or "No"}
@@ -18,7 +19,8 @@
   \item{log.re75}{log of earnings in 1975}
   \item{u75}{unemployed in 1975; factor with levels "Yes" or "No"}
   \item{wts.extrap}{extrapolation weights to the 1978 Panel Study for Income Dynamics dataset}
-}}
+}
+}
 \source{
 The National Supported Work Study.
 }

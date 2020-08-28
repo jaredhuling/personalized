@@ -6,11 +6,19 @@
 \alias{plot.subgroup_validated}
 \title{Plotting results for fitted subgroup identification models}
 \usage{
-\method{plot}{subgroup_fitted}(x, type = c("boxplot", "density",
-  "interaction", "conditional"), avg.line = TRUE, ...)
+\method{plot}{subgroup_fitted}(
+  x,
+  type = c("boxplot", "density", "interaction", "conditional"),
+  avg.line = TRUE,
+  ...
+)
 
-\method{plot}{subgroup_validated}(x, type = c("boxplot", "density",
-  "interaction", "conditional", "stability"), avg.line = TRUE, ...)
+\method{plot}{subgroup_validated}(
+  x,
+  type = c("boxplot", "density", "interaction", "conditional", "stability"),
+  avg.line = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{fitted object returned by \code{validate.subgroup()} or \code{fit.subgroup()} function}
