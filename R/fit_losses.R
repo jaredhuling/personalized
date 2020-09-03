@@ -671,8 +671,8 @@ fit_sq_loss_gam <- function(x, y, trt, n.trts, wts, family, match.id, ...)
         var.levels[v] <- length(unique(x[,sel.idx[v]]))
     }
 
-    contin.vars <- sel.vnames[var.levels > 3]
-    binary.vars <- sel.vnames[var.levels <= 3]
+    contin.vars <- sel.vnames[var.levels > 2]
+    binary.vars <- sel.vnames[var.levels <= 2]
 
     # create formula for gam
     contin.formula <- binary.formula <- NULL
