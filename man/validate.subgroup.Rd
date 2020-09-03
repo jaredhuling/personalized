@@ -4,10 +4,14 @@
 \alias{validate.subgroup}
 \title{Validating fitted subgroup identification models}
 \usage{
-validate.subgroup(model, B = 50L,
+validate.subgroup(
+  model,
+  B = 50L,
   method = c("training_test_replication", "boot_bias_correction"),
-  train.fraction = 0.75, benefit.score.quantiles = c(0.1666667,
-  0.3333333, 0.5, 0.6666667, 0.8333333), parallel = FALSE)
+  train.fraction = 0.75,
+  benefit.score.quantiles = c(0.1666667, 0.3333333, 0.5, 0.6666667, 0.8333333),
+  parallel = FALSE
+)
 }
 \arguments{
 \item{model}{fitted model object returned by \code{fit.subgroup()} function}

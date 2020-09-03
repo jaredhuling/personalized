@@ -4,8 +4,14 @@
 \alias{check.overlap}
 \title{Check propensity score overlap}
 \usage{
-check.overlap(x, trt, propensity.func, type = c("histogram", "density",
-  "both"), bins = 50L, alpha = ifelse(type == "both", 0.35, 0.5))
+check.overlap(
+  x,
+  trt,
+  propensity.func,
+  type = c("histogram", "density", "both"),
+  bins = 50L,
+  alpha = ifelse(type == "both", 0.35, 0.5)
+)
 }
 \arguments{
 \item{x}{The design matrix (not including intercept term)}

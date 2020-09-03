@@ -4,8 +4,11 @@
 \alias{create.propensity.function}
 \title{Creation of propensity fitting function}
 \usage{
-create.propensity.function(crossfit = TRUE, nfolds.crossfit = 10,
-  cv.glmnet.args = NULL)
+create.propensity.function(
+  crossfit = TRUE,
+  nfolds.crossfit = 10,
+  cv.glmnet.args = NULL
+)
 }
 \arguments{
 \item{crossfit}{A logical value indicating whether to use cross-fitting (\code{TRUE}) or not (\code{FALSE}).

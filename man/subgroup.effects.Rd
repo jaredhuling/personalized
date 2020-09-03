@@ -4,8 +4,15 @@
 \alias{subgroup.effects}
 \title{Computes treatment effects within various subgroups}
 \usage{
-subgroup.effects(benefit.scores, y, trt, pi.x, cutpoint = 0,
-  larger.outcome.better = TRUE, reference.trt = NULL)
+subgroup.effects(
+  benefit.scores,
+  y,
+  trt,
+  pi.x,
+  cutpoint = 0,
+  larger.outcome.better = TRUE,
+  reference.trt = NULL
+)
 }
 \arguments{
 \item{benefit.scores}{vector of estimated benefit scores}

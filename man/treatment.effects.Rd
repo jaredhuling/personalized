@@ -11,16 +11,20 @@ treatment.effects(x, ...)
 
 \method{treatment.effects}{default}(x, ...)
 
-treat.effects(benefit.scores, loss = c("sq_loss_lasso",
-  "logistic_loss_lasso", "poisson_loss_lasso", "cox_loss_lasso",
-  "owl_logistic_loss_lasso", "owl_logistic_flip_loss_lasso",
-  "owl_hinge_loss", "owl_hinge_flip_loss", "sq_loss_lasso_gam",
-  "poisson_loss_lasso_gam", "logistic_loss_lasso_gam", "sq_loss_gam",
-  "poisson_loss_gam", "logistic_loss_gam", "owl_logistic_loss_gam",
-  "owl_logistic_flip_loss_gam", "owl_logistic_loss_lasso_gam",
-  "owl_logistic_flip_loss_lasso_gam", "sq_loss_gbm", "poisson_loss_gbm",
-  "logistic_loss_gbm", "cox_loss_gbm",      "custom"),
-  method = c("weighting", "a_learning"), pi.x = NULL, ...)
+treat.effects(
+  benefit.scores,
+  loss = c("sq_loss_lasso", "logistic_loss_lasso", "poisson_loss_lasso",
+    "cox_loss_lasso", "owl_logistic_loss_lasso", "owl_logistic_flip_loss_lasso",
+    "owl_hinge_loss", "owl_hinge_flip_loss", "sq_loss_lasso_gam",
+    "poisson_loss_lasso_gam", "logistic_loss_lasso_gam", "sq_loss_gam",
+    "poisson_loss_gam", "logistic_loss_gam", "owl_logistic_loss_gam",
+    "owl_logistic_flip_loss_gam", "owl_logistic_loss_lasso_gam",
+    "owl_logistic_flip_loss_lasso_gam", "sq_loss_gbm", "poisson_loss_gbm",
+    "logistic_loss_gbm", "cox_loss_gbm",      "custom"),
+  method = c("weighting", "a_learning"),
+  pi.x = NULL,
+  ...
+)
 
 \method{treatment.effects}{subgroup_fitted}(x, ...)
 }

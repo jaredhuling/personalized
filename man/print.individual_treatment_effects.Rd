@@ -4,8 +4,7 @@
 \alias{print.individual_treatment_effects}
 \title{Printing individualized treatment effects}
 \usage{
-\method{print}{individual_treatment_effects}(x,
-  digits = max(getOption("digits") - 3, 3), ...)
+\method{print}{individual_treatment_effects}(x, digits = max(getOption("digits") - 3, 3), ...)
 }
 \arguments{
 \item{x}{a fitted object from either \code{\link[personalized]{treat.effects}} or \code{\link[personalized]{treatment.effects}}}

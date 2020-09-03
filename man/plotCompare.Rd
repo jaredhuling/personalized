@@ -4,8 +4,11 @@
 \alias{plotCompare}
 \title{Plot a comparison results for fitted or validated subgroup identification models}
 \usage{
-plotCompare(..., type = c("boxplot", "density", "interaction",
-  "conditional"), avg.line = TRUE)
+plotCompare(
+  ...,
+  type = c("boxplot", "density", "interaction", "conditional"),
+  avg.line = TRUE
+)
 }
 \arguments{
 \item{...}{the fitted (model or validation) objects to be plotted. Must be either
