@@ -64,7 +64,7 @@ prop.func <- create.propensity.function(crossfit = TRUE,
                                         nfolds.crossfit = 10,
                                         cv.glmnet.args = list(type.measure = "auc",
                                                               nfolds = 5))
-
+\dontrun{
 subgrp.model <- fit.subgroup(x = x, y = y,
                              trt = trt01,
                              propensity.func = prop.func,
@@ -73,6 +73,7 @@ subgrp.model <- fit.subgroup(x = x, y = y,
                              nfolds = 10)    # option for cv.glmnet (for ITR estimation)
 
 summary(subgrp.model)
+}
 
 }
 \references{

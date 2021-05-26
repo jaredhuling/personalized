@@ -1,16 +1,21 @@
 citHeader("To cite personalized in publications use:")
 
-citEntry(,
-  entry        = "Unpublished",
-  author       = "Jared D. Huling and Menggang Yu",
-  title        = "Subgroup Identification Using the personalized Package",
-  year         = "2018",
-  note         = "submitted",
-  url          = "https://arxiv.org/abs/1809.07905",
-  textVersion  = paste("Huling, J.D., Yu, M. (2018) ",
-      "Subgroup Identification Using the personalized Package, ",
-      "URL: https://arxiv.org/abs/1809.07905.")
+bibentry(bibtype = "Article",
+  title        = "Subgroup Identification Using the {personalized} Package",
+  author       = c(person(given = c("Jared", "D."),
+                          family = "Huling",
+                          email = "huling@umn.edu"),
+                   person(given = "Menggang",
+                          family = "Yu",
+                          email = "meyu@biostat.wisc.edu")),
+  journal      = "Journal of Statistical Software",
+  year         = "2021",
+  volume       = "98",
+  number       = "5",
+  pages        = "1--60",
+  doi          = "10.18637/jss.v098.i05"
 )
+
 
 citEntry(,
   entry        = "Article",

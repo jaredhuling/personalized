@@ -232,7 +232,10 @@
 #' results from fitted models, and \code{\link[personalized]{print.subgroup_fitted}}
 #' for arguments for printing options for \code{fit.subgroup()}.
 #' from \code{fit.subgroup}.
-#' @references Chen, S., Tian, L., Cai, T. and Yu, M. (2017), A general statistical framework for subgroup identification
+#' @references Huling. J.D. and Yu, M. (2021), Subgroup Identification Using the personalized Package.
+#' Journal of Statistical Software 98(5), 1-60. doi:10.18637/jss.v098.i05
+#'
+#' Chen, S., Tian, L., Cai, T. and Yu, M. (2017), A general statistical framework for subgroup identification
 #' and comparative treatment scoring. Biometrics. doi:10.1111/biom.12676 \url{http://onlinelibrary.wiley.com/doi/10.1111/biom.12676/abstract}
 #'
 #' Xu, Y., Yu, M., Zhao, Y. Q., Li, Q., Wang, S., & Shao, J. (2015),
@@ -868,6 +871,8 @@ fit.subgroup <- function(x,
             }
         }
     }
+
+    attr(trt, "unique.trts") <- unique.trts
 
 
     extra.args <- NULL

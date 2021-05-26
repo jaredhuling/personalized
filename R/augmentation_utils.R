@@ -53,7 +53,7 @@
 #'                                         nfolds.crossfit = 10,
 #'                                         cv.glmnet.args = list(type.measure = "auc",
 #'                                                               nfolds = 5))
-#'
+#' \dontrun{
 #' subgrp.model <- fit.subgroup(x = x, y = y,
 #'                              trt = trt01,
 #'                              propensity.func = prop.func,
@@ -62,6 +62,7 @@
 #'                              nfolds = 10)    # option for cv.glmnet (for ITR estimation)
 #'
 #' summary(subgrp.model)
+#' }
 #'
 #' @importFrom stats model.matrix
 #' @export
@@ -74,6 +75,7 @@ create.augmentation.function <- function(family, crossfit = TRUE, nfolds.crossfi
     {
         tm <- "mse"
     }
+
 
     nfolds.crossfit <- as.integer(nfolds.crossfit[1])
     stopifnot(nfolds.crossfit > 1)
@@ -246,12 +248,27 @@ glmnet_aug_kfold_crossfit <- function(x, y, trt, wts = NULL,
         wts <- rep(1, NROW(x))
     }
 
+    unique.trts <- attr(trt, "unique.trts")
+    if (is.null(unique.trts))
+    {
+        if (is.factor(trt))
+        {
+            # drop any unused levels of trt
+            trt         <- droplevels(trt)
+            unique.trts <- levels(trt)
+        } else
+        {
+            unique.trts <- sort(unique(trt))
+        }
+    }
+    n.trts      <- length(unique.trts)
+
     if (interactions)
     {
         ## full model for nonzeroness
         df_all <- data.frame(x, trt = trt)
-        df_1   <- data.frame(x, trt = 1)
-        df_0   <- data.frame(x, trt = -1)
+        df_1   <- data.frame(x, trt = unique.trts[2])
+        df_0   <- data.frame(x, trt = unique.trts[1])
 
         mm_all <- model.matrix(~x*trt-1, data = df_all)
         mm_1   <- model.matrix(~x*trt-1, data = df_1)
@@ -290,7 +307,18 @@ glmnet_aug_kfold_crossfit <- function(x, y, trt, wts = NULL,
                 pred1_zerr <- unname(drop(predict(glmfit_zero_main, newx = mm_1[which,,drop=FALSE], s = "lambda.min", type = predtype)))
                 pred0_zerr <- unname(drop(predict(glmfit_zero_main, newx = mm_0[which,,drop=FALSE], s = "lambda.min", type = predtype)))
 
-                predvec[which] <- 0.5 * (pred1_zerr + pred0_zerr)
+                preds_cur <- rep(0, sum(which))
+                for (tt in 1:length(unique.trts))
+                {
+                    df_cur_trt    <- data.frame(x, trt = unique.trts[tt])
+                    mm_cur_trt    <- model.matrix(~x*trt-1, data = df_cur_trt)
+                    preds_cur <- preds_cur + unname(drop(predict(glmfit_zero_main,
+                                                                 newx = mm_cur_trt[which,,drop=FALSE],
+                                                                 s = "lambda.min", type = predtype)))
+                }
+                preds_cur <- preds_cur / length(unique.trts)
+
+                predvec[which] <- preds_cur
             } else
             {
                 ## get predictions for trt = 1 & -1

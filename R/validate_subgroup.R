@@ -76,6 +76,8 @@
 #' \item{iterations}{Number of replications used in the validation process}
 #' \item{nobs}{Number of observations in \code{x} provided to \code{\link[personalized]{fit.subgroup}}}
 #' \item{nvars}{Number of variables in \code{x} provided to \code{\link[personalized]{fit.subgroup}}}
+#' @references Huling. J.D. and Yu, M. (2021), Subgroup Identification Using the personalized Package.
+#' Journal of Statistical Software 98(5), 1-60. doi:10.18637/jss.v098.i05
 #' @importFrom stats predict sd
 #' @import foreach
 #' @examples

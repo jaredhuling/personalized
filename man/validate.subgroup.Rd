@@ -166,6 +166,9 @@ and comparative treatment scoring. Biometrics. doi:10.1111/biom.12676
 Harrell, F. E., Lee, K. L., and Mark, D. B. (1996). Tutorial in biostatistics multivariable prognostic models: issues in developing models,
 evaluating assumptions and adequacy, and measuring and reducing errors. Statistics in medicine, 15, 361-387.
 doi:10.1002/(SICI)1097-0258(19960229)15:4<361::AID-SIM168>3.0.CO;2-4
+
+Huling. J.D. and Yu, M. (2021), Subgroup Identification Using the personalized Package.
+Journal of Statistical Software 98(5), 1-60. doi:10.18637/jss.v098.i05
 }
 \seealso{
 \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models,
