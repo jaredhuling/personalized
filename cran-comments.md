@@ -7,10 +7,8 @@ publication on CRAN.
 
 ## Test environments
 
-* Debian Linux, (R-devel, 2019-05-12 r76488)
-* local Mac OSX Sierra (R 3.6.0)
-* Ubuntu 16.04.6 LTS (on travis-ci), (R-devel git2019-11-02 r77358)
-* Windows Server 2012 R2 x64 (R version 3.6.1 and 3.6.1 Patched (2019-10-31 r77367))
+* Debian Linux, (R-devel unstable, 2021-05-26 r80390)
+* local Mac OSX Catalina (R 4.1.0)
 
 ## R CMD check results
 
