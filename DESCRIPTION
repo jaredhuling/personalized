@@ -16,7 +16,7 @@ Description: Provides functions for fitting and validation of models for subgrou
     This package is intended for use for both randomized controlled trials and
     observational studies and is described in detail in Huling and Yu (2021) 
     <doi:10.18637/jss.v098.i05>.
-URL: https://jaredhuling.github.io/personalized/,
+URL: https://jaredhuling.org/personalized/,
      https://arxiv.org/abs/1809.07905
 BugReports: https://github.com/jaredhuling/personalized/issues
 License: GPL-2

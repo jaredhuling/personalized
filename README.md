@@ -19,7 +19,7 @@ analysis of medical data.
 
 The personalized package provides estimation methods for subgroup
 identification under the framework of [Chen et al
-(2017)](http://onlinelibrary.wiley.com/doi/10.1111/biom.12676/abstract).
+(2017)](https://onlinelibrary.wiley.com/doi/abs/10.1111/biom.12676).
 It also provides routines for valid estimation of the subgroup-specific
 treatment effects.
 
@@ -27,14 +27,14 @@ treatment effects.
 
 ## Documentation
 
-[Documentation](http://jaredhuling.org/personalized/)
+[Documentation](https://jaredhuling.org/personalized/)
 
   - [Tutorial /
-    Vignette](http://jaredhuling.org/personalized/articles/usage_of_the_personalized_package.html)
+    Vignette](https://jaredhuling.org/personalized/articles/usage_of_the_personalized_package.html)
     - tutorial of statistical methodology and usage of the package
 
   - [Function help
-    files](http://jaredhuling.org/personalized/reference/index.html)
+    files](https://jaredhuling.org/personalized/reference/index.html)
 
 # Installing the ‘personalized’ package
 
