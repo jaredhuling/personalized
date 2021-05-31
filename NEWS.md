@@ -1,3 +1,9 @@
+# personalized 0.2.6
+* Various small improvements/bug fixes
+* Added changes to reflect the incoming JSS publication related to this package
+* The DOI in the CITATION is for a new JSS publication that will be registered after
+publication on CRAN.
+
 # personalized 0.2.5
 
 * Adds utilities for construction of augmentation functions and propensity score fitting functions

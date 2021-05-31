@@ -8,23 +8,29 @@
 
 <title>National Supported Work Study Data — LaLonde • personalized</title>
 
-<!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -32,11 +38,11 @@
 
 
 
-<meta property="og:title" content="National Supported Work Study Data — LaLonde" />
 
+<meta property="og:title" content="National Supported Work Study Data — LaLonde" />
 <meta property="og:description" content="The LaLonde dataset comes from the National Supported Work Study, which sought to
 evaluate the effectiveness of an employment trainining program on wage increases." />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -53,7 +59,7 @@ evaluate the effectiveness of an employment trainining program on wage increases
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -67,7 +73,7 @@ evaluate the effectiveness of an employment trainining program on wage increases
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">personalized</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.6</span>
       </span>
     </div>
 
@@ -75,7 +81,7 @@ evaluate the effectiveness of an employment trainining program on wage increases
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home"></span>
+    <span class="fas fa-home"></span>
      
   </a>
 </li>
@@ -104,11 +110,10 @@ evaluate the effectiveness of an employment trainining program on wage increases
   <a href="../news/index.html">News</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/jaredhuling/personalized">
-    <span class="fa fa-github"></span>
+    <span class="fas fa-github"></span>
      
   </a>
 </li>
@@ -126,22 +131,21 @@ evaluate the effectiveness of an employment trainining program on wage increases
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>National Supported Work Study Data</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/jaredhuling/personalized/blob/master/R/data.R'><code>R/data.R</code></a></small>
     <div class="hidden name"><code>LaLonde.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    
     <p>The LaLonde dataset comes from the National Supported Work Study, which sought to
 evaluate the effectiveness of an employment trainining program on wage increases.</p>
-    
     </div>
 
-    <pre class="usage"><span class='no'>LaLonde</span></pre>
-        
+    <pre class="usage"><span class='va'>LaLonde</span></pre>
+
+
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A data frame with 722 observations and 12 variables:</p><dl class='dl-horizontal'>
+    <p>A data frame with 722 observations and 12 variables:</p><dl>
   <dt>outcome</dt><dd><p>whether earnings in 1978 are larger than in 1975; 1 for yes, 0 for no</p></dd>
   <dt>treat</dt><dd><p>whether the individual received the treatment; "Yes" or "No"</p></dd>
   <dt>age</dt><dd><p>age in years</p></dd>
@@ -156,46 +160,45 @@ evaluate the effectiveness of an employment trainining program on wage increases
   <dt>wts.extrap</dt><dd><p>extrapolation weights to the 1978 Panel Study for Income Dynamics dataset</p></dd>
 
 </dl>
-    
+
     <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
 
     <p>The National Supported Work Study.</p>
-    
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>LaLonde, R.J. 1986. "Evaluating the econometric evaulations of training programs with experimental data." American Economic Review, Vol.76, No.4, pp. 604-620.</p>
 <p>Egami  N,  Ratkovic  M,  Imai  K  (2017). "<span class="pkg">FindIt</span>:  Finding  Heterogeneous  Treatment  Effects." <code>R</code> package version 1.1.2, <a href='https://CRAN.R-project.org/package=FindIt'>https://CRAN.R-project.org/package=FindIt</a>.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>LaLonde</span>)
-<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='no'>LaLonde</span>$<span class='no'>outcome</span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>LaLonde</span><span class='op'>)</span>
+<span class='va'>y</span> <span class='op'>&lt;-</span> <span class='va'>LaLonde</span><span class='op'>$</span><span class='va'>outcome</span>
 
-<span class='no'>trt</span> <span class='kw'>&lt;-</span> <span class='no'>LaLonde</span>$<span class='no'>treat</span>
+<span class='va'>trt</span> <span class='op'>&lt;-</span> <span class='va'>LaLonde</span><span class='op'>$</span><span class='va'>treat</span>
 
-<span class='no'>x.varnames</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"educ"</span>, <span class='st'>"black"</span>, <span class='st'>"hisp"</span>, <span class='st'>"white"</span>,
-                <span class='st'>"marr"</span>, <span class='st'>"nodegr"</span>, <span class='st'>"log.re75"</span>, <span class='st'>"u75"</span>)
+<span class='va'>x.varnames</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"age"</span>, <span class='st'>"educ"</span>, <span class='st'>"black"</span>, <span class='st'>"hisp"</span>, <span class='st'>"white"</span>,
+                <span class='st'>"marr"</span>, <span class='st'>"nodegr"</span>, <span class='st'>"log.re75"</span>, <span class='st'>"u75"</span><span class='op'>)</span>
 
 <span class='co'># covariates</span>
-<span class='no'>data.x</span> <span class='kw'>&lt;-</span> <span class='no'>LaLonde</span>[, <span class='no'>x.varnames</span>]
+<span class='va'>data.x</span> <span class='op'>&lt;-</span> <span class='va'>LaLonde</span><span class='op'>[</span>, <span class='va'>x.varnames</span><span class='op'>]</span>
 
 <span class='co'># construct design matrix (with no intercept)</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/model.matrix.html'>model.matrix</a></span>(~ -<span class='fl'>1</span> + <span class='no'>.</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data.x</span>)
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/model.matrix.html'>model.matrix</a></span><span class='op'>(</span><span class='op'>~</span> <span class='op'>-</span><span class='fl'>1</span> <span class='op'>+</span> <span class='va'>.</span>, data <span class='op'>=</span> <span class='va'>data.x</span><span class='op'>)</span>
 
-<span class='no'>const.propens</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>trt</span>)
-{
-    <span class='no'>mean.trt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>trt</span> <span class='kw'>==</span> <span class='st'>"Trt"</span>)
-    <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='no'>mean.trt</span>, <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>trt</span>))
-}
+<span class='va'>const.propens</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>trt</span><span class='op'>)</span>
+<span class='op'>{</span>
+    <span class='va'>mean.trt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>trt</span> <span class='op'>==</span> <span class='st'>"Trt"</span><span class='op'>)</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='va'>mean.trt</span>, <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>trt</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>}</span>
 
-<span class='no'>subgrp_fit_w</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='fit.subgroup.html'>fit.subgroup</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>, <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt</span>,
-    <span class='kw'>loss</span> <span class='kw'>=</span> <span class='st'>"logistic_loss_lasso"</span>,
-    <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>const.propens</span>,
-    <span class='kw'>cutpoint</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-    <span class='kw'>type.measure</span> <span class='kw'>=</span> <span class='st'>"auc"</span>,
-    <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>10</span>)
+<span class='va'>subgrp_fit_w</span> <span class='op'>&lt;-</span> <span class='fu'><a href='fit.subgroup.html'>fit.subgroup</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, y <span class='op'>=</span> <span class='va'>y</span>, trt <span class='op'>=</span> <span class='va'>trt</span>,
+    loss <span class='op'>=</span> <span class='st'>"logistic_loss_lasso"</span>,
+    propensity.func <span class='op'>=</span> <span class='va'>const.propens</span>,
+    cutpoint <span class='op'>=</span> <span class='fl'>0</span>,
+    type.measure <span class='op'>=</span> <span class='st'>"auc"</span>,
+    nfolds <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>subgrp_fit_w</span>)</div><div class='output co'>#&gt; family:    binomial 
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>subgrp_fit_w</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; family:    binomial 
 #&gt; loss:      logistic_loss_lasso 
 #&gt; method:    weighting 
 #&gt; cutpoint:  0 
@@ -224,7 +227,7 @@ evaluate the effectiveness of an employment trainining program on wage increases
 #&gt; 
 #&gt; Benefit score quantiles (f(X) for Trt vs Ctrl): 
 #&gt;      0%     25%     50%     75%    100% 
-#&gt; -0.1811  0.1341  0.1341  0.1341  0.2980 
+#&gt; -0.2748  0.1309  0.1309  0.1309  0.3730 
 #&gt; 
 #&gt; ---------------------------------------------------
 #&gt; 
@@ -232,7 +235,7 @@ evaluate the effectiveness of an employment trainining program on wage increases
 #&gt; E[Y|T=Trt, X] - E[Y|T=Ctrl, X]
 #&gt; 
 #&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-#&gt; -0.09029  0.06696  0.06696  0.06353  0.06696  0.14790 
+#&gt; -0.13652  0.06537  0.06537  0.06342  0.06537  0.18436 
 #&gt; 
 #&gt; ---------------------------------------------------
 #&gt; 
@@ -242,21 +245,12 @@ evaluate the effectiveness of an employment trainining program on wage increases
 #&gt; Any other variables selected represent treatment-covariate interactions.
 #&gt; 
 #&gt;             Trt hispYes marrYes
-#&gt; Estimate 0.1341 -0.3152  0.1639</div></pre>
+#&gt; Estimate 0.1309 -0.4057   0.242</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      
-      <li><a href="#format">Format</a></li>
-
-      <li><a href="#source">Source</a></li>
-
-      <li><a href="#references">References</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -267,7 +261,7 @@ evaluate the effectiveness of an employment trainining program on wage increases
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

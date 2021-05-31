@@ -8,23 +8,29 @@
 
 <title>Creation of augmentation functions — create.augmentation.function • personalized</title>
 
-<!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -32,10 +38,10 @@
 
 
 
-<meta property="og:title" content="Creation of augmentation functions — create.augmentation.function" />
 
+<meta property="og:title" content="Creation of augmentation functions — create.augmentation.function" />
 <meta property="og:description" content="Creates an augmentation function that optionally utilizes cross-fitting" />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -52,7 +58,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -66,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">personalized</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.6</span>
       </span>
     </div>
 
@@ -74,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home"></span>
+    <span class="fas fa-home"></span>
      
   </a>
 </li>
@@ -103,11 +109,10 @@
   <a href="../news/index.html">News</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/jaredhuling/personalized">
-    <span class="fa fa-github"></span>
+    <span class="fas fa-github"></span>
      
   </a>
 </li>
@@ -125,25 +130,27 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Creation of augmentation functions</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/jaredhuling/personalized/blob/master/R/augmentation_utils.R'><code>R/augmentation_utils.R</code></a></small>
     <div class="hidden name"><code>create.augmentation.function.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    
     <p>Creates an augmentation function that optionally utilizes cross-fitting</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>create.augmentation.function</span>(<span class='no'>family</span>, <span class='kw'>crossfit</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>nfolds.crossfit</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>cv.glmnet.args</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>create.augmentation.function</span><span class='op'>(</span>
+  <span class='va'>family</span>,
+  crossfit <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  nfolds.crossfit <span class='op'>=</span> <span class='fl'>10</span>,
+  cv.glmnet.args <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>family</th>
-      <td><p>The response type (see options in <code><a href='https://rdrr.io/pkg/glmnet/man/glmnet.html'>glmnet</a></code> help file)</p></td>
+      <td><p>The response type (see options in <code><a href='https://glmnet.stanford.edu/reference/glmnet.html'>glmnet</a></code> help file)</p></td>
     </tr>
     <tr>
       <th>crossfit</th>
@@ -156,135 +163,75 @@ Cross-fitting is more computationally intensive, but helps to prevent overfittin
     </tr>
     <tr>
       <th>cv.glmnet.args</th>
-      <td><p>A list of NAMED arguments to pass to the <code><a href='https://rdrr.io/pkg/glmnet/man/cv.glmnet.html'>cv.glmnet</a></code> function. For
-example, <code>cv.glmnet.args = list(type.measure = "mse", nfolds = 10)</code>. See <code><a href='https://rdrr.io/pkg/glmnet/man/cv.glmnet.html'>cv.glmnet</a></code> and <code><a href='https://rdrr.io/pkg/glmnet/man/glmnet.html'>glmnet</a></code>
+      <td><p>A list of NAMED arguments to pass to the <code><a href='https://glmnet.stanford.edu/reference/cv.glmnet.html'>cv.glmnet</a></code> function. For
+example, <code>cv.glmnet.args = list(type.measure = "mse", nfolds = 10)</code>. See <code><a href='https://glmnet.stanford.edu/reference/cv.glmnet.html'>cv.glmnet</a></code> and <code><a href='https://glmnet.stanford.edu/reference/glmnet.html'>glmnet</a></code>
 for all possible options.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A function which can be passed to the <code>augment.func</code> argument of the <code><a href='fit.subgroup.html'>fit.subgroup</a></code> function.</p>
-    
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Chernozhukov, V., Chetverikov, D., Demirer, M., Duflo, E., Hansen, C., Newey, W., &amp; Robins, J. (2018).
 Double/debiased machine learning for treatment and structural parameters <a href='https://arxiv.org/abs/1608.00060'>https://arxiv.org/abs/1608.00060</a></p>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='fit.subgroup.html'>fit.subgroup</a></code> for estimating ITRs and <code><a href='create.propensity.function.html'>create.propensity.function</a></code> for creation of propensity functions</p></div>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>personalized</span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://jaredhuling.org/personalized/'>personalized</a></span><span class='op'>)</span>
 
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>123</span>)
-<span class='no'>n.obs</span>  <span class='kw'>&lt;-</span> <span class='fl'>500</span>
-<span class='no'>n.vars</span> <span class='kw'>&lt;-</span> <span class='fl'>15</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>n.obs</span> * <span class='no'>n.vars</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>3</span>), <span class='no'>n.obs</span>, <span class='no'>n.vars</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>123</span><span class='op'>)</span>
+<span class='va'>n.obs</span>  <span class='op'>&lt;-</span> <span class='fl'>500</span>
+<span class='va'>n.vars</span> <span class='op'>&lt;-</span> <span class='fl'>15</span>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n.obs</span> <span class='op'>*</span> <span class='va'>n.vars</span>, sd <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>, <span class='va'>n.obs</span>, <span class='va'>n.vars</span><span class='op'>)</span>
 
 
 <span class='co'># simulate non-randomized treatment</span>
-<span class='no'>xbetat</span>   <span class='kw'>&lt;-</span> <span class='fl'>0.5</span> + <span class='fl'>0.5</span> * <span class='no'>x</span>[,<span class='fl'>7</span>] - <span class='fl'>0.5</span> * <span class='no'>x</span>[,<span class='fl'>9</span>]
-<span class='no'>trt.prob</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span>(<span class='no'>xbetat</span>) / (<span class='fl'>1</span> + <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span>(<span class='no'>xbetat</span>))
-<span class='no'>trt01</span>    <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span>(<span class='no'>n.obs</span>, <span class='fl'>1</span>, <span class='kw'>prob</span> <span class='kw'>=</span> <span class='no'>trt.prob</span>)
+<span class='va'>xbetat</span>   <span class='op'>&lt;-</span> <span class='fl'>0.5</span> <span class='op'>+</span> <span class='fl'>0.5</span> <span class='op'>*</span> <span class='va'>x</span><span class='op'>[</span>,<span class='fl'>7</span><span class='op'>]</span> <span class='op'>-</span> <span class='fl'>0.5</span> <span class='op'>*</span> <span class='va'>x</span><span class='op'>[</span>,<span class='fl'>9</span><span class='op'>]</span>
+<span class='va'>trt.prob</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>xbetat</span><span class='op'>)</span> <span class='op'>/</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>xbetat</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>trt01</span>    <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span><span class='va'>n.obs</span>, <span class='fl'>1</span>, prob <span class='op'>=</span> <span class='va'>trt.prob</span><span class='op'>)</span>
 
-<span class='no'>trt</span>      <span class='kw'>&lt;-</span> <span class='fl'>2</span> * <span class='no'>trt01</span> - <span class='fl'>1</span>
+<span class='va'>trt</span>      <span class='op'>&lt;-</span> <span class='fl'>2</span> <span class='op'>*</span> <span class='va'>trt01</span> <span class='op'>-</span> <span class='fl'>1</span>
 
 <span class='co'># simulate response</span>
 <span class='co'># delta below drives treatment effect heterogeneity</span>
-<span class='no'>delta</span> <span class='kw'>&lt;-</span> <span class='fl'>2</span> * (<span class='fl'>0.5</span> + <span class='no'>x</span>[,<span class='fl'>2</span>] - <span class='no'>x</span>[,<span class='fl'>3</span>] - <span class='no'>x</span>[,<span class='fl'>11</span>] + <span class='no'>x</span>[,<span class='fl'>1</span>] * <span class='no'>x</span>[,<span class='fl'>12</span>] )
-<span class='no'>xbeta</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>[,<span class='fl'>1</span>] + <span class='no'>x</span>[,<span class='fl'>11</span>] - <span class='fl'>2</span> * <span class='no'>x</span>[,<span class='fl'>12</span>]^<span class='fl'>2</span> + <span class='no'>x</span>[,<span class='fl'>13</span>] + <span class='fl'>0.5</span> * <span class='no'>x</span>[,<span class='fl'>15</span>] ^ <span class='fl'>2</span>
-<span class='no'>xbeta</span> <span class='kw'>&lt;-</span> <span class='no'>xbeta</span> + <span class='no'>delta</span> * <span class='no'>trt</span>
+<span class='va'>delta</span> <span class='op'>&lt;-</span> <span class='fl'>2</span> <span class='op'>*</span> <span class='op'>(</span><span class='fl'>0.5</span> <span class='op'>+</span> <span class='va'>x</span><span class='op'>[</span>,<span class='fl'>2</span><span class='op'>]</span> <span class='op'>-</span> <span class='va'>x</span><span class='op'>[</span>,<span class='fl'>3</span><span class='op'>]</span> <span class='op'>-</span> <span class='va'>x</span><span class='op'>[</span>,<span class='fl'>11</span><span class='op'>]</span> <span class='op'>+</span> <span class='va'>x</span><span class='op'>[</span>,<span class='fl'>1</span><span class='op'>]</span> <span class='op'>*</span> <span class='va'>x</span><span class='op'>[</span>,<span class='fl'>12</span><span class='op'>]</span> <span class='op'>)</span>
+<span class='va'>xbeta</span> <span class='op'>&lt;-</span> <span class='va'>x</span><span class='op'>[</span>,<span class='fl'>1</span><span class='op'>]</span> <span class='op'>+</span> <span class='va'>x</span><span class='op'>[</span>,<span class='fl'>11</span><span class='op'>]</span> <span class='op'>-</span> <span class='fl'>2</span> <span class='op'>*</span> <span class='va'>x</span><span class='op'>[</span>,<span class='fl'>12</span><span class='op'>]</span><span class='op'>^</span><span class='fl'>2</span> <span class='op'>+</span> <span class='va'>x</span><span class='op'>[</span>,<span class='fl'>13</span><span class='op'>]</span> <span class='op'>+</span> <span class='fl'>0.5</span> <span class='op'>*</span> <span class='va'>x</span><span class='op'>[</span>,<span class='fl'>15</span><span class='op'>]</span> <span class='op'>^</span> <span class='fl'>2</span>
+<span class='va'>xbeta</span> <span class='op'>&lt;-</span> <span class='va'>xbeta</span> <span class='op'>+</span> <span class='va'>delta</span> <span class='op'>*</span> <span class='va'>trt</span>
 
 <span class='co'># continuous outcomes</span>
-<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/drop.html'>drop</a></span>(<span class='no'>xbeta</span>) + <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>n.obs</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+<span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/drop.html'>drop</a></span><span class='op'>(</span><span class='va'>xbeta</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n.obs</span>, sd <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
 
-<span class='no'>aug.func</span> <span class='kw'>&lt;-</span> <span class='fu'>create.augmentation.function</span>(<span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"gaussian"</span>,
-                                         <span class='kw'>crossfit</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-                                         <span class='kw'>nfolds.crossfit</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-                                         <span class='kw'>cv.glmnet.args</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>type.measure</span> <span class='kw'>=</span> <span class='st'>"mae"</span>,
-                                                               <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>5</span>))
+<span class='va'>aug.func</span> <span class='op'>&lt;-</span> <span class='fu'>create.augmentation.function</span><span class='op'>(</span>family <span class='op'>=</span> <span class='st'>"gaussian"</span>,
+                                         crossfit <span class='op'>=</span> <span class='cn'>TRUE</span>,
+                                         nfolds.crossfit <span class='op'>=</span> <span class='fl'>10</span>,
+                                         cv.glmnet.args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>type.measure <span class='op'>=</span> <span class='st'>"mae"</span>,
+                                                               nfolds <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='no'>prop.func</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create.propensity.function.html'>create.propensity.function</a></span>(<span class='kw'>crossfit</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-                                        <span class='kw'>nfolds.crossfit</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-                                        <span class='kw'>cv.glmnet.args</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>type.measure</span> <span class='kw'>=</span> <span class='st'>"auc"</span>,
-                                                              <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>5</span>))
+<span class='va'>prop.func</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create.propensity.function.html'>create.propensity.function</a></span><span class='op'>(</span>crossfit <span class='op'>=</span> <span class='cn'>TRUE</span>,
+                                        nfolds.crossfit <span class='op'>=</span> <span class='fl'>10</span>,
+                                        cv.glmnet.args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>type.measure <span class='op'>=</span> <span class='st'>"auc"</span>,
+                                                              nfolds <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>subgrp.model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='fit.subgroup.html'>fit.subgroup</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, y <span class='op'>=</span> <span class='va'>y</span>,
+                             trt <span class='op'>=</span> <span class='va'>trt01</span>,
+                             propensity.func <span class='op'>=</span> <span class='va'>prop.func</span>,
+                             augment.func <span class='op'>=</span> <span class='va'>aug.func</span>,
+                             loss   <span class='op'>=</span> <span class='st'>"sq_loss_lasso"</span>,
+                             nfolds <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>    <span class='co'># option for cv.glmnet (for ITR estimation)</span>
 
-<span class='no'>subgrp.model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='fit.subgroup.html'>fit.subgroup</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>,
-                             <span class='kw'>trt</span> <span class='kw'>=</span> <span class='no'>trt01</span>,
-                             <span class='kw'>propensity.func</span> <span class='kw'>=</span> <span class='no'>prop.func</span>,
-                             <span class='kw'>augment.func</span> <span class='kw'>=</span> <span class='no'>aug.func</span>,
-                             <span class='kw'>loss</span>   <span class='kw'>=</span> <span class='st'>"sq_loss_lasso"</span>,
-                             <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>10</span>)    <span class='co'># option for cv.glmnet (for ITR estimation)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>subgrp.model</span><span class='op'>)</span>
+<span class='op'>}</span>
 
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>subgrp.model</span>)</div><div class='output co'>#&gt; family:    gaussian 
-#&gt; loss:      sq_loss_lasso 
-#&gt; method:    weighting 
-#&gt; cutpoint:  0 
-#&gt; augmentation 
-#&gt; function: augment.func 
-#&gt; propensity 
-#&gt; function:  propensity.func 
-#&gt; 
-#&gt; benefit score: f(x), 
-#&gt; Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
-#&gt; 
-#&gt; Average Outcomes:
-#&gt;                 Recommended 0      Recommended 1
-#&gt; Received 0   -6.0587 (n = 62) -19.7447 (n = 139)
-#&gt; Received 1 -24.1033 (n = 103)  -4.3076 (n = 196)
-#&gt; 
-#&gt; Treatment effects conditional on subgroups:
-#&gt; Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] 
-#&gt;                          18.0446 (n = 165) 
-#&gt; Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] 
-#&gt;                          15.4371 (n = 335) 
-#&gt; 
-#&gt; NOTE: The above average outcomes are biased estimates of
-#&gt;       the expected outcomes conditional on subgroups. 
-#&gt;       Use 'validate.subgroup()' to obtain unbiased estimates.
-#&gt; 
-#&gt; ---------------------------------------------------
-#&gt; 
-#&gt; Benefit score quantiles (f(X) for 1 vs 0): 
-#&gt;      0%     25%     50%     75%    100% 
-#&gt; -15.897  -1.468   2.809   7.028  19.228 
-#&gt; 
-#&gt; ---------------------------------------------------
-#&gt; 
-#&gt; Summary of individual treatment effects: 
-#&gt; E[Y|T=1, X] - E[Y|T=0, X]
-#&gt; 
-#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-#&gt; -31.794  -2.936   5.619   5.823  14.055  38.456 
-#&gt; 
-#&gt; ---------------------------------------------------
-#&gt; 
-#&gt; 5 out of 15 interactions selected in total by the lasso (cross validation criterion).
-#&gt; 
-#&gt; The first estimate is the treatment main effect, which is always selected. 
-#&gt; Any other variables selected represent treatment-covariate interactions.
-#&gt; 
-#&gt;            Trt1     V2      V3     V11    V13   V15
-#&gt; Estimate 3.0816 1.0394 -1.7033 -0.6562 0.3347 0.247</div><div class='input'>
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#references">References</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -295,7 +242,7 @@ Double/debiased machine learning for treatment and structural parameters <a href
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

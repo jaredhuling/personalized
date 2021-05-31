@@ -8,23 +8,29 @@
 
 <title>Fit weighted kernel svm model. — weighted.ksvm • personalized</title>
 
-<!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -32,10 +38,10 @@
 
 
 
-<meta property="og:title" content="Fit weighted kernel svm model. — weighted.ksvm" />
 
+<meta property="og:title" content="Fit weighted kernel svm model. — weighted.ksvm" />
 <meta property="og:description" content="Fits weighted kernel SVM.  To be used for OWL with hinge loss (but can be used more generally)" />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -52,7 +58,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -66,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">personalized</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.6</span>
       </span>
     </div>
 
@@ -74,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home"></span>
+    <span class="fas fa-home"></span>
      
   </a>
 </li>
@@ -103,11 +109,10 @@
   <a href="../news/index.html">News</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/jaredhuling/personalized">
-    <span class="fa fa-github"></span>
+    <span class="fas fa-github"></span>
      
   </a>
 </li>
@@ -125,20 +130,26 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Fit weighted kernel svm model.</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/jaredhuling/personalized/blob/master/R/weighted_svm.R'><code>R/weighted_svm.R</code></a></small>
     <div class="hidden name"><code>weighted.ksvm.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    
     <p>Fits weighted kernel SVM.  To be used for OWL with hinge loss (but can be used more generally)</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>weighted.ksvm</span>(<span class='no'>y</span>, <span class='no'>x</span>, <span class='no'>weights</span>, <span class='kw'>C</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.1</span>, <span class='fl'>0.5</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>10</span>),
-  <span class='kw'>kernel</span> <span class='kw'>=</span> <span class='st'>"rbfdot"</span>, <span class='kw'>kpar</span> <span class='kw'>=</span> <span class='st'>"automatic"</span>, <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-  <span class='kw'>foldid</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>weighted.ksvm</span><span class='op'>(</span>
+  <span class='va'>y</span>,
+  <span class='va'>x</span>,
+  <span class='va'>weights</span>,
+  C <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.1</span>, <span class='fl'>0.5</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>10</span><span class='op'>)</span>,
+  kernel <span class='op'>=</span> <span class='st'>"rbfdot"</span>,
+  kpar <span class='op'>=</span> <span class='st'>"automatic"</span>,
+  nfolds <span class='op'>=</span> <span class='fl'>10</span>,
+  foldid <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -180,42 +191,37 @@ override the <code>nfolds</code> argument.</p></td>
       <td><p>extra arguments to be passed to <code><a href='https://rdrr.io/pkg/kernlab/man/ipop.html'>ipop</a></code> from the kernlab package</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='predict.html'>predict.wksvm</a></code> for predicting from fitted <code>weighted.ksvm</code> objects</p></div>
-    
+    <div class='dont-index'><p><code><a href='predict.subgroup_fitted.html'>predict.wksvm</a></code> for predicting from fitted <code>weighted.ksvm</code> objects</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>kernlab</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>kernlab</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: ‘kernlab’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:ggplot2’:</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    alpha</span></div><div class='input'>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>200</span> * <span class='fl'>2</span>), <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>200</span> <span class='op'>*</span> <span class='fl'>2</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
 
-<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fl'>2</span> * (<span class='fu'><a href='https://rdrr.io/r/base/Trig.html'>sin</a></span>(<span class='no'>x</span>[,<span class='fl'>2</span>]) ^ <span class='fl'>2</span> * <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span>(-<span class='no'>x</span>[,<span class='fl'>2</span>]) - <span class='fl'>0.2</span> <span class='kw'>&gt;</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>200</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>0.1</span>)) - <span class='fl'>1</span>
+<span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fl'>2</span> <span class='op'>*</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Trig.html'>sin</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>[</span>,<span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>^</span> <span class='fl'>2</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='op'>-</span><span class='va'>x</span><span class='op'>[</span>,<span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>-</span> <span class='fl'>0.2</span> <span class='op'>&gt;</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>200</span>, sd <span class='op'>=</span> <span class='fl'>0.1</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>-</span> <span class='fl'>1</span>
 
-<span class='no'>weights</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span>(<span class='fl'>100</span>, <span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>1.5</span>, <span class='kw'>min</span> <span class='kw'>=</span> <span class='fl'>0.5</span>)
+<span class='va'>weights</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>100</span>, max <span class='op'>=</span> <span class='fl'>1.5</span>, min <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>
 
-<span class='no'>wk</span> <span class='kw'>&lt;-</span> <span class='fu'>weighted.ksvm</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>[<span class='fl'>1</span>:<span class='fl'>100</span>,], <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>y</span>[<span class='fl'>1</span>:<span class='fl'>100</span>], <span class='kw'>C</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.1</span>, <span class='fl'>0.5</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>10</span>),
-                    <span class='kw'>weights</span> <span class='kw'>=</span> <span class='no'>weights</span>[<span class='fl'>1</span>:<span class='fl'>100</span>])
+<span class='va'>wk</span> <span class='op'>&lt;-</span> <span class='fu'>weighted.ksvm</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span>,<span class='op'>]</span>, y <span class='op'>=</span> <span class='va'>y</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span><span class='op'>]</span>, C <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.1</span>, <span class='fl'>0.5</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>10</span><span class='op'>)</span>,
+                    weights <span class='op'>=</span> <span class='va'>weights</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span><span class='op'>]</span><span class='op'>)</span>
 
-<span class='no'>pr</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>wk</span>, <span class='kw'>newx</span> <span class='kw'>=</span> <span class='no'>x</span>[<span class='fl'>101</span>:<span class='fl'>200</span>,])
+<span class='va'>pr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>wk</span>, newx <span class='op'>=</span> <span class='va'>x</span><span class='op'>[</span><span class='fl'>101</span><span class='op'>:</span><span class='fl'>200</span>,<span class='op'>]</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>pr</span> <span class='kw'>==</span> <span class='no'>y</span>[<span class='fl'>101</span>:<span class='fl'>200</span>])</div><div class='output co'>#&gt; [1] 0.79</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>pr</span> <span class='op'>==</span> <span class='va'>y</span><span class='op'>[</span><span class='fl'>101</span><span class='op'>:</span><span class='fl'>200</span><span class='op'>]</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.79</div><div class='input'>
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#see-also">See also</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -226,7 +232,7 @@ override the <code>nfolds</code> argument.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
