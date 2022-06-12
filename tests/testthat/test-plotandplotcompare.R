@@ -108,10 +108,10 @@ test_that("test plotting for continuous outcomes with various options", {
 
     expect_is(subgrp.model2, "subgroup_fitted")
 
-    subgrp.val <- validate.subgroup(subgrp.model, B = 3,
+    subgrp.val <- validate.subgroup(subgrp.model, B = 2,
                                     method = "training")
 
-    subgrp.val2 <- validate.subgroup(subgrp.model2, B = 3,
+    subgrp.val2 <- validate.subgroup(subgrp.model2, B = 2,
                                     method = "training")
 
     expect_is(subgrp.val, "subgroup_validated")
@@ -160,7 +160,9 @@ test_that("test plotting for continuous outcomes with various options", {
 
     expect_is(pl, "ggplot")
 
-    pl <- plot(subgrp.val, type = "stability")
+    suppressWarnings({
+        pl <- plot(subgrp.val, type = "stability")
+    })
 
     expect_is(pl, "plotly")
 

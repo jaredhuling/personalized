@@ -131,7 +131,9 @@ subgrp.model <- fit.subgroup(x = x, y = y,
                              trt = trt01,
                              propensity.func = prop.func,
                              loss   = "sq_loss_lasso",
-                             nfolds = 5)    # option for cv.glmnet
+                             # option for cv.glmnet,
+                             # better to use 'nfolds=10'
+                             nfolds = 3)
 
 
 x.test <- matrix(rnorm(10 * n.obs * n.vars, sd = 3), 10 * n.obs, n.vars)
@@ -151,7 +153,7 @@ xbeta.test <- xbeta.test + delta.test * trt.test
 
 y.test <- drop(xbeta.test) + rnorm(10 * n.obs, sd = 2)
 
-valmod <- validate.subgroup(subgrp.model, B = 3,
+valmod <- validate.subgroup(subgrp.model, B = 2,
                             method = "training_test",
                             train.fraction = 0.75)
 valmod

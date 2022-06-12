@@ -86,12 +86,13 @@ test_that("test validate.subgroup for continuous outcomes with various options",
                                        method = "training"))
 
         ## parallel
+        suppressWarnings({
+            subgrp.val <- validate.subgroup(subgrp.model, B = 3,
+                                            parallel = TRUE,
+                                            method = "training")
 
-        subgrp.val <- validate.subgroup(subgrp.model, B = 3,
-                                        parallel = TRUE,
-                                        method = "training")
-
-        expect_is(subgrp.val, "subgroup_validated")
+            expect_is(subgrp.val, "subgroup_validated")
+        })
 
 
         subgrp.val <- validate.subgroup(subgrp.model, B = 3,

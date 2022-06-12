@@ -35,7 +35,6 @@ Imports:
 Depends:
     glmnet (>= 2.0-13),
     mgcv,
-    gbm,
     ggplot2,
     plotly,
     xgboost

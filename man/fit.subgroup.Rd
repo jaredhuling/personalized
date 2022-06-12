@@ -72,7 +72,6 @@ is complex.
         \item{\code{"logistic_loss_lasso"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with with linear model and lasso penalty}
         \item{\code{"logistic_loss_lasso_gam"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with variables selected by lasso penalty and generalized additive model fit on the selected variables}
         \item{\code{"logistic_loss_gam"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with generalized additive model fit on all variables}
-        \item{\code{"logistic_loss_gbm"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with gradient-boosted decision trees model}
     }
     \item{\strong{Count Outcomes}}
     \itemize{
@@ -80,12 +79,10 @@ is complex.
         \item{\code{"poisson_loss_lasso"}}{ - M(y, v) = -[yv - exp(v)] with with linear model and lasso penalty}
         \item{\code{"poisson_loss_lasso_gam"}}{ - M(y, v) = -[yv - exp(v)] with variables selected by lasso penalty and generalized additive model fit on the selected variables}
         \item{\code{"poisson_loss_gam"}}{ - M(y, v) = -[yv - exp(v)] with generalized additive model fit on all variables}
-        \item{\code{"poisson_loss_gbm"}}{ - M(y, v) = -[yv - exp(v)] with gradient-boosted decision trees model}
     }
     \item{\strong{Time-to-Event Outcomes}}
     \itemize{
         \item{\code{"cox_loss_lasso"}}{ - M corresponds to the negative partial likelihood of the cox model with linear model and additionally a lasso penalty}
-        \item{\code{"cox_loss_gbm"}}{ - M corresponds to the negative partial likelihood of the cox model with gradient-boosted decision trees model}
     }
 }}
 
@@ -356,7 +353,9 @@ subgrp.model <- fit.subgroup(x = x, y = y,
                            trt = trt01,
                            propensity.func = prop.func,
                            loss   = "sq_loss_lasso",
-                           nfolds = 10)              # option for cv.glmnet
+                           # option for cv.glmnet,
+                           # better to use 'nfolds=10'
+                           nfolds = 3)
 
 summary(subgrp.model)
 
@@ -408,7 +407,9 @@ subgrp.model.aug <- fit.subgroup(x = x, y = y,
                            propensity.func = prop.func,
                            augment.func    = augment.func,
                            loss   = "sq_loss_lasso",
-                           nfolds = 10)              # option for cv.glmnet
+                           # option for cv.glmnet,
+                           # better to use 'nfolds=10'
+                           nfolds = 3)              # option for cv.glmnet
 
 summary(subgrp.model.aug)
 }
@@ -421,7 +422,7 @@ subgrp.model.bin <- fit.subgroup(x = x, y = y.binary,
                            propensity.func = prop.func,
                            loss   = "logistic_loss_lasso",
                            type.measure = "auc",    # option for cv.glmnet
-                           nfolds = 5)              # option for cv.glmnet
+                           nfolds = 3)              # option for cv.glmnet
 
 subgrp.model.bin
 
@@ -434,7 +435,7 @@ subgrp.model.poisson <- fit.subgroup(x = x, y = y.count,
                            propensity.func = prop.func,
                            loss   = "poisson_loss_lasso",
                            type.measure = "mse",    # option for cv.glmnet
-                           nfolds = 5)              # option for cv.glmnet
+                           nfolds = 3)              # option for cv.glmnet
 
 subgrp.model.poisson
 
@@ -447,7 +448,7 @@ subgrp.model.cox <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
                            trt = trt01,
                            propensity.func = prop.func,
                            loss   = "cox_loss_lasso",
-                           nfolds = 5)              # option for cv.glmnet
+                           nfolds = 3)              # option for cv.glmnet
 
 subgrp.model.cox
 }

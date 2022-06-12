@@ -13,6 +13,7 @@ weighted.ksvm(
   kpar = "automatic",
   nfolds = 10,
   foldid = NULL,
+  eps = 1e-08,
   ...
 )
 }
@@ -34,6 +35,8 @@ weighted.ksvm(
 \item{foldid}{optional vector of values between 1 and nfolds specifying which fold each observation is in. If specified, it will
 override the \code{nfolds} argument.}
 
+\item{eps}{penalty nugget parameter. Defaults to \code{1e-8}}
+
 \item{...}{extra arguments to be passed to \code{\link[kernlab]{ipop}} from the kernlab package}
 }
 \description{
@@ -49,7 +52,9 @@ y <- 2 * (sin(x[,2]) ^ 2 * exp(-x[,2]) - 0.2 > rnorm(200, sd = 0.1)) - 1
 
 weights <- runif(100, max = 1.5, min = 0.5)
 
-wk <- weighted.ksvm(x = x[1:100,], y = y[1:100], C = c(0.1, 0.5, 1, 2, 10),
+wk <- weighted.ksvm(x = x[1:100,], y = y[1:100],
+                    C = c(0.1, 0.5, 1, 2),
+                    nfolds = 5,
                     weights = weights[1:100])
 
 pr <- predict(wk, newx = x[101:200,])

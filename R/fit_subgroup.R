@@ -43,7 +43,6 @@
 #'         \item{\code{"logistic_loss_lasso"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with with linear model and lasso penalty}
 #'         \item{\code{"logistic_loss_lasso_gam"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with variables selected by lasso penalty and generalized additive model fit on the selected variables}
 #'         \item{\code{"logistic_loss_gam"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with generalized additive model fit on all variables}
-#'         \item{\code{"logistic_loss_gbm"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with gradient-boosted decision trees model}
 #'     }
 #'     \item{\strong{Count Outcomes}}
 #'     \itemize{
@@ -51,12 +50,10 @@
 #'         \item{\code{"poisson_loss_lasso"}}{ - M(y, v) = -[yv - exp(v)] with with linear model and lasso penalty}
 #'         \item{\code{"poisson_loss_lasso_gam"}}{ - M(y, v) = -[yv - exp(v)] with variables selected by lasso penalty and generalized additive model fit on the selected variables}
 #'         \item{\code{"poisson_loss_gam"}}{ - M(y, v) = -[yv - exp(v)] with generalized additive model fit on all variables}
-#'         \item{\code{"poisson_loss_gbm"}}{ - M(y, v) = -[yv - exp(v)] with gradient-boosted decision trees model}
 #'     }
 #'     \item{\strong{Time-to-Event Outcomes}}
 #'     \itemize{
 #'         \item{\code{"cox_loss_lasso"}}{ - M corresponds to the negative partial likelihood of the cox model with linear model and additionally a lasso penalty}
-#'         \item{\code{"cox_loss_gbm"}}{ - M corresponds to the negative partial likelihood of the cox model with gradient-boosted decision trees model}
 #'     }
 #' }
 #' @param method subgroup ID model type. Either the weighting or A-learning method of Chen et al, (2017)
@@ -332,7 +329,9 @@
 #'                            trt = trt01,
 #'                            propensity.func = prop.func,
 #'                            loss   = "sq_loss_lasso",
-#'                            nfolds = 10)              # option for cv.glmnet
+#'                            # option for cv.glmnet,
+#'                            # better to use 'nfolds=10'
+#'                            nfolds = 3)
 #'
 #' summary(subgrp.model)
 #'
@@ -384,7 +383,9 @@
 #'                            propensity.func = prop.func,
 #'                            augment.func    = augment.func,
 #'                            loss   = "sq_loss_lasso",
-#'                            nfolds = 10)              # option for cv.glmnet
+#'                            # option for cv.glmnet,
+#'                            # better to use 'nfolds=10'
+#'                            nfolds = 3)              # option for cv.glmnet
 #'
 #' summary(subgrp.model.aug)
 #' }
@@ -397,7 +398,7 @@
 #'                            propensity.func = prop.func,
 #'                            loss   = "logistic_loss_lasso",
 #'                            type.measure = "auc",    # option for cv.glmnet
-#'                            nfolds = 5)              # option for cv.glmnet
+#'                            nfolds = 3)              # option for cv.glmnet
 #'
 #' subgrp.model.bin
 #'
@@ -410,7 +411,7 @@
 #'                            propensity.func = prop.func,
 #'                            loss   = "poisson_loss_lasso",
 #'                            type.measure = "mse",    # option for cv.glmnet
-#'                            nfolds = 5)              # option for cv.glmnet
+#'                            nfolds = 3)              # option for cv.glmnet
 #'
 #' subgrp.model.poisson
 #'
@@ -423,7 +424,7 @@
 #'                            trt = trt01,
 #'                            propensity.func = prop.func,
 #'                            loss   = "cox_loss_lasso",
-#'                            nfolds = 5)              # option for cv.glmnet
+#'                            nfolds = 3)              # option for cv.glmnet
 #'
 #' subgrp.model.cox
 #' }
@@ -524,9 +525,6 @@ fit.subgroup <- function(x,
                                         "owl_logistic_loss_lasso_gam",
                                         "owl_logistic_flip_loss_lasso_gam",
                                         "sq_loss_xgboost",
-                                        #"poisson_loss_gbm",
-                                        #"logistic_loss_gbm",
-                                        #"cox_loss_gbm",
                                         "custom"),
                          method       = c("weighting", "a_learning"),
                          match.id     = NULL,
@@ -730,10 +728,6 @@ fit.subgroup <- function(x,
                              "owl_logistic_loss_lasso_gam"      = "adj",
                              "owl_logistic_flip_loss_lasso_gam" = "adj",
                              "sq_loss_xgboost"              = "offset",
-                             #"poisson_loss_gbm"                = "offset",
-                             #"abs_loss_gbm"                    = "offset",
-                             #"logistic_loss_gbm"                = "offset",
-                             #"cox_loss_gbm"                     = "offset",
                              "custom"                           = "offset_notdots")
 
     if (is.factor(trt))
@@ -801,9 +795,9 @@ fit.subgroup <- function(x,
         refnull <- TRUE
     }
 
-    if (n.trts > 2 & (grepl("_gbm", loss) | grepl("_xgboost", loss) | grepl("_gam", loss)) )
+    if (n.trts > 2 & (grepl("_xgboost", loss) | grepl("_gam", loss)) )
     {
-        stop("gbm/xgboost and gam based losses not supported for multiple treatments (number of total treatments > 2)")
+        stop("xgboost and gam based losses not supported for multiple treatments (number of total treatments > 2)")
     }
 
     # Check match.id validity and convert it to a factor, if supplied

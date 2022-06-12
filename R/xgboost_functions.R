@@ -27,22 +27,41 @@ return_eval_metric_xgboost <- function(trt_multiplier)
 }
 
 
+## extract unexported xgboost functions
+categorize.callbacks <- utils::getFromNamespace("categorize.callbacks", "xgboost")
+check.custom.obj <- utils::getFromNamespace("check.custom.obj", "xgboost")
+check.custom.eval <- utils::getFromNamespace("check.custom.eval", "xgboost")
+check.deprecation <- utils::getFromNamespace("check.deprecation", "xgboost")
+check.booster.params <- utils::getFromNamespace("check.booster.params", "xgboost")
+generate.cv.folds <- utils::getFromNamespace("generate.cv.folds", "xgboost")
+has.callbacks <- utils::getFromNamespace("has.callbacks", "xgboost")
+add.cb <- utils::getFromNamespace("add.cb", "xgboost")
+cb.print.evaluation <- utils::getFromNamespace("cb.print.evaluation", "xgboost")
+cb.evaluation.log <- utils::getFromNamespace("cb.evaluation.log", "xgboost")
+cb.early.stop <- utils::getFromNamespace("cb.early.stop", "xgboost")
+cb.cv.predict <- utils::getFromNamespace("cb.cv.predict", "xgboost")
+xgb.get.DMatrix <- utils::getFromNamespace("xgb.get.DMatrix", "xgboost")
+slicexgb <- utils::getFromNamespace("slice", "xgboost")
+xgb.Booster.handle <- utils::getFromNamespace("xgb.Booster.handle", "xgboost")
+NVL <- utils::getFromNamespace("NVL", "xgboost")
+xgb.iter.update <- utils::getFromNamespace("xgb.iter.update", "xgboost")
+xgb.iter.eval <- utils::getFromNamespace("xgb.iter.eval", "xgboost")
 
-
+#' @importFrom xgboost xgb.train
 xgb_cv_personalized <- function (params = list(), data, trt.multiplier, nrounds, nfold, label = NULL,
                                  missing = NA, prediction = FALSE, showsd = TRUE, metrics = list(),
                                  obj_func = NULL, feval_func = NULL, stratified = TRUE, folds = NULL,
                                  train_folds = NULL, verbose = TRUE, print_every_n = 1L, early_stopping_rounds = NULL,
                                  maximize = NULL, callbacks = list(), ...)
 {
-    xgboost:::check.deprecation(...)
-    params <- xgboost:::check.booster.params(params, ...)
+    check.deprecation(...)
+    params <- check.booster.params(params, ...)
     for (m in metrics) params <- c(params, list(eval_metric = m))
 
     obj <- obj_func(trt.multiplier)
     feval <- feval_func(trt.multiplier)
-    xgboost:::check.custom.obj()
-    xgboost:::check.custom.eval()
+    check.custom.obj()
+    check.custom.eval()
     if ((inherits(data, "xgb.DMatrix") && is.null(getinfo(data,
                                                           "label"))) || (!inherits(data, "xgb.DMatrix") && is.null(label))) {
         stop("Labels must be provided for CV either through xgb.DMatrix, or through 'label=' when 'data' is matrix")
@@ -63,44 +82,44 @@ xgb_cv_personalized <- function (params = list(), data, trt.multiplier, nrounds,
     else {
         if (nfold <= 1)
             stop("'nfold' must be > 1")
-        folds <- xgboost:::generate.cv.folds(nfold, nrow(data), stratified,
+        folds <- generate.cv.folds(nfold, nrow(data), stratified,
                                              cv_label, params)
     }
     params <- c(params, list(silent = 1))
     print_every_n <- max(as.integer(print_every_n), 1L)
-    if (!xgboost:::has.callbacks(callbacks, "cb.print.evaluation") && verbose) {
-        callbacks <- xgboost:::add.cb(callbacks, xgboost:::cb.print.evaluation(print_every_n,
-                                                                               showsd = showsd))
+    if (!has.callbacks(callbacks, "cb.print.evaluation") && verbose) {
+        callbacks <- add.cb(callbacks, cb.print.evaluation(print_every_n,
+                                                           showsd = showsd))
     }
     evaluation_log <- list()
-    if (!xgboost:::has.callbacks(callbacks, "cb.evaluation.log")) {
-        callbacks <- xgboost:::add.cb(callbacks, xgboost:::cb.evaluation.log())
+    if (!has.callbacks(callbacks, "cb.evaluation.log")) {
+        callbacks <- add.cb(callbacks, cb.evaluation.log())
     }
     stop_condition <- FALSE
-    if (!is.null(early_stopping_rounds) && !xgboost:::has.callbacks(callbacks,
-                                                                    "cb.early.stop")) {
-        callbacks <- xgboost:::add.cb(callbacks, xgboost:::cb.early.stop(early_stopping_rounds,
-                                                                         maximize = maximize, verbose = verbose))
+    if (!is.null(early_stopping_rounds) && !has.callbacks(callbacks,
+                                                          "cb.early.stop")) {
+        callbacks <- add.cb(callbacks, cb.early.stop(early_stopping_rounds,
+                                                     maximize = maximize, verbose = verbose))
     }
-    if (prediction && !xgboost:::has.callbacks(callbacks, "cb.cv.predict")) {
-        callbacks <- xgboost:::add.cb(callbacks, xgboost:::cb.cv.predict(save_models = FALSE))
+    if (prediction && !has.callbacks(callbacks, "cb.cv.predict")) {
+        callbacks <- add.cb(callbacks, cb.cv.predict(save_models = FALSE))
     }
-    cb <- xgboost:::categorize.callbacks(callbacks)
-    dall <- xgboost:::xgb.get.DMatrix(data, label, missing)
+    cb <- categorize.callbacks(callbacks)
+    dall <- xgb.get.DMatrix(data, label, missing)
     bst_folds <- lapply(seq_along(folds), function(k) {
-        dtest <- xgboost::slice(dall, folds[[k]])
+        dtest <- slicexgb(dall, folds[[k]])
         if (is.null(train_folds))
-            dtrain <- xgboost::slice(dall, unlist(folds[-k]))
-        else dtrain <- xgboost::slice(dall, train_folds[[k]])
-        handle <- xgboost:::xgb.Booster.handle(params, list(dtrain, dtest))
+            dtrain <- slicexgb(dall, unlist(folds[-k]))
+        else dtrain <- slicexgb(dall, train_folds[[k]])
+        handle <- xgb.Booster.handle(params, list(dtrain, dtest))
         list(dtrain = dtrain, bst = handle, watchlist = list(test = dtest), index = folds[[k]],
              train_index = unlist(folds[-k]))
     })
     rm(dall)
     basket <- list()
-    num_class <- max(as.numeric(xgboost:::NVL(params[["num_class"]], 1)),
+    num_class <- max(as.numeric(NVL(params[["num_class"]], 1)),
                      1)
-    num_parallel_tree <- max(as.numeric(xgboost:::NVL(params[["num_parallel_tree"]],
+    num_parallel_tree <- max(as.numeric(NVL(params[["num_parallel_tree"]],
                                                       1)), 1)
     begin_iteration <- 1
     end_iteration <- nrounds
@@ -110,10 +129,10 @@ xgb_cv_personalized <- function (params = list(), data, trt.multiplier, nrounds,
             train_idx <- fd$train_index
             test_idx <- fd$index
             obj_current <- obj_func(trt.multiplier[train_idx])
-            xgboost:::xgb.iter.update(fd$bst, fd$dtrain, iteration - 1,
+            xgb.iter.update(fd$bst, fd$dtrain, iteration - 1,
                                       obj_current)
             feval_current <- feval_func(trt.multiplier[test_idx])
-            xgboost:::xgb.iter.eval(fd$bst, fd$watchlist, iteration - 1,
+            xgb.iter.eval(fd$bst, fd$watchlist, iteration - 1,
                                     feval_current)
         })
 

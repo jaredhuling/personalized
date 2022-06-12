@@ -12,6 +12,7 @@
 #' @param nfolds number of cross validation folds for selecting value of C
 #' @param foldid optional vector of values between 1 and nfolds specifying which fold each observation is in. If specified, it will
 #' override the \code{nfolds} argument.
+#' @param eps penalty nugget parameter. Defaults to \code{1e-8}
 #' @param ... extra arguments to be passed to \code{\link[kernlab]{ipop}} from the kernlab package
 #' @seealso \code{\link[personalized]{predict.wksvm}} for predicting from fitted \code{weighted.ksvm} objects
 #' @importFrom kernlab ipop primal dual kernelMatrix sigest kpar
@@ -29,7 +30,9 @@
 #'
 #' weights <- runif(100, max = 1.5, min = 0.5)
 #'
-#' wk <- weighted.ksvm(x = x[1:100,], y = y[1:100], C = c(0.1, 0.5, 1, 2, 10),
+#' wk <- weighted.ksvm(x = x[1:100,], y = y[1:100],
+#'                     C = c(0.1, 0.5, 1, 2),
+#'                     nfolds = 5,
 #'                     weights = weights[1:100])
 #'
 #' pr <- predict(wk, newx = x[101:200,])
@@ -44,6 +47,7 @@ weighted.ksvm <- function(y,
                           kpar = "automatic",
                           nfolds = 10,
                           foldid = NULL,
+                          eps = 1e-8,
                           ...)
 {
 
@@ -81,13 +85,7 @@ weighted.ksvm <- function(y,
 
     dots <- list(...)
 
-    if (any(names(dots) == "eps"))
-    {
-        epsil <- dots$eps
-    } else
-    {
-        epsil <- 1e-8
-    }
+    epsil <- eps
 
     if (length(y.vals) != 2)
     {

@@ -43,7 +43,9 @@
 #'                            trt = trt01,
 #'                            propensity.func = prop.func,
 #'                            loss   = "sq_loss_lasso",
-#'                            nfolds = 5)              # option for cv.glmnet
+#'                            # option for cv.glmnet,
+#'                            # better to use 'nfolds=10'
+#'                            nfolds = 3)              # option for cv.glmnet
 #'
 #' subgrp.model$subgroup.trt.effects
 #'
@@ -89,7 +91,7 @@ plot.subgroup_fitted <- function(x,
         res.2.plot[, 1] <- paste("Recommended", trt.rec)
         res.2.plot[, 2] <- as.factor(x$call$trt) #paste("Received", x$call$trt)
 
-        if (class(x$call$y) == "Surv")
+        if (inherits(x$call$y, "Surv"))
         {
             res.2.plot[, 3] <- log(x$call$y[,1])
             outcome.lab <- "log survival time"

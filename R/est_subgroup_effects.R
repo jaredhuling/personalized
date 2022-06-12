@@ -35,7 +35,7 @@ subgroup.effects <- function(benefit.scores, y, trt,
     y   <- drop(y)
 
     family <- "standard"
-    if (class(y) == "Surv")
+    if (inherits(y, "Surv"))
     {
         family <- "cox"
     }
