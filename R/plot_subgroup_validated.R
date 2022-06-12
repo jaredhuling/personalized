@@ -22,7 +22,7 @@
 #' @seealso \code{\link[personalized]{validate.subgroup}} for function which creates validation results
 #' and \code{\link[personalized]{fit.subgroup}} for function which fits subgroup identification models.
 #' @rdname plot
-#' @import plotly
+#' @importFrom plotly ggplotly subplot layout
 #' @importFrom ggplot2 ggplot aes geom_density geom_rug coord_flip facet_grid theme xlab
 #' @importFrom ggplot2 ylab ggtitle geom_vline geom_boxplot geom_line geom_point geom_smooth geom_errorbar
 #' @importFrom ggplot2 scale_x_discrete scale_color_discrete geom_histogram geom_rect geom_hline xlim geom_bar
@@ -299,23 +299,24 @@ plot.subgroup_validated <- function(x,
         p.secondary <- ggplot(d, aes(x = plot.idx, y = pct.selected, fill = bar.type,
                                      tooltip1 = Variable, tooltip2 = Selection)) +
             geom_bar(stat="identity") +
-            geom_vline(xintercept = c(which.min(d$bar.type=="Negative Tendency") - 0.5, which.max(d$bar.type=="Positive Tendency") - 0.5), linetype = "dashed")
+            geom_vline(xintercept = c(which.min(d$bar.type=="Negative Tendency") - 0.5,
+                                      which.max(d$bar.type=="Positive Tendency") - 0.5), linetype = "dashed")
 
         # Combine plots and create plotly object
-        pl.obj <-
-            subplot(ggplotly(p.primary, tooltip = paste0("tooltip",1:4)),
-                    ggplotly(p.secondary, tooltip = paste0("tooltip",1:2)),
-                    nrows=2,
-                    shareX = TRUE,
-                    titleX = TRUE,
-                    titleY = TRUE
-            ) %>%
-            layout(title="Variable Selection Across Bootstrap Iterations",
-                   showlegend=FALSE,
-                   xaxis =  list(title = "Plot Index"),
-                   yaxis =  list(title = "Coefficient Value"),
-                   yaxis2 = list(title = "Percent of Times Selected")
+        pl.obj.1 <-
+            plotly::subplot(plotly::ggplotly(p.primary, tooltip = paste0("tooltip",1:4)),
+                            plotly::ggplotly(p.secondary, tooltip = paste0("tooltip",1:2)),
+                            nrows=2,
+                            shareX = TRUE,
+                            titleX = TRUE,
+                            titleY = TRUE
             )
+
+        pl.obj <- plotly::layout(pl.obj.1, title="Variable Selection Across Bootstrap Iterations",
+                                 showlegend=FALSE,
+                                 xaxis =  list(title = "Plot Index"),
+                                 yaxis =  list(title = "Coefficient Value"),
+                                 yaxis2 = list(title = "Percent of Times Selected"))
     } else
     {
         pl.obj <- ggplot(avg.res.2.plot,

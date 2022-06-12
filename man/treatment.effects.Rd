@@ -19,8 +19,7 @@ treat.effects(
     "poisson_loss_lasso_gam", "logistic_loss_lasso_gam", "sq_loss_gam",
     "poisson_loss_gam", "logistic_loss_gam", "owl_logistic_loss_gam",
     "owl_logistic_flip_loss_gam", "owl_logistic_loss_lasso_gam",
-    "owl_logistic_flip_loss_lasso_gam", "sq_loss_gbm", "poisson_loss_gbm",
-    "logistic_loss_gbm", "cox_loss_gbm",      "custom"),
+    "owl_logistic_flip_loss_lasso_gam", "sq_loss_xgboost", "custom"),
   method = c("weighting", "a_learning"),
   pi.x = NULL,
   ...

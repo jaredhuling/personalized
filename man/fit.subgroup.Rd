@@ -15,8 +15,7 @@ fit.subgroup(
     "poisson_loss_lasso_gam", "logistic_loss_lasso_gam", "sq_loss_gam",
     "poisson_loss_gam", "logistic_loss_gam", "owl_logistic_loss_gam",
     "owl_logistic_flip_loss_gam", "owl_logistic_loss_lasso_gam",
-    "owl_logistic_flip_loss_lasso_gam", "sq_loss_gbm", "poisson_loss_gbm",
-    "logistic_loss_gbm", "cox_loss_gbm",      "custom"),
+    "owl_logistic_flip_loss_lasso_gam", "sq_loss_xgboost", "custom"),
   method = c("weighting", "a_learning"),
   match.id = NULL,
   augment.func = NULL,
@@ -48,7 +47,7 @@ the logistic loss: M(y, v) = y * log(1 + exp\{-v\}), and all options starting wi
 All options ending with \code{lasso} have a lasso penalty added to the loss for variable selection. \code{sq_loss_lasso_gam}
 and \code{logistic_loss_lasso_gam} first use the lasso to select variables and then fit a generalized additive model
 with nonparametric additive terms for each selected variable. \code{sq_loss_gam} involves a squared error loss with a generalized additive model and no variable selection.
-\code{sq_loss_gbm} involves a squared error loss with a gradient-boosted decision trees model for the benefit score; this
+\code{sq_loss_xgboost} involves a squared error loss with a gradient-boosted decision trees model using \code{xgboost} for the benefit score; this
 allows for flexible estimation using machine learning and can be useful when the underlying treatment-covariate interaction
 is complex.
 \itemize{
@@ -65,7 +64,7 @@ is complex.
         \item{\code{"owl_logistic_flip_loss_gam"}} { - M(y, v) = |y|log(1 + exp\{-sign(y)v\}) with generalized additive model fit on all variables}
         \item{\code{"owl_logistic_loss_lasso_gam"}} { - M(y, v) = ylog(1 + exp\{-v\}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
         \item{\code{"owl_logistic_flip_loss_lasso_gam"}} { - M(y, v) = |y|log(1 + exp\{-sign(y)v\}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
-        \item{\code{"sq_loss_gbm"}}{ - M(y, v) = (v - y) ^ 2 with gradient-boosted decision trees model}
+        \item{\code{"sq_loss_xgboost"}}{ - M(y, v) = (v - y) ^ 2 with gradient-boosted decision trees model}
     }
     \item{\strong{Binary Outcomes}}
     \itemize{

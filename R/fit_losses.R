@@ -13,6 +13,7 @@ get.pred.func <- function(fit.name, model, env = parent.frame())
         {
             pred.func <- function(x, type = c("link", "class"))
             {
+                type <- match.arg(type)
                 df.pred <- data.frame(cbind(1, x[,sel.idx[-1] - 1]))
                 colnames(df.pred) <- vnames
                 df.pred$trt_1n1 <- 1
@@ -22,6 +23,7 @@ get.pred.func <- function(fit.name, model, env = parent.frame())
         {
             pred.func <- function(x, type = c("link", "class"))
             {
+                type <- match.arg(type)
                 df.pred <- data.frame(cbind(1, x[,sel.idx[-1] - 1]))
                 colnames(df.pred) <- vnames
                 df.pred$trt_1n1 <- 1
@@ -39,12 +41,31 @@ get.pred.func <- function(fit.name, model, env = parent.frame())
             drop(predict(model, newdata = df.x, n.trees = best.iter, type = "link"))
         }
         # non-GAM/GBM LASSO models (loss ends in _lasso)
+    } else if (grepl("_xgboost$", fit.name))
+    {
+        pred.func <- function(x, type = c("link", "class"))
+        {
+            type <- match.arg(type)
+            df <- xgb.DMatrix(x)
+
+            if (type == "link")
+            {
+                outputmargin <- TRUE
+            } else
+            {
+                outputmargin <- FALSE
+            }
+
+            drop(predict(model, newdata = df, outputmargin = outputmargin))
+        }
+        # non-GAM/GBM LASSO models (loss ends in _lasso)
     } else if (grepl("_lasso$",fit.name))
     {
         if (grepl("_cox", fit.name))
         {
             pred.func <- function(x, type = c("link", "class"))
             {
+                type <- match.arg(type)
                 if (n.trts == 2)
                 {
                     -drop(predict(model, newx = cbind(1, x),
@@ -146,7 +167,6 @@ get.coef.func <- function(fit.name, env = parent.frame())
         {
             coef(mod)
         }
-        # Not sure what the analogue is for GBM models, since there aren't any coefficients to return
     } else
     {
         coef.func <- function(mod)
@@ -159,7 +179,7 @@ get.coef.func <- function(fit.name, env = parent.frame())
 
 #' @import glmnet
 #' @importFrom stats coef
-fit_sq_loss_lasso <- function(x, y, trt, n.trts, wts, family, match.id, intercept = FALSE, ...)
+fit_sq_loss_lasso <- function(x, y, trt, n.trts, wts, family, match.id, trt.multiplier, intercept = FALSE, ...)
 {
     # this function must return a fitted model
     # in addition to a function which takes in
@@ -175,7 +195,6 @@ fit_sq_loss_lasso <- function(x, y, trt, n.trts, wts, family, match.id, intercep
     ##                 function
     ##
     ###################################################################
-
 
     list.dots <- list(...)
     dot.names <- names(list.dots)
@@ -289,7 +308,7 @@ fit_logistic_loss_lasso <- fit_sq_loss_lasso
 fit_poisson_loss_lasso  <- fit_sq_loss_lasso
 
 #' @import survival
-fit_cox_loss_lasso <- function(x, y, trt, n.trts, wts, family, match.id, ...)
+fit_cox_loss_lasso <- function(x, y, trt, n.trts, wts, family, match.id, trt.multiplier, ...)
 {
 
     list.dots <- list(...)
@@ -381,7 +400,7 @@ fit_cox_loss_lasso <- function(x, y, trt, n.trts, wts, family, match.id, ...)
 
 #' @import mgcv
 #' @importFrom stats as.formula binomial gaussian
-fit_sq_loss_lasso_gam <- function(x, y, trt, n.trts, wts, family, match.id, intercept = FALSE, ...)
+fit_sq_loss_lasso_gam <- function(x, y, trt, n.trts, wts, family, match.id, trt.multiplier, intercept = FALSE, ...)
 {
     # this function must return a fitted model
     # in addition to a function which takes in
@@ -431,6 +450,7 @@ fit_sq_loss_lasso_gam <- function(x, y, trt, n.trts, wts, family, match.id, inte
     {
         trt.y <- trt
 
+        ## can also use 'trt.multiplier'
         trt_1n1 <- ifelse(trt == unique.trts[2], 1, -1)
     } else
     {
@@ -496,7 +516,7 @@ fit_sq_loss_lasso_gam <- function(x, y, trt, n.trts, wts, family, match.id, inte
 
     # fit a model with a lasso
     # penalty and desired loss:
-    sel.model <- do.call(cv.glmnet, c(list(x = x, y = y, weights = wts, family = family),
+    sel.model <- do.call(cv.glmnet, c(list(x = trt.multiplier * x, y = y, weights = wts, family = family),
                                       list.dots[dots.idx.glmnet]))
 
 
@@ -571,6 +591,9 @@ fit_sq_loss_lasso_gam <- function(x, y, trt, n.trts, wts, family, match.id, inte
 
     colnames(df) <- c("y", sel.vnames)
 
+    ## need binary vars to also be multiplied!!
+    df[,binary.vars] <- trt.multiplier * df[,binary.vars]
+
     vnames <- sel.vnames
 
 
@@ -605,7 +628,7 @@ fit_poisson_loss_lasso_gam  <- fit_sq_loss_lasso_gam
 
 
 
-fit_sq_loss_gam <- function(x, y, trt, n.trts, wts, family, match.id, ...)
+fit_sq_loss_gam <- function(x, y, trt, n.trts, wts, family, match.id, trt.multiplier, ...)
 {
     # this function must return a fitted model
     # in addition to a function which takes in
@@ -721,6 +744,9 @@ fit_sq_loss_gam <- function(x, y, trt, n.trts, wts, family, match.id, ...)
     df <- data.frame(y = y, x = x[,sel.idx], trt_1n1 = trt_1n1)
     colnames(df) <- c("y", sel.vnames)
 
+    ## need binary vars to also be multiplied!!
+    df[,binary.vars] <- trt.multiplier * df[,binary.vars]
+
     vnames <- sel.vnames
 
     # fit gam model:
@@ -745,6 +771,7 @@ fit_sq_loss_gam <- function(x, y, trt, n.trts, wts, family, match.id, ...)
          coefficients = get.coef.func("fit_sq_loss_gam")(model))
 }
 
+
 fit_logistic_loss_gam <- fit_sq_loss_gam
 fit_poisson_loss_gam  <- fit_sq_loss_gam
 fit_cox_loss_gam      <- fit_sq_loss_gam
@@ -752,7 +779,7 @@ fit_cox_loss_gam      <- fit_sq_loss_gam
 
 
 #' @import gbm
-fit_sq_loss_gbm <- function(x, y, trt, n.trts, wts, family, match.id, ...)
+fit_sq_loss_gbm <- function(x, y, trt, n.trts, wts, family, match.id, trt.multiplier, ...)
 {
     # this function must return a fitted model
     # in addition to a function which takes in
@@ -895,7 +922,7 @@ fit_poisson_loss_gbm <- fit_sq_loss_gbm
 # }
 
 
-fit_logistic_loss_gbm <- function(x, y, trt, n.trts, wts, family, match.id, ...)
+fit_logistic_loss_gbm <- function(x, y, trt, n.trts, wts, family, match.id, trt.multiplier, ...)
 {
     # this function must return a fitted model
     # in addition to a function which takes in
@@ -1034,7 +1061,7 @@ fit_logistic_loss_gbm <- function(x, y, trt, n.trts, wts, family, match.id, ...)
 # }
 #
 
-fit_cox_loss_gbm <- function(x, y, trt, n.trts, wts, family, match.id, ...)
+fit_cox_loss_gbm <- function(x, y, trt, n.trts, wts, family, match.id, trt.multiplier, ...)
 {
     # this function must return a fitted model
     # in addition to a function which takes in
@@ -1118,7 +1145,7 @@ fit_cox_loss_gbm <- function(x, y, trt, n.trts, wts, family, match.id, ...)
 
 
 
-fit_owl_hinge_loss <- function(x, y, trt, n.trts, wts, family, match.id, ...)
+fit_owl_hinge_loss <- function(x, y, trt, n.trts, wts, family, match.id, trt.multiplier, ...)
 {
 
     list.dots <- list(...)

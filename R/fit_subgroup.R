@@ -18,7 +18,7 @@
 #' All options ending with \code{lasso} have a lasso penalty added to the loss for variable selection. \code{sq_loss_lasso_gam}
 #' and \code{logistic_loss_lasso_gam} first use the lasso to select variables and then fit a generalized additive model
 #' with nonparametric additive terms for each selected variable. \code{sq_loss_gam} involves a squared error loss with a generalized additive model and no variable selection.
-#' \code{sq_loss_gbm} involves a squared error loss with a gradient-boosted decision trees model for the benefit score; this
+#' \code{sq_loss_xgboost} involves a squared error loss with a gradient-boosted decision trees model using \code{xgboost} for the benefit score; this
 #' allows for flexible estimation using machine learning and can be useful when the underlying treatment-covariate interaction
 #' is complex.
 #' \itemize{
@@ -35,7 +35,7 @@
 #'         \item{\code{"owl_logistic_flip_loss_gam"}} { - M(y, v) = |y|log(1 + exp\{-sign(y)v\}) with generalized additive model fit on all variables}
 #'         \item{\code{"owl_logistic_loss_lasso_gam"}} { - M(y, v) = ylog(1 + exp\{-v\}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
 #'         \item{\code{"owl_logistic_flip_loss_lasso_gam"}} { - M(y, v) = |y|log(1 + exp\{-sign(y)v\}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
-#'         \item{\code{"sq_loss_gbm"}}{ - M(y, v) = (v - y) ^ 2 with gradient-boosted decision trees model}
+#'         \item{\code{"sq_loss_xgboost"}}{ - M(y, v) = (v - y) ^ 2 with gradient-boosted decision trees model}
 #'     }
 #'     \item{\strong{Binary Outcomes}}
 #'     \itemize{
@@ -523,10 +523,10 @@ fit.subgroup <- function(x,
                                         "owl_logistic_flip_loss_gam",
                                         "owl_logistic_loss_lasso_gam",
                                         "owl_logistic_flip_loss_lasso_gam",
-                                        "sq_loss_gbm",
-                                        "poisson_loss_gbm",
-                                        "logistic_loss_gbm",
-                                        "cox_loss_gbm",
+                                        "sq_loss_xgboost",
+                                        #"poisson_loss_gbm",
+                                        #"logistic_loss_gbm",
+                                        #"cox_loss_gbm",
                                         "custom"),
                          method       = c("weighting", "a_learning"),
                          match.id     = NULL,
@@ -729,11 +729,11 @@ fit.subgroup <- function(x,
                              "owl_logistic_flip_loss_gam"       = "adj",
                              "owl_logistic_loss_lasso_gam"      = "adj",
                              "owl_logistic_flip_loss_lasso_gam" = "adj",
-                             "sq_loss_gbm"                      = "offset",
-                             "poisson_loss_gbm"                     = "offset",
-                             "abs_loss_gbm"                     = "offset",
-                             "logistic_loss_gbm"                = "offset",
-                             "cox_loss_gbm"                     = "offset",
+                             "sq_loss_xgboost"              = "offset",
+                             #"poisson_loss_gbm"                = "offset",
+                             #"abs_loss_gbm"                    = "offset",
+                             #"logistic_loss_gbm"                = "offset",
+                             #"cox_loss_gbm"                     = "offset",
                              "custom"                           = "offset_notdots")
 
     if (is.factor(trt))
@@ -801,9 +801,9 @@ fit.subgroup <- function(x,
         refnull <- TRUE
     }
 
-    if (n.trts > 2 & (grepl("_gbm", loss) | grepl("_gam", loss)) )
+    if (n.trts > 2 & (grepl("_gbm", loss) | grepl("_xgboost", loss) | grepl("_gam", loss)) )
     {
-        stop("gbm and gam based losses not supported for multiple treatments (number of total treatments > 2)")
+        stop("gbm/xgboost and gam based losses not supported for multiple treatments (number of total treatments > 2)")
     }
 
     # Check match.id validity and convert it to a factor, if supplied
@@ -1006,14 +1006,25 @@ fit.subgroup <- function(x,
     if (grepl("owl_", loss))
     {
         x.tilde <- cbind(1, x)
+        trt.multiplier <- rep(1, NROW(x))
     } else
     {
         # construct design matrix to be passed to fitting function
-        x.tilde <- create.design.matrix(x             = x,
-                                        pi.x          = pi.x,
-                                        trt           = trt,
-                                        method        = method,
-                                        reference.trt = reference.trt)
+        design_objects <- create.design.matrix.split(x             = x,
+                                                     pi.x          = pi.x,
+                                                     trt           = trt,
+                                                     method        = method,
+                                                     reference.trt = reference.trt)
+
+        if (grepl("_xgboost", loss) | grepl("_gam", loss))
+        {
+            x.tilde <- design_objects$x
+        } else
+        {
+            x.tilde <- design_objects$trt.multiplier * design_objects$x
+        }
+
+        trt.multiplier <- design_objects$trt.multiplier
     }
 
     # construct observation weight vector
@@ -1119,7 +1130,7 @@ fit.subgroup <- function(x,
         fitted.model <- do.call(fit_fun, c(list(x = x.tilde, trt = trt, n.trts = n.trts,
                                                 y = trt.y, wts = drop(wts) * drop(y.wt),
                                                 family = family, intercept = intercept,
-                                                match.id = match.id, ...), extra.args) )
+                                                match.id = match.id, trt.multiplier = trt.multiplier, ...), extra.args) )
     } else
     {
         if (loss == "custom")
@@ -1159,7 +1170,7 @@ fit.subgroup <- function(x,
 
             fitted.model <- do.call(fit_fun, c(list(x = x.tilde, trt = trt, n.trts = n.trts,
                                                     y = y.adj, wts = wts, family = family,
-                                                    match.id = match.id, ...), extra.args)  )
+                                                    match.id = match.id, trt.multiplier = trt.multiplier, ...), extra.args)  )
         }
     }
 
