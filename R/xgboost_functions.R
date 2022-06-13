@@ -213,6 +213,8 @@ fit_sq_loss_xgboost <- function(x, y, trt, n.trts, wts, family, match.id, trt.mu
                        eta       = 0.05,
                        nthread   = 2,
                        verbosity = 1,
+                       subsample = 0.623,
+                       colsample_bytree = 0.8,
                        booster   = "gbtree")
     }
 
