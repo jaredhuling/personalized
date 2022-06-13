@@ -19,8 +19,8 @@
 #' and \code{logistic_loss_lasso_gam} first use the lasso to select variables and then fit a generalized additive model
 #' with nonparametric additive terms for each selected variable. \code{sq_loss_gam} involves a squared error loss with a generalized additive model and no variable selection.
 #' \code{sq_loss_xgboost} involves a squared error loss with a gradient-boosted decision trees model using \code{xgboost} for the benefit score; this
-#' allows for flexible estimation using machine learning and can be useful when the underlying treatment-covariate interaction
-#' is complex.
+#' allows for flexible estimation using machine learning and can be useful when the underlying treatment-covariate interaction is complex. Must specify
+#' \code{params}, \code{nrounds}, \code{nfold}, and optionally, \code{early_stopping_rounds}; see \code{\link[xgboost]{xgb.train}} for details
 #' \itemize{
 #'     \item{\strong{Continuous Outcomes}}
 #'     \itemize{
