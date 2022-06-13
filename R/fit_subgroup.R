@@ -727,7 +727,7 @@ fit.subgroup <- function(x,
                              "owl_logistic_flip_loss_gam"       = "adj",
                              "owl_logistic_loss_lasso_gam"      = "adj",
                              "owl_logistic_flip_loss_lasso_gam" = "adj",
-                             "sq_loss_xgboost"              = "offset",
+                             "sq_loss_xgboost"                  = "adj",
                              "custom"                           = "offset_notdots")
 
     if (is.factor(trt))
