@@ -212,10 +212,20 @@ fit_sq_loss_xgboost <- function(x, y, trt, n.trts, wts, family, match.id, trt.mu
         params <- list(max_depth = 3,
                        eta       = 0.05,
                        nthread   = 2,
-                       verbosity = 1,
+                       verbose   = 1,
                        subsample = 0.623,
                        colsample_bytree = 0.8,
                        booster   = "gbtree")
+    }
+
+    if ("verbose" %in% names(params))
+    {
+        verbose <- params$verbose
+        params$verbose <- NULL
+        if (!("verbose" %in% names(list.dots)))
+        {
+            list.dots$verbose <- verbose
+        }
     }
 
     list.dots$params <- NULL

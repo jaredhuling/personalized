@@ -1,0 +1,178 @@
+---
+title: "Estimation of Flexible ITRs with xgboost"
+author: "Jared Huling"
+date: "`r Sys.Date()`"
+output: 
+    rmarkdown::html_vignette:
+        fig_width: 7
+        fig_height: 5
+        toc: true
+        toc_depth: 3
+        number_sections: true
+        self_contained: true
+preamble: >
+    \usepackage{amsmath,amssymb,amsfonts,bm,bbm,amsthm}
+    \usepackage{longtable}
+    \usepackage{booktabs}
+    \usepackage{bbm, bm}
+    \def\bsx {\boldsymbol x}
+    \def\bsX {\boldsymbol X}
+    \def\bsT {\boldsymbol T}
+    \def\bsbeta {\boldsymbol \beta}
+    \def\bsgamma {\boldsymbol \gamma}
+    \def\bsW {\boldsymbol W}
+    \def\bsy {\boldsymbol y}
+    \def\bsY {\boldsymbol Y}
+    \def\bsM {\boldsymbol M}
+    \def\bfx {\mathbf x}
+    \def\bfX {\mathbf X}
+    \def\bfT {\mathbf T}
+    \def\bfW {\mathbf W}
+    \def\bfy {\mathbf y}
+    \def\bfY {\mathbf Y}
+    \def\bfM {\mathbf M}
+    \def\bfU {\mathbf U}
+vignette: >
+  %\VignetteIndexEntry{Estimation of Flexible ITRs with xgboost}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+# First simulate data with complicated conditional average treatment effect/benefit score
+
+To demonstrate how to estimate flexible individualized treatment rules using `xgboost` in the `personalized` package, we simulate data with a binary treatment and a complex relationship between covariates and the effect of the treatment. The treatment assignments are based on covariates and thus mimic an observational setting with no unmeasured confounders.
+
+```{r loadpkg, message=FALSE, warning=FALSE, echo=FALSE}
+library(personalized)
+```
+
+In this simulation, the treatment assignment depends on covariates and hence we must model the propensity score $\pi(x) = Pr(T = 1 | X = x)$. In this simulation we will assume that larger values of the outcome are better. 
+
+```{r sim_data_1, message = FALSE, warning = FALSE}
+library(personalized)
+
+set.seed(1)
+n.obs  <- 2500
+n.vars <- 10
+x <- matrix(rnorm(n.obs * n.vars, sd = 1), n.obs, n.vars)
+
+# simulate non-randomized treatment
+xbetat   <- 0.5 + 0.25 * x[,1] - 0.25 * x[,5]
+trt.prob <- exp(xbetat) / (1 + exp(xbetat))
+trt      <- rbinom(n.obs, 1, prob = trt.prob)
+
+# simulate delta (CATE) as a complex function of the covariates
+delta <- 2*(0.25 + x[,1] * x[,2] - x[,3] ^ {-2} * (x[,3] > 0.35) + 
+                (x[,1] < x[,3]) - (x[,1] < x[,2]))
+
+# simulate main effects g(X)
+xbeta <- x[,1] + x[,2] + x[,4] - 0.2 * x[,4]^2 + x[,5] + 0.2 * x[,9] ^ 2
+xbeta <- xbeta + delta * (2 * trt - 1) * 0.5
+
+# simulate continuous outcomes
+y <- drop(xbeta) + rnorm(n.obs)
+```
+
+
+# Setup
+
+To estimate any ITR, we first must construct a propensity score function. We also optionally (and highly recommended for performance) can define an augmentation function that estimates main effects of covariates.
+
+The `personalized` package has functionality for doing so using cross-fitting (see the vignette for augmentation):
+
+```{r}
+# arguments can be passed to cv.glmnet via `cv.glmnet.args`
+prop.func <- create.propensity.function(crossfit = TRUE,
+                                        nfolds.crossfit = 10,
+                                        cv.glmnet.args = list(type.measure = "auc", nfolds = 5))
+```
+
+```{r}
+aug.func <- create.augmentation.function(family = "gaussian",
+                                         crossfit = TRUE,
+                                         nfolds.crossfit = 10,
+                                         cv.glmnet.args = list(type.measure = "mse", nfolds = 5))
+```
+
+For the sake of comparison, first fit a linear ITR:
+```{r}
+subgrp.model.linear <- fit.subgroup(x = x, y = y,
+                             trt = trt,
+                             propensity.func = prop.func,
+                             augment.func = aug.func,
+                             loss   = "sq_loss_lasso",
+                             nfolds = 10)    # option for cv.glmnet (for ITR estimation)
+
+summary(subgrp.model.linear)
+```
+
+# Using xgboost for estimation of ITRs
+
+The `{personalized}` package allows use of `{xgboost}` routines for direct estimation of the CATE (conditional average treatment effect) based on gradient boosted decision trees. This allows for highly flexible estimates of the CATE and thus benefit scores. 
+
+Several arguments used by the `xgb.train()` and `xgb.cv()` functions from `{xgboost}` must be specified; they are:
+
+- `params`: the list of parameters for the underlying `xgboost` model (see help file for `xgb.train()`: this includes `eta`, `max_depth`, `nthread`, `subsample`, `colsample_bytree`, etc). However, note that `objective` and `eval_metric` will be overwritten, as they need to be set to custom values to work within `{personalized}`.
+- `nfold`: number of cross validation folds to be used by `xgb.cv()` for tuning
+- `nrounds`: the number of boosting iterations
+- `early_stopping_rounds`: can optionally be set. If set to an integer `k`, training will stop if the performance doesn't improve for `k` rounds.
+
+
+```{r}
+
+## xgboost tuning parameters to use:
+param <- list(max_depth = 5, eta = 0.01, nthread = 1, 
+              booster = "gbtree", subsample = 0.623, colsample_bytree = 1)
+
+subgrp.model.xgb <- fit.subgroup(x = x, y = y,
+                        trt = trt,
+                        propensity.func = prop.func,
+                        augment.func = aug.func,
+                        ## specify xgboost via the 'loss' argument
+                        loss   = "sq_loss_xgboost",
+                        nfold = 5,
+                        params = param, verbose = 0,
+                        nrounds = 5000, early_stopping_rounds = 50)
+
+subgrp.model.xgb
+```
+
+# Comparing performance with augmentation
+
+We first run the training/testing procedure to assess the performance of the non-augmented estimator (ideally, with the number of replications much larger than `B=5`):
+
+```{r}
+valmod.lin <- validate.subgroup(subgrp.model.linear, B = 5,
+                            method = "training_test",
+                            train.fraction = 0.75)
+valmod.lin
+```
+
+Then we compare with the augmented estimator. Although this is based on just 5 replications, we can see that the augmented estimator is much better at discriminating between benefitting and non-benefitting patients, as evidenced by the large treatment effect among those predicted to benefit by the augmented estimator versus the smaller conditional treatment effect above.
+
+```{r}
+valmod.xgb <- validate.subgroup(subgrp.model.xgb, B = 5,
+                                method = "training_test",
+                                train.fraction = 0.75)
+valmod.xgb
+```
+
+
+
+We also plot the estimated CATE versus the true CATE for each approach:
+
+```{r, fig.height=10}
+
+## RMSE (note: this is still on the in-sample data so
+## out-of-sample RMSE is preferred to evaluate methods)
+
+sqrt(mean((delta - treatment.effects(subgrp.model.linear)$delta) ^ 2))
+sqrt(mean((delta - treatment.effects(subgrp.model.xgb)$delta) ^ 2))
+
+par(mfrow = c(2,1))
+plot(delta ~ treatment.effects(subgrp.model.linear)$delta,
+     ylab = "True CATE", xlab = "Estimated Linear CATE")
+abline(a=0,b=1,col="blue")
+plot(delta ~ treatment.effects(subgrp.model.xgb)$delta,
+     ylab = "True CATE", xlab = "CATE via xgboost") 
+abline(a=0,b=1,col="blue")
+```
