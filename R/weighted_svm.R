@@ -152,8 +152,8 @@ weighted.ksvm <- function(y,
     if (!is.function(kernel))
     {
         if (!is.list(kpar) &&
-            is.character(kpar) && (class(kernel) == "rbfkernel"  ||
-                                   class(kernel) == "laplacedot" ||
+            is.character(kpar) && (inherits(kernel, "rbfkernel")  ||
+                                   inherits(kernel, "laplacedot") ||
                                    kernel        == "laplacedot" ||
                                    kernel        == "rbfdot"))
         {
