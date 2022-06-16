@@ -54,6 +54,8 @@ environment:
   global:
     WARNINGS_ARE_ERRORS: 1
     USE_RTOOLS: true
+    R_CHECK_ARGS: --no-manual --as-cran --install-args=--build _R_CHECK_CRAN_INCOMING_=TRUE
+
 
   matrix:
   - R_VERSION: stable
