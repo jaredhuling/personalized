@@ -52,7 +52,7 @@ test_that("test that treatment effect calculations work", {
                                  trt = trt01,
                                  propensity.func = prop.func,
                                  loss   = "sq_loss_lasso",
-                                 nfolds = 5)    # option for cv.glmnet
+                                 nfolds = 3)    # option for cv.glmnet
 
     trt_eff <- treatment.effects(subgrp.model)
 
@@ -65,7 +65,7 @@ test_that("test that treatment effect calculations work", {
                                   propensity.func = prop.func,
                                   loss   = "sq_loss_lasso",
                                   method = "a_learning",
-                                  nfolds = 5)    # option for cv.glmnet
+                                  nfolds = 3)    # option for cv.glmnet
 
     trt_eff <- treatment.effects(subgrp.modela)
     expect_true(is.na(trt_eff$gamma))
@@ -96,7 +96,7 @@ test_that("test that treatment effect calculations work", {
                                      trt = trt01,
                                      propensity.func = prop.func,
                                      loss   = "cox_loss_lasso",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
     trt_eff_c <- treatment.effects(subgrp.model.cox)
 
@@ -106,57 +106,59 @@ test_that("test that treatment effect calculations work", {
     print(trt_eff_c)
 
 
-    ## other calculation types
+    if (Sys.info()[[1]] != "windows")
+    {
+        ## other calculation types
 
-    subgrp.model <- fit.subgroup(x = x, y = y.binary,
-                                 trt = trt01,
-                                 propensity.func = prop.func,
-                                 loss   = "owl_logistic_loss_lasso",
-                                 nfolds = 5)    # option for cv.glmnet
+        subgrp.model <- fit.subgroup(x = x, y = y.binary,
+                                     trt = trt01,
+                                     propensity.func = prop.func,
+                                     loss   = "owl_logistic_loss_lasso",
+                                     nfolds = 3)    # option for cv.glmnet
 
-    trt_eff <- treatment.effects(subgrp.model)
+        trt_eff <- treatment.effects(subgrp.model)
 
-    expect_true(all(trt_eff$gamma >= 0))
-    expect_true(is.na(trt_eff$delta))
-
-
-
-    subgrp.model <- fit.subgroup(x = x, y = y.count,
-                                 trt = trt01,
-                                 propensity.func = prop.func,
-                                 loss   = "poisson_loss_lasso",
-                                 nfolds = 5)    # option for cv.glmnet
-
-    trt_eff <- treatment.effects(subgrp.model)
-
-    subgrp.modela <- fit.subgroup(x = x, y = y.count,
-                                  trt = trt01,
-                                  propensity.func = prop.func,
-                                  loss   = "poisson_loss_lasso",
-                                  method = "a_learning",
-                                  nfolds = 5)    # option for cv.glmnet
-
-    trt_eff <- treatment.effects(subgrp.modela)
+        expect_true(all(trt_eff$gamma >= 0))
+        expect_true(is.na(trt_eff$delta))
 
 
 
-    subgrp.model <- fit.subgroup(x = x, y = y.binary,
-                                 trt = trt01,
-                                 propensity.func = prop.func,
-                                 loss   = "logistic_loss_lasso",
-                                 nfolds = 5)    # option for cv.glmnet
+        subgrp.model <- fit.subgroup(x = x, y = y.count,
+                                     trt = trt01,
+                                     propensity.func = prop.func,
+                                     loss   = "poisson_loss_lasso",
+                                     nfolds = 3)    # option for cv.glmnet
 
-    trt_eff <- treatment.effects(subgrp.model)
+        trt_eff <- treatment.effects(subgrp.model)
 
-    subgrp.modela <- fit.subgroup(x = x, y = y.binary,
-                                  trt = trt01,
-                                  propensity.func = prop.func,
-                                  loss   = "logistic_loss_lasso",
-                                  method = "a_learning",
-                                  nfolds = 5)    # option for cv.glmnet
+        subgrp.modela <- fit.subgroup(x = x, y = y.count,
+                                      trt = trt01,
+                                      propensity.func = prop.func,
+                                      loss   = "poisson_loss_lasso",
+                                      method = "a_learning",
+                                      nfolds = 3)    # option for cv.glmnet
 
-    trt_eff <- treatment.effects(subgrp.modela)
+        trt_eff <- treatment.effects(subgrp.modela)
 
+
+
+        subgrp.model <- fit.subgroup(x = x, y = y.binary,
+                                     trt = trt01,
+                                     propensity.func = prop.func,
+                                     loss   = "logistic_loss_lasso",
+                                     nfolds = 3)    # option for cv.glmnet
+
+        trt_eff <- treatment.effects(subgrp.model)
+
+        subgrp.modela <- fit.subgroup(x = x, y = y.binary,
+                                      trt = trt01,
+                                      propensity.func = prop.func,
+                                      loss   = "logistic_loss_lasso",
+                                      method = "a_learning",
+                                      nfolds = 3)    # option for cv.glmnet
+
+        trt_eff <- treatment.effects(subgrp.modela)
+    }
 
 
 })

@@ -233,11 +233,11 @@
 #' Journal of Statistical Software 98(5), 1-60. doi:10.18637/jss.v098.i05
 #'
 #' Chen, S., Tian, L., Cai, T. and Yu, M. (2017), A general statistical framework for subgroup identification
-#' and comparative treatment scoring. Biometrics. doi:10.1111/biom.12676 \url{https://onlinelibrary.wiley.com/doi/abs/10.1111/biom.12676}
+#' and comparative treatment scoring. Biometrics. doi:10.1111/biom.12676 \url{https://doi.org/10.1111/biom.12676}
 #'
 #' Xu, Y., Yu, M., Zhao, Y. Q., Li, Q., Wang, S., & Shao, J. (2015),
 #'  Regularized outcome weighted subgroup identification for differential treatment effects. Biometrics, 71(3), 645-653.
-#'  doi: 10.1111/biom.12322 \url{https://onlinelibrary.wiley.com/doi/full/10.1111/biom.12322}
+#'  doi: 10.1111/biom.12322 \url{https://doi.org/10.1111/biom.12322}
 #'
 #'  Zhao, Y., Zeng, D., Rush, A. J., & Kosorok, M. R. (2012),
 #'   Estimating individualized treatment rules using outcome weighted learning.

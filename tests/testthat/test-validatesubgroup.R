@@ -48,7 +48,7 @@ test_that("test validate.subgroup for continuous outcomes with various options",
                                  trt = trt01,
                                  propensity.func = prop.func,
                                  loss   = "sq_loss_lasso",
-                                 nfolds = 5)              # option for cv.glmnet
+                                 nfolds = 3)              # option for cv.glmnet
 
     expect_is(subgrp.model, "subgroup_fitted")
 
@@ -72,16 +72,16 @@ test_that("test validate.subgroup for continuous outcomes with various options",
 
     invisible(capture.output(print(subgrp.val, digits = 2, sample.pct = TRUE)))
 
-    subgrp.val <- validate.subgroup(subgrp.model, B = 3,
-                                    method = "boot")
-
-    expect_is(subgrp.val, "subgroup_validated")
-
-    invisible(capture.output(print(subgrp.val, digits = 2)))
-
-
     if (Sys.info()[[1]] != "windows")
     {
+        subgrp.val <- validate.subgroup(subgrp.model, B = 3,
+                                        method = "boot")
+
+        expect_is(subgrp.val, "subgroup_validated")
+
+        invisible(capture.output(print(subgrp.val, digits = 2)))
+
+
         expect_error(validate.subgroup(x, B = 3,
                                        method = "training"))
 
@@ -152,7 +152,7 @@ test_that("test validate.subgroup for binary outcomes and various losses", {
                                  trt = trt01,
                                  propensity.func = prop.func,
                                  loss   = "logistic_loss_lasso",
-                                 nfolds = 5)              # option for cv.glmnet
+                                 nfolds = 3)              # option for cv.glmnet
 
     expect_is(subgrp.model, "subgroup_fitted")
 
@@ -174,7 +174,7 @@ test_that("test validate.subgroup for binary outcomes and various losses", {
                                      propensity.func = prop.func,
                                      larger.outcome.better = FALSE,
                                      loss   = "sq_loss_lasso",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         subgrp.val <- validate.subgroup(subgrp.model, B = 3,
                                         benefit.score.quantiles = NULL,
@@ -217,7 +217,7 @@ test_that("test validate.subgroup for binary outcomes and various losses", {
                                      propensity.func = prop.func,
                                      loss   = "logistic_loss_lasso",
                                      retcall = FALSE,
-                                     nfolds = 5)
+                                     nfolds = 3)
 
         # retcall must be true
         expect_error(validate.subgroup(subgrp.model2, B = 3,
@@ -247,7 +247,7 @@ test_that("test validate.subgroup for binary outcomes and various losses", {
                                      trt = trt01,
                                      propensity.func = prop.func,
                                      loss   = "cox_loss_lasso",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -314,7 +314,7 @@ test_that("test validate.subgroup for binary outcomes and various losses", {
         # predict returns a matrix of probabilities:
         # one column for each treatment level
         propens <- drop(predict(gfit, newx = x, type = "response", s = "lambda.min",
-                                nfolds = 5, alpha = 0))
+                                nfolds = 3, alpha = 0))
 
         # return the probability corresponding to the
         # treatment that was observed

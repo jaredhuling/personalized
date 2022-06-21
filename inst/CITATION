@@ -27,11 +27,11 @@ citEntry(,
   issue        = "4",
   pages        = "1199--1209",
   doi          = "10.1111/biom.12676",
-  url          = "http://dx.doi.org/10.1111/biom.12676",
+  url          = "https://doi.org/10.1111/biom.12676",
   textVersion  = paste("Chen, S., Tian, L., Cai, T., Yu, M. (2017) ",
       "A General Statistical Framework for Subgroup Identification and Comparative Treatment Scoring, ",
       "Biometrics, Volume 73, Issue 4, Pages 1199-1209,",
-      "http://dx.doi.org/10.1111/biom.12676.")
+      "https://doi.org/10.1111/biom.12676.")
 )
 
 

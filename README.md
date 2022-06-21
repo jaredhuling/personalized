@@ -4,7 +4,7 @@
 Status](https://travis-ci.org/jaredhuling/personalized.svg?branch=master)](https://travis-ci.org/jaredhuling/personalized)
 [![Appveyor Build
 Status](https://ci.appveyor.com/api/projects/status/github/jaredhuling/personalized?branch=master&svg=true)](https://ci.appveyor.com/project/jaredhuling/personalized)
-[![codecov](https://codecov.io/gh/jaredhuling/personalized/branch/master/graph/badge.svg)](https://codecov.io/gh/jaredhuling/personalized)
+[![codecov](https://codecov.io/gh/jaredhuling/personalized/branch/master/graph/badge.svg)](https://app.codecov.io/gh/jaredhuling/personalized)
 [![](http://cranlogs.r-pkg.org/badges/personalized)](https://cran.r-project.org/package=personalized)
 
 <img src="man/figures/sticker.png" align="right" width="15%" height="15%" />
@@ -19,8 +19,8 @@ analysis of medical data.
 
 The personalized package provides estimation methods for subgroup
 identification under the framework of [Chen et al
-(2017)](https://onlinelibrary.wiley.com/doi/abs/10.1111/biom.12676).
-It also provides routines for valid estimation of the subgroup-specific
+(2017)](https://onlinelibrary.wiley.com/doi/abs/10.1111/biom.12676). It
+also provides routines for valid estimation of the subgroup-specific
 treatment effects.
 
 <img src="vignettes/usage_overview-1.png" width="100%" />
@@ -29,11 +29,11 @@ treatment effects.
 
 [Documentation](https://jaredhuling.org/personalized/)
 
-  - [Tutorial /
-    Vignette](https://jaredhuling.org/personalized/articles/usage_of_the_personalized_package.html)
-    - tutorial of statistical methodology and usage of the package
+-   [Tutorial /
+    Vignette](https://jaredhuling.org/personalized/articles/usage_of_the_personalized_package.html) -
+    tutorial of statistical methodology and usage of the package
 
-  - [Function help
+-   [Function help
     files](https://jaredhuling.org/personalized/reference/index.html)
 
 # Installing the ‘personalized’ package
@@ -183,8 +183,7 @@ print(val.model, digits = 2, sample.pct = TRUE)
     ## 2.91 (SE = 8.29)
 
 Visualize subgroup-specific treatment effect estimates across
-training/testing
-iterations:
+training/testing iterations:
 
 ``` r
 plot(val.model)
@@ -202,14 +201,10 @@ summ <- summarize.subgroups(subgrp.model)
 print(summ, p.value = 0.05)
 ```
 
-    ##     Avg (recom Ctrl) Avg (recom Trt) Ctrl - Trt SE (recom Ctrl)
-    ## V2           -2.4161          1.9013     -4.317          0.1423
-    ## V11           1.1279         -0.7963      1.924          0.1914
-    ## V17           0.8053         -0.3715      1.177          0.2170
-    ##     SE (recom Trt)
-    ## V2          0.1298
-    ## V11         0.1572
-    ## V17         0.1736
+    ##     Avg (recom Ctrl) Avg (recom Trt) Ctrl - Trt SE (recom Ctrl) SE (recom Trt)
+    ## V2           -2.4161          1.9013     -4.317          0.1423         0.1298
+    ## V11           1.1279         -0.7963      1.924          0.1914         0.1572
+    ## V17           0.8053         -0.3715      1.177          0.2170         0.1736
 
 ## Accessing Help Files for Main Functions of `personalized`
 

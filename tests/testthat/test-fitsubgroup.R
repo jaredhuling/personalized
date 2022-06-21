@@ -99,23 +99,23 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
                                   trt = trt01,
                                   propensity.func = prop.func.bad,
                                   loss   = "sq_loss_lasso",
-                                  nfolds = 5))
+                                  nfolds = 3))
 
         expect_error(fit.subgroup(x = x, y = y,
                                   trt = trt01,
                                   propensity.func = prop.func.bad2,
                                   loss   = "sq_loss_lasso",
-                                  nfolds = 5))
+                                  nfolds = 3))
         expect_error(fit.subgroup(x = x, y = y,
                                   trt = trt01,
                                   propensity.func = prop.func.bad3,
                                   loss   = "sq_loss_lasso",
-                                  nfolds = 5))
+                                  nfolds = 3))
         expect_error(fit.subgroup(x = x, y = y,
                                   trt = trt01,
                                   propensity.func = prop.func.bad4,
                                   loss   = "sq_loss_lasso",
-                                  nfolds = 5))
+                                  nfolds = 3))
 
         expect_error(fit.subgroup(x = y, y = y,
                                   trt = trt01,
@@ -125,7 +125,7 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
                                      trt = trt01,
                                      propensity.func = prop.func,
                                      loss   = "sq_loss_lasso",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -141,7 +141,7 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
                                  propensity.func = prop.func,
                                  larger.outcome.better = FALSE,
                                  loss   = "sq_loss_lasso",
-                                 nfolds = 5)              # option for cv.glmnet
+                                 nfolds = 3)              # option for cv.glmnet
 
     print(subgrp.model)
 
@@ -517,7 +517,7 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
                                      trt = as.factor(trt01),
                                      propensity.func = prop.func,
                                      loss   = "sq_loss_lasso",
-                                     nfolds = 5)
+                                     nfolds = 3)
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -526,7 +526,7 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
                                      trt = as.factor(trt01),
                                      propensity.func = prop.func,
                                      loss   = "owl_logistic_loss_lasso",
-                                     nfolds = 5)
+                                     nfolds = 3)
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -536,27 +536,27 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
                                   propensity.func = prop.func,
                                   reference.trt = 2,
                                   loss   = "owl_logistic_loss_lasso",
-                                  nfolds = 5))
+                                  nfolds = 3))
 
         ## only 1 trt level
         expect_error(fit.subgroup(x = x, y = y,
                                     trt = as.factor(rep(1, NROW(y))),
                                     propensity.func = prop.func,
                                     loss   = "owl_logistic_loss_lasso",
-                                    nfolds = 5))
+                                    nfolds = 3))
 
         ## too many trt levels
         expect_error(fit.subgroup(x = x, y = y,
                                   trt = as.factor(1:NROW(y)),
                                   propensity.func = prop.func,
                                   loss   = "owl_logistic_loss_lasso",
-                                  nfolds = 5))
+                                  nfolds = 3))
 
         subgrp.model <- fit.subgroup(x = x, y = y,
                                      trt = as.factor(trt01),
                                      propensity.func = prop.func,
                                      loss   = "owl_logistic_flip_loss_lasso",
-                                     nfolds = 5)
+                                     nfolds = 3)
 
         expect_is(subgrp.model, "subgroup_fitted")
     }
@@ -568,7 +568,7 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
                                      trt = trt01,
                                      propensity.func = prop.func,
                                      loss   = "owl_hinge_flip_loss",
-                                     nfolds = 5)
+                                     nfolds = 3)
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -579,7 +579,7 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
                                                   trt = trt01_bad,
                                                   propensity.func = prop.func,
                                                   loss   = "owl_hinge_flip_loss",
-                                                  nfolds = 5))
+                                                  nfolds = 3))
 
 
         expect_is(subgrp.model, "subgroup_fitted")
@@ -592,7 +592,7 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
                                      trt = trt01,
                                      propensity.func = prop.func,
                                      loss   = "owl_hinge_loss",
-                                     nfolds = 5)
+                                     nfolds = 3)
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -625,7 +625,7 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
                                      loss   = "owl_hinge_flip_loss",
                                      kernel = "polydot",
                                      kpar = list(degree = 3),
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -638,7 +638,7 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
                                      propensity.func = prop.func,
                                      loss   = "owl_hinge_flip_loss",
                                      kernel = "laplacedot",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -651,7 +651,7 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
                                      propensity.func = prop.func,
                                      loss   = "owl_hinge_flip_loss",
                                      kernel = "besseldot",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -665,7 +665,7 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
                                          propensity.func = prop.func,
                                          loss   = "owl_hinge_flip_loss",
                                          kernel = "anovadot",
-                                         nfolds = 5)              # option for cv.glmnet
+                                         nfolds = 3)              # option for cv.glmnet
         })
 
         expect_is(subgrp.model, "subgroup_fitted")
@@ -680,7 +680,7 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
                                          loss   = "owl_hinge_flip_loss",
                                          kernel = "splinedot",
                                          margin = 0.2,
-                                         nfolds = 5)              # option for cv.glmnet
+                                         nfolds = 3)              # option for cv.glmnet
         })
 
         expect_is(subgrp.model, "subgroup_fitted")
@@ -696,7 +696,7 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
                                  larger.outcome.better = FALSE,
                                  propensity.func = prop.func,
                                  loss   = "sq_loss_lasso",
-                                 nfolds = 5)              # option for cv.glmnet
+                                 nfolds = 3)              # option for cv.glmnet
 
     expect_is(subgrp.model, "subgroup_fitted")
 
@@ -707,7 +707,7 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
                                      trt = trt01,
                                      propensity.func = prop.func2,
                                      loss   = "sq_loss_lasso",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -716,7 +716,7 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
                                      trt = trt01,
                                      propensity.func = prop.func3,
                                      loss   = "sq_loss_lasso",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -724,7 +724,7 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
         subgrp.model <- fit.subgroup(x = x, y = y,
                                      trt = trt01,
                                      loss   = "sq_loss_lasso",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -741,7 +741,7 @@ test_that("test fit.subgroup for continuous outcomes and various losses", {
                                      trt = trt01,
                                      propensity.func = prop.func,
                                      loss   = "sq_loss_lasso_gam",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -868,7 +868,7 @@ test_that("test fit.subgroup for time-to-event outcomes and various losses", {
                                  trt = trt01,
                                  propensity.func = prop.func,
                                  loss   = "cox_loss_lasso",
-                                 nfolds = 5)              # option for cv.glmnet
+                                 nfolds = 3)              # option for cv.glmnet
 
     expect_is(subgrp.model, "subgroup_fitted")
 
@@ -885,7 +885,7 @@ test_that("test fit.subgroup for time-to-event outcomes and various losses", {
                                      trt = as.factor(trt01),
                                      propensity.func = prop.func,
                                      loss   = "cox_loss_lasso",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -895,7 +895,7 @@ test_that("test fit.subgroup for time-to-event outcomes and various losses", {
                                      larger.outcome.better = FALSE,
                                      propensity.func = prop.func,
                                      loss   = "cox_loss_lasso",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -904,7 +904,7 @@ test_that("test fit.subgroup for time-to-event outcomes and various losses", {
                                      trt = trt01,
                                      propensity.func = prop.func2,
                                      loss   = "cox_loss_lasso",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model, "subgroup_fitted")
     }
@@ -974,7 +974,7 @@ test_that("test fit.subgroup with augment.func for continuous outcomes and vario
                                  augment.func = augment.func,
                                  propensity.func = prop.func,
                                  loss   = "sq_loss_lasso",
-                                 nfolds = 5)              # option for cv.glmnet
+                                 nfolds = 3)              # option for cv.glmnet
 
     expect_is(subgrp.model, "subgroup_fitted")
 
@@ -990,7 +990,7 @@ test_that("test fit.subgroup with augment.func for continuous outcomes and vario
                                      augment.func = augment.func,
                                      propensity.func = prop.func,
                                      loss   = "owl_logistic_loss_lasso",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -1003,7 +1003,7 @@ test_that("test fit.subgroup with augment.func for continuous outcomes and vario
                                      augment.func = augment.func2,
                                      propensity.func = prop.func,
                                      loss   = "sq_loss_lasso",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -1012,28 +1012,28 @@ test_that("test fit.subgroup with augment.func for continuous outcomes and vario
                                   augment.func = augment.func.bad,
                                   propensity.func = prop.func,
                                   loss   = "sq_loss_lasso",
-                                  nfolds = 5))
+                                  nfolds = 3))
 
         expect_error(fit.subgroup(x = x, y = y,
                                   trt = trt01,
                                   augment.func = augment.func.bad2,
                                   propensity.func = prop.func,
                                   loss   = "sq_loss_lasso",
-                                  nfolds = 5))
+                                  nfolds = 3))
 
         expect_error(fit.subgroup(x = x, y = y,
                                   trt = trt01,
                                   augment.func = augment.func.bad3,
                                   propensity.func = prop.func,
                                   loss   = "sq_loss_lasso",
-                                  nfolds = 5))
+                                  nfolds = 3))
 
         expect_error(fit.subgroup(x = x, y = y,
                                   trt = trt01,
                                   augment.func = augment.func.bad4,
                                   propensity.func = prop.func,
                                   loss   = "sq_loss_lasso",
-                                  nfolds = 5))
+                                  nfolds = 3))
 
 
         subgrp.model <- fit.subgroup(x = x, y = y,
@@ -1051,7 +1051,7 @@ test_that("test fit.subgroup with augment.func for continuous outcomes and vario
                                      propensity.func = prop.func,
                                      augment.func = augment.func,
                                      loss   = "sq_loss_lasso_gam",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -1172,16 +1172,19 @@ test_that("test fit.subgroup for continuous outcomes with no propensity function
     y.time.to.event  <- pmin(surv.time, cens.time)
     status           <- 1 * (surv.time <= cens.time)
 
-    subgrp.model <- fit.subgroup(x = x, y = y,
-                                 trt = trt01,
-                                 loss   = "sq_loss_lasso",
-                                 nfolds = 5)              # option for cv.glmnet
+    if (Sys.info()[[1]] != "windows")
+    {
+        subgrp.model <- fit.subgroup(x = x, y = y,
+                                     trt = trt01,
+                                     loss   = "sq_loss_lasso",
+                                     nfolds = 3)              # option for cv.glmnet
 
-    expect_is(subgrp.model, "subgroup_fitted")
+        expect_is(subgrp.model, "subgroup_fitted")
 
-    invisible(capture.output(print(subgrp.model, digits = 2)))
+        invisible(capture.output(print(subgrp.model, digits = 2)))
 
-    invisible(capture.output(summary(subgrp.model)))
+        invisible(capture.output(summary(subgrp.model)))
+    }
 
 })
 
@@ -1237,7 +1240,7 @@ test_that("test fit.subgroup for binary outcomes and various losses", {
                                  trt = trt01,
                                  propensity.func = prop.func,
                                  loss   = "logistic_loss_lasso",
-                                 nfolds = 5)              # option for cv.glmnet
+                                 nfolds = 3)              # option for cv.glmnet
 
     expect_is(subgrp.model, "subgroup_fitted")
 
@@ -1252,7 +1255,7 @@ test_that("test fit.subgroup for binary outcomes and various losses", {
                                      trt = trt01,
                                      propensity.func = prop.func,
                                      loss   = "poisson_loss_lasso",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -1265,7 +1268,7 @@ test_that("test fit.subgroup for binary outcomes and various losses", {
                                      trt = trt01,
                                      propensity.func = prop.func,
                                      loss   = "poisson_loss_gam",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -1307,7 +1310,7 @@ test_that("test fit.subgroup for binary outcomes and various losses", {
                                      propensity.func = prop.func,
                                      augment.func = augment.func,
                                      loss   = "logistic_loss_lasso",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.modela, "subgroup_fitted")
 
@@ -1322,7 +1325,7 @@ test_that("test fit.subgroup for binary outcomes and various losses", {
                                           propensity.func = prop.func,
                                           augment.func = augment.func,
                                           loss   = "logistic_loss_gam",
-                                          nfolds = 5)              # option for cv.glmnet
+                                          nfolds = 3)              # option for cv.glmnet
         })
 
         expect_is(subgrp.modela, "subgroup_fitted")
@@ -1351,7 +1354,7 @@ test_that("test fit.subgroup for binary outcomes and various losses", {
                                            propensity.func = prop.func,
                                            augment.func = augment.func,
                                            loss   = "logistic_loss_lasso_gam",
-                                           nfolds = 5)              # option for cv.glmnet
+                                           nfolds = 3)              # option for cv.glmnet
         })
 
         expect_is(subgrp.modelga, "subgroup_fitted")
@@ -1535,7 +1538,7 @@ test_that("test fit.subgroup for continuous outcomes and match.id provided", {
                                        match.id = match.id,
                                        penlty.factor = rep(1, ncol(x.m) + 1),
                                        loss   = "sq_loss_lasso_gam",
-                                       nfolds = 5)              # option for cv.glmnet
+                                       nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model.m, "subgroup_fitted")
 
@@ -1628,7 +1631,7 @@ test_that("test fit.subgroup for continuous outcomes and match.id provided", {
                                   propensity.func = prop.func,
                                   match.id = rep(1, length(y.m)), # provide bad match.id (only 1 level)
                                   loss   = "sq_loss_lasso",
-                                  nfolds = 5) )
+                                  nfolds = 3) )
 
         expect_error(fit.subgroup(x = x.m, y = Surv(y.time.to.event.m, status.m),
                                   trt = trt.m,
@@ -1750,7 +1753,7 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
         # predict returns a matrix of probabilities:
         # one column for each treatment level
         propens <- drop(predict(gfit, newx = x, type = "response", s = "lambda.min",
-                                nfolds = 5, alpha = 0))
+                                nfolds = 3, alpha = 0))
 
         # return the probability corresponding to the
         # treatment that was observed
@@ -1768,7 +1771,7 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
         # predict returns a matrix of probabilities:
         # one column for each treatment level
         propens <- drop(predict(gfit, newx = x, type = "response", s = "lambda.min",
-                                nfolds = 5, alpha = 0))
+                                nfolds = 3, alpha = 0))
 
         # return the probability corresponding to the
         # treatment that was observed
@@ -1781,7 +1784,7 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
                                  trt = trt,
                                  propensity.func = propensity.multinom.lasso,
                                  loss   = "sq_loss_lasso",
-                                 nfolds = 5)              # option for cv.glmnet
+                                 nfolds = 3)              # option for cv.glmnet
 
     expect_is(subgrp.model, "subgroup_fitted")
 
@@ -1791,7 +1794,7 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
                                      trt = trt,
                                      propensity.func = propensity.multinom.lasso,
                                      loss   = "owl_logistic_loss_lasso",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -1804,13 +1807,13 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
                                     propensity.func = propensity.multinom.lasso,
                                     loss   = "owl_logistic_loss_lasso",
                                     method = "a_learning",
-                                    nfolds = 5))
+                                    nfolds = 3))
 
         expect_error(fit.subgroup(x = x, y = y,
                                   trt = trt,
                                   propensity.func = propensity.multinom.lasso,
                                   loss   = "owl_logistic_flip_loss_lasso",
-                                  nfolds = 5))
+                                  nfolds = 3))
 
 
         ## test matching without prop score
@@ -1819,7 +1822,7 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
                                      trt = trt,
                                      match.id = rep(1:10, each = 10),
                                      loss   = "sq_loss_lasso",
-                                     nfolds = 5)
+                                     nfolds = 3)
         expect_is(subgrp.model, "subgroup_fitted")
 
         invisible(capture.output(print(subgrp.model, digits = 2)))
@@ -1838,7 +1841,7 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
                                      propensity.func = propensity.multinom.lasso,
                                      reference.trt = 3,
                                      loss   = "sq_loss_lasso",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -1849,7 +1852,7 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
                                   propensity.func = propensity.multinom.lasso.bad,
                                   reference.trt = 3,
                                   loss   = "sq_loss_lasso",
-                                  nfolds = 5) )
+                                  nfolds = 3) )
 
         # provide incorrect reference trt
         expect_error(fit.subgroup(x = x, y = y,
@@ -1857,14 +1860,14 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
                                   propensity.func = propensity.multinom.lasso,
                                   reference.trt = "something_wrong",
                                   loss   = "sq_loss_lasso",
-                                  nfolds = 5) )
+                                  nfolds = 3) )
 
         # no prop func
         subgrp.model <- fit.subgroup(x = x, y = y,
                                      trt = trt,
                                      reference.trt = 3,
                                      loss   = "sq_loss_lasso",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -1872,7 +1875,7 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
                                      trt = as.factor(trt),
                                      propensity.func = propensity.multinom.lasso,
                                      loss   = "sq_loss_lasso",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -1882,7 +1885,7 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
                                      reference.trt = "2",
                                      propensity.func = propensity.multinom.lasso,
                                      loss   = "sq_loss_lasso",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -1893,7 +1896,7 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
                                      larger.outcome.better = FALSE,
                                      propensity.func = propensity.multinom.lasso,
                                      loss   = "sq_loss_lasso",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model, "subgroup_fitted")
     }
@@ -1908,7 +1911,7 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
         # predict returns a matrix of probabilities:
         # one column for each treatment level
         propens <- drop(predict(gfit, newx = x, type = "response", s = "lambda.min",
-                                nfolds = 5, alpha = 0))
+                                nfolds = 3, alpha = 0))
 
         # return the probability corresponding to the
         # treatment that was observed
@@ -1921,7 +1924,7 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
                                  trt = trt,
                                  propensity.func = propensity.multinom.lasso,
                                  loss   = "sq_loss_lasso",
-                                 nfolds = 5)              # option for cv.glmnet
+                                 nfolds = 3)              # option for cv.glmnet
 
     expect_is(subgrp.model, "subgroup_fitted")
 
@@ -1944,7 +1947,7 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
                                      propensity.func = propensity.multinom.lasso,
                                      reference.trt = 3,
                                      loss   = "sq_loss_lasso",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -1953,7 +1956,7 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
                                      trt = as.factor(trt),
                                      propensity.func = propensity.multinom.lasso,
                                      loss   = "sq_loss_lasso",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -1963,7 +1966,7 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
                                      reference.trt = "2",
                                      propensity.func = propensity.multinom.lasso,
                                      loss   = "sq_loss_lasso",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -1974,7 +1977,7 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
                                      larger.outcome.better = FALSE,
                                      propensity.func = propensity.multinom.lasso,
                                      loss   = "sq_loss_lasso",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -1985,7 +1988,7 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
                                      trt = trt,
                                      propensity.func = prop.func,
                                      loss   = "sq_loss_lasso_gam",
-                                     nfolds = 5))
+                                     nfolds = 3))
 
 
         # different outcomes
@@ -1994,7 +1997,7 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
                                      trt = as.factor(trt),
                                      propensity.func = propensity.multinom.lasso,
                                      loss   = "cox_loss_lasso",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -2002,7 +2005,7 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
                                      trt = as.factor(trt),
                                      propensity.func = propensity.multinom.lasso,
                                      loss   = "logistic_loss_lasso",
-                                     nfolds = 5)              # option for cv.glmnet
+                                     nfolds = 3)              # option for cv.glmnet
 
         expect_is(subgrp.model, "subgroup_fitted")
 
@@ -2010,13 +2013,13 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
                                   trt = as.factor(trt),
                                   propensity.func = propensity.multinom.lasso,
                                   loss   = "sq_loss_lasso",
-                                  nfolds = 5) )
+                                  nfolds = 3) )
 
         expect_error(fit.subgroup(x = x, y = y,
                                   trt = as.factor(trt),
                                   propensity.func = propensity.multinom.lasso,
                                   loss   = "cox_loss_lasso",
-                                  nfolds = 5) )
+                                  nfolds = 3) )
 
 
         propensity.multinom.lasso.array <- function(x, trt)
@@ -2027,7 +2030,7 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
             # predict returns a matrix of probabilities:
             # one column for each treatment level
             propens <- drop(predict(gfit, newx = x, type = "response", s = "lambda.min",
-                                    nfolds = 5, alpha = 0))
+                                    nfolds = 3, alpha = 0))
 
             # return the probability corresponding to the
             # treatment that was observed
@@ -2040,7 +2043,7 @@ test_that("test fit.subgroup for continuous outcomes and multiple trts and vario
                                   trt = as.factor(trt),
                                   propensity.func = propensity.multinom.lasso.array,
                                   loss   = "cox_loss_lasso",
-                                  nfolds = 5) )
+                                  nfolds = 3) )
 
     }
 
