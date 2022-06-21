@@ -136,7 +136,20 @@ xgb_cv_personalized <- function (params = list(), data, trt.multiplier, nrounds,
                                     feval_current)
         })
 
-        msg <- simplify2array(msg, except = 0L)
+        if (getRversion() >= "4.2.0")
+        {
+            msg <- simplify2array(msg, except = 0L)
+        } else
+        {
+            msg <- simplify2array(msg)
+            if (is.null(dim(msg)))
+            {
+                msg_names <- names(msg)
+                msg <- matrix(msg, nrow = 1)
+                rownames(msg) <- msg_names[1]
+            }
+        }
+
 
         bst_evaluation <- rowMeans(msg)
         bst_evaluation_err <- sqrt(rowMeans(msg^2) - bst_evaluation^2)
