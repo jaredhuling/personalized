@@ -319,7 +319,7 @@ All options containing `lasso` in the name use the `cv.glmnet()` function of the
 
 Any options for `loss` which end with `lasso_gam` have a two-stage model. Variables are selected using a linear or generalized linear model in the first stage and then the selected variables are used in a generalized additive model in the second stage. Univariate nonparametric smoother terms are used in the second stage for all continuous variables. Binary variables are used as linear terms in the model. All `loss` options containing `gam` in the name use the `gam()` function of the `R` package `mgcv`. Please see the documentation of `gam()` for information about other arguments which can be passed to it.
 
-All options that end in `gbm` use a gradient-boosted decision tree model for $f(X)$. These models are machine learning models which can provide more flexible estimation. These models are essentially a sum of many decision trees models. However, this procedure results in a "black box" model which may be more challenging or impossible to interpret. The `gbm`-based models are fit using the `gbm` `R` package. Please see the documentation for the `gbm` function of the `gbm` package for more details on the possible arguments. Tuning the values of the hyperparameters `shrinkage`, `n.trees`, and `interaction.depth` is crucial for a successful gradient-boosting model. These arguments can be passed to the `fit.subgroup()` function. By default, when `gbm`-based models are used, a plot of the cross validation error versus the number of trees is displayed. If this plot has values which are still decreasing significantly by the maximum value of the number of trees, then it is recommended to either increase the number of trees (`n.trees`), the maximum tree depth (`interaction.depth`), or increase the step size of the algorithm (`shrinkage`). 
+All options that end in `xgboost` use a gradient-boosted decision tree model for $f(X)$. These models are machine learning models which can provide more flexible estimation. These models are essentially a sum of many decision trees models. However, this procedure results in a "black box" model which may be more challenging or impossible to interpret. The `xgboost`-based models are fit using the `xgboost` `R` package. Please see the documentation for the `xgb.train()` and `xgb.cv()` functions of the `xgboost` package for more details on the possible arguments. Tuning the values of the hyperparameters `eta`, `nrounds`, and `max_depth` is crucial for a successful gradient-boosting model. These arguments can be passed to the `fit.subgroup()` function in a list via the `params` argument (that is usually passed to `xgb.train()` in typical usage of the `xgboost` package. By default, when `xgboost`-based models are used, cross validation is used to select the optimal number of trees (number of CV folds set via `nfold`). Please see the vignette for usage of `xgboost` functionality for a complete worked example. 
 
 
 
@@ -360,8 +360,7 @@ The `loss` argument options that are available for continuous outcomes are:
 - `'owl_logistic_loss_lasso_gam'`
 - `'sq_loss_gam'`
 - `'owl_logistic_loss_gam'`
-- `'sq_loss_gbm'`
-- `'abs_loss_gbm'`
+- `'sq_loss_xgboost'`
 
 
 ```{r fit_model2}
@@ -381,7 +380,6 @@ The `loss` argument options that are available for binary outcomes are all of th
 - `'logistic_loss_lasso'`
 - `'logistic_loss_lasso_gam'`
 - `'logistic_loss_gam'`
-- `'logistic_loss_gbm'`
 
 Note that all options that are available for continuous options can also potentially be used for binary outcomes. 
 
@@ -401,22 +399,7 @@ subgrp.bin <- fit.subgroup(x = x, y = y.binary,
 ```
 
 
-When gradient-boosted decision trees are used for $f(X)$ by the package `gbm`, care must be taken to choose the hyperparameters effectively. Specifically, `shrinkage` (similar to the step-size in gradient descent), `n.trees` (the number of trees to fit), and `interaction.depth` (the maximum depth of each tree) should be tuned according to the data at hand. By default for gradient-boosting models, `fit.subgroup` plots the cross validation error versus the number of trees to give the user a sense of if their choice of tuning parameters is effective.
-```{r fit_binary_2, eval = FALSE}
-subgrp.bin2 <- fit.subgroup(x = x, y = y.binary,
-                            trt = trt,
-                            propensity.func = prop.func,
-                            loss = "logistic_loss_gbm",
-                            shrinkage = 0.025,  # options for gbm
-                            n.trees = 1500,
-                            interaction.depth = 3,
-                            cv.folds = 5)
-```
 
-We can see that at least on the training data, the performance of the gradient-boosting model is better.
-```{r plotcompare_bin}
-subgrp.bin
-```
 
 ### Count Outcomes
 
@@ -425,14 +408,14 @@ The `loss` argument options that are available for count outcomes are all of the
 - `'poisson_loss_lasso'`
 - `'poisson_loss_lasso_gam'`
 - `'poisson_loss_gam'`
-- `'poisson_loss_gbm'`
+
 
 ### Time-to-event Outcomes
 
 The `loss` argument options that are available for continuous outcomes are:
 
 - `'cox_loss_lasso'`
-- `'cox_loss_gbm'`
+
 
 First we will generate time-to-event outcomes to illustrate usage of the `fit.subgroup()` model.
 

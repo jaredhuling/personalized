@@ -1,14 +1,12 @@
-## New version for 'personalized' -- 0.2.6
+## New version for 'personalized' -- 0.2.7
 
-* Various small improvements/bug fixes
-* Added changes to reflect the incoming JSS publication related to this package
-* The DOI in the CITATION is for a new JSS publication that will be registered after
-publication on CRAN.
+* Bug fix for GAM-based losses
+* Replaces gbm implementation with xgboost using a custom loss function
 
 ## Test environments
 
-* Debian Linux, (R-devel unstable, 2021-05-26 r80390)
-* local Mac OSX Catalina (R 4.1.0)
+* Windows Server 2012 R2 x64, (R-devel unstable, 2022-06-20 r82506 ucrt)
+* local Mac OSX Catalina (R 4.2.0)
 
 ## R CMD check results
 

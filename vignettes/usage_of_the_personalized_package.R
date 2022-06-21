@@ -1,4 +1,4 @@
-## ----sim_data_1, message = FALSE, warning = FALSE------------------------
+## ----sim_data_1, message = FALSE, warning = FALSE-----------------------------
 library(personalized)
 
 set.seed(123)
@@ -21,7 +21,7 @@ xbeta <- xbeta + delta * (2 * trt - 1)
 # simulate continuous outcomes
 y <- drop(xbeta) + rnorm(n.obs)
 
-## ----create_propensity---------------------------------------------------
+## ----create_propensity--------------------------------------------------------
 # create function for fitting propensity score model
 prop.func <- function(x, trt)
 {
@@ -34,10 +34,10 @@ prop.func <- function(x, trt)
  pi.x
 }
 
-## ----plot_overlap--------------------------------------------------------
+## ----plot_overlap-------------------------------------------------------------
 check.overlap(x, trt, prop.func)
 
-## ----fit_model-----------------------------------------------------------
+## ----fit_model----------------------------------------------------------------
 subgrp.model <- fit.subgroup(x = x, y = y,
                              trt = trt,
                              propensity.func = prop.func,
@@ -46,13 +46,13 @@ subgrp.model <- fit.subgroup(x = x, y = y,
 
 summary(subgrp.model)
 
-## ----plot_model----------------------------------------------------------
+## ----plot_model---------------------------------------------------------------
 plot(subgrp.model)
 
-## ----plot_model_2--------------------------------------------------------
+## ----plot_model_2-------------------------------------------------------------
 plot(subgrp.model, type = "interaction")
 
-## ----validate_model------------------------------------------------------
+## ----validate_model-----------------------------------------------------------
 validation <- validate.subgroup(subgrp.model, 
                                 B = 25L,  # specify the number of replications
                                 method = "training_test_replication",
@@ -60,16 +60,16 @@ validation <- validate.subgroup(subgrp.model,
 
 validation
 
-## ----plot_validation-----------------------------------------------------
+## ----plot_validation----------------------------------------------------------
 plot(validation)
 
-## ----plot_validation_2---------------------------------------------------
+## ----plot_validation_2--------------------------------------------------------
 plot(validation, type = "interaction")
 
-## ----plot_validation_compare---------------------------------------------
+## ----plot_validation_compare--------------------------------------------------
 plotCompare(subgrp.model, validation, type = "interaction")
 
-## ----propens_func_example_glm--------------------------------------------
+## ----propens_func_example_glm-------------------------------------------------
 propensity.func <- function(x, trt)
 {
     # save data in a data.frame
@@ -86,10 +86,10 @@ propensity.func <- function(x, trt)
 propensity.func(x, trt)[101:105]
 trt[101:105]
 
-## ----propens_func_example_const------------------------------------------
+## ----propens_func_example_const-----------------------------------------------
 propensity.func <- function(x, trt) 0.5
 
-## ----fit_model2----------------------------------------------------------
+## ----fit_model2---------------------------------------------------------------
 subgrp.model2 <- fit.subgroup(x = x, y = y,
                              trt = trt,
                              propensity.func = prop.func,
@@ -98,39 +98,26 @@ subgrp.model2 <- fit.subgroup(x = x, y = y,
 
 summary(subgrp.model2)
 
-## ----binary_example------------------------------------------------------
+## ----binary_example-----------------------------------------------------------
 # create binary outcomes
 y.binary <- 1 * (xbeta + rnorm(n.obs, sd = 2) > 0 )
 
 
-## ----fit_binary_1--------------------------------------------------------
+## ----fit_binary_1-------------------------------------------------------------
 subgrp.bin <- fit.subgroup(x = x, y = y.binary,
                            trt = trt,
                            propensity.func = prop.func,
                            loss   = "logistic_loss_lasso",
                            nfolds = 10)      # option for cv.glmnet
 
-## ----fit_binary_2, eval = FALSE------------------------------------------
-#  subgrp.bin2 <- fit.subgroup(x = x, y = y.binary,
-#                              trt = trt,
-#                              propensity.func = prop.func,
-#                              loss = "logistic_loss_gbm",
-#                              shrinkage = 0.025,  # options for gbm
-#                              n.trees = 1500,
-#                              interaction.depth = 3,
-#                              cv.folds = 5)
-
-## ----plotcompare_bin-----------------------------------------------------
-subgrp.bin
-
-## ----tte_example---------------------------------------------------------
+## ----tte_example--------------------------------------------------------------
 # create time-to-event outcomes
 surv.time <- exp(-20 - xbeta + rnorm(n.obs, sd = 1))
 cens.time <- exp(rnorm(n.obs, sd = 3))
 y.time.to.event  <- pmin(surv.time, cens.time)
 status           <- 1 * (surv.time <= cens.time)
 
-## ----tte_model_example---------------------------------------------------
+## ----tte_model_example--------------------------------------------------------
 library(survival)
 set.seed(123)
 subgrp.cox <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
@@ -140,10 +127,10 @@ subgrp.cox <- fit.subgroup(x = x, y = Surv(y.time.to.event, status),
                            loss   = "cox_loss_lasso",
                            nfolds = 10)      # option for cv.glmnet
 
-## ----print_tte_model-----------------------------------------------------
+## ----print_tte_model----------------------------------------------------------
 summary(subgrp.cox)
 
-## ----efficiency_func_example---------------------------------------------
+## ----efficiency_func_example--------------------------------------------------
 adjustment.func <- function(x, y)
 {
     df.x  <- data.frame(x)
@@ -158,7 +145,7 @@ adjustment.func <- function(x, y)
     predictions
 }
 
-## ----efficiency_ex-------------------------------------------------------
+## ----efficiency_ex------------------------------------------------------------
 
 subgrp.model.eff <- fit.subgroup(x = x, y = y,
                              trt = trt,
@@ -169,28 +156,28 @@ subgrp.model.eff <- fit.subgroup(x = x, y = y,
 
 summary(subgrp.model.eff)
 
-## ----plot_ex_model_1-----------------------------------------------------
+## ----plot_ex_model_1----------------------------------------------------------
 plot(subgrp.model)
 
-## ----plot_ex_model_2-----------------------------------------------------
+## ----plot_ex_model_2----------------------------------------------------------
 plot(subgrp.model, type = "density")
 
-## ----plot_ex_model_3-----------------------------------------------------
+## ----plot_ex_model_3----------------------------------------------------------
 plot(subgrp.model, type = "interaction")
 
-## ----plot_compare_ex2----------------------------------------------------
+## ----plot_compare_ex2---------------------------------------------------------
 plotCompare(subgrp.model, subgrp.model.eff)
 
-## ----summarize_sub-------------------------------------------------------
+## ----summarize_sub------------------------------------------------------------
 comp <- summarize.subgroups(subgrp.model)
 
-## ----print_summarize-----------------------------------------------------
+## ----print_summarize----------------------------------------------------------
 print(comp, p.value = 0.01)
 
-## ----summarize_sub2------------------------------------------------------
+## ----summarize_sub2-----------------------------------------------------------
 comp2 <- summarize.subgroups(x, subgroup = subgrp.model$benefit.scores > 0)
 
-## ----train_test_ex-------------------------------------------------------
+## ----train_test_ex------------------------------------------------------------
 
 # check that the object is an object returned by fit.subgroup()
 class(subgrp.model.eff)
@@ -202,19 +189,19 @@ validation.eff <- validate.subgroup(subgrp.model.eff,
 
 validation.eff
 
-## ----boot_bias_ex--------------------------------------------------------
+## ----boot_bias_ex-------------------------------------------------------------
 validation3 <- validate.subgroup(subgrp.model, 
                                  B = 25L,  # specify the number of replications
                                  method = "boot_bias_correction")
 
 validation3
 
-## ----plot_ex_model_1a----------------------------------------------------
+## ----plot_ex_model_1a---------------------------------------------------------
 plot(validation)
 
-## ----plot_ex_model_1b----------------------------------------------------
+## ----plot_ex_model_1b---------------------------------------------------------
 plot(validation, type = "density")
 
-## ----plot_compare_ex3, eval = FALSE--------------------------------------
+## ----plot_compare_ex3, eval = FALSE-------------------------------------------
 #  plotCompare(validation, validation.eff)
 
