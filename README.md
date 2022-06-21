@@ -19,7 +19,7 @@ analysis of medical data.
 
 The personalized package provides estimation methods for subgroup
 identification under the framework of [Chen et al
-(2017)](https://onlinelibrary.wiley.com/doi/abs/10.1111/biom.12676). It
+(2017)](https://doi.org/10.1111/biom.12676). It
 also provides routines for valid estimation of the subgroup-specific
 treatment effects.
 
