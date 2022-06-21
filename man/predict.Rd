@@ -46,13 +46,13 @@ Function to obtain predictions for weighted ksvm objects
 library(personalized)
 
 set.seed(123)
-n.obs  <- 1000
-n.vars <- 50
+n.obs  <- 500
+n.vars <- 15
 x <- matrix(rnorm(n.obs * n.vars, sd = 3), n.obs, n.vars)
 
 
 # simulate non-randomized treatment
-xbetat   <- 0.5 + 0.5 * x[,21] - 0.5 * x[,41]
+xbetat   <- 0.5 + 0.5 * x[,11] - 0.5 * x[,3]
 trt.prob <- exp(xbetat) / (1 + exp(xbetat))
 trt01    <- rbinom(n.obs, 1, prob = trt.prob)
 
@@ -81,7 +81,7 @@ subgrp.model <- fit.subgroup(x = x, y = y,
                             trt = trt01,
                             propensity.func = prop.func,
                             loss   = "sq_loss_lasso",
-                            nfolds = 5)              # option for cv.glmnet
+                            nfolds = 3)              # option for cv.glmnet
 
 subgrp.model$subgroup.trt.effects
 benefit.scores <- predict(subgrp.model, newx = x, type = "benefit.score")
