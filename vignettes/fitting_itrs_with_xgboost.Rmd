@@ -51,7 +51,7 @@ In this simulation, the treatment assignment depends on covariates and hence we 
 library(personalized)
 
 set.seed(1)
-n.obs  <- 2500
+n.obs  <- 1000
 n.vars <- 10
 x <- matrix(rnorm(n.obs * n.vars, sd = 1), n.obs, n.vars)
 
@@ -80,27 +80,30 @@ To estimate any ITR, we first must construct a propensity score function. We als
 The `personalized` package has functionality for doing so using cross-fitting (see the vignette for augmentation):
 
 ```{r}
-# arguments can be passed to cv.glmnet via `cv.glmnet.args`
+# arguments can be passed to cv.glmnet via `cv.glmnet.args`.
+# normally we would set the number of crossfit folds and internal folds to be larger, 
+# but have reduced it to make computation time shorter
 prop.func <- create.propensity.function(crossfit = TRUE,
-                                        nfolds.crossfit = 10,
-                                        cv.glmnet.args = list(type.measure = "auc", nfolds = 5))
+                                        nfolds.crossfit = 5,
+                                        cv.glmnet.args = list(type.measure = "auc", nfolds = 3))
 ```
 
 ```{r}
 aug.func <- create.augmentation.function(family = "gaussian",
                                          crossfit = TRUE,
-                                         nfolds.crossfit = 10,
-                                         cv.glmnet.args = list(type.measure = "mse", nfolds = 5))
+                                         nfolds.crossfit = 5,
+                                         cv.glmnet.args = list(type.measure = "mse", nfolds = 3))
 ```
 
-For the sake of comparison, first fit a linear ITR:
+
+For the sake of comparison, first fit a linear ITR. We have set `nfolds` to 3 for computational reasons; it should generally be higher, such as 10.
 ```{r}
 subgrp.model.linear <- fit.subgroup(x = x, y = y,
                              trt = trt,
                              propensity.func = prop.func,
                              augment.func = aug.func,
                              loss   = "sq_loss_lasso",
-                             nfolds = 10)    # option for cv.glmnet (for ITR estimation)
+                             nfolds = 3)    # option for cv.glmnet (for ITR estimation)
 
 summary(subgrp.model.linear)
 ```
@@ -117,6 +120,7 @@ Several arguments used by the `xgb.train()` and `xgb.cv()` functions from `{xgbo
 - `early_stopping_rounds`: can optionally be set. If set to an integer `k`, training will stop if the performance doesn't improve for `k` rounds.
 
 
+We have set `nfolds` to 3 for computational reasons; it should generally be higher, such as 10.
 ```{r}
 
 ## xgboost tuning parameters to use:
@@ -129,7 +133,7 @@ subgrp.model.xgb <- fit.subgroup(x = x, y = y,
                         augment.func = aug.func,
                         ## specify xgboost via the 'loss' argument
                         loss   = "sq_loss_xgboost",
-                        nfold = 5,
+                        nfold = 3,
                         params = param, verbose = 0,
                         nrounds = 5000, early_stopping_rounds = 50)
 

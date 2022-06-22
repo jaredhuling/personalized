@@ -26,16 +26,18 @@ xbeta <- xbeta + delta * (2 * trt - 1) * 0.5
 y <- drop(xbeta) + rnorm(n.obs)
 
 ## -----------------------------------------------------------------------------
-# arguments can be passed to cv.glmnet via `cv.glmnet.args`
+# arguments can be passed to cv.glmnet via `cv.glmnet.args`.
+# normally we would set the number of crossfit folds and internal folds to be larger, 
+# but have reduced it to make computation time shorter
 prop.func <- create.propensity.function(crossfit = TRUE,
-                                        nfolds.crossfit = 10,
-                                        cv.glmnet.args = list(type.measure = "auc", nfolds = 5))
+                                        nfolds.crossfit = 5,
+                                        cv.glmnet.args = list(type.measure = "auc", nfolds = 3))
 
 ## -----------------------------------------------------------------------------
 aug.func <- create.augmentation.function(family = "gaussian",
                                          crossfit = TRUE,
-                                         nfolds.crossfit = 10,
-                                         cv.glmnet.args = list(type.measure = "mse", nfolds = 5))
+                                         nfolds.crossfit = 5,
+                                         cv.glmnet.args = list(type.measure = "mse", nfolds = 3))
 
 ## -----------------------------------------------------------------------------
 subgrp.model.linear <- fit.subgroup(x = x, y = y,
@@ -43,7 +45,7 @@ subgrp.model.linear <- fit.subgroup(x = x, y = y,
                              propensity.func = prop.func,
                              augment.func = aug.func,
                              loss   = "sq_loss_lasso",
-                             nfolds = 10)    # option for cv.glmnet (for ITR estimation)
+                             nfolds = 3)    # option for cv.glmnet (for ITR estimation)
 
 summary(subgrp.model.linear)
 
@@ -59,7 +61,7 @@ subgrp.model.xgb <- fit.subgroup(x = x, y = y,
                         augment.func = aug.func,
                         ## specify xgboost via the 'loss' argument
                         loss   = "sq_loss_xgboost",
-                        nfold = 5,
+                        nfold = 3,
                         params = param, verbose = 0,
                         nrounds = 5000, early_stopping_rounds = 50)
 

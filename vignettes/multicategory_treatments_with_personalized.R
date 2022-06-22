@@ -1,16 +1,16 @@
-## ----loadpkg, message=FALSE, warning=FALSE-------------------------------
+## ----loadpkg, message=FALSE, warning=FALSE------------------------------------
 library(personalized)
 
-## ----sim_three_trt_data--------------------------------------------------
+## ----sim_three_trt_data-------------------------------------------------------
 set.seed(123)
 n.obs  <- 250
-n.vars <- 15
+n.vars <- 10
 x <- matrix(rnorm(n.obs * n.vars, sd = 3), n.obs, n.vars)
 
 # simulated non-randomized treatment with multiple levels
 # based off of a multinomial logistic model
 xbetat_1 <- 0.1 + 0.5 * x[,1]  - 0.25 * x[,5]
-xbetat_2 <- 0.1 - 0.5 * x[,11] + 0.25 * x[,15]
+xbetat_2 <- 0.1 - 0.5 * x[,9] + 0.25 * x[,5]
 trt.1.prob <- exp(xbetat_1) / (1 + exp(xbetat_1) + exp(xbetat_2))
 trt.2.prob <- exp(xbetat_2) / (1 + exp(xbetat_1) + exp(xbetat_2))
 trt.3.prob <- 1 - (trt.1.prob + trt.2.prob)
@@ -28,8 +28,8 @@ delta1 <- 2 * (0.5 + x[,2] - 2 * x[,3]  )
 delta2 <- (0.5 + x[,6] - 2 * x[,5] )
 
 # main covariate effects with nonlinearities
-xbeta <- x[,1] + x[,11] - 2 * x[,12]^2 + x[,13] + 
-    0.5 * x[,15] ^ 2 + 2 * x[,2] - 3 * x[,5]
+xbeta <- x[,1] + x[,9] - 2 * x[,4]^2 + x[,4] + 
+    0.5 * x[,5] ^ 2 + 2 * x[,2] - 3 * x[,5]
 
 # create entire functional form of E(Y|T,X)
 xbeta <- xbeta + 
@@ -41,15 +41,16 @@ xbeta <- xbeta +
 y <- xbeta + rnorm(n.obs, sd = 2)
 
 
-## ----display_mult_trt_vector---------------------------------------------
+## ----display_mult_trt_vector--------------------------------------------------
 trt[1:5]
 table(trt)
 
-## ----define_multi_propens------------------------------------------------
+## ----define_multi_propens-----------------------------------------------------
 propensity.multinom.lasso <- function(x, trt)
 {
     if (!is.factor(trt)) trt <- as.factor(trt)
-    gfit <- cv.glmnet(y = trt, x = x, family = "multinomial")
+    gfit <- cv.glmnet(y = trt, x = x, family = "multinomial",
+                      nfolds = 3)
 
     # predict returns a matrix of probabilities:
     # one column for each treatment level
@@ -65,12 +66,13 @@ propensity.multinom.lasso <- function(x, trt)
 ## ----check_overlap_multitreat, fig.cap = "Propensity score overlap plot for multi-category treatment data."----
 check.overlap(x = x, trt = trt, propensity.multinom.lasso)
 
-## ----fit_multi_trt_model-------------------------------------------------
+## ----fit_multi_trt_model------------------------------------------------------
 set.seed(123)
 subgrp.multi <- fit.subgroup(x = x, y = y,
     trt = trt, propensity.func = propensity.multinom.lasso,
     reference.trt = "Trt_3",
-    loss   = "sq_loss_lasso")
+    loss   = "sq_loss_lasso",
+    nfolds = 3)
 
 summary(subgrp.multi)
 
@@ -78,10 +80,10 @@ summary(subgrp.multi)
 pl <- plot(subgrp.multi)
 pl + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
-## ----validate_multi_trt_model, eval = TRUE-------------------------------
+## ----validate_multi_trt_model, eval = TRUE------------------------------------
 set.seed(123)
 validation.multi <- validate.subgroup(subgrp.multi, 
-    B = 5,  # specify the number of replications
+    B = 4,  # specify the number of replications
     method = "training_test_replication",
     train.fraction = 0.5)
 
@@ -91,7 +93,7 @@ print(validation.multi, digits = 2, sample.pct = TRUE)
 plv <- plot(validation.multi)
 plv + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
-## ----multinom_propens----------------------------------------------------
+## ----multinom_propens---------------------------------------------------------
 propensity.func.multinom <- function(x, trt)
 {
     df <- data.frame(trt = trt, x)
@@ -114,7 +116,7 @@ propensity.func.multinom <- function(x, trt)
     probs
 }
 
-## ----multinom_propens2---------------------------------------------------
+## ----multinom_propens2--------------------------------------------------------
 propensity.func.multinom <- function(x, trt)
 {
     require(nnet)
