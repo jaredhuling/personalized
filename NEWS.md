@@ -1,4 +1,13 @@
+
+# personalized 0.2.7
+
+* Bug fix for GAM-based losses
+* Replaces gbm implementation with xgboost using a custom loss function
+* Adds vignette for estimation of flexible ITRs via xgboost
+
+
 # personalized 0.2.6
+
 * Various small improvements/bug fixes
 * Added changes to reflect the incoming JSS publication related to this package
 * The DOI in the CITATION is for a new JSS publication that will be registered after
