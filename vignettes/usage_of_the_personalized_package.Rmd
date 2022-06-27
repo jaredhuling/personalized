@@ -540,7 +540,7 @@ Since our estimated subgroups are conditional on observing the outcomes of the p
 
 The first method is prediction-based. For each replication in this procedure, data are randomly partitioned into a training and testing portion. For each replocation the subgroup identification model is estimated using the training procedure and the subgroup treatment effects are estimated using the test data. This method requires two arguments to be passed to `validate.subgroup()`. The first argument is `B`, the number of replications and the second argument is `train.fraction`, which is the proportion of all samples which will be used for training (hence `1 - train.fraction` is the portion of samples used for testing).
 
-The main object which needs to be passed to `validate.subgroup()` is a fitted object returned by the `fit.subgroup()`. Note that in order to validate a fitted object from `fit.subgroup()`, the model must be fit with the `fit.subgroup()` `retcall` set to `TRUE`.
+The main object which needs to be passed to `validate.subgroup()` is a fitted object returned by the `fit.subgroup()`. Note that in order to validate a fitted object from `fit.subgroup()`, the model must be fit with the `fit.subgroup()` `retcall` set to `TRUE`. Note: here we use 5 replications, but ideally this should be much larger, like 500 or 1000.
 
 ```{r train_test_ex}
 
@@ -548,7 +548,7 @@ The main object which needs to be passed to `validate.subgroup()` is a fitted ob
 class(subgrp.model.eff)
 
 validation.eff <- validate.subgroup(subgrp.model.eff, 
-                                 B = 25L,  # specify the number of replications
+                                 B = 5L,  # specify the number of replications
                                  method = "training_test_replication",
                                  train.fraction = 0.75)
 
@@ -574,7 +574,7 @@ $$
 
 ```{r boot_bias_ex}
 validation3 <- validate.subgroup(subgrp.model, 
-                                 B = 10L,  # specify the number of replications
+                                 B = 5L,  # specify the number of replications
                                  method = "boot_bias_correction")
 
 validation3

@@ -183,7 +183,7 @@ comp2 <- summarize.subgroups(x, subgroup = subgrp.model$benefit.scores > 0)
 class(subgrp.model.eff)
 
 validation.eff <- validate.subgroup(subgrp.model.eff, 
-                                 B = 25L,  # specify the number of replications
+                                 B = 5L,  # specify the number of replications
                                  method = "training_test_replication",
                                  train.fraction = 0.75)
 
@@ -191,7 +191,7 @@ validation.eff
 
 ## ----boot_bias_ex-------------------------------------------------------------
 validation3 <- validate.subgroup(subgrp.model, 
-                                 B = 10L,  # specify the number of replications
+                                 B = 5L,  # specify the number of replications
                                  method = "boot_bias_correction")
 
 validation3

@@ -51,35 +51,35 @@ In this simulation, the treatment assignment depends on covariates and hence we 
 library(personalized)
 
 set.seed(1)
-n.obs  <- 1000
-n.vars <- 20
+n.obs  <- 500
+n.vars <- 10
 x <- matrix(rnorm(n.obs * n.vars, sd = 3), n.obs, n.vars)
 
 # simulate non-randomized treatment
-xbetat   <- 0.5 + 0.25 * x[,19] - 0.25 * x[,11]
+xbetat   <- 0.5 + 0.25 * x[,9] - 0.25 * x[,1]
 trt.prob <- exp(xbetat) / (1 + exp(xbetat))
 trt      <- rbinom(n.obs, 1, prob = trt.prob)
 
 # simulate delta
-delta <- (0.5 + x[,2] - 0.5 * x[,3] - 1 * x[,11] + 1 * x[,1] * x[,12] )
+delta <- (0.5 + x[,2] - 0.5 * x[,3] - 1 * x[,1] + 1 * x[,1] * x[,4] )
 
 # simulate main effects g(X)
-xbeta <- x[,1] + x[,11] - 2 * x[,12]^2 + x[,13] + 0.5 * x[,15] ^ 2
+xbeta <- 2 * x[,1] + 3 * x[,4] - 0.25 * x[,2]^2 + 2 * x[,3] + 0.25 * x[,5] ^ 2
 xbeta <- xbeta + delta * (2 * trt - 1)
 
 # simulate continuous outcomes
-y <- drop(xbeta) + rnorm(n.obs)
+y <- drop(xbeta) + rnorm(n.obs, sd = 3)
 ```
 
 
 # Propensity score utilities
 
-Estimation of the propensity score is a fundamental aspect of the estimation of individualized treatment rules (ITRs). The `personalized` package offers support tools for construction of the propensity score function used by the `fit.subgroup()` function. The support is via the `create.propensity.function()` function. This tool allows for estimation of the propensity score in high dimensions via `glmnet`. In high dimensions it can be important to account for regularization bias via cross-fitting (<https://arxiv.org/abs/1608.00060>); the `create.propensity.function()` offers a cross-fitting approach for high-dimensional propensity score estimation. A basic usage of this function with cross-fitting (with 5 folds; normally we would set this larger, but have reduced it to make computation time shorter) is as follows:
+Estimation of the propensity score is a fundamental aspect of the estimation of individualized treatment rules (ITRs). The `personalized` package offers support tools for construction of the propensity score function used by the `fit.subgroup()` function. The support is via the `create.propensity.function()` function. This tool allows for estimation of the propensity score in high dimensions via `glmnet`. In high dimensions it can be important to account for regularization bias via cross-fitting (<https://arxiv.org/abs/1608.00060>); the `create.propensity.function()` offers a cross-fitting approach for high-dimensional propensity score estimation. A basic usage of this function with cross-fitting (with 4 folds; normally we would set this larger, but have reduced it to make computation time shorter) is as follows:
 
 ```{r}
 # arguments can be passed to cv.glmnet via `cv.glmnet.args`
 prop.func <- create.propensity.function(crossfit = TRUE,
-                                        nfolds.crossfit = 5,
+                                        nfolds.crossfit = 4,
                                         cv.glmnet.args = list(type.measure = "auc", nfolds = 3))
 ```
 
@@ -105,7 +105,7 @@ Efficiency in estimating ITRs can be improved by including an augmentation term.
 ```{r}
 aug.func <- create.augmentation.function(family = "gaussian",
                                          crossfit = TRUE,
-                                         nfolds.crossfit = 5,
+                                         nfolds.crossfit = 4,
                                          cv.glmnet.args = list(type.measure = "mae", nfolds = 3))
 ```
 
@@ -130,16 +130,16 @@ summary(subgrp.model.aug)
 We first run the training/testing procedure to assess the performance of the non-augmented estimator:
 
 ```{r}
-valmod <- validate.subgroup(subgrp.model, B = 4,
+valmod <- validate.subgroup(subgrp.model, B = 3,
                             method = "training_test",
                             train.fraction = 0.75)
 valmod
 ```
 
-Then we compare with the augmented estimator. Although this is based on just 5 replications, we can see that the augmented estimator is much better at discriminating between benefitting and non-benefitting patients, as evidenced by the large treatment effect among those predicted to benefit by the augmented estimator versus the smaller conditional treatment effect above.
+Then we compare with the augmented estimator. Although this is based on just 3 replications, we can see that the augmented estimator is  better at discriminating between benefitting and non-benefitting patients, as evidenced by the large treatment effect among those predicted to benefit (and smaller standard error) by the augmented estimator versus the smaller conditional treatment effect above.
 
 ```{r}
-valmod.aug <- validate.subgroup(subgrp.model.aug, B = 4,
+valmod.aug <- validate.subgroup(subgrp.model.aug, B = 3,
                                 method = "training_test",
                                 train.fraction = 0.75)
 valmod.aug

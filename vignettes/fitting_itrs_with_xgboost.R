@@ -5,7 +5,7 @@ library(personalized)
 library(personalized)
 
 set.seed(1)
-n.obs  <- 2500
+n.obs  <- 500
 n.vars <- 10
 x <- matrix(rnorm(n.obs * n.vars, sd = 1), n.obs, n.vars)
 
@@ -30,13 +30,13 @@ y <- drop(xbeta) + rnorm(n.obs)
 # normally we would set the number of crossfit folds and internal folds to be larger, 
 # but have reduced it to make computation time shorter
 prop.func <- create.propensity.function(crossfit = TRUE,
-                                        nfolds.crossfit = 5,
+                                        nfolds.crossfit = 4,
                                         cv.glmnet.args = list(type.measure = "auc", nfolds = 3))
 
 ## -----------------------------------------------------------------------------
 aug.func <- create.augmentation.function(family = "gaussian",
                                          crossfit = TRUE,
-                                         nfolds.crossfit = 5,
+                                         nfolds.crossfit = 4,
                                          cv.glmnet.args = list(type.measure = "mse", nfolds = 3))
 
 ## -----------------------------------------------------------------------------
@@ -67,17 +67,17 @@ subgrp.model.xgb <- fit.subgroup(x = x, y = y,
 
 subgrp.model.xgb
 
-## -----------------------------------------------------------------------------
-valmod.lin <- validate.subgroup(subgrp.model.linear, B = 5,
-                            method = "training_test",
-                            train.fraction = 0.75)
-valmod.lin
+## ----eval=FALSE---------------------------------------------------------------
+#  valmod.lin <- validate.subgroup(subgrp.model.linear, B = 100,
+#                              method = "training_test",
+#                              train.fraction = 0.75)
+#  valmod.lin
 
-## -----------------------------------------------------------------------------
-valmod.xgb <- validate.subgroup(subgrp.model.xgb, B = 5,
-                                method = "training_test",
-                                train.fraction = 0.75)
-valmod.xgb
+## ----eval=FALSE---------------------------------------------------------------
+#  valmod.xgb <- validate.subgroup(subgrp.model.xgb, B = 100,
+#                                  method = "training_test",
+#                                  train.fraction = 0.75)
+#  valmod.xgb
 
 ## ---- fig.height=10-----------------------------------------------------------
 

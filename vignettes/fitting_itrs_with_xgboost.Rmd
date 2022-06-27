@@ -51,7 +51,7 @@ In this simulation, the treatment assignment depends on covariates and hence we 
 library(personalized)
 
 set.seed(1)
-n.obs  <- 1000
+n.obs  <- 500
 n.vars <- 10
 x <- matrix(rnorm(n.obs * n.vars, sd = 1), n.obs, n.vars)
 
@@ -84,14 +84,14 @@ The `personalized` package has functionality for doing so using cross-fitting (s
 # normally we would set the number of crossfit folds and internal folds to be larger, 
 # but have reduced it to make computation time shorter
 prop.func <- create.propensity.function(crossfit = TRUE,
-                                        nfolds.crossfit = 5,
+                                        nfolds.crossfit = 4,
                                         cv.glmnet.args = list(type.measure = "auc", nfolds = 3))
 ```
 
 ```{r}
 aug.func <- create.augmentation.function(family = "gaussian",
                                          crossfit = TRUE,
-                                         nfolds.crossfit = 5,
+                                         nfolds.crossfit = 4,
                                          cv.glmnet.args = list(type.measure = "mse", nfolds = 3))
 ```
 
@@ -142,10 +142,10 @@ subgrp.model.xgb
 
 # Comparing performance with augmentation
 
-We first run the training/testing procedure to assess the performance of the non-augmented estimator (ideally, with the number of replications much larger than `B=5`):
+We first run the training/testing procedure to assess the performance of the non-augmented estimator (ideally, with the number of replications larger than `B=100`). Note we do not run this part due to computation time.
 
-```{r}
-valmod.lin <- validate.subgroup(subgrp.model.linear, B = 5,
+```{r eval=FALSE}
+valmod.lin <- validate.subgroup(subgrp.model.linear, B = 100,
                             method = "training_test",
                             train.fraction = 0.75)
 valmod.lin
@@ -153,8 +153,8 @@ valmod.lin
 
 Then we compare with the augmented estimator. Although this is based on just 5 replications, we can see that the augmented estimator is much better at discriminating between benefitting and non-benefitting patients, as evidenced by the large treatment effect among those predicted to benefit by the augmented estimator versus the smaller conditional treatment effect above.
 
-```{r}
-valmod.xgb <- validate.subgroup(subgrp.model.xgb, B = 5,
+```{r eval=FALSE}
+valmod.xgb <- validate.subgroup(subgrp.model.xgb, B = 100,
                                 method = "training_test",
                                 train.fraction = 0.75)
 valmod.xgb
