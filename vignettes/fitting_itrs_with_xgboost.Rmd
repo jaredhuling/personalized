@@ -140,9 +140,9 @@ subgrp.model.xgb <- fit.subgroup(x = x, y = y,
 subgrp.model.xgb
 ```
 
-# Comparing performance with augmentation
+# Comparing performance with linear ITRs
 
-We first run the training/testing procedure to assess the performance of the non-augmented estimator (ideally, with the number of replications larger than `B=100`). Note we do not run this part due to computation time.
+We first run the training/testing procedure to assess the performance of the linear estimator (ideally, with the number of replications larger than `B=100`). Note we do not run this part due to computation time.
 
 ```{r eval=FALSE}
 valmod.lin <- validate.subgroup(subgrp.model.linear, B = 100,
@@ -151,7 +151,7 @@ valmod.lin <- validate.subgroup(subgrp.model.linear, B = 100,
 valmod.lin
 ```
 
-Then we compare with the augmented estimator. Although this is based on just 5 replications, we can see that the augmented estimator is much better at discriminating between benefitting and non-benefitting patients, as evidenced by the large treatment effect among those predicted to benefit by the augmented estimator versus the smaller conditional treatment effect above.
+Then we compare with the xgboost-based estimator. Although this is based on just 5 replications, we can see that the xgboost estimator is much better at discriminating between benefitting and non-benefitting patients, as would be evidenced by the large treatment effect among those predicted to benefit by the xgboost estimator and below in the plots as the estimated conditional average treatment effect (CATE) of the xgboost estimator tracks better with the true CATE than does the linear estimate.
 
 ```{r eval=FALSE}
 valmod.xgb <- validate.subgroup(subgrp.model.xgb, B = 100,
