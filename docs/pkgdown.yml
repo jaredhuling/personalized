@@ -1,9 +1,10 @@
-pandoc: '2.13'
-pkgdown: 1.6.1
+pandoc: 2.17.1.1
+pkgdown: 2.0.5
 pkgdown_sha: ~
 articles:
   efficiency_augmentation_personalized: efficiency_augmentation_personalized.html
+  fitting_itrs_with_xgboost: fitting_itrs_with_xgboost.html
   multicategory_treatments_with_personalized: multicategory_treatments_with_personalized.html
   usage_of_the_personalized_package: usage_of_the_personalized_package.html
-last_built: 2021-05-31T18:28Z
+last_built: 2022-07-07T14:58Z
 

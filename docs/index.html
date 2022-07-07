@@ -26,6 +26,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -38,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">personalized</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.7</span>
       </span>
     </div>
 
@@ -46,12 +48,12 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fas fa-home"></span>
+    <span class="fa fa-home"></span>
      
   </a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
@@ -61,10 +63,13 @@
       <a href="articles/usage_of_the_personalized_package.html">Usage of the personalized Package</a>
     </li>
     <li>
-      <a href="articles/efficiency_augmentation_personalized.html">Improving Estimation Efficiency via Augmentation and Propensity Score Utilities</a>
+      <a href="articles/efficiency_augmentation_personalized.html">Utilities for Improving Estimation Efficiency via Augmentation and for Propensity Score Estimation</a>
     </li>
     <li>
       <a href="articles/multicategory_treatments_with_personalized.html">Multi-category Treatments with personalized</a>
+    </li>
+    <li>
+      <a href="articles/fitting_itrs_with_xgboost.html">Estimation of Flexible ITRs with xgboost</a>
     </li>
   </ul>
 </li>
@@ -77,8 +82,8 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/jaredhuling/personalized">
-    <span class="fas fa-github"></span>
+  <a href="https://github.com/jaredhuling/personalized" class="external-link">
+    <span class="fa fa-github"></span>
      
   </a>
 </li>
@@ -97,62 +102,57 @@
 
 
 <p><img src="reference/figures/sticker.png" align="right" width="15%" height="15%"></p>
-<div id="overview-of-personalized" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#overview-of-personalized" class="anchor"></a>Overview of ‘personalized’</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="overview-of-personalized">Overview of ‘personalized’<a class="anchor" aria-label="anchor" href="#overview-of-personalized"></a>
+</h1></div>
 <p>The ‘personalized’ package is designed for the analysis of data where the effect of a treatment or intervention may vary for different patients. It can be used for either data from randomized controlled trials or observational studies and is not limited specifically to the analysis of medical data.</p>
-<p>The personalized package provides estimation methods for subgroup identification under the framework of <a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/biom.12676">Chen et al (2017)</a>. It also provides routines for valid estimation of the subgroup-specific treatment effects.</p>
+<p>The personalized package provides estimation methods for subgroup identification under the framework of <a href="https://doi.org/10.1111/biom.12676" class="external-link">Chen et al (2017)</a>. It also provides routines for valid estimation of the subgroup-specific treatment effects.</p>
 <p><img src="articles/usage_overview-1.png" width="100%"></p>
-<div id="documentation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#documentation" class="anchor"></a>Documentation</h2>
-<p><a href="https://jaredhuling.org/personalized/">Documentation</a></p>
+<div class="section level2">
+<h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
+</h2>
+<p><a href="https://jaredhuling.org/personalized/" class="external-link">Documentation</a></p>
 <ul>
-<li>
-<a href="https://jaredhuling.org/personalized/articles/usage_of_the_personalized_package.html">Tutorial / Vignette</a>
-<ul>
-<li>tutorial of statistical methodology and usage of the package</li>
-</ul>
-</li>
-<li><a href="https://jaredhuling.org/personalized/reference/index.html">Function help files</a></li>
+<li><p><a href="https://jaredhuling.org/personalized/articles/usage_of_the_personalized_package.html" class="external-link">Tutorial / Vignette</a> - tutorial of statistical methodology and usage of the package</p></li>
+<li><p><a href="https://jaredhuling.org/personalized/reference/index.html" class="external-link">Function help files</a></p></li>
 </ul>
 </div>
 </div>
-<div id="installing-the-personalized-package" class="section level1">
-<h1 class="hasAnchor">
-<a href="#installing-the-personalized-package" class="anchor"></a>Installing the ‘personalized’ package</h1>
+<div class="section level1">
+<h1 id="installing-the-personalized-package">Installing the ‘personalized’ package<a class="anchor" aria-label="anchor" href="#installing-the-personalized-package"></a>
+</h1>
 <p>Install from CRAN using:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"personalized"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"personalized"</span><span class="op">)</span></code></pre></div>
 <p>or install the development version using the <strong>devtools</strong> package:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"jaredhuling/personalized"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"jaredhuling/personalized"</span><span class="op">)</span></code></pre></div>
 <p>or by cloning and building using <code>R CMD INSTALL</code></p>
 </div>
-<div id="quick-usage-overview" class="section level1">
-<h1 class="hasAnchor">
-<a href="#quick-usage-overview" class="anchor"></a>Quick Usage Overview</h1>
+<div class="section level1">
+<h1 id="quick-usage-overview">Quick Usage Overview<a class="anchor" aria-label="anchor" href="#quick-usage-overview"></a>
+</h1>
 <p>Load the package:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://jaredhuling.org/personalized/">personalized</a></span><span class="op">)</span></code></pre></div>
-<div id="create-a-propensity-score-model" class="section level3">
-<h3 class="hasAnchor">
-<a href="#create-a-propensity-score-model" class="anchor"></a>Create a propensity score model</h3>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jaredhuling.org/personalized/" class="external-link">personalized</a></span><span class="op">)</span></code></pre></div>
+<div class="section level3">
+<h3 id="create-a-propensity-score-model">Create a propensity score model<a class="anchor" aria-label="anchor" href="#create-a-propensity-score-model"></a>
+</h3>
 <p>(it should be a function which inputs covariates and treatments and returns propensity score):</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">prop.func</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">trt</span><span class="op">)</span>
 <span class="op">{</span>
     <span class="co"># fit propensity score model</span>
-    <span class="va">propens.model</span> <span class="op">&lt;-</span> <span class="fu">cv.glmnet</span><span class="op">(</span>y <span class="op">=</span> <span class="va">trt</span>,
+    <span class="va">propens.model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://glmnet.stanford.edu/reference/cv.glmnet.html" class="external-link">cv.glmnet</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">trt</span>,
                                x <span class="op">=</span> <span class="va">x</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span>
-    <span class="va">pi.x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">propens.model</span>, s <span class="op">=</span> <span class="st">"lambda.min"</span>,
+    <span class="va">pi.x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">propens.model</span>, s <span class="op">=</span> <span class="st">"lambda.min"</span>,
                     newx <span class="op">=</span> <span class="va">x</span>, type <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span>
     <span class="va">pi.x</span>
 <span class="op">}</span></code></pre></div>
 </div>
-<div id="fit-a-model-to-estimate-subgroup" class="section level3">
-<h3 class="hasAnchor">
-<a href="#fit-a-model-to-estimate-subgroup" class="anchor"></a>Fit a model to estimate subgroup:</h3>
+<div class="section level3">
+<h3 id="fit-a-model-to-estimate-subgroup">Fit a model to estimate subgroup:<a class="anchor" aria-label="anchor" href="#fit-a-model-to-estimate-subgroup"></a>
+</h3>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">subgrp.model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fit.subgroup.html">fit.subgroup</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>,
                              trt <span class="op">=</span> <span class="va">trt</span>,
@@ -160,11 +160,11 @@
                              loss   <span class="op">=</span> <span class="st">"sq_loss_lasso"</span>,
                              nfolds <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>              <span class="co"># option for cv.glmnet</span></code></pre></div>
 </div>
-<div id="display-estimated-subgroups-and-variables-selected-which-determine-the-subgroups" class="section level3">
-<h3 class="hasAnchor">
-<a href="#display-estimated-subgroups-and-variables-selected-which-determine-the-subgroups" class="anchor"></a>Display estimated subgroups and variables selected which determine the subgroups:</h3>
+<div class="section level3">
+<h3 id="display-estimated-subgroups-and-variables-selected-which-determine-the-subgroups">Display estimated subgroups and variables selected which determine the subgroups:<a class="anchor" aria-label="anchor" href="#display-estimated-subgroups-and-variables-selected-which-determine-the-subgroups"></a>
+</h3>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">subgrp.model</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">subgrp.model</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">## family:    gaussian </span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="do">## loss:      sq_loss_lasso </span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="do">## method:    weighting </span></span>
@@ -214,19 +214,19 @@
 <span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a><span class="do">##             Trt     V2     V11     V17    V32    V35</span></span>
 <span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimate 0.5463 0.9827 -0.4356 -0.1532 0.0326 0.1007</span></span></code></pre></div>
 </div>
-<div id="use-repeated-train-and-test-splitting-to-estimate-subgroup-treatment-effects" class="section level3">
-<h3 class="hasAnchor">
-<a href="#use-repeated-train-and-test-splitting-to-estimate-subgroup-treatment-effects" class="anchor"></a>Use repeated train and test splitting to estimate subgroup treatment effects:</h3>
+<div class="section level3">
+<h3 id="use-repeated-train-and-test-splitting-to-estimate-subgroup-treatment-effects">Use repeated train and test splitting to estimate subgroup treatment effects:<a class="anchor" aria-label="anchor" href="#use-repeated-train-and-test-splitting-to-estimate-subgroup-treatment-effects"></a>
+</h3>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">val.model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/validate.subgroup.html">validate.subgroup</a></span><span class="op">(</span><span class="va">subgrp.model</span>, B <span class="op">=</span> <span class="fl">100</span>,
                                method <span class="op">=</span> <span class="st">"training_test"</span>,
                                train.fraction <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="display-estimated-subgroup-treatment-effects" class="section level3">
-<h3 class="hasAnchor">
-<a href="#display-estimated-subgroup-treatment-effects" class="anchor"></a>Display estimated subgroup treatment effects:</h3>
+<div class="section level3">
+<h3 id="display-estimated-subgroup-treatment-effects">Display estimated subgroup treatment effects:<a class="anchor" aria-label="anchor" href="#display-estimated-subgroup-treatment-effects"></a>
+</h3>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">val.model</span>, digits <span class="op">=</span> <span class="fl">2</span>, sample.pct <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">val.model</span>, digits <span class="op">=</span> <span class="fl">2</span>, sample.pct <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="do">## family:  gaussian </span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="do">## loss:    sq_loss_lasso </span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="do">## method:  weighting </span></span>
@@ -254,28 +254,24 @@
 <span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a><span class="do">## 2.91 (SE = 8.29)</span></span></code></pre></div>
 <p>Visualize subgroup-specific treatment effect estimates across training/testing iterations:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">val.model</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">val.model</span><span class="op">)</span></code></pre></div>
 <p><img src="articles/vis_val-1.png" width="75%" style="display: block; margin: auto;"></p>
 </div>
-<div id="investigate-the-marginal-characteristics-of-the-two-estimated-subgroups" class="section level3">
-<h3 class="hasAnchor">
-<a href="#investigate-the-marginal-characteristics-of-the-two-estimated-subgroups" class="anchor"></a>Investigate the marginal characteristics of the two estimated subgroups</h3>
+<div class="section level3">
+<h3 id="investigate-the-marginal-characteristics-of-the-two-estimated-subgroups">Investigate the marginal characteristics of the two estimated subgroups<a class="anchor" aria-label="anchor" href="#investigate-the-marginal-characteristics-of-the-two-estimated-subgroups"></a>
+</h3>
 <p>Here we only display covariates with a significantly different mean value (at level 0.05)</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">summ</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/summarize.subgroups.html">summarize.subgroups</a></span><span class="op">(</span><span class="va">subgrp.model</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">summ</span>, p.value <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb13"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="do">##     Avg (recom Ctrl) Avg (recom Trt) Ctrl - Trt SE (recom Ctrl)</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="do">## V2           -2.4161          1.9013     -4.317          0.1423</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="do">## V11           1.1279         -0.7963      1.924          0.1914</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="do">## V17           0.8053         -0.3715      1.177          0.2170</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="do">##     SE (recom Trt)</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="do">## V2          0.1298</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="do">## V11         0.1572</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="do">## V17         0.1736</span></span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">summ</span>, p.value <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="do">##     Avg (recom Ctrl) Avg (recom Trt) Ctrl - Trt SE (recom Ctrl) SE (recom Trt)</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="do">## V2           -2.4161          1.9013     -4.317          0.1423         0.1298</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="do">## V11           1.1279         -0.7963      1.924          0.1914         0.1572</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="do">## V17           0.8053         -0.3715      1.177          0.2170         0.1736</span></span></code></pre></div>
 </div>
-<div id="accessing-help-files-for-main-functions-of-personalized" class="section level2">
-<h2 class="hasAnchor">
-<a href="#accessing-help-files-for-main-functions-of-personalized" class="anchor"></a>Accessing Help Files for Main Functions of <code>personalized</code>
+<div class="section level2">
+<h2 id="accessing-help-files-for-main-functions-of-personalized">Accessing Help Files for Main Functions of <code>personalized</code>
+<a class="anchor" aria-label="anchor" href="#accessing-help-files-for-main-functions-of-personalized"></a>
 </h2>
 <p>Access help files for the main functions of the <code>personalized</code> package:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
@@ -288,56 +284,60 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=personalized">https://​cloud.r-project.org/​package=personalized</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/jaredhuling/personalized/">https://​github.com/​jaredhuling/​personalized/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/jaredhuling/personalized/issues">https://​github.com/​jaredhuling/​personalized/​issues</a>
-</li>
-</ul>
-</div>
-<div class="license">
-<h2>License</h2>
-<ul class="list-unstyled">
-<li><a href="https://www.r-project.org/Licenses/GPL-2">GPL-2</a></li>
-</ul>
-</div>
-<div class="citation">
-<h2>Citation</h2>
-<ul class="list-unstyled">
-<li><a href="authors.html">Citing personalized</a></li>
-</ul>
-</div>
-<div class="developers">
-<h2>Developers</h2>
-<ul class="list-unstyled">
-<li>Jared Huling <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-0670-4845" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="https://cloud.r-project.org/package=personalized" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/jaredhuling/personalized/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/jaredhuling/personalized/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="license">
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://cran.r-project.org/package=personalized"><img src="http://www.r-pkg.org/badges/version/personalized" alt="version"></a></li>
-<li><a href="https://travis-ci.org/jaredhuling/personalized"><img src="https://travis-ci.org/jaredhuling/personalized.svg?branch=master" alt="Build Status"></a></li>
-<li><a href="https://ci.appveyor.com/project/jaredhuling/personalized"><img src="https://ci.appveyor.com/api/projects/status/github/jaredhuling/personalized?branch=master&amp;svg=true" alt="Appveyor Build Status"></a></li>
-<li><a href="https://codecov.io/gh/jaredhuling/personalized"><img src="https://codecov.io/gh/jaredhuling/personalized/branch/master/graph/badge.svg" alt="codecov"></a></li>
-<li><a href="https://cran.r-project.org/package=personalized"><img src="http://cranlogs.r-pkg.org/badges/personalized"></a></li>
+<li><a href="https://www.r-project.org/Licenses/GPL-2" class="external-link">GPL-2</a></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing personalized</a></li>
+</ul>
 </div>
+
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
+<ul class="list-unstyled">
+<li>Jared Huling <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-0670-4845" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html">More about authors...</a></li>
+</ul>
+</div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://cran.r-project.org/package=personalized" class="external-link"><img src="http://www.r-pkg.org/badges/version/personalized" alt="version"></a></li>
+<li><a href="https://travis-ci.org/jaredhuling/personalized" class="external-link"><img src="https://travis-ci.org/jaredhuling/personalized.svg?branch=master" alt="Build Status"></a></li>
+<li><a href="https://ci.appveyor.com/project/jaredhuling/personalized" class="external-link"><img src="https://ci.appveyor.com/api/projects/status/github/jaredhuling/personalized?branch=master&amp;svg=true" alt="Appveyor Build Status"></a></li>
+<li><a href="https://app.codecov.io/gh/jaredhuling/personalized" class="external-link"><img src="https://codecov.io/gh/jaredhuling/personalized/branch/master/graph/badge.svg" alt="codecov"></a></li>
+<li><a href="https://cran.r-project.org/package=personalized" class="external-link"><img src="http://cranlogs.r-pkg.org/badges/personalized"></a></li>
+</ul>
+</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Jared Huling.</p>
+  <p></p>
+<p>Developed by Jared Huling.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer>
@@ -345,6 +345,8 @@
 
   
 
+
+  
 
   </body>
 </html>

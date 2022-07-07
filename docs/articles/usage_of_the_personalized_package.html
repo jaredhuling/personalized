@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">personalized</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.7</span>
       </span>
     </div>
 
@@ -39,12 +41,12 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa-home"></span>
+    <span class="fa fa-home"></span>
      
   </a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
@@ -54,10 +56,13 @@
       <a href="../articles/usage_of_the_personalized_package.html">Usage of the personalized Package</a>
     </li>
     <li>
-      <a href="../articles/efficiency_augmentation_personalized.html">Improving Estimation Efficiency via Augmentation and Propensity Score Utilities</a>
+      <a href="../articles/efficiency_augmentation_personalized.html">Utilities for Improving Estimation Efficiency via Augmentation and for Propensity Score Estimation</a>
     </li>
     <li>
       <a href="../articles/multicategory_treatments_with_personalized.html">Multi-category Treatments with personalized</a>
+    </li>
+    <li>
+      <a href="../articles/fitting_itrs_with_xgboost.html">Estimation of Flexible ITRs with xgboost</a>
     </li>
   </ul>
 </li>
@@ -70,8 +75,8 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/jaredhuling/personalized">
-    <span class="fas fa-github"></span>
+  <a href="https://github.com/jaredhuling/personalized" class="external-link">
+    <span class="fa fa-github"></span>
      
   </a>
 </li>
@@ -85,42 +90,100 @@
 
       
 
-      </header><script src="usage_of_the_personalized_package_files/header-attrs-2.8/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Usage of the Personalized Package</h1>
-                        <h4 class="author">Jared Huling</h4>
+                        <h4 data-toc-skip class="author">Jared
+Huling</h4>
             
-            <h4 class="date">2021-05-31</h4>
+            <h4 data-toc-skip class="date">2022-07-07</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/jaredhuling/personalized/blob/master/vignettes/usage_of_the_personalized_package.Rmd"><code>vignettes/usage_of_the_personalized_package.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/jaredhuling/personalized/blob/HEAD/vignettes/usage_of_the_personalized_package.Rmd" class="external-link"><code>vignettes/usage_of_the_personalized_package.Rmd</code></a></small>
       <div class="hidden name"><code>usage_of_the_personalized_package.Rmd</code></div>
 
     </div>
 
     
     
-<div id="introduction-to-personalized" class="section level1">
-<h1 class="hasAnchor">
-<a href="#introduction-to-personalized" class="anchor"></a>Introduction to <code>personalized</code>
-</h1>
-<p>The <code>personalized</code> package aims to provide an entire analysis pipeline that encompasses a broad class of statistical methods for subgroup identification / personalized medicine.</p>
+<div class="section level2">
+<h2 id="introduction-to-personalized">Introduction to <code>personalized</code><a class="anchor" aria-label="anchor" href="#introduction-to-personalized"></a>
+</h2>
+<p>The <code>personalized</code> package aims to provide an entire
+analysis pipeline that encompasses a broad class of statistical methods
+for subgroup identification / personalized medicine.</p>
 <p>The general analysis pipeline is as follows:</p>
 <ol style="list-style-type: decimal">
-<li>Construct propensity score function and check propensity score diagnostics</li>
+<li>Construct propensity score function and check propensity score
+diagnostics</li>
 <li>Choose and fit a subgroup identification model</li>
-<li>Estimate the resulting treatment effects among estimated subgroups</li>
+<li>Estimate the resulting treatment effects among estimated
+subgroups</li>
 <li>Visualize and examine model and subgroup treatment effects</li>
 </ol>
-<p>The available subgroup identification models are those under the purview of the general subgroup identification framework proposed by Chen, et al. (2017). In this section we will give a brief summary of this framework and what elements of it are available in the <code>personalized</code> package.</p>
-<p>In general we are interested in understanding the impact of a treatment on an outcome and in particular determining if and how different patients respond differently to a treatment in terms of their expected outcome. Assume the outcome we observe <span class="math inline">\(Y\)</span> is such that larger values are preferable. In addition to the outcome, we also observe patient covariate information <span class="math inline">\(X \in \mathbb{R}^p\)</span> and the treatment status <span class="math inline">\(T \in \{-1,1\}\)</span>, where <span class="math inline">\(T = 1\)</span> indicates that a patient received the treatment, and <span class="math inline">\(T = -1\)</span> indicates a patient received the control. For the purposes of this package, we consider an unspecified form for the expected outcome conditional on the covariate and treatment status information: <span class="math display">\[E(Y|T, X) = g(X) + T\Delta(X)/2,\]</span> where <span class="math inline">\(\Delta(X) \equiv E(Y|T=1, X) - E(Y|T=-1, X)\)</span> is of primary interest and <span class="math inline">\(g(X) \equiv \frac{1}{2}\{E(Y|T=1, X) + E(Y|T=-1, X) \}\)</span> represents covariate main effects. Here, <span class="math inline">\(\Delta(X)\)</span> represents the interaction between treatment and covariates and thus drives heterogeneity of main effect. The purpose of the  package is in estimation of <span class="math inline">\(\Delta(X)\)</span> or monotone transformations of <span class="math inline">\(\Delta(X)\)</span> which can be used to stratify the population into subgroups (e.g. a subgroup of patients who benefit from the treatment and a subgroup who does not benefit).</p>
-<p>We call the term <span class="math inline">\(\Delta(X)\)</span> a benefit score, as it reflects how much a patient is expected to benefit from a treatment in terms of their outcome. For a patient with <span class="math inline">\(X = x\)</span>, if <span class="math inline">\(\Delta(x) &gt; 0\)</span> (assuming larger outcomes are better), the treatment is beneficial in terms of the expected outcome, and if <span class="math inline">\(\Delta(X) \leq 0\)</span>, the control is better than the treatment. Hence to identify which subgroup of patients benefits from a treatment, we seek to estimate <span class="math inline">\(\Delta(X)\)</span>.</p>
-<p>In the framework of Chen, et al. (2017), there are two main methods for estimating subgroups. The first is called the weighting method. The weighting method estimates <span class="math inline">\(\Delta(X)\)</span> (or monotone transformations of it) by minimizing the following objective function with respect to <span class="math inline">\(f(X)\)</span>: <span class="math display">\[L_W(f) = \frac{1}{n}\sum_{i = 1}^n\frac{M(Y_i, T_i\times f(x_i)) }{ {T_i\pi(x_i)+(1-T_i)/2} },\]</span> where <span class="math inline">\(\pi(x) = Pr(T = 1|X = x)\)</span> is the propensity score function. Here, <span class="math inline">\(\hat{f}\)</span> is our estimated benefit score. Hence <span class="math inline">\(\hat{f} = \mbox{argmin}_f L_W(f)\)</span> is our estimate of <span class="math inline">\(\Delta(X)\)</span>. If we want a simple functional form for the estimate <span class="math inline">\(\hat{f}\)</span>, we can restrict the form of <span class="math inline">\(f\)</span> such that it is a linear combination of the covariates, i.e. <span class="math inline">\(f(X) = X^T\beta\)</span>. Hence <span class="math inline">\(\hat{f}(X) = X^T\hat{\beta}\)</span>.</p>
-<p>The A-learning estimator is the minimizer of <span class="math display">\[L_A(f) = \frac{1}{n}\sum_{i = 1}^n M(Y_i, {\{(T_i+1)/2 -\pi(x_i)\} } {\times f(x_i))}.\]</span></p>
-<div id="choice-of-m-function" class="section level3">
-<h3 class="hasAnchor">
-<a href="#choice-of-m-function" class="anchor"></a>Choice of <span class="math inline">\(M\)</span> function</h3>
-<p>The <code>personalized</code> package offers a flexible range of choices both for the form of <span class="math inline">\(f(X)\)</span> and also for the loss function <span class="math inline">\(M(y, v)\)</span>. Most choices of <span class="math inline">\(f\)</span> and <span class="math inline">\(M\)</span> can be used for either the weighting method or for the A-learning method. In this package, we limit the use of <span class="math inline">\(M\)</span> to natural choices corresponding to the type of outcome. The squared error loss <span class="math inline">\(M(y, v) = (v - y) ^ 2\)</span> corresponds to continuous responses but can also be used for binary outcomes, however the logistic loss <span class="math inline">\(M(y, v) = y \cdot log(1 + \exp\{-v\})\)</span> corresponds to binary outcomes and the loss associated with the negative partial likelihood of the Cox proportional hazards model corresponds to time-to-event outcomes.</p>
+<p>The available subgroup identification models are those under the
+purview of the general subgroup identification framework proposed by
+Chen, et al. (2017). In this section we will give a brief summary of
+this framework and what elements of it are available in the
+<code>personalized</code> package.</p>
+<p>In general we are interested in understanding the impact of a
+treatment on an outcome and in particular determining if and how
+different patients respond differently to a treatment in terms of their
+expected outcome. Assume the outcome we observe <span class="math inline">\(Y\)</span> is such that larger values are
+preferable. In addition to the outcome, we also observe patient
+covariate information <span class="math inline">\(X \in
+\mathbb{R}^p\)</span> and the treatment status <span class="math inline">\(T \in \{-1,1\}\)</span>, where <span class="math inline">\(T = 1\)</span> indicates that a patient received
+the treatment, and <span class="math inline">\(T = -1\)</span> indicates
+a patient received the control. For the purposes of this package, we
+consider an unspecified form for the expected outcome conditional on the
+covariate and treatment status information: <span class="math display">\[E(Y|T, X) = g(X) + T\Delta(X)/2,\]</span> where
+<span class="math inline">\(\Delta(X) \equiv E(Y|T=1, X) - E(Y|T=-1,
+X)\)</span> is of primary interest and <span class="math inline">\(g(X)
+\equiv \frac{1}{2}\{E(Y|T=1, X) + E(Y|T=-1, X) \}\)</span> represents
+covariate main effects. Here, <span class="math inline">\(\Delta(X)\)</span> represents the interaction
+between treatment and covariates and thus drives heterogeneity of main
+effect. The purpose of the package is in estimation of <span class="math inline">\(\Delta(X)\)</span> or monotone transformations of
+<span class="math inline">\(\Delta(X)\)</span> which can be used to
+stratify the population into subgroups (e.g. a subgroup of patients who
+benefit from the treatment and a subgroup who does not benefit).</p>
+<p>We call the term <span class="math inline">\(\Delta(X)\)</span> a
+benefit score, as it reflects how much a patient is expected to benefit
+from a treatment in terms of their outcome. For a patient with <span class="math inline">\(X = x\)</span>, if <span class="math inline">\(\Delta(x) &gt; 0\)</span> (assuming larger
+outcomes are better), the treatment is beneficial in terms of the
+expected outcome, and if <span class="math inline">\(\Delta(X) \leq
+0\)</span>, the control is better than the treatment. Hence to identify
+which subgroup of patients benefits from a treatment, we seek to
+estimate <span class="math inline">\(\Delta(X)\)</span>.</p>
+<p>In the framework of Chen, et al. (2017), there are two main methods
+for estimating subgroups. The first is called the weighting method. The
+weighting method estimates <span class="math inline">\(\Delta(X)\)</span> (or monotone transformations of
+it) by minimizing the following objective function with respect to <span class="math inline">\(f(X)\)</span>: <span class="math display">\[L_W(f)
+= \frac{1}{n}\sum_{i = 1}^n\frac{M(Y_i, T_i\times f(x_i)) }{
+{T_i\pi(x_i)+(1-T_i)/2} },\]</span> where <span class="math inline">\(\pi(x) = Pr(T = 1|X = x)\)</span> is the
+propensity score function. Here, <span class="math inline">\(\hat{f}\)</span> is our estimated benefit score.
+Hence <span class="math inline">\(\hat{f} = \mbox{argmin}_f
+L_W(f)\)</span> is our estimate of <span class="math inline">\(\Delta(X)\)</span>. If we want a simple functional
+form for the estimate <span class="math inline">\(\hat{f}\)</span>, we
+can restrict the form of <span class="math inline">\(f\)</span> such
+that it is a linear combination of the covariates, i.e. <span class="math inline">\(f(X) = X^T\beta\)</span>. Hence <span class="math inline">\(\hat{f}(X) = X^T\hat{\beta}\)</span>.</p>
+<p>The A-learning estimator is the minimizer of <span class="math display">\[L_A(f) = \frac{1}{n}\sum_{i = 1}^n M(Y_i,
+{\{(T_i+1)/2 -\pi(x_i)\} } {\times f(x_i))}.\]</span></p>
+<div class="section level4">
+<h4 id="choice-of-m-function">Choice of <span class="math inline">\(M\)</span> function<a class="anchor" aria-label="anchor" href="#choice-of-m-function"></a>
+</h4>
+<p>The <code>personalized</code> package offers a flexible range of
+choices both for the form of <span class="math inline">\(f(X)\)</span>
+and also for the loss function <span class="math inline">\(M(y,
+v)\)</span>. Most choices of <span class="math inline">\(f\)</span> and
+<span class="math inline">\(M\)</span> can be used for either the
+weighting method or for the A-learning method. In this package, we limit
+the use of <span class="math inline">\(M\)</span> to natural choices
+corresponding to the type of outcome. The squared error loss <span class="math inline">\(M(y, v) = (v - y) ^ 2\)</span> corresponds to
+continuous responses but can also be used for binary outcomes, however
+the logistic loss <span class="math inline">\(M(y, v) = y \cdot log(1 +
+\exp\{-v\})\)</span> corresponds to binary outcomes and the loss
+associated with the negative partial likelihood of the Cox proportional
+hazards model corresponds to time-to-event outcomes.</p>
 <table class="table">
 <colgroup>
 <col width="31%">
@@ -136,92 +199,184 @@
 <tr class="odd">
 <td>Squared Error</td>
 <td>C/B/CT</td>
-<td align="left"><span class="math inline">\(M(y, v) = (v - y) ^ 2\)</span></td>
+<td align="left"><span class="math inline">\(M(y, v) = (v - y) ^
+2\)</span></td>
 </tr>
 <tr class="even">
 <td>OWL Logistic</td>
 <td>C/B/CT</td>
-<td align="left"><span class="math inline">\(M(y, v) = y\log(1 + \exp\{-v\})\)</span></td>
+<td align="left"><span class="math inline">\(M(y, v) = y\log(1 +
+\exp\{-v\})\)</span></td>
 </tr>
 <tr class="odd">
 <td>OWL Logistic Flip</td>
 <td>C/B/CT</td>
-<td align="left"><span class="math inline">\(M(y, v) = \vert y\vert \log(1 + \exp\{-\mbox{sign}(y)v\})\)</span></td>
+<td align="left"><span class="math inline">\(M(y, v) = \vert y\vert
+\log(1 + \exp\{-\mbox{sign}(y)v\})\)</span></td>
 </tr>
 <tr class="even">
 <td>OWL Hinge</td>
 <td>C/B/CT</td>
-<td align="left"><span class="math inline">\(M(y, v) = y\max(0, 1 - v)\)</span></td>
+<td align="left"><span class="math inline">\(M(y, v) = y\max(0, 1 -
+v)\)</span></td>
 </tr>
 <tr class="odd">
 <td>OWL Hinge Flip</td>
 <td>C/B/CT</td>
-<td align="left"><span class="math inline">\(M(y, v) = \vert y\vert\max(0, 1 - \mbox{sign}(y)v)\)</span></td>
+<td align="left"><span class="math inline">\(M(y, v) = \vert
+y\vert\max(0, 1 - \mbox{sign}(y)v)\)</span></td>
 </tr>
 <tr class="even">
 <td>Logistic</td>
 <td>B</td>
-<td align="left"><span class="math inline">\(M(y, v) = -[yv - \log(1 + \mbox{exp}\{-v\})]\)</span></td>
+<td align="left"><span class="math inline">\(M(y, v) = -[yv - \log(1 +
+\mbox{exp}\{-v\})]\)</span></td>
 </tr>
 <tr class="odd">
 <td>Poisson</td>
 <td>CT</td>
-<td align="left"><span class="math inline">\(M(y, v) = -[yv - \exp(v)]\)</span></td>
+<td align="left"><span class="math inline">\(M(y, v) = -[yv -
+\exp(v)]\)</span></td>
 </tr>
 <tr class="even">
 <td>Cox</td>
 <td>TTE</td>
-<td align="left"><span class="math inline">\(M(y, v) = -\left\{ \int_0^\tau\left( v - \log[E\{ e^vI(X \geq u) \}] \right)\mathrm{d} N(u) \right\}\)</span></td>
+<td align="left"><span class="math inline">\(M(y, v) = -\left\{
+\int_0^\tau\left( v - \log[E\{ e^vI(X \geq u) \}] \right)\mathrm{d} N(u)
+\right\}\)</span></td>
 </tr>
 </tbody>
 </table>
-<p>where “C” indicates usage for continuous outcomes, “B” indicates usage for binary outcomes, “CT” indicates usages for count outcomes, and “TTE” indicates usages for time-to-event outcomes, and for the last loss <span class="math inline">\(y = (X, \delta) = \{ \widetilde{X} \wedge C, I(\widetilde{X} \leq t) \}\)</span>, <span class="math inline">\(\widetilde{X}\)</span> is the survival time, &amp; <span class="math inline">\(C\)</span> is the censoring time, <span class="math inline">\(N(t) = I(\widetilde{X} \leq t)\delta\)</span>, and <span class="math inline">\(\tau\)</span> &amp; is fixed time point where <span class="math inline">\(P(X \geq \tau) &gt; 0\)</span>.</p>
+<p>where “C” indicates usage for continuous outcomes, “B” indicates
+usage for binary outcomes, “CT” indicates usages for count outcomes, and
+“TTE” indicates usages for time-to-event outcomes, and for the last loss
+<span class="math inline">\(y = (X, \delta) = \{ \widetilde{X} \wedge C,
+I(\widetilde{X} \leq t) \}\)</span>, <span class="math inline">\(\widetilde{X}\)</span> is the survival time, &amp;
+<span class="math inline">\(C\)</span> is the censoring time, <span class="math inline">\(N(t) = I(\widetilde{X} \leq t)\delta\)</span>, and
+<span class="math inline">\(\tau\)</span> &amp; is fixed time point
+where <span class="math inline">\(P(X \geq \tau) &gt; 0\)</span>.</p>
 </div>
-<div id="choice-of-f" class="section level3">
-<h3 class="hasAnchor">
-<a href="#choice-of-f" class="anchor"></a>Choice of <span class="math inline">\(f\)</span>
+<div class="section level4">
+<h4 id="choice-of-f">Choice of <span class="math inline">\(f\)</span><a class="anchor" aria-label="anchor" href="#choice-of-f"></a>
+</h4>
+<p>The choices of <span class="math inline">\(f\)</span> offered in the
+<code>personalized</code> package are varied. A familiar, interpretable
+choice of <span class="math inline">\(f(X)\)</span> is <span class="math inline">\(X^T\beta\)</span>. Also offered is an additive
+model, i.e. <span class="math inline">\(f(X) = \sum_{j =
+1}^pf_j(X_j)\)</span>; this option is accessed through use of the
+<code>mgcv</code> package, which provides estimation procedures for
+generalized additive models (GAMs). Another flexible, but less
+interpretable choice offered here is related to gradient boosted
+decision trees, which model <span class="math inline">\(f\)</span> as
+<span class="math inline">\(f(X) = \sum_{k = 1}^Kf_k(X)\)</span>, where
+each <span class="math inline">\(f_k\)</span> is a decision tree
+model.</p>
+</div>
+<div class="section level4">
+<h4 id="variable-selection">Variable Selection<a class="anchor" aria-label="anchor" href="#variable-selection"></a>
+</h4>
+<p>For subgroup identification models with <span class="math inline">\(f(X) = X^T\beta\)</span>, the
+<code>personalized</code> package also allows for variable selection.
+Instead of minimizing <span class="math inline">\(L_W(f)\)</span> or
+<span class="math inline">\(L_A(f)\)</span>, we instead minimize a
+penalized version: <span class="math inline">\(L_W(f) +
+\lambda||\beta||_1\)</span> or <span class="math inline">\(L_A(f) +
+\lambda||\beta||_1\)</span>.</p>
+</div>
+<div class="section level3">
+<h3 id="extension-to-multi-category-treatments">Extension to multi-category treatments<a class="anchor" aria-label="anchor" href="#extension-to-multi-category-treatments"></a>
 </h3>
-<p>The choices of <span class="math inline">\(f\)</span> offered in the <code>personalized</code> package are varied. A familiar, interpretable choice of <span class="math inline">\(f(X)\)</span> is <span class="math inline">\(X^T\beta\)</span>. Also offered is an additive model, i.e. <span class="math inline">\(f(X) = \sum_{j = 1}^pf_j(X_j)\)</span>; this option is accessed through use of the <code>mgcv</code> package, which provides estimation procedures for generalized additive models (GAMs). Another flexible, but less interpretable choice offered here is related to gradient boosted decision trees, which model <span class="math inline">\(f\)</span> as <span class="math inline">\(f(X) = \sum_{k = 1}^Kf_k(X)\)</span>, where each <span class="math inline">\(f_k\)</span> is a decision tree model.</p>
-</div>
-<div id="variable-selection" class="section level3">
-<h3 class="hasAnchor">
-<a href="#variable-selection" class="anchor"></a>Variable Selection</h3>
-<p>For subgroup identification models with <span class="math inline">\(f(X) = X^T\beta\)</span>, the <code>personalized</code> package also allows for variable selection. Instead of minimizing <span class="math inline">\(L_W(f)\)</span> or <span class="math inline">\(L_A(f)\)</span>, we instead minimize a penalized version: <span class="math inline">\(L_W(f) + \lambda||\beta||_1\)</span> or <span class="math inline">\(L_A(f) + \lambda||\beta||_1\)</span>.</p>
-</div>
-<div id="extension-to-multi-category-treatments" class="section level2">
-<h2 class="hasAnchor">
-<a href="#extension-to-multi-category-treatments" class="anchor"></a>Extension to multi-category treatments</h2>
-<p>Often, multiple treatment options are available for patients instead of one treatment option and a control and the researcher may wish to understand which of all treatment options are the best for which patients. Extending the above methodology to multi-category treatment results in added complications, and in particular there is no straightforward extension of the A-learning method for multiple treatment settings. In the supplementary material of , the weighting method was extended to estimate a benefit score corresponding to each level of a treatment subject to a sum-to-zero constraint for identifiability. <!-- We assume that the expected outcome conditional on the covariate and treatment status information can be represented by  --> <!-- \begin{equation}\label{eqn:outcome_model_mult_trt} --> <!-- E(Y|\bfX, T) = g(\bfX) + \sum_{k = 1}^{K} 1(T = k)\Delta_k(\bfX), --> <!-- \end{equation} --> <!-- where $\sum_{k = 1}^{K} \Delta_k(\bfX) = 0$.   --> In particular, we are interested in estimating (the sign) of <span class="math display">\[\begin{eqnarray}
-\Delta_{kl}(x) \equiv 
-\{ E(Y | T = k, { X} = { x}) - E(Y | T = l, X = { x}) \} \label{definition of Delta_kl}
-\end{eqnarray}\]</span> If <span class="math inline">\(\Delta_{kl}(x) &gt; 0\)</span>, then treatment <span class="math inline">\(k\)</span> is preferable to treatment <span class="math inline">\(l\)</span> for a patient with <span class="math inline">\(X = x\)</span>. For each patient, evaluation of all pairwise comparisons of the <span class="math inline">\(\Delta_{kl}(x)\)</span> indicates which treatment leads to the largest expected outcome. The weighting estimators of the benefit scores are the minimizers of the following loss function: <span class="math display">\[\begin{equation} \label{eqn:weighting_mult}
-L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum_{k = 1}^{K}I(T_{i} = k)\times f_k(x_i) ) }{ { Pr(T = T_i | X = x_i)} },
-\end{equation}\]</span> subject to <span class="math inline">\(\sum_{k = 1}^{K}f_k(x_i) = 0\)</span>. Clearly when <span class="math inline">\(K = 2\)</span>, this loss function is equivalent to ().</p>
-<p>Estimation of the benefit scores in this model is still challenging without added modeling assumptions, as enforcing <span class="math inline">\(\sum_{k = 1}^{K}f_k(x_i) = 0\)</span> may not always be feasible using existing estimation routines. However, if each <span class="math inline">\(\Delta_{kl}(X)\)</span> has a linear form, i.e. <span class="math inline">\(\Delta_{kl}(X) = X^\top\boldsymbol \beta_k\)</span> where <span class="math inline">\(l\)</span> represents a reference treatment group, estimation can then easily be fit into the same computational framework as for the simpler two treatment case by constructing an appropriate design matrix. Thus, for multiple treatments the  package is restricted to linear estimators of the benefit scores. For instructive purposes, consider a scenario with three treatment options, <span class="math inline">\(A\)</span>, <span class="math inline">\(B\)</span>, and <span class="math inline">\(C\)</span>. Let <span class="math inline">\(\boldsymbol X = ({\boldsymbol X}_A^\top, {\boldsymbol X}_B^\top, {\boldsymbol X}_C^\top )^\top\)</span> be the design matrix for all patients, where each <span class="math inline">\({\boldsymbol X}_k^\top\)</span> is the sub-design matrix of patients who received treatment <span class="math inline">\(k\)</span>. Under <span class="math inline">\(\Delta_{kl}(X) = X^\top\boldsymbol \beta_k\)</span> with <span class="math inline">\(l\)</span> as the reference treatment, we can construct a new design matrix which can then be provided to existing estimation routines in order to minimize (). With treatment <span class="math inline">\(C\)</span> as the reference treatment, the design matrix is constructed as <span class="math display">\[
+<p>Often, multiple treatment options are available for patients instead
+of one treatment option and a control and the researcher may wish to
+understand which of all treatment options are the best for which
+patients. Extending the above methodology to multi-category treatment
+results in added complications, and in particular there is no
+straightforward extension of the A-learning method for multiple
+treatment settings. In the supplementary material of , the weighting
+method was extended to estimate a benefit score corresponding to each
+level of a treatment subject to a sum-to-zero constraint for
+identifiability.
+<!-- We assume that the expected outcome conditional on the covariate and treatment status information can be represented by  -->
+<!-- \begin{equation}\label{eqn:outcome_model_mult_trt} -->
+<!-- E(Y|\bfX, T) = g(\bfX) + \sum_{k = 1}^{K} 1(T = k)\Delta_k(\bfX), -->
+<!-- \end{equation} -->
+<!-- where $\sum_{k = 1}^{K} \Delta_k(\bfX) = 0$.   --> In particular,
+we are interested in estimating (the sign) of <span class="math display">\[\begin{eqnarray}
+\Delta_{kl}(x) \equiv
+\{ E(Y | T = k, { X} = { x}) - E(Y | T = l, X = { x}) \}
+\label{definition of Delta_kl}
+\end{eqnarray}\]</span> If <span class="math inline">\(\Delta_{kl}(x)
+&gt; 0\)</span>, then treatment <span class="math inline">\(k\)</span>
+is preferable to treatment <span class="math inline">\(l\)</span> for a
+patient with <span class="math inline">\(X = x\)</span>. For each
+patient, evaluation of all pairwise comparisons of the <span class="math inline">\(\Delta_{kl}(x)\)</span> indicates which treatment
+leads to the largest expected outcome. The weighting estimators of the
+benefit scores are the minimizers of the following loss function: <span class="math display">\[\begin{equation} \label{eqn:weighting_mult}
+L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol
+M(Y_i,  \sum_{k = 1}^{K}I(T_{i} = k)\times f_k(x_i) ) }{ { Pr(T = T_i |
+X = x_i)} },
+\end{equation}\]</span> subject to <span class="math inline">\(\sum_{k =
+1}^{K}f_k(x_i) = 0\)</span>. Clearly when <span class="math inline">\(K
+= 2\)</span>, this loss function is equivalent to (<span class="math inline">\(\ref{eqn:weighting}\)</span>).</p>
+<p>Estimation of the benefit scores in this model is still challenging
+without added modeling assumptions, as enforcing <span class="math inline">\(\sum_{k = 1}^{K}f_k(x_i) = 0\)</span> may not
+always be feasible using existing estimation routines. However, if each
+<span class="math inline">\(\Delta_{kl}(X)\)</span> has a linear form,
+i.e. <span class="math inline">\(\Delta_{kl}(X) = X^\top\boldsymbol
+\beta_k\)</span> where <span class="math inline">\(l\)</span> represents
+a reference treatment group, estimation can then easily be fit into the
+same computational framework as for the simpler two treatment case by
+constructing an appropriate design matrix. Thus, for multiple treatments
+the package is restricted to linear estimators of the benefit scores.
+For instructive purposes, consider a scenario with three treatment
+options, <span class="math inline">\(A\)</span>, <span class="math inline">\(B\)</span>, and <span class="math inline">\(C\)</span>. Let <span class="math inline">\(\boldsymbol X = ({\boldsymbol X}_A^\top,
+{\boldsymbol X}_B^\top, {\boldsymbol X}_C^\top )^\top\)</span> be the
+design matrix for all patients, where each <span class="math inline">\({\boldsymbol X}_k^\top\)</span> is the sub-design
+matrix of patients who received treatment <span class="math inline">\(k\)</span>. Under <span class="math inline">\(\Delta_{kl}(X) = X^\top\boldsymbol
+\beta_k\)</span> with <span class="math inline">\(l\)</span> as the
+reference treatment, we can construct a new design matrix which can then
+be provided to existing estimation routines in order to minimize (<span class="math inline">\(\ref{eqn:weighting_mult}\)</span>). With treatment
+<span class="math inline">\(C\)</span> as the reference treatment, the
+design matrix is constructed as <span class="math display">\[
 \widetilde{{\boldsymbol X}} = \mbox{diag}(\boldsymbol J)\begin{pmatrix}
 {\boldsymbol X}_A &amp; \boldsymbol 0 \\
 \boldsymbol 0 &amp; {\boldsymbol X}_B \\
 {\boldsymbol X}_C &amp; {\boldsymbol X}_C
 \end{pmatrix},
-\]</span> where the <span class="math inline">\(i\)</span>th element of <span class="math inline">\(\boldsymbol J\)</span> is <span class="math inline">\(2I(T_i \neq C) - 1\)</span> and the weight vector <span class="math inline">\(\boldsymbol W\)</span> is constructed with the <span class="math inline">\(i\)</span>th element set to <span class="math inline">\(1 / Pr(T = T_i | X = {x}_i)\)</span>. Furthermore denote <span class="math inline">\(\widetilde{\boldsymbol \beta} = (\boldsymbol \beta_A^\top, \boldsymbol \beta_B^\top)^\top\)</span>. Hence <span class="math inline">\(\widetilde{{\boldsymbol X}}^\top\widetilde{\boldsymbol \beta} = {\boldsymbol X}_A^\top\boldsymbol \beta_A + {\boldsymbol X}_B^\top\boldsymbol \beta_B - {\boldsymbol X}_C^\top(\boldsymbol \beta_A + \boldsymbol \beta_B)\)</span>, and thus the sum-to-zero constraints on the benefit scores hold by construction.</p>
+\]</span> where the <span class="math inline">\(i\)</span>th element of
+<span class="math inline">\(\boldsymbol J\)</span> is <span class="math inline">\(2I(T_i \neq C) - 1\)</span> and the weight vector
+<span class="math inline">\(\boldsymbol W\)</span> is constructed with
+the <span class="math inline">\(i\)</span>th element set to <span class="math inline">\(1 / Pr(T = T_i | X = {x}_i)\)</span>. Furthermore
+denote <span class="math inline">\(\widetilde{\boldsymbol \beta} =
+(\boldsymbol \beta_A^\top, \boldsymbol \beta_B^\top)^\top\)</span>.
+Hence <span class="math inline">\(\widetilde{{\boldsymbol
+X}}^\top\widetilde{\boldsymbol \beta} = {\boldsymbol
+X}_A^\top\boldsymbol \beta_A + {\boldsymbol X}_B^\top\boldsymbol \beta_B
+- {\boldsymbol X}_C^\top(\boldsymbol \beta_A + \boldsymbol
+\beta_B)\)</span>, and thus the sum-to-zero constraints on the benefit
+scores hold by construction.</p>
 </div>
 </div>
-<div id="quick-usage-reference" class="section level1">
-<h1 class="hasAnchor">
-<a href="#quick-usage-reference" class="anchor"></a>Quick Usage Reference</h1>
-<p>First simulate some data where we know the truth. In this simulation, the treatment assignment depends on covariates and hence we must model the propensity score <span class="math inline">\(\pi(x) = Pr(T = 1 | X = x)\)</span>. In this simulation we will assume that larger values of the outcome are better.</p>
+<div class="section level2">
+<h2 id="quick-usage-reference">Quick Usage Reference<a class="anchor" aria-label="anchor" href="#quick-usage-reference"></a>
+</h2>
+<p>First simulate some data where we know the truth. In this simulation,
+the treatment assignment depends on covariates and hence we must model
+the propensity score <span class="math inline">\(\pi(x) = Pr(T = 1 | X =
+x)\)</span>. In this simulation we will assume that larger values of the
+outcome are better.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://jaredhuling.org/personalized/">personalized</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jaredhuling.org/personalized/" class="external-link">personalized</a></span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
 <span class="va">n.obs</span>  <span class="op">&lt;-</span> <span class="fl">1000</span>
-<span class="va">n.vars</span> <span class="op">&lt;-</span> <span class="fl">50</span>
-<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n.obs</span> <span class="op">*</span> <span class="va">n.vars</span>, sd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>, <span class="va">n.obs</span>, <span class="va">n.vars</span><span class="op">)</span>
+<span class="va">n.vars</span> <span class="op">&lt;-</span> <span class="fl">25</span>
+<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n.obs</span> <span class="op">*</span> <span class="va">n.vars</span>, sd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>, <span class="va">n.obs</span>, <span class="va">n.vars</span><span class="op">)</span>
 
 <span class="co"># simulate non-randomized treatment</span>
-<span class="va">xbetat</span>   <span class="op">&lt;-</span> <span class="fl">0.5</span> <span class="op">+</span> <span class="fl">0.25</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">21</span><span class="op">]</span> <span class="op">-</span> <span class="fl">0.25</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">41</span><span class="op">]</span>
-<span class="va">trt.prob</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="va">xbetat</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="va">xbetat</span><span class="op">)</span><span class="op">)</span>
-<span class="va">trt</span>      <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">rbinom</a></span><span class="op">(</span><span class="va">n.obs</span>, <span class="fl">1</span>, prob <span class="op">=</span> <span class="va">trt.prob</span><span class="op">)</span>
+<span class="va">xbetat</span>   <span class="op">&lt;-</span> <span class="fl">0.5</span> <span class="op">+</span> <span class="fl">0.25</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">11</span><span class="op">]</span> <span class="op">-</span> <span class="fl">0.25</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span>
+<span class="va">trt.prob</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">xbetat</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">xbetat</span><span class="op">)</span><span class="op">)</span>
+<span class="va">trt</span>      <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="va">n.obs</span>, <span class="fl">1</span>, prob <span class="op">=</span> <span class="va">trt.prob</span><span class="op">)</span>
 
 <span class="co"># simulate delta</span>
 <span class="va">delta</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">0.5</span> <span class="op">+</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">3</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">11</span><span class="op">]</span> <span class="op">+</span> <span class="fl">1</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">12</span><span class="op">]</span> <span class="op">)</span>
@@ -231,286 +386,480 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 <span class="va">xbeta</span> <span class="op">&lt;-</span> <span class="va">xbeta</span> <span class="op">+</span> <span class="va">delta</span> <span class="op">*</span> <span class="op">(</span><span class="fl">2</span> <span class="op">*</span> <span class="va">trt</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span>
 
 <span class="co"># simulate continuous outcomes</span>
-<span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/drop.html">drop</a></span><span class="op">(</span><span class="va">xbeta</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n.obs</span><span class="op">)</span></code></pre></div>
-<div id="creating-and-checking-propensity-score-model" class="section level2">
-<h2 class="hasAnchor">
-<a href="#creating-and-checking-propensity-score-model" class="anchor"></a>Creating and Checking Propensity Score Model</h2>
-<p>The first step in our analysis is to construct a model for the propensity score. In the <code>personalized</code> package, we need to wrap this model in a function which inputs covariate values and the treatment statuses and outputs a propensity score between 0 and 1. Since there are many covariates, we use the lasso to select variables in our propensity score model:</p>
+<span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/drop.html" class="external-link">drop</a></span><span class="op">(</span><span class="va">xbeta</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n.obs</span><span class="op">)</span></code></pre></div>
+<div class="section level3">
+<h3 id="creating-and-checking-propensity-score-model">Creating and Checking Propensity Score Model<a class="anchor" aria-label="anchor" href="#creating-and-checking-propensity-score-model"></a>
+</h3>
+<p>The first step in our analysis is to construct a model for the
+propensity score. In the <code>personalized</code> package, we need to
+wrap this model in a function which inputs covariate values and the
+treatment statuses and outputs a propensity score between 0 and 1. Since
+there are many covariates, we use the lasso to select variables in our
+propensity score model:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create function for fitting propensity score model</span>
 <span class="va">prop.func</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">trt</span><span class="op">)</span>
 <span class="op">{</span>
  <span class="co"># fit propensity score model</span>
- <span class="va">propens.model</span> <span class="op">&lt;-</span> <span class="fu">cv.glmnet</span><span class="op">(</span>y <span class="op">=</span> <span class="va">trt</span>,
+ <span class="va">propens.model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://glmnet.stanford.edu/reference/cv.glmnet.html" class="external-link">cv.glmnet</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">trt</span>,
                             x <span class="op">=</span> <span class="va">x</span>, 
                             family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span>
- <span class="va">pi.x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">propens.model</span>, s <span class="op">=</span> <span class="st">"lambda.min"</span>,
+ <span class="va">pi.x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">propens.model</span>, s <span class="op">=</span> <span class="st">"lambda.min"</span>,
                  newx <span class="op">=</span> <span class="va">x</span>, type <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span>
  <span class="va">pi.x</span>
 <span class="op">}</span></code></pre></div>
-<p>We then need to make sure the propensity scores have sufficient overlap between treatment groups. We can do this with the <code><a href="../reference/check.overlap.html">check.overlap()</a></code> function, which plots densities or histograms of the propensity scores for each of the treatment groups:</p>
+<p>We then need to make sure the propensity scores have sufficient
+overlap between treatment groups. We can do this with the
+<code><a href="../reference/check.overlap.html">check.overlap()</a></code> function, which plots densities or
+histograms of the propensity scores for each of the treatment
+groups:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/check.overlap.html">check.overlap</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">trt</span>, <span class="va">prop.func</span><span class="op">)</span></code></pre></div>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_overlap-1.png" width="700"></p>
-<p>We can see that the propensity scores mostly have common support except a small region near 0 where there are no propensity scores for the treatment arm.</p>
+<p>We can see that the propensity scores mostly have common support
+except a small region near 0 where there are no propensity scores for
+the treatment arm.</p>
 </div>
-<div id="fitting-subgroup-identification-models" class="section level2">
-<h2 class="hasAnchor">
-<a href="#fitting-subgroup-identification-models" class="anchor"></a>Fitting Subgroup Identification Models</h2>
-<p>The next step is to choose and fit a subgroup identification model. In this example, the outcome is continuous, so we choose the squared error loss function. We also choose the model type (either the weighting or the A-learning method). The main function for fitting subgroup identification models is <code>fit.subgroup</code>. Since there are many covariates, we choose a loss function with a lasso penalty to select variables. The underlying fitting function here is <code>cv.glmnet()</code>. We can pass to <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> arguments of the <code>cv.glmnet()</code> function, such as <code>nfolds</code> for the number of cross validation folds.</p>
+<div class="section level3">
+<h3 id="fitting-subgroup-identification-models">Fitting Subgroup Identification Models<a class="anchor" aria-label="anchor" href="#fitting-subgroup-identification-models"></a>
+</h3>
+<p>The next step is to choose and fit a subgroup identification model.
+In this example, the outcome is continuous, so we choose the squared
+error loss function. We also choose the model type (either the weighting
+or the A-learning method). The main function for fitting subgroup
+identification models is <code>fit.subgroup</code>. Since there are many
+covariates, we choose a loss function with a lasso penalty to select
+variables. The underlying fitting function here is
+<code><a href="https://glmnet.stanford.edu/reference/cv.glmnet.html" class="external-link">cv.glmnet()</a></code>. We can pass to <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code>
+arguments of the <code><a href="https://glmnet.stanford.edu/reference/cv.glmnet.html" class="external-link">cv.glmnet()</a></code> function, such as
+<code>nfolds</code> for the number of cross validation folds.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">subgrp.model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>,
                              trt <span class="op">=</span> <span class="va">trt</span>,
                              propensity.func <span class="op">=</span> <span class="va">prop.func</span>,
                              loss   <span class="op">=</span> <span class="st">"sq_loss_lasso"</span>,
-                             nfolds <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>              <span class="co"># option for cv.glmnet</span>
+                             nfolds <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>              <span class="co"># option for cv.glmnet</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">subgrp.model</span><span class="op">)</span></code></pre></div>
-<pre><code>## family:    gaussian 
-## loss:      sq_loss_lasso 
-## method:    weighting 
-## cutpoint:  0 
-## propensity 
-## function:  propensity.func 
-## 
-## benefit score: f(x), 
-## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
-## 
-## Average Outcomes:
-##                 Recommended 0      Recommended 1
-## Received 0  -8.1779 (n = 184) -17.8088 (n = 226)
-## Received 1 -18.6836 (n = 299)  -6.7163 (n = 291)
-## 
-## Treatment effects conditional on subgroups:
-## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] 
-##                          10.5057 (n = 483) 
-## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] 
-##                          11.0925 (n = 517) 
-## 
-## NOTE: The above average outcomes are biased estimates of
-##       the expected outcomes conditional on subgroups. 
-##       Use 'validate.subgroup()' to obtain unbiased estimates.
-## 
-## ---------------------------------------------------
-## 
-## Benefit score quantiles (f(X) for 1 vs 0): 
-##       0%      25%      50%      75%     100% 
-## -16.9375  -2.7079   0.2419   3.1821  13.2107 
-## 
-## ---------------------------------------------------
-## 
-## Summary of individual treatment effects: 
-## E[Y|T=1, X] - E[Y|T=0, X]
-## 
-##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-## -33.8750  -5.4157   0.4838   0.3755   6.3642  26.4214 
-## 
-## ---------------------------------------------------
-## 
-## 19 out of 50 interactions selected in total by the lasso (cross validation criterion).
-## 
-## The first estimate is the treatment main effect, which is always selected. 
-## Any other variables selected represent treatment-covariate interactions.
-## 
-##            Trt1     V1     V2      V3      V6      V8    V10    V11     V12
-## Estimate 0.2381 0.2061 0.8023 -0.6372 -0.2726 -0.1684 0.0641 -0.546 -0.0385
-##             V13    V17     V21     V27     V29     V31    V35     V37     V40
-## Estimate 0.4716 0.4156 -0.1525 -0.0379 -0.0638 -0.0402 0.0422 -0.3323 -0.0916
-##              V42    V50
-## Estimate -0.0422 0.0908</code></pre>
-<p>We can then plot the outcomes of patients in the different subgroups:</p>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">subgrp.model</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## family:    gaussian </span>
+<span class="co">## loss:      sq_loss_lasso </span>
+<span class="co">## method:    weighting </span>
+<span class="co">## cutpoint:  0 </span>
+<span class="co">## propensity </span>
+<span class="co">## function:  propensity.func </span>
+<span class="co">## </span>
+<span class="co">## benefit score: f(x), </span>
+<span class="co">## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'</span>
+<span class="co">## </span>
+<span class="co">## Average Outcomes:</span>
+<span class="co">##                 Recommended 0      Recommended 1</span>
+<span class="co">## Received 0   -7.792 (n = 177) -19.5361 (n = 224)</span>
+<span class="co">## Received 1 -15.8839 (n = 437) -10.8195 (n = 162)</span>
+<span class="co">## </span>
+<span class="co">## Treatment effects conditional on subgroups:</span>
+<span class="co">## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] </span>
+<span class="co">##                           8.0919 (n = 614) </span>
+<span class="co">## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] </span>
+<span class="co">##                           8.7166 (n = 386) </span>
+<span class="co">## </span>
+<span class="co">## NOTE: The above average outcomes are biased estimates of</span>
+<span class="co">##       the expected outcomes conditional on subgroups. </span>
+<span class="co">##       Use 'validate.subgroup()' to obtain unbiased estimates.</span>
+<span class="co">## </span>
+<span class="co">## ---------------------------------------------------</span>
+<span class="co">## </span>
+<span class="co">## Benefit score quantiles (f(X) for 1 vs 0): </span>
+<span class="co">##      0%     25%     50%     75%    100% </span>
+<span class="co">## -9.1348 -2.5640 -0.7204  0.8641  7.8583 </span>
+<span class="co">## </span>
+<span class="co">## ---------------------------------------------------</span>
+<span class="co">## </span>
+<span class="co">## Summary of individual treatment effects: </span>
+<span class="co">## E[Y|T=1, X] - E[Y|T=0, X]</span>
+<span class="co">## </span>
+<span class="co">##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
+<span class="co">## -18.270  -5.128  -1.441  -1.526   1.728  15.717 </span>
+<span class="co">## </span>
+<span class="co">## ---------------------------------------------------</span>
+<span class="co">## </span>
+<span class="co">## 3 out of 25 interactions selected in total by the lasso (cross validation criterion).</span>
+<span class="co">## </span>
+<span class="co">## The first estimate is the treatment main effect, which is always selected. </span>
+<span class="co">## Any other variables selected represent treatment-covariate interactions.</span>
+<span class="co">## </span>
+<span class="co">##             Trt1     V2    V11    V21</span>
+<span class="co">## Estimate -0.8104 0.7112 -0.353 0.2706</span></code></pre>
+<p>We can then plot the outcomes of patients in the different
+subgroups:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">subgrp.model</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">subgrp.model</span><span class="op">)</span></code></pre></div>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_model-1.png" width="700"></p>
-<p>Alternatively, we can create an interaction plot. This plot represents the average outcome within each subgroup broken down by treatment status. If the lines in the interaction plots cross, that indicates there is a subgroup treatment effect.</p>
+<p>Alternatively, we can create an interaction plot. This plot
+represents the average outcome within each subgroup broken down by
+treatment status. If the lines in the interaction plots cross, that
+indicates there is a subgroup treatment effect.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">subgrp.model</span>, type <span class="op">=</span> <span class="st">"interaction"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">subgrp.model</span>, type <span class="op">=</span> <span class="st">"interaction"</span><span class="op">)</span></code></pre></div>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_model_2-1.png" width="700"></p>
 </div>
-<div id="evaluating-treatment-effects-within-estimated-subgroups" class="section level2">
-<h2 class="hasAnchor">
-<a href="#evaluating-treatment-effects-within-estimated-subgroups" class="anchor"></a>Evaluating Treatment Effects within Estimated Subgroups</h2>
-<p>Unfortunately, if we simply look at the average outcome within each subgroup, this will give us a biased estimate of the treatment effects within each subgroup as we have already used the data to estimate the subgroups. Instead, to get a valid estimate of the subgroup treatment effects we can use a bootstrap approach to correcting for this bias. We can alternatively repeatedly partition our data into training and testing samples. In this procedure for each replication we fit a subgroup model using the training data and then evaluate the subgroup treatment effects on the testing data. The argument <code>B</code> specifies the number of replications and the argument <code>train.fraction</code> specifies what proportion of samples are for training in the training and testing partitioning method.</p>
-<p>Both of these approaches can be carried out using the <code><a href="../reference/validate.subgroup.html">validate.subgroup()</a></code> function.</p>
+<div class="section level3">
+<h3 id="evaluating-treatment-effects-within-estimated-subgroups">Evaluating Treatment Effects within Estimated Subgroups<a class="anchor" aria-label="anchor" href="#evaluating-treatment-effects-within-estimated-subgroups"></a>
+</h3>
+<p>Unfortunately, if we simply look at the average outcome within each
+subgroup, this will give us a biased estimate of the treatment effects
+within each subgroup as we have already used the data to estimate the
+subgroups. Instead, to get a valid estimate of the subgroup treatment
+effects we can use a bootstrap approach to correcting for this bias. We
+can alternatively repeatedly partition our data into training and
+testing samples. In this procedure for each replication we fit a
+subgroup model using the training data and then evaluate the subgroup
+treatment effects on the testing data. The argument <code>B</code>
+specifies the number of replications and the argument
+<code>train.fraction</code> specifies what proportion of samples are for
+training in the training and testing partitioning method. Normally this
+would be set to a very large number, such as 500 or 1000.</p>
+<p>Both of these approaches can be carried out using the
+<code><a href="../reference/validate.subgroup.html">validate.subgroup()</a></code> function.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">validation</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate.subgroup.html">validate.subgroup</a></span><span class="op">(</span><span class="va">subgrp.model</span>, 
-                                B <span class="op">=</span> <span class="fl">25L</span>,  <span class="co"># specify the number of replications</span>
+                                B <span class="op">=</span> <span class="fl">10L</span>,  <span class="co"># specify the number of replications</span>
                                 method <span class="op">=</span> <span class="st">"training_test_replication"</span>,
                                 train.fraction <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span>
 
 <span class="va">validation</span></code></pre></div>
-<pre><code>## family:  gaussian 
-## loss:    sq_loss_lasso 
-## method:  weighting 
-## 
-## validation method:  training_test_replication 
-## cutpoint:           0 
-## replications:       25 
-## 
-## benefit score: f(x), 
-## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
-## 
-## Average Test Set Outcomes:
-##                              Recommended 0                     Recommended 1
-## Received 0  -10.7233 (SE = 3.7153, n = 50) -15.3414 (SE = 3.1969, n = 54.12)
-## Received 1 -16.879 (SE = 3.7641, n = 67.4)  -9.3921 (SE = 3.2042, n = 78.48)
-## 
-## Treatment effects conditional on subgroups:
-## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] 
-##            6.1557 (SE = 5.7211, n = 117.4) 
-## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] 
-##             5.9493 (SE = 5.109, n = 132.6) 
-## 
-## Est of 
-## E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:                    
-## 5.3607 (SE = 3.318)</code></pre>
-<p>We can then plot the average outcomes averaged over all replications of the training and testing partition procedure:</p>
+<pre><code><span class="co">## family:  gaussian </span>
+<span class="co">## loss:    sq_loss_lasso </span>
+<span class="co">## method:  weighting </span>
+<span class="co">## </span>
+<span class="co">## validation method:  training_test_replication </span>
+<span class="co">## cutpoint:           0 </span>
+<span class="co">## replications:       10 </span>
+<span class="co">## </span>
+<span class="co">## benefit score: f(x), </span>
+<span class="co">## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'</span>
+<span class="co">## </span>
+<span class="co">## Average Test Set Outcomes:</span>
+<span class="co">##                                Recommended 0                  Recommended 1</span>
+<span class="co">## Received 0  -10.0324 (SE = 3.0877, n = 46.2) -15.6445 (SE = 3.9982, n = 56)</span>
+<span class="co">## Received 1 -15.3881 (SE = 2.3438, n = 105.8) -12.0415 (SE = 3.4534, n = 42)</span>
+<span class="co">## </span>
+<span class="co">## Treatment effects conditional on subgroups:</span>
+<span class="co">## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] </span>
+<span class="co">##              5.3557 (SE = 4.7726, n = 152) </span>
+<span class="co">## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] </span>
+<span class="co">##                3.603 (SE = 4.4692, n = 98) </span>
+<span class="co">## </span>
+<span class="co">## Est of </span>
+<span class="co">## E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:                     </span>
+<span class="co">## 4.1217 (SE = 3.2018)</span></code></pre>
+<p>We can then plot the average outcomes averaged over all replications
+of the training and testing partition procedure:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">validation</span><span class="op">)</span></code></pre></div>
-<p><img src="usage_of_the_personalized_package_files/figure-html/plot_validation-1.png" width="700"> From the above plot we can evaluate what the impact of the subgroups is. Among patients for whom the model recommends the control is more effective than the treatment, we can see that those who instead take the treatment are worse off than patients who take the control. Similarly, among patients who are recommended the treatment, patients who take the treatment are better off on average than patients who do not take the treatment.</p>
-<p>Similarly, we can create an interaction plot of either the bootstrap bias-corrected means within the different subgroups or the average test set means within subgroups. Here, lines crossing is an indicator of differential treatment effect between the subgroups.</p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">validation</span><span class="op">)</span></code></pre></div>
+<p><img src="usage_of_the_personalized_package_files/figure-html/plot_validation-1.png" width="700">
+From the above plot we can evaluate what the impact of the subgroups is.
+Among patients for whom the model recommends the control is more
+effective than the treatment, we can see that those who instead take the
+treatment are worse off than patients who take the control. Similarly,
+among patients who are recommended the treatment, patients who take the
+treatment are better off on average than patients who do not take the
+treatment.</p>
+<p>Similarly, we can create an interaction plot of either the bootstrap
+bias-corrected means within the different subgroups or the average test
+set means within subgroups. Here, lines crossing is an indicator of
+differential treatment effect between the subgroups.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">validation</span>, type <span class="op">=</span> <span class="st">"interaction"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">validation</span>, type <span class="op">=</span> <span class="st">"interaction"</span><span class="op">)</span></code></pre></div>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_validation_2-1.png" width="700"></p>
-<p>We can also compare the validation results with the results on the observed data:</p>
+<p>We can also compare the validation results with the results on the
+observed data:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plotCompare.html">plotCompare</a></span><span class="op">(</span><span class="va">subgrp.model</span>, <span class="va">validation</span>, type <span class="op">=</span> <span class="st">"interaction"</span><span class="op">)</span></code></pre></div>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_validation_compare-1.png" width="700"></p>
-<p>Note that the estimated treatment effects within subgroups are attenuated for the validated results. It is common for the estimated treatment effects within subgroups to be overly-optimistic based on the training data.</p>
+<p>Note that the estimated treatment effects within subgroups are
+attenuated for the validated results. It is common for the estimated
+treatment effects within subgroups to be overly-optimistic based on the
+training data.</p>
 </div>
 </div>
-<div id="user-guide" class="section level1">
-<h1 class="hasAnchor">
-<a href="#user-guide" class="anchor"></a>User Guide</h1>
-<div id="overview" class="section level2">
-<h2 class="hasAnchor">
-<a href="#overview" class="anchor"></a>Overview</h2>
-<p>In this user guide we will provide more detailed information about the entire subgroup identification modeling process in the <code>personalized</code> package. Specifically, we will explore more thoroughly the four steps outlined in the introduction section.</p>
+<div class="section level2">
+<h2 id="user-guide">User Guide<a class="anchor" aria-label="anchor" href="#user-guide"></a>
+</h2>
+<div class="section level3">
+<h3 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h3>
+<p>In this user guide we will provide more detailed information about
+the entire subgroup identification modeling process in the
+<code>personalized</code> package. Specifically, we will explore more
+thoroughly the four steps outlined in the introduction section.</p>
 </div>
-<div id="creating-and-checking-a-propensity-score-model" class="section level2">
-<h2 class="hasAnchor">
-<a href="#creating-and-checking-a-propensity-score-model" class="anchor"></a>Creating and Checking a propensity Score Model</h2>
-<p>The propensity score, <span class="math inline">\(\pi(x) = Pr(T = 1 | X = x)\)</span> is a crucial component of the subgroup identification models in the <code>personalized</code> package, especially for the analysis of data that comes from an observational study.</p>
-<div id="observational-studies" class="section level3">
-<h3 class="hasAnchor">
-<a href="#observational-studies" class="anchor"></a>Observational Studies</h3>
-<p>For data from observational studies, the user must construct a model for the propensity score. Typically this is done usine a logistic regression model with</p>
-<p><span class="math display">\[ \mbox{logit}(\pi(X)) = \mbox{logit} Pr(T = 1 | X) = X^T\beta.\]</span> When this model is not appropriate, users may use a more flexible model, or utilize variable selection techniques if there are a large number of covariates. More details on how this is implemented are documented within the <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> documentation below.</p>
-</div>
-<div id="randomized-controlled-trials" class="section level3">
-<h3 class="hasAnchor">
-<a href="#randomized-controlled-trials" class="anchor"></a>Randomized Controlled Trials</h3>
-<p>For data from RCTs, the users can simply use a constant function for the propensity score. For example, if patients were equally randomized to the treatment and control groups, we know that <span class="math inline">\(\pi(x) = 1/2\)</span>.</p>
-</div>
-</div>
-<div id="fitting-subgroup-identification-models-1" class="section level2">
-<h2 class="hasAnchor">
-<a href="#fitting-subgroup-identification-models-1" class="anchor"></a>Fitting Subgroup Identification Models</h2>
-<div id="overview-1" class="section level3">
-<h3 class="hasAnchor">
-<a href="#overview-1" class="anchor"></a>Overview</h3>
-<p>The core component of the <code>personalized</code> package is in fitting subgroup identification models with the <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> function. This function provides fitting capabilities for many different outcomes, choices of loss function, choice of underlying model for <span class="math inline">\(\Delta(X)\)</span>, and model class (either the weighting method or A-learning).</p>
-</div>
-<div id="explanation-of-major-function-arguments" class="section level3">
-<h3 class="hasAnchor">
-<a href="#explanation-of-major-function-arguments" class="anchor"></a>Explanation of Major Function Arguments</h3>
-<div id="x" class="section level4">
-<h4 class="hasAnchor">
-<a href="#x" class="anchor"></a><code>x</code>
+<div class="section level3">
+<h3 id="creating-and-checking-a-propensity-score-model">Creating and Checking a propensity Score Model<a class="anchor" aria-label="anchor" href="#creating-and-checking-a-propensity-score-model"></a>
+</h3>
+<p>The propensity score, <span class="math inline">\(\pi(x) = Pr(T = 1 |
+X = x)\)</span> is a crucial component of the subgroup identification
+models in the <code>personalized</code> package, especially for the
+analysis of data that comes from an observational study.</p>
+<div class="section level4">
+<h4 id="observational-studies">Observational Studies<a class="anchor" aria-label="anchor" href="#observational-studies"></a>
 </h4>
-<p>The argument <code>x</code> is for the design matrix. Each column of <code>x</code> corresponds to a variable to be used in the model for <span class="math inline">\(\Delta(X)\)</span> and each row of <code>x</code> corresponds to an observation. Every variable in <code>x</code> will be used for the subgroup identification model (however some variables may be removed if a variable selection procedure is specified for <code>loss</code>).</p>
+<p>For data from observational studies, the user must construct a model
+for the propensity score. Typically this is done usine a logistic
+regression model with</p>
+<p><span class="math display">\[ \mbox{logit}(\pi(X)) = \mbox{logit}
+Pr(T = 1 | X) = X^T\beta.\]</span> When this model is not appropriate,
+users may use a more flexible model, or utilize variable selection
+techniques if there are a large number of covariates. More details on
+how this is implemented are documented within the
+<code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> documentation below.</p>
 </div>
-<div id="y" class="section level4">
-<h4 class="hasAnchor">
-<a href="#y" class="anchor"></a><code>y</code>
+<div class="section level4">
+<h4 id="randomized-controlled-trials">Randomized Controlled Trials<a class="anchor" aria-label="anchor" href="#randomized-controlled-trials"></a>
 </h4>
-<p>The argument <code>y</code> is for the response vector. Each element in <code>y</code> is a patient observation. In the case of time-to-event outcomes <code>y</code> should be specified as a <code>Surv</code> object. For example the user should specify <code>y = Surv(time, status)</code>, where <code>time</code> is the observed time and <code>status</code> is an indicator that the observed time is the survival time.</p>
+<p>For data from RCTs, the users can simply use a constant function for
+the propensity score. For example, if patients were equally randomized
+to the treatment and control groups, we know that <span class="math inline">\(\pi(x) = 1/2\)</span>.</p>
 </div>
-<div id="trt" class="section level4">
-<h4 class="hasAnchor">
-<a href="#trt" class="anchor"></a><code>trt</code>
-</h4>
-<p>The argument <code>trt</code> corresponds to the vector of observed treatment statuses. Each element in <code>trt</code> shoulld be either the integer 1 or the integer 0, where 1 in the <span class="math inline">\(i\)</span>th position means means patient <span class="math inline">\(i\)</span> received the treatment and 0 in the <span class="math inline">\(i\)</span>th position indicates patient <span class="math inline">\(i\)</span> did not receive treatment.</p>
 </div>
-<div id="propensity-func" class="section level4">
-<h4 class="hasAnchor">
-<a href="#propensity-func" class="anchor"></a><code>propensity.func</code>
+<div class="section level3">
+<h3 id="fitting-subgroup-identification-models-1">Fitting Subgroup Identification Models<a class="anchor" aria-label="anchor" href="#fitting-subgroup-identification-models-1"></a>
+</h3>
+<div class="section level4">
+<h4 id="overview-1">Overview<a class="anchor" aria-label="anchor" href="#overview-1"></a>
 </h4>
-<p>The argument <code>propensity.func</code> corresponds to a function which returns a propensity score. While it seems cumbersome to have to specify a function instead of a vector of probabilities, it is crucial for later validation for the propensity scores to be re-estimated using the resampled or sampled data (this will be explained further in the section below for the <code><a href="../reference/validate.subgroup.html">validate.subgroup()</a></code> function). The user should specify a function which inputs two arguments: <code>trt</code> and <code>x</code>, where <code>trt</code> corresponds to the <code>trt</code> argument for the <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> function and <code>x</code> corresponds to the <code>x</code> argument for the <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> function. The function supplied to <code>propensity.func</code> should contain code that uses <code>x</code> and <code>trt</code> to fit a propensity score model and then return an estimated propensity score for each observation in <code>x</code>. A basic example which uses ` logistic regression model to estimate the propensity score is the following:</p>
+<p>The core component of the <code>personalized</code> package is in
+fitting subgroup identification models with the
+<code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> function. This function provides fitting
+capabilities for many different outcomes, choices of loss function,
+choice of underlying model for <span class="math inline">\(\Delta(X)\)</span>, and model class (either the
+weighting method or A-learning).</p>
+</div>
+<div class="section level4">
+<h4 id="explanation-of-major-function-arguments">Explanation of Major Function Arguments<a class="anchor" aria-label="anchor" href="#explanation-of-major-function-arguments"></a>
+</h4>
+<div class="section level5">
+<h5 id="x">
+<code>x</code><a class="anchor" aria-label="anchor" href="#x"></a>
+</h5>
+<p>The argument <code>x</code> is for the design matrix. Each column of
+<code>x</code> corresponds to a variable to be used in the model for
+<span class="math inline">\(\Delta(X)\)</span> and each row of
+<code>x</code> corresponds to an observation. Every variable in
+<code>x</code> will be used for the subgroup identification model
+(however some variables may be removed if a variable selection procedure
+is specified for <code>loss</code>).</p>
+</div>
+<div class="section level5">
+<h5 id="y">
+<code>y</code><a class="anchor" aria-label="anchor" href="#y"></a>
+</h5>
+<p>The argument <code>y</code> is for the response vector. Each element
+in <code>y</code> is a patient observation. In the case of time-to-event
+outcomes <code>y</code> should be specified as a <code>Surv</code>
+object. For example the user should specify
+<code>y = Surv(time, status)</code>, where <code>time</code> is the
+observed time and <code>status</code> is an indicator that the observed
+time is the survival time.</p>
+</div>
+<div class="section level5">
+<h5 id="trt">
+<code>trt</code><a class="anchor" aria-label="anchor" href="#trt"></a>
+</h5>
+<p>The argument <code>trt</code> corresponds to the vector of observed
+treatment statuses. Each element in <code>trt</code> shoulld be either
+the integer 1 or the integer 0, where 1 in the <span class="math inline">\(i\)</span>th position means means patient <span class="math inline">\(i\)</span> received the treatment and 0 in the
+<span class="math inline">\(i\)</span>th position indicates patient
+<span class="math inline">\(i\)</span> did not receive treatment.</p>
+</div>
+<div class="section level5">
+<h5 id="propensity-func">
+<code>propensity.func</code><a class="anchor" aria-label="anchor" href="#propensity-func"></a>
+</h5>
+<p>The argument <code>propensity.func</code> corresponds to a function
+which returns a propensity score. While it seems cumbersome to have to
+specify a function instead of a vector of probabilities, it is crucial
+for later validation for the propensity scores to be re-estimated using
+the resampled or sampled data (this will be explained further in the
+section below for the <code><a href="../reference/validate.subgroup.html">validate.subgroup()</a></code> function). The
+user should specify a function which inputs two arguments:
+<code>trt</code> and <code>x</code>, where <code>trt</code> corresponds
+to the <code>trt</code> argument for the <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code>
+function and <code>x</code> corresponds to the <code>x</code> argument
+for the <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> function. The function supplied to
+<code>propensity.func</code> should contain code that uses
+<code>x</code> and <code>trt</code> to fit a propensity score model and
+then return an estimated propensity score for each observation in
+<code>x</code>. A basic example which uses ` logistic regression model
+to estimate the propensity score is the following:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">propensity.func</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">trt</span><span class="op">)</span>
 <span class="op">{</span>
     <span class="co"># save data in a data.frame</span>
-    <span class="va">data.fr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>trt <span class="op">=</span> <span class="va">trt</span>, <span class="va">x</span><span class="op">)</span>
+    <span class="va">data.fr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>trt <span class="op">=</span> <span class="va">trt</span>, <span class="va">x</span><span class="op">)</span>
     
     <span class="co"># fit propensity score model</span>
-    <span class="va">propensity.model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">trt</span> <span class="op">~</span> <span class="va">.</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">binomial</a></span><span class="op">(</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">data.fr</span><span class="op">)</span>
+    <span class="va">propensity.model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">trt</span> <span class="op">~</span> <span class="va">.</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">data.fr</span><span class="op">)</span>
     
     <span class="co"># create estimated probabilities</span>
-    <span class="va">pi.x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">propensity.model</span>, type <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span>
-    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">pi.x</span><span class="op">)</span>
+    <span class="va">pi.x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">propensity.model</span>, type <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span>
+    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">pi.x</span><span class="op">)</span>
 <span class="op">}</span>
 
 <span class="fu">propensity.func</span><span class="op">(</span><span class="va">x</span>, <span class="va">trt</span><span class="op">)</span><span class="op">[</span><span class="fl">101</span><span class="op">:</span><span class="fl">105</span><span class="op">]</span></code></pre></div>
-<pre><code>##       101       102       103       104       105 
-## 0.2251357 0.2786683 0.9021204 0.4400091 0.8250830</code></pre>
+<pre><code><span class="co">##       101       102       103       104       105 </span>
+<span class="co">## 0.4193212 0.5477704 0.7904663 0.8994977 0.6864177</span></code></pre>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">trt</span><span class="op">[</span><span class="fl">101</span><span class="op">:</span><span class="fl">105</span><span class="op">]</span></code></pre></div>
-<pre><code>## [1] 0 0 1 1 1</code></pre>
-<p>For randomized controlled trials with equal probability of assignment to treatment and control, the user can simply define <code>propensity.func</code> as:</p>
+<pre><code><span class="co">## [1] 0 1 0 1 1</span></code></pre>
+<p>For randomized controlled trials with equal probability of assignment
+to treatment and control, the user can simply define
+<code>propensity.func</code> as:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">propensity.func</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">trt</span><span class="op">)</span> <span class="fl">0.5</span></code></pre></div>
 <p>which always returns the constant <span class="math inline">\(1/2\)</span>.</p>
 </div>
-<div id="loss" class="section level4">
-<h4 class="hasAnchor">
-<a href="#loss" class="anchor"></a><code>loss</code>
-</h4>
-<p>The <code>loss</code> argument specifies the combination of <span class="math inline">\(M\)</span> function (i.e. loss function) and underlying model for <span class="math inline">\(f(X)\)</span>, the form of the estimator of <span class="math inline">\(\Delta(X)\)</span>. The name of each possible value for <code>loss</code> has two parts:</p>
+<div class="section level5">
+<h5 id="loss">
+<code>loss</code><a class="anchor" aria-label="anchor" href="#loss"></a>
+</h5>
+<p>The <code>loss</code> argument specifies the combination of <span class="math inline">\(M\)</span> function (i.e. loss function) and
+underlying model for <span class="math inline">\(f(X)\)</span>, the form
+of the estimator of <span class="math inline">\(\Delta(X)\)</span>. The
+name of each possible value for <code>loss</code> has two parts:</p>
 <ol style="list-style-type: decimal">
 <li>The first part, which corresponds to the <span class="math inline">\(M\)</span> function</li>
-<li>The second part, which corresponds to the form of <span class="math inline">\(f(X)\)</span> and whether variable selection via the lasso is used</li>
+<li>The second part, which corresponds to the form of <span class="math inline">\(f(X)\)</span> and whether variable selection via
+the lasso is used</li>
 </ol>
-<p>An example is <code>sq_loss_lasso</code>, which corresponds to using <span class="math inline">\(M(y, v) = (y - v) ^ 2\)</span>, a linear form of <span class="math inline">\(f\)</span>, i.e. <span class="math inline">\(f(X) = X^T\beta\)</span>, and an additional penalty term <span class="math inline">\(\sum_{j = 1}^p|\beta_j|\)</span> added to the loss function for variable selection. Other forms of <span class="math inline">\(M\)</span> are <code>logistic_loss</code>, which corresponds to the negative log-likelihood for a logistic regression model, and <code>cox_loss</code>, which corresponds to the negative log-likelihood for the Cox proportional hazards model, <code>abs_loss</code> for <span class="math inline">\(M(y, v) = |y - v|\)</span>, and <code>huberized_loss</code> for a huberized hinge loss <span class="math inline">\(M(y, v) = (1 - yv) ^ 2/(2\delta)I(1 - \delta &lt; yv \leq 1) + (1 - yv - \delta/2)I(yv \leq 1 - \delta)\)</span> for binary outcomes.</p>
-<p>All options containing <code>lasso</code> in the name use the <code>cv.glmnet()</code> function of the <code>glmnet</code> package for the underlying model fitting and variable selection. Please see the documentation of <code>cv.glmnet()</code> for information about other arguments which can be passed to it.</p>
-<p>Any options for <code>loss</code> which end with <code>lasso_gam</code> have a two-stage model. Variables are selected using a linear or generalized linear model in the first stage and then the selected variables are used in a generalized additive model in the second stage. Univariate nonparametric smoother terms are used in the second stage for all continuous variables. Binary variables are used as linear terms in the model. All <code>loss</code> options containing <code>gam</code> in the name use the <code>gam()</code> function of the <code>R</code> package <code>mgcv</code>. Please see the documentation of <code>gam()</code> for information about other arguments which can be passed to it.</p>
-<p>All options that end in <code>gbm</code> use a gradient-boosted decision tree model for <span class="math inline">\(f(X)\)</span>. These models are machine learning models which can provide more flexible estimation. These models are essentially a sum of many decision trees models. However, this procedure results in a “black box” model which may be more challenging or impossible to interpret. The <code>gbm</code>-based models are fit using the <code>gbm</code> <code>R</code> package. Please see the documentation for the <code>gbm</code> function of the <code>gbm</code> package for more details on the possible arguments. Tuning the values of the hyperparameters <code>shrinkage</code>, <code>n.trees</code>, and <code>interaction.depth</code> is crucial for a successful gradient-boosting model. These arguments can be passed to the <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> function. By default, when <code>gbm</code>-based models are used, a plot of the cross validation error versus the number of trees is displayed. If this plot has values which are still decreasing significantly by the maximum value of the number of trees, then it is recommended to either increase the number of trees (<code>n.trees</code>), the maximum tree depth (<code>interaction.depth</code>), or increase the step size of the algorithm (<code>shrinkage</code>).</p>
+<p>An example is <code>sq_loss_lasso</code>, which corresponds to using
+<span class="math inline">\(M(y, v) = (y - v) ^ 2\)</span>, a linear
+form of <span class="math inline">\(f\)</span>, i.e. <span class="math inline">\(f(X) = X^T\beta\)</span>, and an additional
+penalty term <span class="math inline">\(\sum_{j =
+1}^p|\beta_j|\)</span> added to the loss function for variable
+selection. Other forms of <span class="math inline">\(M\)</span> are
+<code>logistic_loss</code>, which corresponds to the negative
+log-likelihood for a logistic regression model, and
+<code>cox_loss</code>, which corresponds to the negative log-likelihood
+for the Cox proportional hazards model, <code>abs_loss</code> for <span class="math inline">\(M(y, v) = |y - v|\)</span>, and
+<code>huberized_loss</code> for a huberized hinge loss <span class="math inline">\(M(y, v) = (1 - yv) ^ 2/(2\delta)I(1 - \delta &lt;
+yv \leq 1) + (1 - yv - \delta/2)I(yv \leq 1 - \delta)\)</span> for
+binary outcomes.</p>
+<p>All options containing <code>lasso</code> in the name use the
+<code><a href="https://glmnet.stanford.edu/reference/cv.glmnet.html" class="external-link">cv.glmnet()</a></code> function of the <code>glmnet</code> package for
+the underlying model fitting and variable selection. Please see the
+documentation of <code><a href="https://glmnet.stanford.edu/reference/cv.glmnet.html" class="external-link">cv.glmnet()</a></code> for information about other
+arguments which can be passed to it.</p>
+<p>Any options for <code>loss</code> which end with
+<code>lasso_gam</code> have a two-stage model. Variables are selected
+using a linear or generalized linear model in the first stage and then
+the selected variables are used in a generalized additive model in the
+second stage. Univariate nonparametric smoother terms are used in the
+second stage for all continuous variables. Binary variables are used as
+linear terms in the model. All <code>loss</code> options containing
+<code>gam</code> in the name use the <code><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">gam()</a></code> function of the
+<code>R</code> package <code>mgcv</code>. Please see the documentation
+of <code><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">gam()</a></code> for information about other arguments which can be
+passed to it.</p>
+<p>All options that end in <code>xgboost</code> use a gradient-boosted
+decision tree model for <span class="math inline">\(f(X)\)</span>. These
+models are machine learning models which can provide more flexible
+estimation. These models are essentially a sum of many decision trees
+models. However, this procedure results in a “black box” model which may
+be more challenging or impossible to interpret. The
+<code>xgboost</code>-based models are fit using the <code>xgboost</code>
+<code>R</code> package. Please see the documentation for the
+<code>xgb.train()</code> and <code>xgb.cv()</code> functions of the
+<code>xgboost</code> package for more details on the possible arguments.
+Tuning the values of the hyperparameters <code>eta</code>,
+<code>nrounds</code>, and <code>max_depth</code> is crucial for a
+successful gradient-boosting model. These arguments can be passed to the
+<code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> function in a list via the
+<code>params</code> argument (that is usually passed to
+<code>xgb.train()</code> in typical usage of the <code>xgboost</code>
+package. By default, when <code>xgboost</code>-based models are used,
+cross validation is used to select the optimal number of trees (number
+of CV folds set via <code>nfold</code>). Please see the vignette for
+usage of <code>xgboost</code> functionality for a complete worked
+example.</p>
 </div>
-<div id="method" class="section level4">
-<h4 class="hasAnchor">
-<a href="#method" class="anchor"></a><code>method</code>
+<div class="section level5">
+<h5 id="method">
+<code>method</code><a class="anchor" aria-label="anchor" href="#method"></a>
+</h5>
+<p>The <code>method</code> argument is used to specify whether the
+weighting or A-learning model is used. Specify <code>'weighting'</code>
+for the weighting method and specify <code>'a_learning'</code> for the
+A-learning method.</p>
+</div>
+<div class="section level5">
+<h5 id="larger-outcome-better">
+<code>larger.outcome.better</code><a class="anchor" aria-label="anchor" href="#larger-outcome-better"></a>
+</h5>
+<p>The argument <code>larger.outcome.better</code> is a boolean variable
+indicating whether larger values of the outcome are better or preferred.
+If <code>larger.outcome.better = TRUE</code>, then
+<code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> will seek to estimate subgroups in a way
+that maximizes the population average outcome and if
+<code>larger.outcome.better = FALSE</code>, <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code>
+will seek to minimize the population average outcome.</p>
+</div>
+<div class="section level5">
+<h5 id="cutpoint">
+<code>cutpoint</code><a class="anchor" aria-label="anchor" href="#cutpoint"></a>
+</h5>
+<p>The cutpoint is the value of the benefit score (i.e. <span class="math inline">\(f(X)\)</span>) above which patients will be
+recommended the treatment. In other words for outcomes where larger
+values are better and a cutpoint with value <span class="math inline">\(c\)</span> if <span class="math inline">\(f(x)
+&gt; c\)</span> for a patient with covariate values <span class="math inline">\(X = x\)</span>, then they will be recommended to
+have the treatment instead of recommended the control. If lower values
+are better for the outcome, <span class="math inline">\(c\)</span> will
+be the value below which patients will be recommended the treatment
+(i.e. a patient will be recommended the treatment if <span class="math inline">\(f(x) &lt; c\)</span>). By default, the cutpoint is
+the population-average optimal value of 0. However, users may wish to
+increase this value if there are limited resources for treatment
+allocation.</p>
+</div>
+<div class="section level5">
+<h5 id="retcall">
+<code>retcall</code><a class="anchor" aria-label="anchor" href="#retcall"></a>
+</h5>
+<p>The argument <code>retcall</code> is a boolean variable which
+indicates whether to return the arguments passed to
+<code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code>. It must be set to <code>TRUE</code> if the
+user wishes to later validate the fitted model object from
+<code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> using the <code><a href="../reference/validate.subgroup.html">validate.subgroup()</a></code>
+function. This is necessary because when <code>retcall = TRUE</code>,
+the design matrix <code>x</code>, response <code>y</code>, and treatment
+vector <code>trt</code> must be re-sampled in either the bootstrap
+procedure or training and testing resampling procedure of
+<code><a href="../reference/validate.subgroup.html">validate.subgroup()</a></code>. The only time when
+<code>retcall</code> should be set to <code>FALSE</code> is when the
+design matrix is too big to be stored in the fitted model object.</p>
+</div>
+<div class="section level5">
+<h5 id="section">
+<code>...</code><a class="anchor" aria-label="anchor" href="#section"></a>
+</h5>
+<p>The argument <code>...</code> is used to pass arguments to the
+underlying modeling functions. For example, if the lasso is specified to
+be used in the <code>loss</code> argument, <code>...</code> is used to
+pass arguments to the <code><a href="https://glmnet.stanford.edu/reference/cv.glmnet.html" class="external-link">cv.glmnet()</a></code> function from the
+<code>glmnet</code> <code>R</code> package. If <code>gam</code> is
+present in the name for the <code>loss</code> argument, the underlying
+model is fit using the <code><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">gam()</a></code> function of <code>mgcv</code>,
+so arguments to <code><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">gam()</a></code> can be passed using <code>...</code>.
+The only tricky part for <code><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">gam()</a></code> is that it also has an
+argument titled <code>method</code> and hence instead, to change the
+<code>method</code> argument of <code><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">gam()</a></code>, the user can pass
+values using <code>method.gam</code> which will then be passed as the
+argument for <code>method</code> in the <code><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">gam()</a></code> function.</p>
+</div>
+</div>
+<div class="section level4">
+<h4 id="continuous-outcomes">Continuous Outcomes<a class="anchor" aria-label="anchor" href="#continuous-outcomes"></a>
 </h4>
-<p>The <code>method</code> argument is used to specify whether the weighting or A-learning model is used. Specify <code>'weighting'</code> for the weighting method and specify <code>'a_learning'</code> for the A-learning method.</p>
-</div>
-<div id="larger-outcome-better" class="section level4">
-<h4 class="hasAnchor">
-<a href="#larger-outcome-better" class="anchor"></a><code>larger.outcome.better</code>
-</h4>
-<p>The argument <code>larger.outcome.better</code> is a boolean variable indicating whether larger values of the outcome are better or preferred. If <code>larger.outcome.better = TRUE</code>, then <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> will seek to estimate subgroups in a way that maximizes the population average outcome and if <code>larger.outcome.better = FALSE</code>, <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> will seek to minimize the population average outcome.</p>
-</div>
-<div id="cutpoint" class="section level4">
-<h4 class="hasAnchor">
-<a href="#cutpoint" class="anchor"></a><code>cutpoint</code>
-</h4>
-<p>The cutpoint is the value of the benefit score (i.e. <span class="math inline">\(f(X)\)</span>) above which patients will be recommended the treatment. In other words for outcomes where larger values are better and a cutpoint with value <span class="math inline">\(c\)</span> if <span class="math inline">\(f(x) &gt; c\)</span> for a patient with covariate values <span class="math inline">\(X = x\)</span>, then they will be recommended to have the treatment instead of recommended the control. If lower values are better for the outcome, <span class="math inline">\(c\)</span> will be the value below which patients will be recommended the treatment (i.e. a patient will be recommended the treatment if <span class="math inline">\(f(x) &lt; c\)</span>). By default, the cutpoint is the population-average optimal value of 0. However, users may wish to increase this value if there are limited resources for treatment allocation.</p>
-</div>
-<div id="retcall" class="section level4">
-<h4 class="hasAnchor">
-<a href="#retcall" class="anchor"></a><code>retcall</code>
-</h4>
-<p>The argument <code>retcall</code> is a boolean variable which indicates whether to return the arguments passed to <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code>. It must be set to <code>TRUE</code> if the user wishes to later validate the fitted model object from <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> using the <code><a href="../reference/validate.subgroup.html">validate.subgroup()</a></code> function. This is necessary because when <code>retcall = TRUE</code>, the design matrix <code>x</code>, response <code>y</code>, and treatment vector <code>trt</code> must be re-sampled in either the bootstrap procedure or training and testing resampling procedure of <code><a href="../reference/validate.subgroup.html">validate.subgroup()</a></code>. The only time when <code>retcall</code> should be set to <code>FALSE</code> is when the design matrix is too big to be stored in the fitted model object.</p>
-</div>
-<div id="section" class="section level4">
-<h4 class="hasAnchor">
-<a href="#section" class="anchor"></a><code>...</code>
-</h4>
-<p>The argument <code>...</code> is used to pass arguments to the underlying modeling functions. For example, if the lasso is specified to be used in the <code>loss</code> argument, <code>...</code> is used to pass arguments to the <code>cv.glmnet()</code> function from the <code>glmnet</code> <code>R</code> package. If <code>gam</code> is present in the name for the <code>loss</code> argument, the underlying model is fit using the <code>gam()</code> function of <code>mgcv</code>, so arguments to <code>gam()</code> can be passed using <code>...</code>. The only tricky part for <code>gam()</code> is that it also has an argument titled <code>method</code> and hence instead, to change the <code>method</code> argument of <code>gam()</code>, the user can pass values using <code>method.gam</code> which will then be passed as the argument for <code>method</code> in the <code>gam()</code> function.</p>
-</div>
-</div>
-<div id="continuous-outcomes" class="section level3">
-<h3 class="hasAnchor">
-<a href="#continuous-outcomes" class="anchor"></a>Continuous Outcomes</h3>
-<p>The <code>loss</code> argument options that are available for continuous outcomes are:</p>
+<p>The <code>loss</code> argument options that are available for
+continuous outcomes are:</p>
 <ul>
 <li><code>'sq_loss_lasso'</code></li>
 <li><code>'owl_logistic_loss_lasso'</code></li>
@@ -521,483 +870,506 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 <li><code>'owl_logistic_loss_lasso_gam'</code></li>
 <li><code>'sq_loss_gam'</code></li>
 <li><code>'owl_logistic_loss_gam'</code></li>
-<li><code>'sq_loss_gbm'</code></li>
-<li><code>'abs_loss_gbm'</code></li>
+<li><code>'sq_loss_xgboost'</code></li>
 </ul>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">subgrp.model2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>,
                              trt <span class="op">=</span> <span class="va">trt</span>,
                              propensity.func <span class="op">=</span> <span class="va">prop.func</span>,
                              loss   <span class="op">=</span> <span class="st">"sq_loss_lasso_gam"</span>,
-                             nfolds <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>              <span class="co"># option for cv.glmnet</span>
+                             nfolds <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>              <span class="co"># option for cv.glmnet</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">subgrp.model2</span><span class="op">)</span></code></pre></div>
-<pre><code>## family:    gaussian 
-## loss:      sq_loss_lasso_gam 
-## method:    weighting 
-## cutpoint:  0 
-## propensity 
-## function:  propensity.func 
-## 
-## benefit score: f(x), 
-## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
-## 
-## Average Outcomes:
-##                 Recommended 0      Recommended 1
-## Received 0 -16.0447 (n = 203) -10.7795 (n = 207)
-## Received 1 -18.7709 (n = 301)   -6.386 (n = 289)
-## 
-## Treatment effects conditional on subgroups:
-## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] 
-##                           2.7262 (n = 504) 
-## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] 
-##                           4.3935 (n = 496) 
-## 
-## NOTE: The above average outcomes are biased estimates of
-##       the expected outcomes conditional on subgroups. 
-##       Use 'validate.subgroup()' to obtain unbiased estimates.
-## 
-## ---------------------------------------------------
-## 
-## Benefit score quantiles (f(X) for 1 vs 0): 
-##       0%      25%      50%      75%     100% 
-## -21.3920  -4.5908  -0.1493   4.2570  19.7626 
-## 
-## ---------------------------------------------------
-## 
-## Summary of individual treatment effects: 
-## E[Y|T=1, X] - E[Y|T=0, X]
-## 
-##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-## -42.7841  -9.1816  -0.2986  -0.3363   8.5139  39.5252 
-## 
-## ---------------------------------------------------
-## The following summary pertains to estimated treatment-covariate interactions:</code></pre>
-<pre><code>## 
-## Family: gaussian 
-## Link function: identity 
-## 
-## Formula:
-## y ~ -1 + Trt1 + s(V1, by = trt_1n1) + s(V2, by = trt_1n1) + s(V3, 
-##     by = trt_1n1) + s(V11, by = trt_1n1) + s(V13, by = trt_1n1)
-## 
-## Parametric coefficients:
-##      Estimate Std. Error t value Pr(&gt;|t|)
-## Trt1   0.4122     0.5190   0.794    0.427
-## 
-## Approximate significance of smooth terms:
-##                  edf Ref.df      F p-value    
-## s(V1):trt_1n1  1.167  1.167  3.600  0.0345 *  
-## s(V2):trt_1n1  1.167  1.167  1.938  0.2363    
-## s(V3):trt_1n1  1.167  1.167  0.361  0.7282    
-## s(V11):trt_1n1 1.663  2.025  1.930  0.1131    
-## s(V13):trt_1n1 1.167  1.167 38.167  &lt;2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Rank: 46/51
-## R-sq.(adj) =  0.0335   Deviance explained = 5.43%
-## GCV = 1545.7  Scale est. = 1497.4    n = 1000</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">subgrp.model2</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## family:    gaussian </span>
+<span class="co">## loss:      sq_loss_lasso_gam </span>
+<span class="co">## method:    weighting </span>
+<span class="co">## cutpoint:  0 </span>
+<span class="co">## propensity </span>
+<span class="co">## function:  propensity.func </span>
+<span class="co">## </span>
+<span class="co">## benefit score: f(x), </span>
+<span class="co">## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'</span>
+<span class="co">## </span>
+<span class="co">## Average Outcomes:</span>
+<span class="co">##                 Recommended 0      Recommended 1</span>
+<span class="co">## Received 0  -7.7496 (n = 155) -18.0849 (n = 246)</span>
+<span class="co">## Received 1 -16.2701 (n = 385)   -11.26 (n = 214)</span>
+<span class="co">## </span>
+<span class="co">## Treatment effects conditional on subgroups:</span>
+<span class="co">## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] </span>
+<span class="co">##                           8.5205 (n = 540) </span>
+<span class="co">## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] </span>
+<span class="co">##                            6.825 (n = 460) </span>
+<span class="co">## </span>
+<span class="co">## NOTE: The above average outcomes are biased estimates of</span>
+<span class="co">##       the expected outcomes conditional on subgroups. </span>
+<span class="co">##       Use 'validate.subgroup()' to obtain unbiased estimates.</span>
+<span class="co">## </span>
+<span class="co">## ---------------------------------------------------</span>
+<span class="co">## </span>
+<span class="co">## Benefit score quantiles (f(X) for 1 vs 0): </span>
+<span class="co">##       0%      25%      50%      75%     100% </span>
+<span class="co">## -22.5228  -4.8193  -0.6251   3.3252  16.2097 </span>
+<span class="co">## </span>
+<span class="co">## ---------------------------------------------------</span>
+<span class="co">## </span>
+<span class="co">## Summary of individual treatment effects: </span>
+<span class="co">## E[Y|T=1, X] - E[Y|T=0, X]</span>
+<span class="co">## </span>
+<span class="co">##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
+<span class="co">## -45.046  -9.639  -1.250  -1.445   6.650  32.419 </span>
+<span class="co">## </span>
+<span class="co">## ---------------------------------------------------</span>
+<span class="co">## The following summary pertains to estimated treatment-covariate interactions:</span></code></pre>
+<pre><code><span class="co">## </span>
+<span class="co">## Family: gaussian </span>
+<span class="co">## Link function: identity </span>
+<span class="co">## </span>
+<span class="co">## Formula:</span>
+<span class="co">## y ~ -1 + Trt1 + s(V2, by = trt_1n1) + s(V11, by = trt_1n1) + </span>
+<span class="co">##     s(V20, by = trt_1n1) + s(V21, by = trt_1n1) + s(V22, by = trt_1n1)</span>
+<span class="co">## </span>
+<span class="co">## Parametric coefficients:</span>
+<span class="co">##      Estimate Std. Error t value Pr(&gt;|t|)</span>
+<span class="co">## Trt1  -0.1204     0.1555  -0.775    0.439</span>
+<span class="co">## </span>
+<span class="co">## Approximate significance of smooth terms:</span>
+<span class="co">##                  edf Ref.df      F  p-value    </span>
+<span class="co">## s(V2):trt_1n1  1.167  1.167 18.832 2.39e-05 ***</span>
+<span class="co">## s(V11):trt_1n1 1.167  1.167  9.090  0.00429 ** </span>
+<span class="co">## s(V20):trt_1n1 1.167  1.167  2.207  0.09437 .  </span>
+<span class="co">## s(V21):trt_1n1 1.167  1.167  5.784  0.00860 ** </span>
+<span class="co">## s(V22):trt_1n1 1.167  1.167  2.036  0.10385    </span>
+<span class="co">## ---</span>
+<span class="co">## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
+<span class="co">## </span>
+<span class="co">## Rank: 46/51</span>
+<span class="co">## R-sq.(adj) =  0.0163   Deviance explained =  3.8%</span>
+<span class="co">## GCV = 1724.1  Scale est. = 1691.5    n = 1000</span></code></pre>
 </div>
-<div id="binary-outcomes" class="section level3">
-<h3 class="hasAnchor">
-<a href="#binary-outcomes" class="anchor"></a>Binary Outcomes</h3>
-<p>The <code>loss</code> argument options that are available for binary outcomes are all of the losses for continuous outcomes plus:</p>
+<div class="section level4">
+<h4 id="binary-outcomes">Binary Outcomes<a class="anchor" aria-label="anchor" href="#binary-outcomes"></a>
+</h4>
+<p>The <code>loss</code> argument options that are available for binary
+outcomes are all of the losses for continuous outcomes plus:</p>
 <ul>
 <li><code>'logistic_loss_lasso'</code></li>
 <li><code>'logistic_loss_lasso_gam'</code></li>
 <li><code>'logistic_loss_gam'</code></li>
-<li><code>'logistic_loss_gbm'</code></li>
 </ul>
-<p>Note that all options that are available for continuous options can also potentially be used for binary outcomes.</p>
+<p>Note that all options that are available for continuous options can
+also potentially be used for binary outcomes.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create binary outcomes</span>
-<span class="va">y.binary</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">*</span> <span class="op">(</span><span class="va">xbeta</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n.obs</span>, sd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span> <span class="op">)</span></code></pre></div>
+<span class="va">y.binary</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">*</span> <span class="op">(</span><span class="va">xbeta</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n.obs</span>, sd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span> <span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">subgrp.bin</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y.binary</span>,
                            trt <span class="op">=</span> <span class="va">trt</span>,
                            propensity.func <span class="op">=</span> <span class="va">prop.func</span>,
                            loss   <span class="op">=</span> <span class="st">"logistic_loss_lasso"</span>,
-                           nfolds <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>      <span class="co"># option for cv.glmnet</span></code></pre></div>
-<p>When gradient-boosted decision trees are used for <span class="math inline">\(f(X)\)</span> by the package <code>gbm</code>, care must be taken to choose the hyperparameters effectively. Specifically, <code>shrinkage</code> (similar to the step-size in gradient descent), <code>n.trees</code> (the number of trees to fit), and <code>interaction.depth</code> (the maximum depth of each tree) should be tuned according to the data at hand. By default for gradient-boosting models, <code>fit.subgroup</code> plots the cross validation error versus the number of trees to give the user a sense of if their choice of tuning parameters is effective.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">subgrp.bin2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y.binary</span>,
-                            trt <span class="op">=</span> <span class="va">trt</span>,
-                            propensity.func <span class="op">=</span> <span class="va">prop.func</span>,
-                            loss <span class="op">=</span> <span class="st">"logistic_loss_gbm"</span>,
-                            shrinkage <span class="op">=</span> <span class="fl">0.025</span>,  <span class="co"># options for gbm</span>
-                            n.trees <span class="op">=</span> <span class="fl">1500</span>,
-                            interaction.depth <span class="op">=</span> <span class="fl">3</span>,
-                            cv.folds <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
-<p>We can see that at least on the training data, the performance of the gradient-boosting model is better.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">subgrp.bin</span></code></pre></div>
-<pre><code>## family:    binomial 
-## loss:      logistic_loss_lasso 
-## method:    weighting 
-## cutpoint:  0 
-## propensity 
-## function:  propensity.func 
-## 
-## benefit score: f(x), 
-## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
-## 
-## Average Outcomes:
-##               Recommended 0    Recommended 1
-## Received 0 0.4311 (n = 172) 0.2152 (n = 238)
-## Received 1 0.2272 (n = 244) 0.4349 (n = 346)
-## 
-## Treatment effects conditional on subgroups:
-## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] 
-##                           0.2039 (n = 416) 
-## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] 
-##                           0.2198 (n = 584) 
-## 
-## NOTE: The above average outcomes are biased estimates of
-##       the expected outcomes conditional on subgroups. 
-##       Use 'validate.subgroup()' to obtain unbiased estimates.
-## 
-## ---------------------------------------------------
-## 
-## Benefit score quantiles (f(X) for 1 vs 0): 
-##       0%      25%      50%      75%     100% 
-## -1.24932 -0.21328  0.09534  0.38025  1.35140 
-## 
-## ---------------------------------------------------
-## 
-## Summary of individual treatment effects: 
-## E[Y|T=1, X] - E[Y|T=0, X]
-## 
-##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-## -0.55436 -0.10624  0.04763  0.04078  0.18787  0.58872</code></pre>
+                           nfolds <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>      <span class="co"># option for cv.glmnet</span></code></pre></div>
 </div>
-<div id="count-outcomes" class="section level3">
-<h3 class="hasAnchor">
-<a href="#count-outcomes" class="anchor"></a>Count Outcomes</h3>
-<p>The <code>loss</code> argument options that are available for count outcomes are all of the losses for continuous outcomes plus:</p>
+<div class="section level4">
+<h4 id="count-outcomes">Count Outcomes<a class="anchor" aria-label="anchor" href="#count-outcomes"></a>
+</h4>
+<p>The <code>loss</code> argument options that are available for count
+outcomes are all of the losses for continuous outcomes plus:</p>
 <ul>
 <li><code>'poisson_loss_lasso'</code></li>
 <li><code>'poisson_loss_lasso_gam'</code></li>
 <li><code>'poisson_loss_gam'</code></li>
-<li><code>'poisson_loss_gbm'</code></li>
 </ul>
 </div>
-<div id="time-to-event-outcomes" class="section level3">
-<h3 class="hasAnchor">
-<a href="#time-to-event-outcomes" class="anchor"></a>Time-to-event Outcomes</h3>
-<p>The <code>loss</code> argument options that are available for continuous outcomes are:</p>
+<div class="section level4">
+<h4 id="time-to-event-outcomes">Time-to-event Outcomes<a class="anchor" aria-label="anchor" href="#time-to-event-outcomes"></a>
+</h4>
+<p>The <code>loss</code> argument options that are available for
+continuous outcomes are:</p>
 <ul>
 <li><code>'cox_loss_lasso'</code></li>
-<li><code>'cox_loss_gbm'</code></li>
 </ul>
-<p>First we will generate time-to-event outcomes to illustrate usage of the <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> model.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<p>First we will generate time-to-event outcomes to illustrate usage of
+the <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> model.</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create time-to-event outcomes</span>
-<span class="va">surv.time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="op">-</span><span class="fl">20</span> <span class="op">-</span> <span class="va">xbeta</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n.obs</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
-<span class="va">cens.time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n.obs</span>, sd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span>
-<span class="va">y.time.to.event</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">pmin</a></span><span class="op">(</span><span class="va">surv.time</span>, <span class="va">cens.time</span><span class="op">)</span>
+<span class="va">surv.time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="fl">20</span> <span class="op">-</span> <span class="va">xbeta</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n.obs</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+<span class="va">cens.time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n.obs</span>, sd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span>
+<span class="va">y.time.to.event</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmin</a></span><span class="op">(</span><span class="va">surv.time</span>, <span class="va">cens.time</span><span class="op">)</span>
 <span class="va">status</span>           <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">*</span> <span class="op">(</span><span class="va">surv.time</span> <span class="op">&lt;=</span> <span class="va">cens.time</span><span class="op">)</span></code></pre></div>
-<p>For subgroup identification models for time-to-event outcomes, the user should provide <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> with a <code>Surv</code> object for <code>y</code>. This can be done like the following:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/therneau/survival">survival</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
-<span class="va">subgrp.cox</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html">Surv</a></span><span class="op">(</span><span class="va">y.time.to.event</span>, <span class="va">status</span><span class="op">)</span>,
+<p>For subgroup identification models for time-to-event outcomes, the
+user should provide <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> with a <code>Surv</code>
+object for <code>y</code>. This can be done like the following:</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/therneau/survival" class="external-link">survival</a></span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="va">subgrp.cox</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">y.time.to.event</span>, <span class="va">status</span><span class="op">)</span>,
                            trt <span class="op">=</span> <span class="va">trt</span>,
                            propensity.func <span class="op">=</span> <span class="va">prop.func</span>,
                            method <span class="op">=</span> <span class="st">"weighting"</span>,
                            loss   <span class="op">=</span> <span class="st">"cox_loss_lasso"</span>,
-                           nfolds <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>      <span class="co"># option for cv.glmnet</span></code></pre></div>
-<p>The subgroup treatment effects are estimated using the restricted mean statistic and can be displayed with <code><a href="../reference/summary.subgroup_fitted.html">summary.subgroup_fitted()</a></code> or <code><a href="../reference/print.subgroup_fitted.html">print.subgroup_fitted()</a></code> like the following:</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">subgrp.cox</span><span class="op">)</span></code></pre></div>
-<pre><code>## family:    cox 
-## loss:      cox_loss_lasso 
-## method:    weighting 
-## cutpoint:  0 
-## propensity 
-## function:  propensity.func 
-## 
-## benefit score: f(x), 
-## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
-## 
-## Average Outcomes:
-##                 Recommended 0      Recommended 1
-## Received 0 639.7763 (n = 244)   7.2035 (n = 166)
-## Received 1 181.8357 (n = 352) 635.7248 (n = 238)
-## 
-## Treatment effects conditional on subgroups:
-## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] 
-##                         457.9406 (n = 596) 
-## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] 
-##                         628.5214 (n = 404) 
-## 
-## NOTE: The above average outcomes are biased estimates of
-##       the expected outcomes conditional on subgroups. 
-##       Use 'validate.subgroup()' to obtain unbiased estimates.
-## 
-## ---------------------------------------------------
-## 
-## Benefit score quantiles (f(X) for 1 vs 0): 
-##       0%      25%      50%      75%     100% 
-## -0.65994 -0.20150 -0.06394  0.09872  0.87391 
-## 
-## ---------------------------------------------------
-## 
-## Summary of individual treatment effects: 
-## E[Y|T=1, X] / E[Y|T=0, X]
-## 
-## Note: for survival outcomes, the above ratio is 
-## E[g(Y)|T=1, X] / E[g(Y)|T=0, X], 
-## where g() is a monotone increasing function of Y, 
-## the survival time
-## 
-##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##  0.4173  0.9060  1.0660  1.0788  1.2232  1.9347 
-## 
-## ---------------------------------------------------
-## 
-## 8 out of 49 interactions selected in total by the lasso (cross validation criterion).
-## 
-## The first estimate is the treatment main effect, which is always selected. 
-## Any other variables selected represent treatment-covariate interactions.
-## 
-##            Trt1     V1     V2      V3      V4     V11    V13    V17     V47
-## Estimate 0.0461 0.0086 0.0568 -0.0195 -0.0088 -0.0279 0.0156 0.0019 -0.0069
-##             V50
-## Estimate 0.0236</code></pre>
+                           nfolds <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>      <span class="co"># option for cv.glmnet</span></code></pre></div>
+<p>The subgroup treatment effects are estimated using the restricted
+mean statistic and can be displayed with
+<code><a href="../reference/summary.html">summary.subgroup_fitted()</a></code> or
+<code><a href="../reference/print.html">print.subgroup_fitted()</a></code> like the following:</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">subgrp.cox</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## family:    cox </span>
+<span class="co">## loss:      cox_loss_lasso </span>
+<span class="co">## method:    weighting </span>
+<span class="co">## cutpoint:  0 </span>
+<span class="co">## propensity </span>
+<span class="co">## function:  propensity.func </span>
+<span class="co">## </span>
+<span class="co">## benefit score: f(x), </span>
+<span class="co">## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'</span>
+<span class="co">## </span>
+<span class="co">## Average Outcomes:</span>
+<span class="co">##                 Recommended 0      Recommended 1</span>
+<span class="co">## Received 0  30.0267 (n = 268)  16.0566 (n = 133)</span>
+<span class="co">## Received 1 253.5269 (n = 230) 120.2127 (n = 369)</span>
+<span class="co">## </span>
+<span class="co">## Treatment effects conditional on subgroups:</span>
+<span class="co">## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] </span>
+<span class="co">##                        -223.5002 (n = 498) </span>
+<span class="co">## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] </span>
+<span class="co">##                         104.1561 (n = 502) </span>
+<span class="co">## </span>
+<span class="co">## NOTE: The above average outcomes are biased estimates of</span>
+<span class="co">##       the expected outcomes conditional on subgroups. </span>
+<span class="co">##       Use 'validate.subgroup()' to obtain unbiased estimates.</span>
+<span class="co">## </span>
+<span class="co">## ---------------------------------------------------</span>
+<span class="co">## </span>
+<span class="co">## Benefit score quantiles (f(X) for 1 vs 0): </span>
+<span class="co">##         0%        25%        50%        75%       100% </span>
+<span class="co">## -0.5005382 -0.0956146  0.0004967  0.1035480  0.4753271 </span>
+<span class="co">## </span>
+<span class="co">## ---------------------------------------------------</span>
+<span class="co">## </span>
+<span class="co">## Summary of individual treatment effects: </span>
+<span class="co">## E[Y|T=1, X] / E[Y|T=0, X]</span>
+<span class="co">## </span>
+<span class="co">## Note: for survival outcomes, the above ratio is </span>
+<span class="co">## E[g(Y)|T=1, X] / E[g(Y)|T=0, X], </span>
+<span class="co">## where g() is a monotone increasing function of Y, </span>
+<span class="co">## the survival time</span>
+<span class="co">## </span>
+<span class="co">##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
+<span class="co">##  0.6217  0.9016  0.9995  1.0066  1.1003  1.6496 </span>
+<span class="co">## </span>
+<span class="co">## ---------------------------------------------------</span>
+<span class="co">## </span>
+<span class="co">## 2 out of 24 interactions selected in total by the lasso (cross validation criterion).</span>
+<span class="co">## </span>
+<span class="co">## The first estimate is the treatment main effect, which is always selected. </span>
+<span class="co">## Any other variables selected represent treatment-covariate interactions.</span>
+<span class="co">## </span>
+<span class="co">##             Trt1     V2     V11    V21</span>
+<span class="co">## Estimate -0.0072 0.0438 -0.0133 0.0129</span></code></pre>
 </div>
-<div id="efficiency-augmentation" class="section level3">
-<h3 class="hasAnchor">
-<a href="#efficiency-augmentation" class="anchor"></a>Efficiency Augmentation</h3>
-<p>The <code>personalized</code> package also allows for efficiency augmentation of the subgroup identification models for continuous outcomes. The basic idea of efficiency augmentation is to construct a model for the main effects of the model and shift the outcome based on these main effects. The resulting estimator based on the shifted outcome can be more efficient than using the outcome itself.</p>
-<p>In the <code>personalized</code> package, this involves providing <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> a function which inputs the covariate information <code>x</code> and the outcomes <code>y</code> and outputs a prediction for <code>y</code> based on <code>x</code>. The following is an example of such a function:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="section level4">
+<h4 id="efficiency-augmentation">Efficiency Augmentation<a class="anchor" aria-label="anchor" href="#efficiency-augmentation"></a>
+</h4>
+<p>The <code>personalized</code> package also allows for efficiency
+augmentation of the subgroup identification models for continuous
+outcomes. The basic idea of efficiency augmentation is to construct a
+model for the main effects of the model and shift the outcome based on
+these main effects. The resulting estimator based on the shifted outcome
+can be more efficient than using the outcome itself.</p>
+<p>In the <code>personalized</code> package, this involves providing
+<code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> a function which inputs the covariate
+information <code>x</code> and the outcomes <code>y</code> and outputs a
+prediction for <code>y</code> based on <code>x</code>. The following is
+an example of such a function:</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">adjustment.func</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span>
 <span class="op">{</span>
-    <span class="va">df.x</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
+    <span class="va">df.x</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
     
     <span class="co"># add all squared terms to model</span>
-    <span class="va">form</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/eval.html">eval</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">" ~ -1 + "</span>, 
-                <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">'poly('</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">df.x</span><span class="op">)</span>, <span class="st">', 2)'</span>, sep<span class="op">=</span><span class="st">''</span><span class="op">)</span>, 
+    <span class="va">form</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/eval.html" class="external-link">eval</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">" ~ -1 + "</span>, 
+                <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">'poly('</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">df.x</span><span class="op">)</span>, <span class="st">', 2)'</span>, sep<span class="op">=</span><span class="st">''</span><span class="op">)</span>, 
                       collapse<span class="op">=</span><span class="st">" + "</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-    <span class="va">mm</span>    <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html">model.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/formula.html">as.formula</a></span><span class="op">(</span><span class="va">form</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">df.x</span><span class="op">)</span>
-    <span class="va">cvmod</span> <span class="op">&lt;-</span> <span class="fu">cv.glmnet</span><span class="op">(</span>y <span class="op">=</span> <span class="va">y</span>, x <span class="op">=</span> <span class="va">mm</span>, nfolds <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
-    <span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">cvmod</span>, newx <span class="op">=</span> <span class="va">mm</span>, s <span class="op">=</span> <span class="st">"lambda.min"</span><span class="op">)</span>
+    <span class="va">mm</span>    <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">as.formula</a></span><span class="op">(</span><span class="va">form</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">df.x</span><span class="op">)</span>
+    <span class="va">cvmod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://glmnet.stanford.edu/reference/cv.glmnet.html" class="external-link">cv.glmnet</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">y</span>, x <span class="op">=</span> <span class="va">mm</span>, nfolds <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
+    <span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">cvmod</span>, newx <span class="op">=</span> <span class="va">mm</span>, s <span class="op">=</span> <span class="st">"lambda.min"</span><span class="op">)</span>
     <span class="va">predictions</span>
 <span class="op">}</span></code></pre></div>
-<p>Then this can be used in <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> by passing the function to the argument <code>augment.func</code> like the following:</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<p>Then this can be used in <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> by passing the
+function to the argument <code>augment.func</code> like the
+following:</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">subgrp.model.eff</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>,
                              trt <span class="op">=</span> <span class="va">trt</span>,
                              propensity.func <span class="op">=</span> <span class="va">prop.func</span>,
                              loss   <span class="op">=</span> <span class="st">"sq_loss_lasso"</span>,
                              augment.func <span class="op">=</span> <span class="va">adjustment.func</span>,
-                             nfolds <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>              <span class="co"># option for cv.glmnet</span>
+                             nfolds <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>              <span class="co"># option for cv.glmnet</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">subgrp.model.eff</span><span class="op">)</span></code></pre></div>
-<pre><code>## family:    gaussian 
-## loss:      sq_loss_lasso 
-## method:    weighting 
-## cutpoint:  0 
-## augmentation 
-## function: augment.func 
-## propensity 
-## function:  propensity.func 
-## 
-## benefit score: f(x), 
-## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
-## 
-## Average Outcomes:
-##                 Recommended 0      Recommended 1
-## Received 0  -7.6832 (n = 199) -19.3012 (n = 211)
-## Received 1 -15.9652 (n = 289)   -9.791 (n = 301)
-## 
-## Treatment effects conditional on subgroups:
-## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] 
-##                            8.282 (n = 488) 
-## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] 
-##                           9.5102 (n = 512) 
-## 
-## NOTE: The above average outcomes are biased estimates of
-##       the expected outcomes conditional on subgroups. 
-##       Use 'validate.subgroup()' to obtain unbiased estimates.
-## 
-## ---------------------------------------------------
-## 
-## Benefit score quantiles (f(X) for 1 vs 0): 
-##        0%       25%       50%       75%      100% 
-## -12.28611  -2.64957   0.07466   2.61577  11.08024 
-## 
-## ---------------------------------------------------
-## 
-## Summary of individual treatment effects: 
-## E[Y|T=1, X] - E[Y|T=0, X]
-## 
-##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
-## -24.57221  -5.29914   0.14933  -0.04341   5.23154  22.16048 
-## 
-## ---------------------------------------------------
-## 
-## 7 out of 50 interactions selected in total by the lasso (cross validation criterion).
-## 
-## The first estimate is the treatment main effect, which is always selected. 
-## Any other variables selected represent treatment-covariate interactions.
-## 
-##             Trt1     V2      V3     V11     V16     V20     V30     V47
-## Estimate -0.0777 0.8969 -0.5836 -0.7594 -0.0131 -0.0362 -0.0652 -0.1579</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">subgrp.model.eff</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## family:    gaussian </span>
+<span class="co">## loss:      sq_loss_lasso </span>
+<span class="co">## method:    weighting </span>
+<span class="co">## cutpoint:  0 </span>
+<span class="co">## augmentation </span>
+<span class="co">## function: augment.func </span>
+<span class="co">## propensity </span>
+<span class="co">## function:  propensity.func </span>
+<span class="co">## </span>
+<span class="co">## benefit score: f(x), </span>
+<span class="co">## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'</span>
+<span class="co">## </span>
+<span class="co">## Average Outcomes:</span>
+<span class="co">##                 Recommended 0      Recommended 1</span>
+<span class="co">## Received 0  -8.8916 (n = 110) -15.5313 (n = 291)</span>
+<span class="co">## Received 1 -14.9151 (n = 362) -13.2178 (n = 237)</span>
+<span class="co">## </span>
+<span class="co">## Treatment effects conditional on subgroups:</span>
+<span class="co">## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] </span>
+<span class="co">##                           6.0235 (n = 472) </span>
+<span class="co">## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] </span>
+<span class="co">##                           2.3135 (n = 528) </span>
+<span class="co">## </span>
+<span class="co">## NOTE: The above average outcomes are biased estimates of</span>
+<span class="co">##       the expected outcomes conditional on subgroups. </span>
+<span class="co">##       Use 'validate.subgroup()' to obtain unbiased estimates.</span>
+<span class="co">## </span>
+<span class="co">## ---------------------------------------------------</span>
+<span class="co">## </span>
+<span class="co">## Benefit score quantiles (f(X) for 1 vs 0): </span>
+<span class="co">##       0%      25%      50%      75%     100% </span>
+<span class="co">## -11.7672  -2.5076   0.2192   2.8743  10.8466 </span>
+<span class="co">## </span>
+<span class="co">## ---------------------------------------------------</span>
+<span class="co">## </span>
+<span class="co">## Summary of individual treatment effects: </span>
+<span class="co">## E[Y|T=1, X] - E[Y|T=0, X]</span>
+<span class="co">## </span>
+<span class="co">##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span>
+<span class="co">## -23.5345  -5.0153   0.4384   0.3592   5.7486  21.6932 </span>
+<span class="co">## </span>
+<span class="co">## ---------------------------------------------------</span>
+<span class="co">## </span>
+<span class="co">## 12 out of 25 interactions selected in total by the lasso (cross validation criterion).</span>
+<span class="co">## </span>
+<span class="co">## The first estimate is the treatment main effect, which is always selected. </span>
+<span class="co">## Any other variables selected represent treatment-covariate interactions.</span>
+<span class="co">## </span>
+<span class="co">##           Trt1      V1     V2      V3    V5     V7      V8     V10     V11</span>
+<span class="co">## Estimate 0.086 -0.0318 0.9205 -0.4966 -0.04 0.0208 -0.0019 -0.0821 -0.7399</span>
+<span class="co">##              V12   V18     V20     V22</span>
+<span class="co">## Estimate -0.0864 0.042 -0.0059 -0.0725</span></code></pre>
 </div>
-<div id="plotting-fitted-models" class="section level3">
-<h3 class="hasAnchor">
-<a href="#plotting-fitted-models" class="anchor"></a>Plotting Fitted Models</h3>
-<p>The outcomes (or average outcomes) of patients within different subgroups can be plotted using the <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> function. In particular, this function plots patient outcomes by treatment group within each subgroup of patients (those recommended the treatment by the model and those recommended the control by the model). Boxplots of the outcomes can be plotted in addition to densities and and interaction plot of the average outcomes within each of these groups. They can all be generated like the following:</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">subgrp.model</span><span class="op">)</span></code></pre></div>
+<div class="section level4">
+<h4 id="plotting-fitted-models">Plotting Fitted Models<a class="anchor" aria-label="anchor" href="#plotting-fitted-models"></a>
+</h4>
+<p>The outcomes (or average outcomes) of patients within different
+subgroups can be plotted using the <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> function. In
+particular, this function plots patient outcomes by treatment group
+within each subgroup of patients (those recommended the treatment by the
+model and those recommended the control by the model). Boxplots of the
+outcomes can be plotted in addition to densities and and interaction
+plot of the average outcomes within each of these groups. They can all
+be generated like the following:</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">subgrp.model</span><span class="op">)</span></code></pre></div>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_ex_model_1-1.png" width="700"></p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">subgrp.model</span>, type <span class="op">=</span> <span class="st">"density"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">subgrp.model</span>, type <span class="op">=</span> <span class="st">"density"</span><span class="op">)</span></code></pre></div>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_ex_model_2-1.png" width="700"></p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">subgrp.model</span>, type <span class="op">=</span> <span class="st">"interaction"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">subgrp.model</span>, type <span class="op">=</span> <span class="st">"interaction"</span><span class="op">)</span></code></pre></div>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_ex_model_3-1.png" width="700"></p>
-<p>Multiple models can be visually compared using the <code><a href="../reference/plotCompare.html">plotCompare()</a></code> function, which offers the same plotting options as the <code><a href="../reference/plot.subgroup_fitted.html">plot.subgroup_fitted()</a></code> function.</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<p>Multiple models can be visually compared using the
+<code><a href="../reference/plotCompare.html">plotCompare()</a></code> function, which offers the same plotting
+options as the <code><a href="../reference/plot.html">plot.subgroup_fitted()</a></code> function.</p>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plotCompare.html">plotCompare</a></span><span class="op">(</span><span class="va">subgrp.model</span>, <span class="va">subgrp.model.eff</span><span class="op">)</span></code></pre></div>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_compare_ex2-1.png" width="700"></p>
 </div>
-<div id="comparing-subgroups-from-a-fitted-model" class="section level3">
-<h3 class="hasAnchor">
-<a href="#comparing-subgroups-from-a-fitted-model" class="anchor"></a>Comparing Subgroups from a Fitted Model</h3>
-<p>The <code><a href="../reference/summarize.subgroups.html">summarize.subgroups()</a></code> function compares the means of covariate values within the estimated subgroups. P-values for the differences within subgroups are also computed. For continuous variables, the p-value will come from a t-test and for binary variables, the p-value will come from a chi-squared test.</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="section level4">
+<h4 id="comparing-subgroups-from-a-fitted-model">Comparing Subgroups from a Fitted Model<a class="anchor" aria-label="anchor" href="#comparing-subgroups-from-a-fitted-model"></a>
+</h4>
+<p>The <code><a href="../reference/summarize.subgroups.html">summarize.subgroups()</a></code> function compares the means of
+covariate values within the estimated subgroups. P-values for the
+differences within subgroups are also computed. For continuous
+variables, the p-value will come from a t-test and for binary variables,
+the p-value will come from a chi-squared test.</p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summarize.subgroups.html">summarize.subgroups</a></span><span class="op">(</span><span class="va">subgrp.model</span><span class="op">)</span></code></pre></div>
-<p>The user can optionally print only the covariates which have significant differences between subgroups with a p-value below a given threshold like the following:</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">comp</span>, p.value <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></code></pre></div>
-<pre><code>##     Avg (recom 0) Avg (recom 1)   0 - 1 SE (recom 0) SE (recom 1)
-## V1        -0.4627        0.5258 -0.9885       0.1331       0.1295
-## V2        -1.3438        1.5019 -2.8457       0.1224       0.1170
-## V3         0.8797       -0.9385  1.8182       0.1232       0.1261
-## V6         0.6225       -0.3814  1.0039       0.1358       0.1267
-## V11        1.0669       -0.8452  1.9121       0.1283       0.1276
-## V13       -0.9469        0.5188 -1.4657       0.1311       0.1311
-## V17       -0.9308        0.5703 -1.5011       0.1276       0.1367
-## V37        0.5553       -0.5857  1.1410       0.1345       0.1320</code></pre>
-<p>The covariate values and estimated subgroups can be directly used by the <code><a href="../reference/summarize.subgroups.html">summarize.subgroups()</a></code> function:</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<p>The user can optionally print only the covariates which have
+significant differences between subgroups with a p-value below a given
+threshold like the following:</p>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">comp</span>, p.value <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##     Avg (recom 0) Avg (recom 1)  0 - 1 SE (recom 0) SE (recom 1)</span>
+<span class="co">## V2         -1.461        2.6540 -4.115      0.09617       0.1061</span>
+<span class="co">## V11         0.790       -1.0538  1.844      0.12098       0.1367</span>
+<span class="co">## V21        -0.653        0.8905 -1.543      0.11899       0.1478</span></code></pre>
+<p>The covariate values and estimated subgroups can be directly used by
+the <code><a href="../reference/summarize.subgroups.html">summarize.subgroups()</a></code> function:</p>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">comp2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summarize.subgroups.html">summarize.subgroups</a></span><span class="op">(</span><span class="va">x</span>, subgroup <span class="op">=</span> <span class="va">subgrp.model</span><span class="op">$</span><span class="va">benefit.scores</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
-<div id="validating-subgroup-identification-models" class="section level2">
-<h2 class="hasAnchor">
-<a href="#validating-subgroup-identification-models" class="anchor"></a>Validating Subgroup Identification Models</h2>
-<div id="overview-2" class="section level3">
-<h3 class="hasAnchor">
-<a href="#overview-2" class="anchor"></a>Overview</h3>
-<p>An important aspect of estimating the impact of estimated subgroups is obtaining estimates of the treatment effect within the estimated subgroups. Ideally, the treatment should have a positive impact within the subgroup of patients who are recommended to the treatment and the control should have a positive impact within the subgroup of patients who were not recommended the treatment.</p>
-<p>Since our estimated subgroups are conditional on observing the outcomes of the patients, taking the average outcomes by treatment status within each subgroup to estimate the treatment effects within subgroups will yield biased and typically overly-optimistic estimates. Instead, we need to use resampling-based procedures to estimate these effects reliably. There are two methods for subgroup treatment effect estimation. Both methods are available using the <code><a href="../reference/validate.subgroup.html">validate.subgroup()</a></code> function.</p>
+<div class="section level3">
+<h3 id="validating-subgroup-identification-models">Validating Subgroup Identification Models<a class="anchor" aria-label="anchor" href="#validating-subgroup-identification-models"></a>
+</h3>
+<div class="section level4">
+<h4 id="overview-2">Overview<a class="anchor" aria-label="anchor" href="#overview-2"></a>
+</h4>
+<p>An important aspect of estimating the impact of estimated subgroups
+is obtaining estimates of the treatment effect within the estimated
+subgroups. Ideally, the treatment should have a positive impact within
+the subgroup of patients who are recommended to the treatment and the
+control should have a positive impact within the subgroup of patients
+who were not recommended the treatment.</p>
+<p>Since our estimated subgroups are conditional on observing the
+outcomes of the patients, taking the average outcomes by treatment
+status within each subgroup to estimate the treatment effects within
+subgroups will yield biased and typically overly-optimistic estimates.
+Instead, we need to use resampling-based procedures to estimate these
+effects reliably. There are two methods for subgroup treatment effect
+estimation. Both methods are available using the
+<code><a href="../reference/validate.subgroup.html">validate.subgroup()</a></code> function.</p>
 </div>
-<div id="repeated-trainingtest-splitting" class="section level3">
-<h3 class="hasAnchor">
-<a href="#repeated-trainingtest-splitting" class="anchor"></a>Repeated Training/Test Splitting</h3>
-<p>The first method is prediction-based. For each replication in this procedure, data are randomly partitioned into a training and testing portion. For each replocation the subgroup identification model is estimated using the training procedure and the subgroup treatment effects are estimated using the test data. This method requires two arguments to be passed to <code><a href="../reference/validate.subgroup.html">validate.subgroup()</a></code>. The first argument is <code>B</code>, the number of replications and the second argument is <code>train.fraction</code>, which is the proportion of all samples which will be used for training (hence <code>1 - train.fraction</code> is the portion of samples used for testing).</p>
-<p>The main object which needs to be passed to <code><a href="../reference/validate.subgroup.html">validate.subgroup()</a></code> is a fitted object returned by the <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code>. Note that in order to validate a fitted object from <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code>, the model must be fit with the <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> <code>retcall</code> set to <code>TRUE</code>.</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="section level4">
+<h4 id="repeated-trainingtest-splitting">Repeated Training/Test Splitting<a class="anchor" aria-label="anchor" href="#repeated-trainingtest-splitting"></a>
+</h4>
+<p>The first method is prediction-based. For each replication in this
+procedure, data are randomly partitioned into a training and testing
+portion. For each replocation the subgroup identification model is
+estimated using the training procedure and the subgroup treatment
+effects are estimated using the test data. This method requires two
+arguments to be passed to <code><a href="../reference/validate.subgroup.html">validate.subgroup()</a></code>. The first
+argument is <code>B</code>, the number of replications and the second
+argument is <code>train.fraction</code>, which is the proportion of all
+samples which will be used for training (hence
+<code>1 - train.fraction</code> is the portion of samples used for
+testing).</p>
+<p>The main object which needs to be passed to
+<code><a href="../reference/validate.subgroup.html">validate.subgroup()</a></code> is a fitted object returned by the
+<code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code>. Note that in order to validate a fitted
+object from <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code>, the model must be fit with the
+<code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> <code>retcall</code> set to
+<code>TRUE</code>. Note: here we use 5 replications, but ideally this
+should be much larger, like 500 or 1000.</p>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># check that the object is an object returned by fit.subgroup()</span>
-<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">subgrp.model.eff</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] "subgroup_fitted"</code></pre>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">subgrp.model.eff</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] "subgroup_fitted"</span></code></pre>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">validation.eff</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate.subgroup.html">validate.subgroup</a></span><span class="op">(</span><span class="va">subgrp.model.eff</span>, 
-                                 B <span class="op">=</span> <span class="fl">25L</span>,  <span class="co"># specify the number of replications</span>
+                                 B <span class="op">=</span> <span class="fl">5L</span>,  <span class="co"># specify the number of replications</span>
                                  method <span class="op">=</span> <span class="st">"training_test_replication"</span>,
                                  train.fraction <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span>
 
 <span class="va">validation.eff</span></code></pre></div>
-<pre><code>## family:  gaussian 
-## loss:    sq_loss_lasso 
-## method:  weighting 
-## 
-## validation method:  training_test_replication 
-## cutpoint:           0 
-## replications:       25 
-## 
-## benefit score: f(x), 
-## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
-## 
-## Average Test Set Outcomes:
-##                                Recommended 0                     Recommended 1
-## Received 0  -8.2968 (SE = 3.9568, n = 52.04) -19.3572 (SE = 3.7228, n = 51.48)
-## Received 1 -15.1893 (SE = 2.9006, n = 73.32)  -8.7957 (SE = 2.5794, n = 73.16)
-## 
-## Treatment effects conditional on subgroups:
-## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] 
-##           6.8925 (SE = 5.6683, n = 125.36) 
-## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] 
-##          10.5615 (SE = 4.6044, n = 124.64) 
-## 
-## Est of 
-## E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:                     
-## 8.6059 (SE = 3.7201)</code></pre>
+<pre><code><span class="co">## family:  gaussian </span>
+<span class="co">## loss:    sq_loss_lasso </span>
+<span class="co">## method:  weighting </span>
+<span class="co">## </span>
+<span class="co">## validation method:  training_test_replication </span>
+<span class="co">## cutpoint:           0 </span>
+<span class="co">## replications:       5 </span>
+<span class="co">## </span>
+<span class="co">## benefit score: f(x), </span>
+<span class="co">## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'</span>
+<span class="co">## </span>
+<span class="co">## Average Test Set Outcomes:</span>
+<span class="co">##                              Recommended 0                    Recommended 1</span>
+<span class="co">## Received 0 -4.9837 (SE = 6.6423, n = 28.4) -15.5416 (SE = 2.9851, n = 72.4)</span>
+<span class="co">## Received 1  -17.3384 (SE = 1.4161, n = 88) -13.9049 (SE = 1.4309, n = 61.2)</span>
+<span class="co">## </span>
+<span class="co">## Treatment effects conditional on subgroups:</span>
+<span class="co">## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] </span>
+<span class="co">##           12.3546 (SE = 7.0885, n = 116.4) </span>
+<span class="co">## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] </span>
+<span class="co">##            1.6367 (SE = 4.1408, n = 133.6) </span>
+<span class="co">## </span>
+<span class="co">## Est of </span>
+<span class="co">## E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:                     </span>
+<span class="co">## 6.5975 (SE = 4.2434)</span></code></pre>
 </div>
-<div id="bootstrap-bias-correction" class="section level3">
-<h3 class="hasAnchor">
-<a href="#bootstrap-bias-correction" class="anchor"></a>Bootstrap Bias Correction</h3>
-<p>The second method is a bootstrap-based method which seeks to estimate the bias in the estimates of the subgroup treatment effects and then corrects for this bias (Harrell, et al. 1996).</p>
+<div class="section level4">
+<h4 id="bootstrap-bias-correction">Bootstrap Bias Correction<a class="anchor" aria-label="anchor" href="#bootstrap-bias-correction"></a>
+</h4>
+<p>The second method is a bootstrap-based method which seeks to estimate
+the bias in the estimates of the subgroup treatment effects and then
+corrects for this bias (Harrell, et al. 1996).</p>
 <ul>
 <li>
-<p>For a statistic <span class="math inline">\(d\)</span> let <span class="math inline">\(d_{train}(X)\)</span> be the statistic estimated with the training data and evaluated on data <span class="math inline">\(X\)</span> and <span class="math inline">\(d_{b}(X)\)</span> be the statistics estimated using a bootstrap sample <span class="math inline">\(X_b\)</span> (samples with replacement from <span class="math inline">\(X\)</span>) and evaluated on <span class="math inline">\(X\)</span></p>
+<p>For a statistic <span class="math inline">\(d\)</span> let <span class="math inline">\(d_{train}(X)\)</span> be the statistic estimated
+with the training data and evaluated on data <span class="math inline">\(X\)</span> and <span class="math inline">\(d_{b}(X)\)</span> be the statistics estimated
+using a bootstrap sample <span class="math inline">\(X_b\)</span>
+(samples with replacement from <span class="math inline">\(X\)</span>)
+and evaluated on <span class="math inline">\(X\)</span></p>
 <p></p>
 </li>
-<li><p>The bootstrap estimate of the amount of bias with regards to the statistic <span class="math inline">\(d\)</span> is <span class="math display">\[
+<li><p>The bootstrap estimate of the amount of bias with regards to the
+statistic <span class="math inline">\(d\)</span> is <span class="math display">\[
 {bias}(X) = \frac{1}{B}\sum_{b = 1}^B [d_b(X_b) - d_b(X) ]
 \]</span></p></li>
 <li><p>Then a bias-corrected estimate of the statistic <span class="math inline">\(d\)</span> is <span class="math display">\[d_{train}(X) - {bias}(X)\]</span></p></li>
 </ul>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">validation3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate.subgroup.html">validate.subgroup</a></span><span class="op">(</span><span class="va">subgrp.model</span>, 
-                                 B <span class="op">=</span> <span class="fl">25L</span>,  <span class="co"># specify the number of replications</span>
+                                 B <span class="op">=</span> <span class="fl">5L</span>,  <span class="co"># specify the number of replications</span>
                                  method <span class="op">=</span> <span class="st">"boot_bias_correction"</span><span class="op">)</span>
 
 <span class="va">validation3</span></code></pre></div>
-<pre><code>## family:  gaussian 
-## loss:    sq_loss_lasso 
-## method:  weighting 
-## 
-## validation method:  boot_bias_correction 
-## cutpoint:           0 
-## replications:       25 
-## 
-## benefit score: f(x), 
-## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'
-## 
-## Average Bootstrap Bias-Corrected Outcomes:
-##                                 Recommended 0                     Recommended 1
-## Received 0 -10.9075 (SE = 1.6769, n = 189.96) -16.179 (SE = 1.8153, n = 219.48)
-## Received 1 -17.2138 (SE = 1.9526, n = 292.12) -8.6521 (SE = 1.1579, n = 298.44)
-## 
-## Treatment effects conditional on subgroups:
-## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] 
-##           6.3062 (SE = 2.4012, n = 482.08) 
-## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] 
-##           7.5268 (SE = 2.1323, n = 517.92) 
-## 
-## Est of 
-## E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:                     
-## 6.8614 (SE = 1.9533)</code></pre>
+<pre><code><span class="co">## family:  gaussian </span>
+<span class="co">## loss:    sq_loss_lasso </span>
+<span class="co">## method:  weighting </span>
+<span class="co">## </span>
+<span class="co">## validation method:  boot_bias_correction </span>
+<span class="co">## cutpoint:           0 </span>
+<span class="co">## replications:       5 </span>
+<span class="co">## </span>
+<span class="co">## benefit score: f(x), </span>
+<span class="co">## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'</span>
+<span class="co">## </span>
+<span class="co">## Average Bootstrap Bias-Corrected Outcomes:</span>
+<span class="co">##                               Recommended 0                     Recommended 1</span>
+<span class="co">## Received 0    -8.367 (SE = 1.4471, n = 181) -18.2909 (SE = 1.6884, n = 219.4)</span>
+<span class="co">## Received 1 -16.538 (SE = 1.6846, n = 447.2) -11.1646 (SE = 2.6971, n = 152.4)</span>
+<span class="co">## </span>
+<span class="co">## Treatment effects conditional on subgroups:</span>
+<span class="co">## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] </span>
+<span class="co">##             8.171 (SE = 2.2815, n = 628.2) </span>
+<span class="co">## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] </span>
+<span class="co">##            7.1263 (SE = 2.4695, n = 371.8) </span>
+<span class="co">## </span>
+<span class="co">## Est of </span>
+<span class="co">## E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:                    </span>
+<span class="co">## 7.3263 (SE = 1.165)</span></code></pre>
 </div>
-<div id="plotting-validated-models" class="section level3">
-<h3 class="hasAnchor">
-<a href="#plotting-validated-models" class="anchor"></a>Plotting Validated Models</h3>
-<p>The results for each of the iterations of either the bootstrap of the training and testing partitioning procedure can be plotted using the <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> function similarly to how the <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> function can be used for fitted objects from <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code>. Similarly, boxplots, density plots, and interaction plots are all available through the <code>type</code> argument:</p>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">validation</span><span class="op">)</span></code></pre></div>
+<div class="section level4">
+<h4 id="plotting-validated-models">Plotting Validated Models<a class="anchor" aria-label="anchor" href="#plotting-validated-models"></a>
+</h4>
+<p>The results for each of the iterations of either the bootstrap of the
+training and testing partitioning procedure can be plotted using the
+<code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> function similarly to how the <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>
+function can be used for fitted objects from
+<code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code>. Similarly, boxplots, density plots, and
+interaction plots are all available through the <code>type</code>
+argument:</p>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">validation</span><span class="op">)</span></code></pre></div>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_ex_model_1a-1.png" width="700"></p>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">validation</span>, type <span class="op">=</span> <span class="st">"density"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">validation</span>, type <span class="op">=</span> <span class="st">"density"</span><span class="op">)</span></code></pre></div>
 <p><img src="usage_of_the_personalized_package_files/figure-html/plot_ex_model_1b-1.png" width="700"></p>
-<p>Multiple validated models can be visually compared using the <code><a href="../reference/plotCompare.html">plotCompare()</a></code> function, which offers the same plotting options as the <code><a href="../reference/plot.subgroup_fitted.html">plot.subgroup_validated()</a></code> function. Here we compare the model fitted using <code>sq_loss_lasso</code> to the one fitted using <code>sq_loss_lasso</code> and efficiency augmentation:</p>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<p>Multiple validated models can be visually compared using the
+<code><a href="../reference/plotCompare.html">plotCompare()</a></code> function, which offers the same plotting
+options as the <code><a href="../reference/plot.html">plot.subgroup_validated()</a></code> function. Here we
+compare the model fitted using <code>sq_loss_lasso</code> to the one
+fitted using <code>sq_loss_lasso</code> and efficiency augmentation:</p>
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plotCompare.html">plotCompare</a></span><span class="op">(</span><span class="va">validation</span>, <span class="va">validation.eff</span><span class="op">)</span></code></pre></div>
-<p>We can see above that the model with efficiency augmentation finds subgroups with more impactful treatment effects.</p>
+<p>We can see above that the model with efficiency augmentation finds
+subgroups with more impactful treatment effects.</p>
 </div>
 </div>
 </div>
@@ -1014,11 +1386,13 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 
 
       <footer><div class="copyright">
-  <p>Developed by Jared Huling.</p>
+  <p></p>
+<p>Developed by Jared Huling.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer>
@@ -1026,6 +1400,8 @@ L_W(f_1, \dots, f_{K}) = \frac{1}{n}\sum_{i = 1}^n\frac{\boldsymbol M(Y_i,  \sum
 
   
 
+
+  
 
   </body>
 </html>
