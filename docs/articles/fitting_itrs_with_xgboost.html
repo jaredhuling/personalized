@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">personalized</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.8</span>
       </span>
     </div>
 
@@ -319,23 +319,25 @@ should generally be higher, such as 10.</p>
 <span class="co">## -16.9377  -1.9319  -0.4113  -0.8605   0.7792   6.6139</span></code></pre>
 </div>
 <div class="section level2">
-<h2 id="comparing-performance-with-augmentation">Comparing performance with augmentation<a class="anchor" aria-label="anchor" href="#comparing-performance-with-augmentation"></a>
+<h2 id="comparing-performance-with-linear-itrs">Comparing performance with linear ITRs<a class="anchor" aria-label="anchor" href="#comparing-performance-with-linear-itrs"></a>
 </h2>
 <p>We first run the training/testing procedure to assess the performance
-of the non-augmented estimator (ideally, with the number of replications
-larger than <code>B=100</code>). Note we do not run this part due to
+of the linear estimator (ideally, with the number of replications larger
+than <code>B=100</code>). Note we do not run this part due to
 computation time.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">valmod.lin</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate.subgroup.html">validate.subgroup</a></span><span class="op">(</span><span class="va">subgrp.model.linear</span>, B <span class="op">=</span> <span class="fl">100</span>,
                             method <span class="op">=</span> <span class="st">"training_test"</span>,
                             train.fraction <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span>
 <span class="va">valmod.lin</span></code></pre></div>
-<p>Then we compare with the augmented estimator. Although this is based
-on just 5 replications, we can see that the augmented estimator is much
-better at discriminating between benefitting and non-benefitting
-patients, as evidenced by the large treatment effect among those
-predicted to benefit by the augmented estimator versus the smaller
-conditional treatment effect above.</p>
+<p>Then we compare with the xgboost-based estimator. Although this is
+based on just 5 replications, we can see that the xgboost estimator is
+much better at discriminating between benefitting and non-benefitting
+patients, as would be evidenced by the large treatment effect among
+those predicted to benefit by the xgboost estimator and below in the
+plots as the estimated conditional average treatment effect (CATE) of
+the xgboost estimator tracks better with the true CATE than does the
+linear estimate.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">valmod.xgb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate.subgroup.html">validate.subgroup</a></span><span class="op">(</span><span class="va">subgrp.model.xgb</span>, B <span class="op">=</span> <span class="fl">100</span>,
                                 method <span class="op">=</span> <span class="st">"training_test"</span>,
