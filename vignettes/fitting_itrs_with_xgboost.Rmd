@@ -120,6 +120,8 @@ Several arguments used by the `xgb.train()` and `xgb.cv()` functions from `{xgbo
 - `early_stopping_rounds`: can optionally be set. If set to an integer `k`, training will stop if the performance doesn't improve for `k` rounds.
 
 
+**Note:** currently the `{personalized}` package does not allow for the user to specify a *grid* of tuning parameters and only allows the user to specify a single set of hyperparameters, as below. However, the number of trees *will* be chosen by cross validation.
+
 We have set `nfolds` to 3 for computational reasons; it should generally be higher, such as 10.
 ```{r}
 

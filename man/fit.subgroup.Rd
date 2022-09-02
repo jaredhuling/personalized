@@ -64,7 +64,8 @@ allows for flexible estimation using machine learning and can be useful when the
         \item{\code{"owl_logistic_flip_loss_gam"}} { - M(y, v) = |y|log(1 + exp\{-sign(y)v\}) with generalized additive model fit on all variables}
         \item{\code{"owl_logistic_loss_lasso_gam"}} { - M(y, v) = ylog(1 + exp\{-v\}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
         \item{\code{"owl_logistic_flip_loss_lasso_gam"}} { - M(y, v) = |y|log(1 + exp\{-sign(y)v\}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
-        \item{\code{"sq_loss_xgboost"}}{ - M(y, v) = (v - y) ^ 2 with gradient-boosted decision trees model}
+        \item{\code{"sq_loss_xgboost"}}{ - M(y, v) = (v - y) ^ 2 with gradient-boosted decision trees model. Currently, the personalized package does not allow for the user to specify a grid of tuning
+        parameters and only allows the user to specify a single set of hyperparameters, but the number of trees will be chosen by cross validation.}
     }
     \item{\strong{Binary Outcomes}}
     \itemize{

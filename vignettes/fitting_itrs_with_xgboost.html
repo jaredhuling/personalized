@@ -12,7 +12,7 @@
 
 <meta name="author" content="Jared Huling" />
 
-<meta name="date" content="2022-06-26" />
+<meta name="date" content="2022-09-02" />
 
 <title>Estimation of Flexible ITRs with xgboost</title>
 
@@ -335,7 +335,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h1 class="title toc-ignore">Estimation of Flexible ITRs with
 xgboost</h1>
 <h4 class="author">Jared Huling</h4>
-<h4 class="date">2022-06-26</h4>
+<h4 class="date">2022-09-02</h4>
 
 
 <div id="TOC">
@@ -346,8 +346,8 @@ conditional average treatment effect/benefit score</a></li>
 Setup</a></li>
 <li><a href="#using-xgboost-for-estimation-of-itrs"><span class="toc-section-number">3</span> Using xgboost for estimation of
 ITRs</a></li>
-<li><a href="#comparing-performance-with-augmentation"><span class="toc-section-number">4</span> Comparing performance with
-augmentation</a></li>
+<li><a href="#comparing-performance-with-linear-itrs"><span class="toc-section-number">4</span> Comparing performance with linear
+ITRs</a></li>
 </ul>
 </div>
 
@@ -494,6 +494,11 @@ as they need to be set to custom values to work within
 an integer <code>k</code>, training will stop if the performance doesn’t
 improve for <code>k</code> rounds.</li>
 </ul>
+<p><strong>Note:</strong> currently the <code>{personalized}</code>
+package does not allow for the user to specify a <em>grid</em> of tuning
+parameters and only allows the user to specify a single set of
+hyperparameters, as below. However, the number of trees <em>will</em> be
+chosen by cross validation.</p>
 <p>We have set <code>nfolds</code> to 3 for computational reasons; it
 should generally be higher, such as 10.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## xgboost tuning parameters to use:</span></span>
@@ -552,23 +557,25 @@ should generally be higher, such as 10.</p>
 ##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
 ## -16.9377  -1.9319  -0.4113  -0.8605   0.7792   6.6139</code></pre>
 </div>
-<div id="comparing-performance-with-augmentation" class="section level1" number="4">
+<div id="comparing-performance-with-linear-itrs" class="section level1" number="4">
 <h1><span class="header-section-number">4</span> Comparing performance
-with augmentation</h1>
+with linear ITRs</h1>
 <p>We first run the training/testing procedure to assess the performance
-of the non-augmented estimator (ideally, with the number of replications
-larger than <code>B=100</code>). Note we do not run this part due to
+of the linear estimator (ideally, with the number of replications larger
+than <code>B=100</code>). Note we do not run this part due to
 computation time.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>valmod.lin <span class="ot">&lt;-</span> <span class="fu">validate.subgroup</span>(subgrp.model.linear, <span class="at">B =</span> <span class="dv">100</span>,</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                            <span class="at">method =</span> <span class="st">&quot;training_test&quot;</span>,</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">train.fraction =</span> <span class="fl">0.75</span>)</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>valmod.lin</span></code></pre></div>
-<p>Then we compare with the augmented estimator. Although this is based
-on just 5 replications, we can see that the augmented estimator is much
-better at discriminating between benefitting and non-benefitting
-patients, as evidenced by the large treatment effect among those
-predicted to benefit by the augmented estimator versus the smaller
-conditional treatment effect above.</p>
+<p>Then we compare with the xgboost-based estimator. Although this is
+based on just 5 replications, we can see that the xgboost estimator is
+much better at discriminating between benefitting and non-benefitting
+patients, as would be evidenced by the large treatment effect among
+those predicted to benefit by the xgboost estimator and below in the
+plots as the estimated conditional average treatment effect (CATE) of
+the xgboost estimator tracks better with the true CATE than does the
+linear estimate.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>valmod.xgb <span class="ot">&lt;-</span> <span class="fu">validate.subgroup</span>(subgrp.model.xgb, <span class="at">B =</span> <span class="dv">100</span>,</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>                                <span class="at">method =</span> <span class="st">&quot;training_test&quot;</span>,</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">train.fraction =</span> <span class="fl">0.75</span>)</span>
