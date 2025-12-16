@@ -545,7 +545,7 @@ fit.subgroup <- function(x,
     # make sure outcome is consistent with
     # other options selected if there is any
     # indication of a survival outcome or model
-    if ( xor(class(y) == "Surv", grepl("cox_loss", loss)) )
+    if ( xor("Surv" %in% class(y), grepl("cox_loss", loss)) )
     {
         ifelse(
             grepl("cox_loss", loss),
@@ -948,6 +948,11 @@ fit.subgroup <- function(x,
     } else
     {
         pi.x <- drop(propensity.func(x = x, trt = trt, match.id = match.id))
+    }
+
+    if (length(pi.x) == 1L)
+    {
+        pi.x <- rep(pi.x, NROW(trt))
     }
 
 
