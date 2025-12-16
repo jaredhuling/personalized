@@ -1,12 +1,12 @@
-## New version for 'personalized' -- 0.2.7
+## New version for 'personalized' -- 0.2.8
 
-* Bug fix for GAM-based losses
-* Replaces gbm implementation with xgboost using a custom loss function
+* Minor bug fixes
+* Fixes CRAN errors and RD warnings
 
 ## Test environments
 
-* Windows Server 2012 R2 x64, (R-devel unstable, 2022-06-20 r82506 ucrt)
-* local Mac OSX Catalina (R 4.2.0)
+* local Mac OSX Sequoia (R 4.5.1)
+* Rhub max-arm64, m1-san, windows
 
 ## R CMD check results
 
