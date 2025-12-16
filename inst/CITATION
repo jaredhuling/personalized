@@ -17,8 +17,8 @@ bibentry(bibtype = "Article",
 )
 
 
-citEntry(,
-  entry        = "Article",
+bibentry(,
+  bibtype      = "Article",
   author       = "Shuai Chen and Lu Tian and Tianxi Cai and Menggang Yu",
   title        = "A General Statistical Framework for Subgroup Identification and Comparative Treatment Scoring",
   journal      = "Biometrics",

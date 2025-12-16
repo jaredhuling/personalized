@@ -18,7 +18,7 @@ weighted.ksvm(
 )
 }
 \arguments{
-\item{y}{The response vector (either a character vector, factor vector, or numeric vector with values in {-1, 1})}
+\item{y}{The response vector (either a character vector, factor vector, or numeric vector with values in \{-1, 1\})}
 
 \item{x}{The design matrix (not including intercept term)}
 

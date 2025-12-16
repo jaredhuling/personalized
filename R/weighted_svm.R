@@ -3,7 +3,7 @@
 #'
 #' @description Fits weighted kernel SVM.  To be used for OWL with hinge loss (but can be used more generally)
 #'
-#' @param y The response vector (either a character vector, factor vector, or numeric vector with values in {-1, 1})
+#' @param y The response vector (either a character vector, factor vector, or numeric vector with values in \{-1, 1\})
 #' @param x The design matrix (not including intercept term)
 #' @param weights vector of sample weights for weighted SVM
 #' @param C cost of constraints violation, see \code{\link[kernlab]{ksvm}}

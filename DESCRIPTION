@@ -32,11 +32,11 @@ Imports:
     methods,
     kernlab,
     foreach,
-    xgboost
+    xgboost (<= 1.7.11.1)
 Depends:
     glmnet (>= 2.0-13),
     mgcv,
     ggplot2,
     plotly
-RoxygenNote: 7.2.0
+RoxygenNote: 7.3.3
 VignetteBuilder: knitr

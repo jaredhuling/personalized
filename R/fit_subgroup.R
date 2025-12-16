@@ -24,37 +24,37 @@
 #' \itemize{
 #'     \item{\strong{Continuous Outcomes}}
 #'     \itemize{
-#'         \item{\code{"sq_loss_lasso"}}{ - M(y, v) = (v - y) ^ 2 with linear model and lasso penalty}
-#'         \item{\code{"owl_logistic_loss_lasso"}} { - M(y, v) = ylog(1 + exp\{-v\}) (method of Regularized Outcome Weighted Subgroup Identification)}
-#'         \item{\code{"owl_logistic_flip_loss_lasso"}} { - M(y, v) = |y|log(1 + exp\{-sign(y)v\})}
-#'         \item{\code{"owl_hinge_loss"}} { - M(y, v) = ymax(0, 1 - v) (method of Estimating individualized treatment rules using outcome weighted learning)}
-#'         \item{\code{"owl_hinge_flip_loss"}} { - M(y, v) = |y|max(0, 1 - sign(y)v) }
-#'         \item{\code{"sq_loss_lasso_gam"}}{ - M(y, v) = (v - y) ^ 2 with variables selected by lasso penalty and generalized additive model fit on the selected variables}
-#'         \item{\code{"sq_loss_gam"}}{ - M(y, v) = (v - y) ^ 2 with generalized additive model fit on all variables}
-#'         \item{\code{"owl_logistic_loss_gam"}} { - M(y, v) = ylog(1 + exp\{-v\}) with generalized additive model fit on all variables}
-#'         \item{\code{"owl_logistic_flip_loss_gam"}} { - M(y, v) = |y|log(1 + exp\{-sign(y)v\}) with generalized additive model fit on all variables}
-#'         \item{\code{"owl_logistic_loss_lasso_gam"}} { - M(y, v) = ylog(1 + exp\{-v\}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
-#'         \item{\code{"owl_logistic_flip_loss_lasso_gam"}} { - M(y, v) = |y|log(1 + exp\{-sign(y)v\}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
-#'         \item{\code{"sq_loss_xgboost"}}{ - M(y, v) = (v - y) ^ 2 with gradient-boosted decision trees model. Currently, the personalized package does not allow for the user to specify a grid of tuning
+#'         \item{\code{"sq_loss_lasso"} - M(y, v) = (v - y) ^ 2 with linear model and lasso penalty}
+#'         \item{\code{"owl_logistic_loss_lasso"}- M(y, v) = ylog(1 + exp\{-v\}) (method of Regularized Outcome Weighted Subgroup Identification)}
+#'         \item{\code{"owl_logistic_flip_loss_lasso"} - M(y, v) = |y|log(1 + exp\{-sign(y)v\})}
+#'         \item{\code{"owl_hinge_loss"} - M(y, v) = ymax(0, 1 - v) (method of Estimating individualized treatment rules using outcome weighted learning)}
+#'         \item{\code{"owl_hinge_flip_loss"} - M(y, v) = |y|max(0, 1 - sign(y)v) }
+#'         \item{\code{"sq_loss_lasso_gam"} - M(y, v) = (v - y) ^ 2 with variables selected by lasso penalty and generalized additive model fit on the selected variables}
+#'         \item{\code{"sq_loss_gam"} - M(y, v) = (v - y) ^ 2 with generalized additive model fit on all variables}
+#'         \item{\code{"owl_logistic_loss_gam"} - M(y, v) = ylog(1 + exp\{-v\}) with generalized additive model fit on all variables}
+#'         \item{\code{"owl_logistic_flip_loss_gam"} - M(y, v) = |y|log(1 + exp\{-sign(y)v\}) with generalized additive model fit on all variables}
+#'         \item{\code{"owl_logistic_loss_lasso_gam"} - M(y, v) = ylog(1 + exp\{-v\}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
+#'         \item{\code{"owl_logistic_flip_loss_lasso_gam"} - M(y, v) = |y|log(1 + exp\{-sign(y)v\}) with variables selected by lasso penalty and generalized additive model fit on the selected variables}
+#'         \item{\code{"sq_loss_xgboost"} - M(y, v) = (v - y) ^ 2 with gradient-boosted decision trees model. Currently, the personalized package does not allow for the user to specify a grid of tuning
 #'         parameters and only allows the user to specify a single set of hyperparameters, but the number of trees will be chosen by cross validation.}
 #'     }
 #'     \item{\strong{Binary Outcomes}}
 #'     \itemize{
 #'         \item{All losses for continuous outcomes can be used plus the following:}
-#'         \item{\code{"logistic_loss_lasso"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with with linear model and lasso penalty}
-#'         \item{\code{"logistic_loss_lasso_gam"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with variables selected by lasso penalty and generalized additive model fit on the selected variables}
-#'         \item{\code{"logistic_loss_gam"}}{ - M(y, v) = -[yv - log(1 + exp\{-v\})] with generalized additive model fit on all variables}
+#'         \item{\code{"logistic_loss_lasso"} - M(y, v) = -[yv - log(1 + exp\{-v\})] with with linear model and lasso penalty}
+#'         \item{\code{"logistic_loss_lasso_gam"} - M(y, v) = -[yv - log(1 + exp\{-v\})] with variables selected by lasso penalty and generalized additive model fit on the selected variables}
+#'         \item{\code{"logistic_loss_gam"} - M(y, v) = -[yv - log(1 + exp\{-v\})] with generalized additive model fit on all variables}
 #'     }
 #'     \item{\strong{Count Outcomes}}
 #'     \itemize{
 #'         \item{All losses for continuous outcomes can be used plus the following:}
-#'         \item{\code{"poisson_loss_lasso"}}{ - M(y, v) = -[yv - exp(v)] with with linear model and lasso penalty}
-#'         \item{\code{"poisson_loss_lasso_gam"}}{ - M(y, v) = -[yv - exp(v)] with variables selected by lasso penalty and generalized additive model fit on the selected variables}
-#'         \item{\code{"poisson_loss_gam"}}{ - M(y, v) = -[yv - exp(v)] with generalized additive model fit on all variables}
+#'         \item{\code{"poisson_loss_lasso"} - M(y, v) = -[yv - exp(v)] with with linear model and lasso penalty}
+#'         \item{\code{"poisson_loss_lasso_gam"} - M(y, v) = -[yv - exp(v)] with variables selected by lasso penalty and generalized additive model fit on the selected variables}
+#'         \item{\code{"poisson_loss_gam"} - M(y, v) = -[yv - exp(v)] with generalized additive model fit on all variables}
 #'     }
 #'     \item{\strong{Time-to-Event Outcomes}}
 #'     \itemize{
-#'         \item{\code{"cox_loss_lasso"}}{ - M corresponds to the negative partial likelihood of the cox model with linear model and additionally a lasso penalty}
+#'         \item{\code{"cox_loss_lasso"} - M corresponds to the negative partial likelihood of the cox model with linear model and additionally a lasso penalty}
 #'     }
 #' }
 #' @param method subgroup ID model type. Either the weighting or A-learning method of Chen et al, (2017)
@@ -111,9 +111,9 @@
 #' The loss function \eqn{M(y, v)} to be minimized \strong{MUST} meet
 #' the following two criteria:
 #' \enumerate{
-#' \item{}{ \eqn{D_M(y, v) = \partial M(y, v)/\partial v } must be increasing in v for each fixed y. \eqn{D_M(y, v)} is the partial
+#' \item{ \eqn{D_M(y, v) = \partial M(y, v)/\partial v } must be increasing in v for each fixed y. \eqn{D_M(y, v)} is the partial
 #' derivative of the loss function M(y, v) with respect to v}
-#' \item{}{ \eqn{D_M(y, 0)} is monotone in y}
+#' \item{ \eqn{D_M(y, 0)} is monotone in y}
 #' }
 #' An example of a valid loss function is \eqn{M(y, v) = (y - v)^2}. In this case \eqn{D_M(y, v) = -2(y - v)}.
 #' See Chen et al. (2017) for more details on the
@@ -121,35 +121,35 @@
 #'
 #' The provided function \strong{MUST} return a list with the following elements:
 #' \itemize{
-#' \item{\code{predict}}{ a function that inputs a design matrix and a 'type' argument for the type of predictions and outputs
+#' \item{\code{predict} a function that inputs a design matrix and a 'type' argument for the type of predictions and outputs
 #' a vector of predictions on the scale of the linear predictor. Note that the matrix provided to 'fit.custom.loss'
 #' has a column appended to the first column of \code{x} corresponding to the treatment main effect.
 #' Thus, the prediction function should deal with this,
 #' e.g. \code{predict(model, cbind(1, x))}}
-#' \item{\code{model} }{ a fitted model object returned by the underlying fitting function}
-#' \item{\code{coefficients}}{ if the underlying fitting function yields a vector of coefficient estimates, they should be provided here}
+#' \item{\code{model} a fitted model object returned by the underlying fitting function}
+#' \item{\code{coefficients} if the underlying fitting function yields a vector of coefficient estimates, they should be provided here}
 #' }
 #'
 #' The provided function \strong{MUST} be a function
 #' with the following arguments:
 #' \enumerate{
-#' \item{\code{x}}{ design matrix}
-#' \item{\code{y}}{ vector of responses}
-#' \item{\code{weights}}{ vector for observations weights. The underlying loss function \strong{MUST} have samples weighted according
+#' \item{\code{x} design matrix}
+#' \item{\code{y} vector of responses}
+#' \item{\code{weights} vector for observations weights. The underlying loss function \strong{MUST} have samples weighted according
 #' to this vector. See below example}
-#' \item{\code{...}}{ additional arguments passed via '\code{...}'. This can be used so that users can specify more arguments to the
+#' \item{\code{...} additional arguments passed via '\code{...}'. This can be used so that users can specify more arguments to the
 #' underlying fitting function if so desired.}
 #' }
 #' The provided function can also optionally take the following arguments:
 #' \itemize{
-#' \item{\code{match.id}}{ vector of case/control cluster IDs. This is useful if cross validation is used in the underlying fitting function
+#' \item{\code{match.id} vector of case/control cluster IDs. This is useful if cross validation is used in the underlying fitting function
 #' in which case it is advisable to sample whole clusters randomly instead of individual observations.}
-#' \item{\code{offset}}{ if efficiency augmentation is used, the predictions from the outcome model from \code{augment.func}
+#' \item{\code{offset} if efficiency augmentation is used, the predictions from the outcome model from \code{augment.func}
 #' will be provided via the \code{offset} argument, which can be used as an offset in the underlying fitting function
 #' as a means of incorporating the efficiency augmentation model's predictions}
-#' \item{\code{trt}}{ vector of treatment statuses}
-#' \item{\code{family}}{ family of outcome}
-#' \item{\code{n.trts}}{ numer of treatment levels. Can be useful if there are more than 2 treatment levels}
+#' \item{\code{trt} vector of treatment statuses}
+#' \item{\code{family} family of outcome}
+#' \item{\code{n.trts} numer of treatment levels. Can be useful if there are more than 2 treatment levels}
 #' }
 #'
 #'  Example 1: Here we minimize \eqn{M(y, v) = (y - v)^2}

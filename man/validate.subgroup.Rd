@@ -73,7 +73,7 @@ Validates subgroup treatment effects for fitted
 \details{
 Estimates of various quantities conditional on subgroups and treatment statuses are provided and displayed
 via the \code{\link[personalized]{print.subgroup_validated}} function:
-\enumerate{
+\describe{
 \item{"Conditional expected outcomes"}{ The first results shown when printing
 a \code{subgroup_validated} object are estimates of the expected outcomes conditional on
 the estimated subgroups (i.e. which subgroup is 'recommended' by the model) and conditional
