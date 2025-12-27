@@ -32,7 +32,7 @@ Imports:
     methods,
     kernlab,
     foreach,
-    xgboost (<= 1.7.11.1)
+    xgboost (>= 3.1.2.1)
 Depends:
     glmnet (>= 2.0-13),
     mgcv,
