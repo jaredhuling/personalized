@@ -397,7 +397,7 @@ xgb_cv_new <- function(params = xgb.params(), data, trt.multiplier, nrounds, nfo
                 bst = fd$bst,
                 evals = fd$evals,
                 iter = iteration - 1,
-                custom_metric = list(custom_metric_current_tr, custom_metric_current)
+                custom_metric_list = list(custom_metric_current_tr, custom_metric_current)
             )
         })
         msg <- simplify2array(msg)
@@ -565,8 +565,8 @@ fit_sq_loss_xgboost <- function(x, y, trt, n.trts, wts, family, match.id, trt.mu
     #                                                         maximize = FALSE)))
 
     cvfit <- do.call(xgb_cv_new, c(list.dots, list(params = params, data = dtrain,
-                                                   objective = return_squared_error_loss_xgboost,
-                                                   custom_metric = return_eval_metric_xgboost,
+                                                   objective_func = return_squared_error_loss_xgboost,
+                                                   custom_metric_func = return_eval_metric_xgboost,
                                                    trt.multiplier = trt.multiplier,
                                                    maximize = FALSE)))
 
