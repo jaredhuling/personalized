@@ -32,7 +32,8 @@ Imports:
     methods,
     kernlab,
     foreach,
-    xgboost (>= 3.1.2.1)
+    xgboost (>= 3.1.2.1),
+    data.table (>= 1.9.6)
 Depends:
     glmnet (>= 2.0-13),
     mgcv,

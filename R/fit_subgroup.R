@@ -503,6 +503,7 @@
 #'
 #'
 #' @export
+#' @importFrom data.table as.data.table, data.table, is.data.table, rbindlist, setkey, setkeyv, setnames, ":="
 fit.subgroup <- function(x,
                          y,
                          trt,
