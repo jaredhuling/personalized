@@ -1,3 +1,8 @@
+# personalized 0.2.8
+
+* Fixes latest CRAN errors
+* Updates compatibility with new xgboost
+* Minor bug fixes, such as errors when outcome passed as 1-column matrix
 
 # personalized 0.2.7
 
