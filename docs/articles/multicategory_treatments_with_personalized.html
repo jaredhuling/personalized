@@ -6,20 +6,19 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Multi-category Treatments with `personalized` • personalized</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Multi-category Treatments with `personalized`">
-<meta property="og:description" content="personalized">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -42,13 +41,13 @@
 <li>
   <a href="../index.html">
     <span class="fa fa-home"></span>
-     
+
   </a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -77,7 +76,7 @@
 <li>
   <a href="https://github.com/jaredhuling/personalized" class="external-link">
     <span class="fa fa-github"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -88,7 +87,7 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
@@ -99,7 +98,7 @@
                         <h4 data-toc-skip class="author">Jared
 Huling</h4>
             
-            <h4 data-toc-skip class="date">2022-07-07</h4>
+            <h4 data-toc-skip class="date">2026-01-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jaredhuling/personalized/blob/HEAD/vignettes/multicategory_treatments_with_personalized.Rmd" class="external-link"><code>vignettes/multicategory_treatments_with_personalized.Rmd</code></a></small>
       <div class="hidden name"><code>multicategory_treatments_with_personalized.Rmd</code></div>
@@ -116,96 +115,106 @@ multi-category treatments, we simulate data with three treatments. The
 treatment assignments will be based on covariates and hence mimic an
 observational setting with no unmeasured confounders.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jaredhuling.org/personalized/" class="external-link">personalized</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jaredhuling.org/personalized/" class="external-link">personalized</a></span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
-<span class="va">n.obs</span>  <span class="op">&lt;-</span> <span class="fl">250</span>
-<span class="va">n.vars</span> <span class="op">&lt;-</span> <span class="fl">10</span>
-<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n.obs</span> <span class="op">*</span> <span class="va">n.vars</span>, sd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>, <span class="va">n.obs</span>, <span class="va">n.vars</span><span class="op">)</span>
-
-<span class="co"># simulated non-randomized treatment with multiple levels</span>
-<span class="co"># based off of a multinomial logistic model</span>
-<span class="va">xbetat_1</span> <span class="op">&lt;-</span> <span class="fl">0.1</span> <span class="op">+</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span>  <span class="op">-</span> <span class="fl">0.25</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">5</span><span class="op">]</span>
-<span class="va">xbetat_2</span> <span class="op">&lt;-</span> <span class="fl">0.1</span> <span class="op">-</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">9</span><span class="op">]</span> <span class="op">+</span> <span class="fl">0.25</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">5</span><span class="op">]</span>
-<span class="va">trt.1.prob</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">xbetat_1</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">xbetat_1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">xbetat_2</span><span class="op">)</span><span class="op">)</span>
-<span class="va">trt.2.prob</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">xbetat_2</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">xbetat_1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">xbetat_2</span><span class="op">)</span><span class="op">)</span>
-<span class="va">trt.3.prob</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">-</span> <span class="op">(</span><span class="va">trt.1.prob</span> <span class="op">+</span> <span class="va">trt.2.prob</span><span class="op">)</span>
-
-<span class="va">prob.mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">trt.1.prob</span>, <span class="va">trt.2.prob</span>, <span class="va">trt.3.prob</span><span class="op">)</span>
-<span class="va">trt.mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">prob.mat</span>, <span class="fl">1</span>, <span class="kw">function</span><span class="op">(</span><span class="va">rr</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/Multinom.html" class="external-link">rmultinom</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, prob <span class="op">=</span> <span class="va">rr</span><span class="op">)</span><span class="op">)</span>
-<span class="va">trt.num</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">trt.mat</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">rr</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">rr</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
-<span class="va">trt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Trt_"</span>, <span class="va">trt.num</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># simulate response</span>
-
-<span class="co"># effect of treatment 1 relative to treatment 3</span>
-<span class="va">delta1</span> <span class="op">&lt;-</span> <span class="fl">2</span> <span class="op">*</span> <span class="op">(</span><span class="fl">0.5</span> <span class="op">+</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">3</span><span class="op">]</span>  <span class="op">)</span>
-<span class="co"># effect of treatment 2 relative to treatment 3</span>
-<span class="va">delta2</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">0.5</span> <span class="op">+</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">6</span><span class="op">]</span> <span class="op">-</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">5</span><span class="op">]</span> <span class="op">)</span>
-
-<span class="co"># main covariate effects with nonlinearities</span>
-<span class="va">xbeta</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">9</span><span class="op">]</span> <span class="op">-</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">4</span><span class="op">]</span><span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">4</span><span class="op">]</span> <span class="op">+</span> 
-    <span class="fl">0.5</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">5</span><span class="op">]</span> <span class="op">^</span> <span class="fl">2</span> <span class="op">+</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="fl">3</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">5</span><span class="op">]</span>
-
-<span class="co"># create entire functional form of E(Y|T,X)</span>
-<span class="va">xbeta</span> <span class="op">&lt;-</span> <span class="va">xbeta</span> <span class="op">+</span> 
-    <span class="va">delta1</span> <span class="op">*</span> <span class="op">(</span><span class="op">(</span><span class="va">trt.num</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op">-</span> <span class="op">(</span><span class="va">trt.num</span> <span class="op">==</span> <span class="fl">3</span><span class="op">)</span> <span class="op">)</span> <span class="op">+</span> 
-    <span class="va">delta2</span> <span class="op">*</span> <span class="op">(</span><span class="op">(</span><span class="va">trt.num</span> <span class="op">==</span> <span class="fl">2</span><span class="op">)</span> <span class="op">-</span> <span class="op">(</span><span class="va">trt.num</span> <span class="op">==</span> <span class="fl">3</span><span class="op">)</span> <span class="op">)</span>
-
-
-<span class="co"># simulate continuous outcomes E(Y|T,X)</span>
-<span class="va">y</span> <span class="op">&lt;-</span> <span class="va">xbeta</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n.obs</span>, sd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="va">n.obs</span>  <span class="op">&lt;-</span> <span class="fl">250</span></span>
+<span><span class="va">n.vars</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n.obs</span> <span class="op">*</span> <span class="va">n.vars</span>, sd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>, <span class="va">n.obs</span>, <span class="va">n.vars</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># simulated non-randomized treatment with multiple levels</span></span>
+<span><span class="co"># based off of a multinomial logistic model</span></span>
+<span><span class="va">xbetat_1</span> <span class="op">&lt;-</span> <span class="fl">0.1</span> <span class="op">+</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span>  <span class="op">-</span> <span class="fl">0.25</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">5</span><span class="op">]</span></span>
+<span><span class="va">xbetat_2</span> <span class="op">&lt;-</span> <span class="fl">0.1</span> <span class="op">-</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">9</span><span class="op">]</span> <span class="op">+</span> <span class="fl">0.25</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">5</span><span class="op">]</span></span>
+<span><span class="va">trt.1.prob</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">xbetat_1</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">xbetat_1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">xbetat_2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">trt.2.prob</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">xbetat_2</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">xbetat_1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">xbetat_2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">trt.3.prob</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">-</span> <span class="op">(</span><span class="va">trt.1.prob</span> <span class="op">+</span> <span class="va">trt.2.prob</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">prob.mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">trt.1.prob</span>, <span class="va">trt.2.prob</span>, <span class="va">trt.3.prob</span><span class="op">)</span></span>
+<span><span class="va">trt.mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">prob.mat</span>, <span class="fl">1</span>, <span class="kw">function</span><span class="op">(</span><span class="va">rr</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/Multinom.html" class="external-link">rmultinom</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, prob <span class="op">=</span> <span class="va">rr</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">trt.num</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">trt.mat</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">rr</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">rr</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">trt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Trt_"</span>, <span class="va">trt.num</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># simulate response</span></span>
+<span></span>
+<span><span class="co"># effect of treatment 1 relative to treatment 3</span></span>
+<span><span class="va">delta1</span> <span class="op">&lt;-</span> <span class="fl">2</span> <span class="op">*</span> <span class="op">(</span><span class="fl">0.5</span> <span class="op">+</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">3</span><span class="op">]</span>  <span class="op">)</span></span>
+<span><span class="co"># effect of treatment 2 relative to treatment 3</span></span>
+<span><span class="va">delta2</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">0.5</span> <span class="op">+</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">6</span><span class="op">]</span> <span class="op">-</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">5</span><span class="op">]</span> <span class="op">)</span></span>
+<span></span>
+<span><span class="co"># main covariate effects with nonlinearities</span></span>
+<span><span class="va">xbeta</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">9</span><span class="op">]</span> <span class="op">-</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">4</span><span class="op">]</span><span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">4</span><span class="op">]</span> <span class="op">+</span> </span>
+<span>    <span class="fl">0.5</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">5</span><span class="op">]</span> <span class="op">^</span> <span class="fl">2</span> <span class="op">+</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="fl">3</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">5</span><span class="op">]</span></span>
+<span></span>
+<span><span class="co"># create entire functional form of E(Y|T,X)</span></span>
+<span><span class="va">xbeta</span> <span class="op">&lt;-</span> <span class="va">xbeta</span> <span class="op">+</span> </span>
+<span>    <span class="va">delta1</span> <span class="op">*</span> <span class="op">(</span><span class="op">(</span><span class="va">trt.num</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op">-</span> <span class="op">(</span><span class="va">trt.num</span> <span class="op">==</span> <span class="fl">3</span><span class="op">)</span> <span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="va">delta2</span> <span class="op">*</span> <span class="op">(</span><span class="op">(</span><span class="va">trt.num</span> <span class="op">==</span> <span class="fl">2</span><span class="op">)</span> <span class="op">-</span> <span class="op">(</span><span class="va">trt.num</span> <span class="op">==</span> <span class="fl">3</span><span class="op">)</span> <span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># simulate continuous outcomes E(Y|T,X)</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">xbeta</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n.obs</span>, sd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p>We will use the version of the treatment status vector in our
 analysis, however, the integer values vector, i.e. , could be used as
 well.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">trt</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></code></pre></div>
-<pre><code><span class="co">## [1] Trt_3 Trt_3 Trt_1 Trt_1 Trt_1</span>
-<span class="co">## Levels: Trt_1 Trt_2 Trt_3</span></code></pre>
+<code class="sourceCode R"><span><span class="va">trt</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] Trt_3 Trt_3 Trt_1 Trt_1 Trt_1</span></span>
+<span><span class="co">## Levels: Trt_1 Trt_2 Trt_3</span></span></code></pre>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">trt</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## trt</span>
-<span class="co">## Trt_1 Trt_2 Trt_3 </span>
-<span class="co">##    97    86    67</span></code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">trt</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## trt</span></span>
+<span><span class="co">## Trt_1 Trt_2 Trt_3 </span></span>
+<span><span class="co">##    97    86    67</span></span></code></pre>
 <p>Then we construct a propensity score function that takes covariate
 information and the treatment statuses as input and generate a matrix of
-probabilities as output. Each row <span class="math inline">\(i\)</span>
-of the output matrix represents an observation and each column <span class="math inline">\(j\)</span> is the probability that the <span class="math inline">\(i\)</span>th patient received the <span class="math inline">\(j\)</span>th treatment. The treatment levels are
-ordered alphabetically (or numerically if the treatment assignment
-vector is a vector of integers). Our propensity score model in this
-example will be a multinomial logistic regression model with a lasso
-penalty for the probability of treatment assignments conditional on
-covariate information:</p>
+probabilities as output. Each row
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
+of the output matrix represents an observation and each column
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>
+is the probability that the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>th
+patient received the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>th
+treatment. The treatment levels are ordered alphabetically (or
+numerically if the treatment assignment vector is a vector of integers).
+Our propensity score model in this example will be a multinomial
+logistic regression model with a lasso penalty for the probability of
+treatment assignments conditional on covariate information:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">propensity.multinom.lasso</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">trt</span><span class="op">)</span>
-<span class="op">{</span>
-    <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">is.factor</a></span><span class="op">(</span><span class="va">trt</span><span class="op">)</span><span class="op">)</span> <span class="va">trt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">trt</span><span class="op">)</span>
-    <span class="va">gfit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://glmnet.stanford.edu/reference/cv.glmnet.html" class="external-link">cv.glmnet</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">trt</span>, x <span class="op">=</span> <span class="va">x</span>, family <span class="op">=</span> <span class="st">"multinomial"</span>,
-                      nfolds <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
-
-    <span class="co"># predict returns a matrix of probabilities:</span>
-    <span class="co"># one column for each treatment level</span>
-    <span class="va">propens</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/drop.html" class="external-link">drop</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">gfit</span>, newx <span class="op">=</span> <span class="va">x</span>, 
-        type <span class="op">=</span> <span class="st">"response"</span>, s <span class="op">=</span> <span class="st">"lambda.min"</span><span class="op">)</span><span class="op">)</span>
-
-    <span class="co"># return the matrix probability of treatment assignments</span>
-    <span class="va">probs</span> <span class="op">&lt;-</span> <span class="va">propens</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">trt</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">propens</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>
-
-    <span class="va">probs</span>
-<span class="op">}</span></code></pre></div>
-<p>An important assumption for the propensity score is that <span class="math inline">\(0 &lt; Pr(T_i = t | \mathbf X) &lt; 1\)</span> for
-all <span class="math inline">\(\mathbf X\)</span> and <span class="math inline">\(t\)</span>. This assumption, often called the
-positivity assumption, is impossible to verify. However, in practice
-validity of the assumption can be assessed via a visualization of the
-empirical overlap of our estimated propensity scores to determine if
-there is any evidence of positivity violations. The function also allows
-us to visualize the overlap of our propensity scores for multi-category
-treatment applications. The following code results in the plot shown
-Figure <span class="math inline">\(\ref{fig:check_overlap_multitreat}\)</span>.</p>
+<code class="sourceCode R"><span><span class="va">propensity.multinom.lasso</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">trt</span><span class="op">)</span></span>
+<span><span class="op">{</span></span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">is.factor</a></span><span class="op">(</span><span class="va">trt</span><span class="op">)</span><span class="op">)</span> <span class="va">trt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">trt</span><span class="op">)</span></span>
+<span>    <span class="va">gfit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://glmnet.stanford.edu/reference/cv.glmnet.html" class="external-link">cv.glmnet</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">trt</span>, x <span class="op">=</span> <span class="va">x</span>, family <span class="op">=</span> <span class="st">"multinomial"</span>,</span>
+<span>                      nfolds <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="co"># predict returns a matrix of probabilities:</span></span>
+<span>    <span class="co"># one column for each treatment level</span></span>
+<span>    <span class="va">propens</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/drop.html" class="external-link">drop</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">gfit</span>, newx <span class="op">=</span> <span class="va">x</span>, </span>
+<span>        type <span class="op">=</span> <span class="st">"response"</span>, s <span class="op">=</span> <span class="st">"lambda.min"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="co"># return the matrix probability of treatment assignments</span></span>
+<span>    <span class="va">probs</span> <span class="op">&lt;-</span> <span class="va">propens</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">trt</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">propens</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span>
+<span></span>
+<span>    <span class="va">probs</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>An important assumption for the propensity score is that
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>P</mi><mi>r</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>T</mi><mi>i</mi></msub><mo>=</mo><mi>t</mi><mo stretchy="false" form="prefix">|</mo><mi>𝐗</mi><mo stretchy="false" form="postfix">)</mo><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0 &lt; Pr(T_i = t | \mathbf X) &lt; 1</annotation></semantics></math>
+for all
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝐗</mi><annotation encoding="application/x-tex">\mathbf X</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>.
+This assumption, often called the positivity assumption, is impossible
+to verify. However, in practice validity of the assumption can be
+assessed via a visualization of the empirical overlap of our estimated
+propensity scores to determine if there is any evidence of positivity
+violations. The function also allows us to visualize the overlap of our
+propensity scores for multi-category treatment applications. The
+following code results in the plot shown Figure .</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/check.overlap.html">check.overlap</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, trt <span class="op">=</span> <span class="va">trt</span>, <span class="va">propensity.multinom.lasso</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/check.overlap.html">check.overlap</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, trt <span class="op">=</span> <span class="va">trt</span>, <span class="va">propensity.multinom.lasso</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
-<img src="multicategory_treatments_with_personalized_files/figure-html/check_overlap_multitreat-1.png" alt="Propensity score overlap plot for multi-category treatment data." width="700"><p class="caption">
+<img src="multicategory_treatments_with_personalized_files/figure-html/check_overlap_multitreat-1.png" class="r-plt" alt="Propensity score overlap plot for multi-category treatment data." width="700"><p class="caption">
 Propensity score overlap plot for multi-category treatment data.
 </p>
 </div>
@@ -221,86 +230,86 @@ models and the weighting method are available. Here we can also specify
 the reference treatment (the treatment that the non-reference treatments
 are compared with by each benefit score).</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
-<span class="va">subgrp.multi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>,
-    trt <span class="op">=</span> <span class="va">trt</span>, propensity.func <span class="op">=</span> <span class="va">propensity.multinom.lasso</span>,
-    reference.trt <span class="op">=</span> <span class="st">"Trt_3"</span>,
-    loss   <span class="op">=</span> <span class="st">"sq_loss_lasso"</span>,
-    nfolds <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">subgrp.multi</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## family:    gaussian </span>
-<span class="co">## loss:      sq_loss_lasso </span>
-<span class="co">## method:    weighting </span>
-<span class="co">## cutpoint:  0 </span>
-<span class="co">## propensity </span>
-<span class="co">## function:  propensity.func </span>
-<span class="co">## </span>
-<span class="co">## benefit score: f_Trt_1(x): Trt_1 vs Trt_3,  f_Trt_2(x): Trt_2 vs Trt_3 </span>
-<span class="co">##                f_Trt_3(x): 0 </span>
-<span class="co">## maxval = max(f_Trt_1(x), f_Trt_2(x)) </span>
-<span class="co">## which.max(maxval) = The trt level which maximizes maxval</span>
-<span class="co">## Trt recom = which.max(maxval)*I(maxval &gt; c) + Trt_3*I(maxval &lt;= c) where c is 'cutpoint'</span>
-<span class="co">## </span>
-<span class="co">## Average Outcomes:</span>
-<span class="co">##                Recommended Trt_1 Recommended Trt_2 Recommended Trt_3</span>
-<span class="co">## Received Trt_1  -8.2279 (n = 97)       NaN (n = 0)       NaN (n = 0)</span>
-<span class="co">## Received Trt_2 -22.7982 (n = 86)       NaN (n = 0)       NaN (n = 0)</span>
-<span class="co">## Received Trt_3 -15.5278 (n = 67)       NaN (n = 0)       NaN (n = 0)</span>
-<span class="co">## </span>
-<span class="co">## Treatment effects conditional on subgroups:</span>
-<span class="co">## Est of E[Y|T=Trt_1,Recom=Trt_1]-E[Y|T=/=Trt_1,Recom=Trt_1] </span>
-<span class="co">##                                          10.8514 (n = 250) </span>
-<span class="co">## Est of E[Y|T=Trt_2,Recom=Trt_2]-E[Y|T=/=Trt_2,Recom=Trt_2] </span>
-<span class="co">##                                                NaN (n = 0) </span>
-<span class="co">## Est of E[Y|T=Trt_3,Recom=Trt_3]-E[Y|T=/=Trt_3,Recom=Trt_3] </span>
-<span class="co">##                                                NaN (n = 0) </span>
-<span class="co">## </span>
-<span class="co">## NOTE: The above average outcomes are biased estimates of</span>
-<span class="co">##       the expected outcomes conditional on subgroups. </span>
-<span class="co">##       Use 'validate.subgroup()' to obtain unbiased estimates.</span>
-<span class="co">## </span>
-<span class="co">## ---------------------------------------------------</span>
-<span class="co">## </span>
-<span class="co">## Benefit score 1 quantiles (f(X) for Trt_1 vs Trt_3): </span>
-<span class="co">##   0%  25%  50%  75% 100% </span>
-<span class="co">## 7.17 7.17 7.17 7.17 7.17 </span>
-<span class="co">## </span>
-<span class="co">## Benefit score 2 quantiles (f(X) for Trt_2 vs Trt_3): </span>
-<span class="co">##       0%      25%      50%      75%     100% </span>
-<span class="co">## -13.2904  -8.2866  -6.5613  -5.2289   0.0758 </span>
-<span class="co">## </span>
-<span class="co">## ---------------------------------------------------</span>
-<span class="co">## </span>
-<span class="co">## Summary of individual treatment effects: </span>
-<span class="co">## E[Y|T=trt, X] - E[Y|T=Trt_3, X]</span>
-<span class="co">## where 'trt' is Trt_1 and Trt_2</span>
-<span class="co">## </span>
-<span class="co">##  Trt_1-vs-Trt_3  Trt_2-vs-Trt_3    </span>
-<span class="co">##  Min.   :14.34   Min.   :-26.5807  </span>
-<span class="co">##  1st Qu.:14.34   1st Qu.:-16.5731  </span>
-<span class="co">##  Median :14.34   Median :-13.1227  </span>
-<span class="co">##  Mean   :14.34   Mean   :-13.3502  </span>
-<span class="co">##  3rd Qu.:14.34   3rd Qu.:-10.4579  </span>
-<span class="co">##  Max.   :14.34   Max.   :  0.1516  </span>
-<span class="co">## </span>
-<span class="co">## ---------------------------------------------------</span>
-<span class="co">## </span>
-<span class="co">## 2 out of 20 interactions selected in total by the lasso (cross validation criterion).</span>
-<span class="co">## </span>
-<span class="co">## The first estimate is the treatment main effect, which is always selected. </span>
-<span class="co">## Any other variables selected represent treatment-covariate interactions.</span>
-<span class="co">## </span>
-<span class="co">## </span>
-<span class="co">## 0 out of 10 variables selected for delta 1 by the lasso (cross validation criterion).</span>
-<span class="co">## </span>
-<span class="co">##                                       Trt_1</span>
-<span class="co">## Estimates for delta (Trt_1 vs Trt_3) 7.1698</span>
-<span class="co">## </span>
-<span class="co">## 2 out of 10 variables selected for delta 2 by the lasso (cross validation criterion).</span>
-<span class="co">## </span>
-<span class="co">##                                        Trt_2      V5      V9</span>
-<span class="co">## Estimates for delta (Trt_2 vs Trt_3) -6.9472 -0.0497 -0.9131</span></code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="va">subgrp.multi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>,</span>
+<span>    trt <span class="op">=</span> <span class="va">trt</span>, propensity.func <span class="op">=</span> <span class="va">propensity.multinom.lasso</span>,</span>
+<span>    reference.trt <span class="op">=</span> <span class="st">"Trt_3"</span>,</span>
+<span>    loss   <span class="op">=</span> <span class="st">"sq_loss_lasso"</span>,</span>
+<span>    nfolds <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">subgrp.multi</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## family:    gaussian </span></span>
+<span><span class="co">## loss:      sq_loss_lasso </span></span>
+<span><span class="co">## method:    weighting </span></span>
+<span><span class="co">## cutpoint:  0 </span></span>
+<span><span class="co">## propensity </span></span>
+<span><span class="co">## function:  propensity.func </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## benefit score: f_Trt_1(x): Trt_1 vs Trt_3,  f_Trt_2(x): Trt_2 vs Trt_3 </span></span>
+<span><span class="co">##                f_Trt_3(x): 0 </span></span>
+<span><span class="co">## maxval = max(f_Trt_1(x), f_Trt_2(x)) </span></span>
+<span><span class="co">## which.max(maxval) = The trt level which maximizes maxval</span></span>
+<span><span class="co">## Trt recom = which.max(maxval)*I(maxval &gt; c) + Trt_3*I(maxval &lt;= c) where c is 'cutpoint'</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Average Outcomes:</span></span>
+<span><span class="co">##                Recommended Trt_1 Recommended Trt_2 Recommended Trt_3</span></span>
+<span><span class="co">## Received Trt_1  -8.2279 (n = 97)       NaN (n = 0)       NaN (n = 0)</span></span>
+<span><span class="co">## Received Trt_2 -22.7982 (n = 86)       NaN (n = 0)       NaN (n = 0)</span></span>
+<span><span class="co">## Received Trt_3 -15.5278 (n = 67)       NaN (n = 0)       NaN (n = 0)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Treatment effects conditional on subgroups:</span></span>
+<span><span class="co">## Est of E[Y|T=Trt_1,Recom=Trt_1]-E[Y|T=/=Trt_1,Recom=Trt_1] </span></span>
+<span><span class="co">##                                          10.8514 (n = 250) </span></span>
+<span><span class="co">## Est of E[Y|T=Trt_2,Recom=Trt_2]-E[Y|T=/=Trt_2,Recom=Trt_2] </span></span>
+<span><span class="co">##                                                NaN (n = 0) </span></span>
+<span><span class="co">## Est of E[Y|T=Trt_3,Recom=Trt_3]-E[Y|T=/=Trt_3,Recom=Trt_3] </span></span>
+<span><span class="co">##                                                NaN (n = 0) </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## NOTE: The above average outcomes are biased estimates of</span></span>
+<span><span class="co">##       the expected outcomes conditional on subgroups. </span></span>
+<span><span class="co">##       Use 'validate.subgroup()' to obtain unbiased estimates.</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## ---------------------------------------------------</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Benefit score 1 quantiles (f(X) for Trt_1 vs Trt_3): </span></span>
+<span><span class="co">##   0%  25%  50%  75% 100% </span></span>
+<span><span class="co">## 7.17 7.17 7.17 7.17 7.17 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Benefit score 2 quantiles (f(X) for Trt_2 vs Trt_3): </span></span>
+<span><span class="co">##       0%      25%      50%      75%     100% </span></span>
+<span><span class="co">## -13.2904  -8.2866  -6.5613  -5.2289   0.0758 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## ---------------------------------------------------</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Summary of individual treatment effects: </span></span>
+<span><span class="co">## E[Y|T=trt, X] - E[Y|T=Trt_3, X]</span></span>
+<span><span class="co">## where 'trt' is Trt_1 and Trt_2</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##  Trt_1-vs-Trt_3  Trt_2-vs-Trt_3    </span></span>
+<span><span class="co">##  Min.   :14.34   Min.   :-26.5807  </span></span>
+<span><span class="co">##  1st Qu.:14.34   1st Qu.:-16.5731  </span></span>
+<span><span class="co">##  Median :14.34   Median :-13.1227  </span></span>
+<span><span class="co">##  Mean   :14.34   Mean   :-13.3502  </span></span>
+<span><span class="co">##  3rd Qu.:14.34   3rd Qu.:-10.4579  </span></span>
+<span><span class="co">##  Max.   :14.34   Max.   :  0.1516  </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## ---------------------------------------------------</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## 2 out of 20 interactions selected in total by the lasso (cross validation criterion).</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## The first estimate is the treatment main effect, which is always selected. </span></span>
+<span><span class="co">## Any other variables selected represent treatment-covariate interactions.</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## 0 out of 10 variables selected for delta 1 by the lasso (cross validation criterion).</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##                                       Trt_1</span></span>
+<span><span class="co">## Estimates for delta (Trt_1 vs Trt_3) 7.1698</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## 2 out of 10 variables selected for delta 2 by the lasso (cross validation criterion).</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##                                        Trt_2      V5      V9</span></span>
+<span><span class="co">## Estimates for delta (Trt_2 vs Trt_3) -6.9472 -0.0497 -0.9131</span></span></code></pre>
 <p>The function now displays selected variables for each of the two
 benefit scores and shows the quantiles of each benefit score. We can
 also plot the empirical observations within the different subgroups
@@ -309,12 +318,12 @@ appears that the average outcome is higher for those who received the
 level of the treatment they were recommended than those who received a
 different treatment than they were recommended. Also note that returns a
 object and can thus be modified by the user. The below example yields
-Figure <span class="math inline">\(\ref{fig:plot_multi_trt_model}\)</span>.</p>
+Figure .</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">subgrp.multi</span><span class="op">)</span>
-<span class="va">pl</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span>, hjust <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">pl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">subgrp.multi</span><span class="op">)</span></span>
+<span><span class="va">pl</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span>, hjust <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
-<img src="multicategory_treatments_with_personalized_files/figure-html/plot_multi_trt_model-1.png" alt="Individual outcome observations by treatment group and subgroup." width="480"><p class="caption">
+<img src="multicategory_treatments_with_personalized_files/figure-html/plot_multi_trt_model-1.png" class="r-plt" alt="Individual outcome observations by treatment group and subgroup." width="480"><p class="caption">
 Individual outcome observations by treatment group and subgroup.
 </p>
 </div>
@@ -323,48 +332,48 @@ we perform the repeated training and testing resample procedure using
 the function (here we set the number of replications <code>B=4</code>,
 but this should be a much larger number in practice) :</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
-<span class="va">validation.multi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate.subgroup.html">validate.subgroup</a></span><span class="op">(</span><span class="va">subgrp.multi</span>, 
-    B <span class="op">=</span> <span class="fl">4</span>,  <span class="co"># specify the number of replications</span>
-    method <span class="op">=</span> <span class="st">"training_test_replication"</span>,
-    train.fraction <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">validation.multi</span>, digits <span class="op">=</span> <span class="fl">2</span>, sample.pct <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## family:  gaussian </span>
-<span class="co">## loss:    sq_loss_lasso </span>
-<span class="co">## method:  weighting </span>
-<span class="co">## </span>
-<span class="co">## validation method:  training_test_replication </span>
-<span class="co">## cutpoint:           0 </span>
-<span class="co">## replications:       4 </span>
-<span class="co">## </span>
-<span class="co">## benefit score: f_Trt_1(x): Trt_1 vs Trt_3,  f_Trt_2(x): Trt_2 vs Trt_3 </span>
-<span class="co">##                f_Trt_3(x): 0 </span>
-<span class="co">## maxval = max(f_Trt_1(x), f_Trt_2(x)) </span>
-<span class="co">## which.max(maxval) = The trt level which maximizes maxval</span>
-<span class="co">## Trt recom = which.max(maxval)*I(maxval &gt; c) + Trt_3*I(maxval &lt;= c) where c is 'cutpoint'</span>
-<span class="co">## </span>
-<span class="co">## Average Test Set Outcomes:</span>
-<span class="co">##                       Recommended Trt_1        Recommended Trt_2</span>
-<span class="co">## Received Trt_1 -2.86 (SE = 1.35, 22.6%)  -2.54 (SE = 9.3, 13.4%)</span>
-<span class="co">## Received Trt_2 -25.56 (SE = 13.08, 24%)  -6.8 (SE = 32.93, 9.2%)</span>
-<span class="co">## Received Trt_3   -15.41 (SE = 2.1, 16%) -25.13 (SE = 7.82, 7.8%)</span>
-<span class="co">##                       Recommended Trt_3</span>
-<span class="co">## Received Trt_1 -36.2 (SE = 10.77, 3.2%)</span>
-<span class="co">## Received Trt_2 -43.89 (SE = 25.4, 2.4%)</span>
-<span class="co">## Received Trt_3 -21.62 (SE = 9.74, 1.4%)</span>
-<span class="co">## </span>
-<span class="co">## Treatment effects conditional on subgroups:</span>
-<span class="co">## Est of E[Y|T=Trt_1,Recom=Trt_1]-E[Y|T=/=Trt_1,Recom=Trt_1] </span>
-<span class="co">##                                    18.38 (SE = 6.9, 62.6%) </span>
-<span class="co">## Est of E[Y|T=Trt_2,Recom=Trt_2]-E[Y|T=/=Trt_2,Recom=Trt_2] </span>
-<span class="co">##                                    5.1 (SE = 29.95, 30.4%) </span>
-<span class="co">## Est of E[Y|T=Trt_3,Recom=Trt_3]-E[Y|T=/=Trt_3,Recom=Trt_3] </span>
-<span class="co">##                                      19.33 (SE = 9.61, 7%) </span>
-<span class="co">## </span>
-<span class="co">## Est of </span>
-<span class="co">## E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:                 </span>
-<span class="co">## 8.3 (SE = 16.44)</span></code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="va">validation.multi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate.subgroup.html">validate.subgroup</a></span><span class="op">(</span><span class="va">subgrp.multi</span>, </span>
+<span>    B <span class="op">=</span> <span class="fl">4</span>,  <span class="co"># specify the number of replications</span></span>
+<span>    method <span class="op">=</span> <span class="st">"training_test_replication"</span>,</span>
+<span>    train.fraction <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">validation.multi</span>, digits <span class="op">=</span> <span class="fl">2</span>, sample.pct <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## family:  gaussian </span></span>
+<span><span class="co">## loss:    sq_loss_lasso </span></span>
+<span><span class="co">## method:  weighting </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## validation method:  training_test_replication </span></span>
+<span><span class="co">## cutpoint:           0 </span></span>
+<span><span class="co">## replications:       4 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## benefit score: f_Trt_1(x): Trt_1 vs Trt_3,  f_Trt_2(x): Trt_2 vs Trt_3 </span></span>
+<span><span class="co">##                f_Trt_3(x): 0 </span></span>
+<span><span class="co">## maxval = max(f_Trt_1(x), f_Trt_2(x)) </span></span>
+<span><span class="co">## which.max(maxval) = The trt level which maximizes maxval</span></span>
+<span><span class="co">## Trt recom = which.max(maxval)*I(maxval &gt; c) + Trt_3*I(maxval &lt;= c) where c is 'cutpoint'</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Average Test Set Outcomes:</span></span>
+<span><span class="co">##                       Recommended Trt_1        Recommended Trt_2</span></span>
+<span><span class="co">## Received Trt_1 -2.86 (SE = 1.35, 22.6%)  -2.54 (SE = 9.3, 13.4%)</span></span>
+<span><span class="co">## Received Trt_2 -25.56 (SE = 13.08, 24%)  -6.8 (SE = 32.93, 9.2%)</span></span>
+<span><span class="co">## Received Trt_3   -15.41 (SE = 2.1, 16%) -25.13 (SE = 7.82, 7.8%)</span></span>
+<span><span class="co">##                       Recommended Trt_3</span></span>
+<span><span class="co">## Received Trt_1 -36.2 (SE = 10.77, 3.2%)</span></span>
+<span><span class="co">## Received Trt_2 -43.89 (SE = 25.4, 2.4%)</span></span>
+<span><span class="co">## Received Trt_3 -21.62 (SE = 9.74, 1.4%)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Treatment effects conditional on subgroups:</span></span>
+<span><span class="co">## Est of E[Y|T=Trt_1,Recom=Trt_1]-E[Y|T=/=Trt_1,Recom=Trt_1] </span></span>
+<span><span class="co">##                                    18.38 (SE = 6.9, 62.6%) </span></span>
+<span><span class="co">## Est of E[Y|T=Trt_2,Recom=Trt_2]-E[Y|T=/=Trt_2,Recom=Trt_2] </span></span>
+<span><span class="co">##                                    5.1 (SE = 29.95, 30.4%) </span></span>
+<span><span class="co">## Est of E[Y|T=Trt_3,Recom=Trt_3]-E[Y|T=/=Trt_3,Recom=Trt_3] </span></span>
+<span><span class="co">##                                      19.33 (SE = 9.61, 7%) </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Est of </span></span>
+<span><span class="co">## E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:                 </span></span>
+<span><span class="co">## 8.3 (SE = 16.44)</span></span></code></pre>
 <p>Setting the argument above to prints out the average percent of all
 patients which are in each subgroup (as opposed to the average sample
 sizes). We can see that about 58% of patients were recommended treatment
@@ -375,12 +384,12 @@ subgroups (meaning those recommended each of the different treatments
 have a positive benefit from receiving the treatment they are
 recommended as opposed to receiving any another treatments).</p>
 <p>We can visualize the subgroup-specific treatment effects using as
-usual with results shown in Figure <span class="math inline">\(\ref{fig:plotcomparemultivalidated}\)</span>:</p>
+usual with results shown in Figure :</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">plv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">validation.multi</span><span class="op">)</span>
-<span class="va">plv</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span>, hjust <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">plv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">validation.multi</span><span class="op">)</span></span>
+<span><span class="va">plv</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span>, hjust <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
-<img src="multicategory_treatments_with_personalized_files/figure-html/plotcomparemultivalidated-1.png" alt="Validation results for multi-category treatment data." width="480"><p class="caption">
+<img src="multicategory_treatments_with_personalized_files/figure-html/plotcomparemultivalidated-1.png" class="r-plt" alt="Validation results for multi-category treatment data." width="480"><p class="caption">
 Validation results for multi-category treatment data.
 </p>
 </div>
@@ -389,65 +398,65 @@ Validation results for multi-category treatment data.
 <h2 id="more-details-on-propensity-scores-for-multi-category-treatments">More details on propensity scores for multi-category treatments<a class="anchor" aria-label="anchor" href="#more-details-on-propensity-scores-for-multi-category-treatments"></a>
 </h2>
 <p>For cases with multi-category treatments, the user must specify a
-propensity function that returns <span class="math inline">\(Pr(T = T_i
-| \mathbf X= \mathbf x)\)</span> for patient <span class="math inline">\(i\)</span>. In other words, it should return the
-probability of receiving the treatment that was actually received for
-each patient. For example:</p>
+propensity function that returns
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>r</mi><mo stretchy="false" form="prefix">(</mo><mi>T</mi><mo>=</mo><msub><mi>T</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">|</mo><mi>𝐗</mi><mo>=</mo><mi>𝐱</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">Pr(T = T_i | \mathbf X= \mathbf x)</annotation></semantics></math>
+for patient
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>.
+In other words, it should return the probability of receiving the
+treatment that was actually received for each patient. For example:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">propensity.func.multinom</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">trt</span><span class="op">)</span>
-<span class="op">{</span>
-    <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>trt <span class="op">=</span> <span class="va">trt</span>, <span class="va">x</span><span class="op">)</span>
-    <span class="va">mfit</span> <span class="op">&lt;-</span> <span class="fu">nnet</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/nnet/man/multinom.html" class="external-link">multinom</a></span><span class="op">(</span><span class="va">trt</span> <span class="op">~</span> <span class="va">.</span> <span class="op">-</span><span class="va">trt</span>, data <span class="op">=</span> <span class="va">df</span><span class="op">)</span>
-    <span class="co"># predict returns a matrix of probabilities:</span>
-    <span class="co"># one column for each treatment level</span>
-    <span class="va">propens</span> <span class="op">&lt;-</span> <span class="fu">nnet</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/nnet/man/predict.nnet.html" class="external-link">predict.nnet</a></span><span class="op">(</span><span class="va">mfit</span>, type <span class="op">=</span> <span class="st">"probs"</span><span class="op">)</span>
-
-    <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">is.factor</a></span><span class="op">(</span><span class="va">trt</span><span class="op">)</span><span class="op">)</span>
-    <span class="op">{</span>
-        <span class="va">values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">trt</span><span class="op">)</span><span class="op">[</span><span class="va">trt</span><span class="op">]</span>
-    <span class="op">}</span> <span class="kw">else</span> 
-    <span class="op">{</span>
-        <span class="va">values</span> <span class="op">&lt;-</span> <span class="va">trt</span>
-    <span class="op">}</span>
-    <span class="co"># return the probability corresponding to the</span>
-    <span class="co"># treatment that was observed</span>
-    <span class="va">probs</span> <span class="op">&lt;-</span> <span class="va">propens</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">propens</span><span class="op">)</span>, 
-        <span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">values</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">propens</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>
-    <span class="va">probs</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">propensity.func.multinom</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">trt</span><span class="op">)</span></span>
+<span><span class="op">{</span></span>
+<span>    <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>trt <span class="op">=</span> <span class="va">trt</span>, <span class="va">x</span><span class="op">)</span></span>
+<span>    <span class="va">mfit</span> <span class="op">&lt;-</span> <span class="fu">nnet</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/nnet/man/multinom.html" class="external-link">multinom</a></span><span class="op">(</span><span class="va">trt</span> <span class="op">~</span> <span class="va">.</span> <span class="op">-</span><span class="va">trt</span>, data <span class="op">=</span> <span class="va">df</span><span class="op">)</span></span>
+<span>    <span class="co"># predict returns a matrix of probabilities:</span></span>
+<span>    <span class="co"># one column for each treatment level</span></span>
+<span>    <span class="va">propens</span> <span class="op">&lt;-</span> <span class="fu">nnet</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/nnet/man/predict.nnet.html" class="external-link">predict.nnet</a></span><span class="op">(</span><span class="va">mfit</span>, type <span class="op">=</span> <span class="st">"probs"</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">is.factor</a></span><span class="op">(</span><span class="va">trt</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="op">{</span></span>
+<span>        <span class="va">values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">trt</span><span class="op">)</span><span class="op">[</span><span class="va">trt</span><span class="op">]</span></span>
+<span>    <span class="op">}</span> <span class="kw">else</span> </span>
+<span>    <span class="op">{</span></span>
+<span>        <span class="va">values</span> <span class="op">&lt;-</span> <span class="va">trt</span></span>
+<span>    <span class="op">}</span></span>
+<span>    <span class="co"># return the probability corresponding to the</span></span>
+<span>    <span class="co"># treatment that was observed</span></span>
+<span>    <span class="va">probs</span> <span class="op">&lt;-</span> <span class="va">propens</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">propens</span><span class="op">)</span>, </span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">values</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">propens</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span>
+<span>    <span class="va">probs</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>Optionally the user can specify the function to return a matrix of
 treatment probabilities, however, the columns <em>must</em> be ordered
 by the levels of . An example of this is the following:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">propensity.func.multinom</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">trt</span><span class="op">)</span>
-<span class="op">{</span>
-    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/" class="external-link">nnet</a></span><span class="op">)</span>
-    <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>trt <span class="op">=</span> <span class="va">trt</span>, <span class="va">x</span><span class="op">)</span>
-    <span class="va">mfit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nnet/man/multinom.html" class="external-link">multinom</a></span><span class="op">(</span><span class="va">trt</span> <span class="op">~</span> <span class="va">.</span> <span class="op">-</span><span class="va">trt</span>, data <span class="op">=</span> <span class="va">df</span><span class="op">)</span>
-    <span class="co"># predict returns a matrix of probabilities:</span>
-    <span class="co"># one column for each treatment level</span>
-    <span class="va">propens</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">mfit</span>, type <span class="op">=</span> <span class="st">"probs"</span><span class="op">)</span>
-
-    <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">is.factor</a></span><span class="op">(</span><span class="va">trt</span><span class="op">)</span><span class="op">)</span>
-    <span class="op">{</span>
-        <span class="va">levels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">trt</span><span class="op">)</span>
-    <span class="op">}</span> <span class="kw">else</span> 
-    <span class="op">{</span>
-        <span class="va">levels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">trt</span><span class="op">)</span><span class="op">)</span>
-    <span class="op">}</span>
-    <span class="co"># return the probability corresponding to the</span>
-    <span class="co"># treatment that was observed</span>
-    <span class="va">probs</span> <span class="op">&lt;-</span> <span class="va">propens</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">levels</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">propens</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>
-    <span class="va">probs</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">propensity.func.multinom</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">trt</span><span class="op">)</span></span>
+<span><span class="op">{</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/" class="external-link">nnet</a></span><span class="op">)</span></span>
+<span>    <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>trt <span class="op">=</span> <span class="va">trt</span>, <span class="va">x</span><span class="op">)</span></span>
+<span>    <span class="va">mfit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nnet/man/multinom.html" class="external-link">multinom</a></span><span class="op">(</span><span class="va">trt</span> <span class="op">~</span> <span class="va">.</span> <span class="op">-</span><span class="va">trt</span>, data <span class="op">=</span> <span class="va">df</span><span class="op">)</span></span>
+<span>    <span class="co"># predict returns a matrix of probabilities:</span></span>
+<span>    <span class="co"># one column for each treatment level</span></span>
+<span>    <span class="va">propens</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">mfit</span>, type <span class="op">=</span> <span class="st">"probs"</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">is.factor</a></span><span class="op">(</span><span class="va">trt</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="op">{</span></span>
+<span>        <span class="va">levels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">trt</span><span class="op">)</span></span>
+<span>    <span class="op">}</span> <span class="kw">else</span> </span>
+<span>    <span class="op">{</span></span>
+<span>        <span class="va">levels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">trt</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span>    <span class="co"># return the probability corresponding to the</span></span>
+<span>    <span class="co"># treatment that was observed</span></span>
+<span>    <span class="va">probs</span> <span class="op">&lt;-</span> <span class="va">propens</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">levels</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">propens</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span>
+<span>    <span class="va">probs</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 
@@ -460,16 +469,16 @@ by the levels of . An example of this is the following:</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>

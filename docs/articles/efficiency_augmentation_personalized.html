@@ -6,20 +6,19 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Utilities for Improving Estimation Efficiency via Augmentation and for Propensity Score Estimation • personalized</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Utilities for Improving Estimation Efficiency via Augmentation and for Propensity Score Estimation">
-<meta property="og:description" content="personalized">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -42,13 +41,13 @@
 <li>
   <a href="../index.html">
     <span class="fa fa-home"></span>
-     
+
   </a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -77,7 +76,7 @@
 <li>
   <a href="https://github.com/jaredhuling/personalized" class="external-link">
     <span class="fa fa-github"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -88,7 +87,7 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
@@ -98,7 +97,7 @@ via Augmentation and for Propensity Score Estimation</h1>
                         <h4 data-toc-skip class="author">Jared
 Huling</h4>
             
-            <h4 data-toc-skip class="date">2022-07-07</h4>
+            <h4 data-toc-skip class="date">2026-01-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jaredhuling/personalized/blob/HEAD/vignettes/efficiency_augmentation_personalized.Rmd" class="external-link"><code>vignettes/efficiency_augmentation_personalized.Rmd</code></a></small>
       <div class="hidden name"><code>efficiency_augmentation_personalized.Rmd</code></div>
@@ -116,33 +115,34 @@ simulate data with two treatments. The treatment assignments are based
 on covariates and hence mimic an observational setting with no
 unmeasured confounders.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jaredhuling.org/personalized/" class="external-link">personalized</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jaredhuling.org/personalized/" class="external-link">personalized</a></span><span class="op">)</span></span></code></pre></div>
 <p>In this simulation, the treatment assignment depends on covariates
-and hence we must model the propensity score <span class="math inline">\(\pi(x) = Pr(T = 1 | X = x)\)</span>. In this
-simulation we will assume that larger values of the outcome are
+and hence we must model the propensity score
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>P</mi><mi>r</mi><mo stretchy="false" form="prefix">(</mo><mi>T</mi><mo>=</mo><mn>1</mn><mo stretchy="false" form="prefix">|</mo><mi>X</mi><mo>=</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\pi(x) = Pr(T = 1 | X = x)</annotation></semantics></math>.
+In this simulation we will assume that larger values of the outcome are
 better.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jaredhuling.org/personalized/" class="external-link">personalized</a></span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
-<span class="va">n.obs</span>  <span class="op">&lt;-</span> <span class="fl">500</span>
-<span class="va">n.vars</span> <span class="op">&lt;-</span> <span class="fl">10</span>
-<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n.obs</span> <span class="op">*</span> <span class="va">n.vars</span>, sd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>, <span class="va">n.obs</span>, <span class="va">n.vars</span><span class="op">)</span>
-
-<span class="co"># simulate non-randomized treatment</span>
-<span class="va">xbetat</span>   <span class="op">&lt;-</span> <span class="fl">0.5</span> <span class="op">+</span> <span class="fl">0.25</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">9</span><span class="op">]</span> <span class="op">-</span> <span class="fl">0.25</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span>
-<span class="va">trt.prob</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">xbetat</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">xbetat</span><span class="op">)</span><span class="op">)</span>
-<span class="va">trt</span>      <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="va">n.obs</span>, <span class="fl">1</span>, prob <span class="op">=</span> <span class="va">trt.prob</span><span class="op">)</span>
-
-<span class="co"># simulate delta</span>
-<span class="va">delta</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">0.5</span> <span class="op">+</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">3</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="fl">1</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">4</span><span class="op">]</span> <span class="op">)</span>
-
-<span class="co"># simulate main effects g(X)</span>
-<span class="va">xbeta</span> <span class="op">&lt;-</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="fl">3</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">4</span><span class="op">]</span> <span class="op">-</span> <span class="fl">0.25</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">3</span><span class="op">]</span> <span class="op">+</span> <span class="fl">0.25</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">5</span><span class="op">]</span> <span class="op">^</span> <span class="fl">2</span>
-<span class="va">xbeta</span> <span class="op">&lt;-</span> <span class="va">xbeta</span> <span class="op">+</span> <span class="va">delta</span> <span class="op">*</span> <span class="op">(</span><span class="fl">2</span> <span class="op">*</span> <span class="va">trt</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span>
-
-<span class="co"># simulate continuous outcomes</span>
-<span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/drop.html" class="external-link">drop</a></span><span class="op">(</span><span class="va">xbeta</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n.obs</span>, sd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jaredhuling.org/personalized/" class="external-link">personalized</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">n.obs</span>  <span class="op">&lt;-</span> <span class="fl">500</span></span>
+<span><span class="va">n.vars</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n.obs</span> <span class="op">*</span> <span class="va">n.vars</span>, sd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>, <span class="va">n.obs</span>, <span class="va">n.vars</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># simulate non-randomized treatment</span></span>
+<span><span class="va">xbetat</span>   <span class="op">&lt;-</span> <span class="fl">0.5</span> <span class="op">+</span> <span class="fl">0.25</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">9</span><span class="op">]</span> <span class="op">-</span> <span class="fl">0.25</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span></span>
+<span><span class="va">trt.prob</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">xbetat</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">xbetat</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">trt</span>      <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="va">n.obs</span>, <span class="fl">1</span>, prob <span class="op">=</span> <span class="va">trt.prob</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># simulate delta</span></span>
+<span><span class="va">delta</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">0.5</span> <span class="op">+</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">3</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="fl">1</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">4</span><span class="op">]</span> <span class="op">)</span></span>
+<span></span>
+<span><span class="co"># simulate main effects g(X)</span></span>
+<span><span class="va">xbeta</span> <span class="op">&lt;-</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="fl">3</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">4</span><span class="op">]</span> <span class="op">-</span> <span class="fl">0.25</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">3</span><span class="op">]</span> <span class="op">+</span> <span class="fl">0.25</span> <span class="op">*</span> <span class="va">x</span><span class="op">[</span>,<span class="fl">5</span><span class="op">]</span> <span class="op">^</span> <span class="fl">2</span></span>
+<span><span class="va">xbeta</span> <span class="op">&lt;-</span> <span class="va">xbeta</span> <span class="op">+</span> <span class="va">delta</span> <span class="op">*</span> <span class="op">(</span><span class="fl">2</span> <span class="op">*</span> <span class="va">trt</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># simulate continuous outcomes</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/drop.html" class="external-link">drop</a></span><span class="op">(</span><span class="va">xbeta</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n.obs</span>, sd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="propensity-score-utilities">Propensity score utilities<a class="anchor" aria-label="anchor" href="#propensity-score-utilities"></a>
@@ -162,70 +162,70 @@ of this function with cross-fitting (with 4 folds; normally we would set
 this larger, but have reduced it to make computation time shorter) is as
 follows:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># arguments can be passed to cv.glmnet via `cv.glmnet.args`</span>
-<span class="va">prop.func</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create.propensity.function.html">create.propensity.function</a></span><span class="op">(</span>crossfit <span class="op">=</span> <span class="cn">TRUE</span>,
-                                        nfolds.crossfit <span class="op">=</span> <span class="fl">4</span>,
-                                        cv.glmnet.args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>type.measure <span class="op">=</span> <span class="st">"auc"</span>, nfolds <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># arguments can be passed to cv.glmnet via `cv.glmnet.args`</span></span>
+<span><span class="va">prop.func</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create.propensity.function.html">create.propensity.function</a></span><span class="op">(</span>crossfit <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                                        nfolds.crossfit <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>                                        cv.glmnet.args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>type.measure <span class="op">=</span> <span class="st">"auc"</span>, nfolds <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><code>prop.func</code> can then be passed to
 <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> as follows:</p>
 <p>We have set <code>nfolds</code> to 3 for computational reasons; it
 should generally be higher, such as 10.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">subgrp.model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>,
-                             trt <span class="op">=</span> <span class="va">trt</span>,
-                             propensity.func <span class="op">=</span> <span class="va">prop.func</span>,
-                             loss   <span class="op">=</span> <span class="st">"sq_loss_lasso"</span>,
-                             nfolds <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>    <span class="co"># option for cv.glmnet (for ITR estimation)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">subgrp.model</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## family:    gaussian </span>
-<span class="co">## loss:      sq_loss_lasso </span>
-<span class="co">## method:    weighting </span>
-<span class="co">## cutpoint:  0 </span>
-<span class="co">## propensity </span>
-<span class="co">## function:  propensity.func </span>
-<span class="co">## </span>
-<span class="co">## benefit score: f(x), </span>
-<span class="co">## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'</span>
-<span class="co">## </span>
-<span class="co">## Average Outcomes:</span>
-<span class="co">##                Recommended 0     Recommended 1</span>
-<span class="co">## Received 0  8.2176 (n = 136) -12.7821 (n = 69)</span>
-<span class="co">## Received 1 -1.7832 (n = 143) -0.4186 (n = 152)</span>
-<span class="co">## </span>
-<span class="co">## Treatment effects conditional on subgroups:</span>
-<span class="co">## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] </span>
-<span class="co">##                          10.0008 (n = 279) </span>
-<span class="co">## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] </span>
-<span class="co">##                          12.3635 (n = 221) </span>
-<span class="co">## </span>
-<span class="co">## NOTE: The above average outcomes are biased estimates of</span>
-<span class="co">##       the expected outcomes conditional on subgroups. </span>
-<span class="co">##       Use 'validate.subgroup()' to obtain unbiased estimates.</span>
-<span class="co">## </span>
-<span class="co">## ---------------------------------------------------</span>
-<span class="co">## </span>
-<span class="co">## Benefit score quantiles (f(X) for 1 vs 0): </span>
-<span class="co">##       0%      25%      50%      75%     100% </span>
-<span class="co">## -14.3195  -3.7348  -0.6998   2.0439  13.0446 </span>
-<span class="co">## </span>
-<span class="co">## ---------------------------------------------------</span>
-<span class="co">## </span>
-<span class="co">## Summary of individual treatment effects: </span>
-<span class="co">## E[Y|T=1, X] - E[Y|T=0, X]</span>
-<span class="co">## </span>
-<span class="co">##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
-<span class="co">## -28.639  -7.470  -1.400  -1.717   4.088  26.089 </span>
-<span class="co">## </span>
-<span class="co">## ---------------------------------------------------</span>
-<span class="co">## </span>
-<span class="co">## 4 out of 10 interactions selected in total by the lasso (cross validation criterion).</span>
-<span class="co">## </span>
-<span class="co">## The first estimate is the treatment main effect, which is always selected. </span>
-<span class="co">## Any other variables selected represent treatment-covariate interactions.</span>
-<span class="co">## </span>
-<span class="co">##            Trt1      V1    V2      V3     V8</span>
-<span class="co">## Estimate -0.651 -1.0653 0.834 -0.4833 0.1437</span></code></pre>
+<code class="sourceCode R"><span><span class="va">subgrp.model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>,</span>
+<span>                             trt <span class="op">=</span> <span class="va">trt</span>,</span>
+<span>                             propensity.func <span class="op">=</span> <span class="va">prop.func</span>,</span>
+<span>                             loss   <span class="op">=</span> <span class="st">"sq_loss_lasso"</span>,</span>
+<span>                             nfolds <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>    <span class="co"># option for cv.glmnet (for ITR estimation)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">subgrp.model</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## family:    gaussian </span></span>
+<span><span class="co">## loss:      sq_loss_lasso </span></span>
+<span><span class="co">## method:    weighting </span></span>
+<span><span class="co">## cutpoint:  0 </span></span>
+<span><span class="co">## propensity </span></span>
+<span><span class="co">## function:  propensity.func </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## benefit score: f(x), </span></span>
+<span><span class="co">## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Average Outcomes:</span></span>
+<span><span class="co">##                Recommended 0     Recommended 1</span></span>
+<span><span class="co">## Received 0  8.2176 (n = 136) -12.7821 (n = 69)</span></span>
+<span><span class="co">## Received 1 -1.7832 (n = 143) -0.4186 (n = 152)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Treatment effects conditional on subgroups:</span></span>
+<span><span class="co">## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] </span></span>
+<span><span class="co">##                          10.0008 (n = 279) </span></span>
+<span><span class="co">## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] </span></span>
+<span><span class="co">##                          12.3635 (n = 221) </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## NOTE: The above average outcomes are biased estimates of</span></span>
+<span><span class="co">##       the expected outcomes conditional on subgroups. </span></span>
+<span><span class="co">##       Use 'validate.subgroup()' to obtain unbiased estimates.</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## ---------------------------------------------------</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Benefit score quantiles (f(X) for 1 vs 0): </span></span>
+<span><span class="co">##       0%      25%      50%      75%     100% </span></span>
+<span><span class="co">## -14.3195  -3.7348  -0.6998   2.0439  13.0446 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## ---------------------------------------------------</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Summary of individual treatment effects: </span></span>
+<span><span class="co">## E[Y|T=1, X] - E[Y|T=0, X]</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
+<span><span class="co">## -28.639  -7.470  -1.400  -1.717   4.088  26.089 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## ---------------------------------------------------</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## 4 out of 10 interactions selected in total by the lasso (cross validation criterion).</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## The first estimate is the treatment main effect, which is always selected. </span></span>
+<span><span class="co">## Any other variables selected represent treatment-covariate interactions.</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##            Trt1      V1    V2      V3     V8</span></span>
+<span><span class="co">## Estimate -0.651 -1.0653 0.834 -0.4833 0.1437</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="augmentation-utilities">Augmentation utilities<a class="anchor" aria-label="anchor" href="#augmentation-utilities"></a>
@@ -241,73 +241,73 @@ option) via the <code><a href="../reference/create.augmentation.function.html">c
 which works similarly as the <code><a href="../reference/create.propensity.function.html">create.propensity.function()</a></code>
 function. The basic usage is as follows:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">aug.func</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create.augmentation.function.html">create.augmentation.function</a></span><span class="op">(</span>family <span class="op">=</span> <span class="st">"gaussian"</span>,
-                                         crossfit <span class="op">=</span> <span class="cn">TRUE</span>,
-                                         nfolds.crossfit <span class="op">=</span> <span class="fl">4</span>,
-                                         cv.glmnet.args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>type.measure <span class="op">=</span> <span class="st">"mae"</span>, nfolds <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">aug.func</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create.augmentation.function.html">create.augmentation.function</a></span><span class="op">(</span>family <span class="op">=</span> <span class="st">"gaussian"</span>,</span>
+<span>                                         crossfit <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                                         nfolds.crossfit <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>                                         cv.glmnet.args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>type.measure <span class="op">=</span> <span class="st">"mae"</span>, nfolds <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>We have set <code>nfolds</code> to 3 for computational reasons; it
 should generally be higher, such as 10.</p>
 <p><code>aug.func</code> can be used for augmentation by passing it to
 <code><a href="../reference/fit.subgroup.html">fit.subgroup()</a></code> like:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">subgrp.model.aug</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>,
-                             trt <span class="op">=</span> <span class="va">trt</span>,
-                             propensity.func <span class="op">=</span> <span class="va">prop.func</span>,
-                             augment.func <span class="op">=</span> <span class="va">aug.func</span>,
-                             loss   <span class="op">=</span> <span class="st">"sq_loss_lasso"</span>,
-                             nfolds <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>    <span class="co"># option for cv.glmnet (for ITR estimation)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">subgrp.model.aug</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## family:    gaussian </span>
-<span class="co">## loss:      sq_loss_lasso </span>
-<span class="co">## method:    weighting </span>
-<span class="co">## cutpoint:  0 </span>
-<span class="co">## augmentation </span>
-<span class="co">## function: augment.func </span>
-<span class="co">## propensity </span>
-<span class="co">## function:  propensity.func </span>
-<span class="co">## </span>
-<span class="co">## benefit score: f(x), </span>
-<span class="co">## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'</span>
-<span class="co">## </span>
-<span class="co">## Average Outcomes:</span>
-<span class="co">##                Recommended 0     Recommended 1</span>
-<span class="co">## Received 0   9.571 (n = 103) -7.8823 (n = 102)</span>
-<span class="co">## Received 1 -2.2994 (n = 120)   0.008 (n = 175)</span>
-<span class="co">## </span>
-<span class="co">## Treatment effects conditional on subgroups:</span>
-<span class="co">## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] </span>
-<span class="co">##                          11.8704 (n = 223) </span>
-<span class="co">## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] </span>
-<span class="co">##                           7.8903 (n = 277) </span>
-<span class="co">## </span>
-<span class="co">## NOTE: The above average outcomes are biased estimates of</span>
-<span class="co">##       the expected outcomes conditional on subgroups. </span>
-<span class="co">##       Use 'validate.subgroup()' to obtain unbiased estimates.</span>
-<span class="co">## </span>
-<span class="co">## ---------------------------------------------------</span>
-<span class="co">## </span>
-<span class="co">## Benefit score quantiles (f(X) for 1 vs 0): </span>
-<span class="co">##       0%      25%      50%      75%     100% </span>
-<span class="co">## -13.5302  -2.1872   0.6803   3.6881  13.3778 </span>
-<span class="co">## </span>
-<span class="co">## ---------------------------------------------------</span>
-<span class="co">## </span>
-<span class="co">## Summary of individual treatment effects: </span>
-<span class="co">## E[Y|T=1, X] - E[Y|T=0, X]</span>
-<span class="co">## </span>
-<span class="co">##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
-<span class="co">## -27.060  -4.374   1.361   1.381   7.376  26.756 </span>
-<span class="co">## </span>
-<span class="co">## ---------------------------------------------------</span>
-<span class="co">## </span>
-<span class="co">## 6 out of 10 interactions selected in total by the lasso (cross validation criterion).</span>
-<span class="co">## </span>
-<span class="co">## The first estimate is the treatment main effect, which is always selected. </span>
-<span class="co">## Any other variables selected represent treatment-covariate interactions.</span>
-<span class="co">## </span>
-<span class="co">##            Trt1      V1     V2      V3      V5      V6    V8</span>
-<span class="co">## Estimate 0.9222 -0.9353 1.0194 -0.4164 -0.0945 -0.1404 0.118</span></code></pre>
+<code class="sourceCode R"><span><span class="va">subgrp.model.aug</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit.subgroup.html">fit.subgroup</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>,</span>
+<span>                             trt <span class="op">=</span> <span class="va">trt</span>,</span>
+<span>                             propensity.func <span class="op">=</span> <span class="va">prop.func</span>,</span>
+<span>                             augment.func <span class="op">=</span> <span class="va">aug.func</span>,</span>
+<span>                             loss   <span class="op">=</span> <span class="st">"sq_loss_lasso"</span>,</span>
+<span>                             nfolds <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>    <span class="co"># option for cv.glmnet (for ITR estimation)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">subgrp.model.aug</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## family:    gaussian </span></span>
+<span><span class="co">## loss:      sq_loss_lasso </span></span>
+<span><span class="co">## method:    weighting </span></span>
+<span><span class="co">## cutpoint:  0 </span></span>
+<span><span class="co">## augmentation </span></span>
+<span><span class="co">## function: augment.func </span></span>
+<span><span class="co">## propensity </span></span>
+<span><span class="co">## function:  propensity.func </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## benefit score: f(x), </span></span>
+<span><span class="co">## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Average Outcomes:</span></span>
+<span><span class="co">##                Recommended 0     Recommended 1</span></span>
+<span><span class="co">## Received 0   9.571 (n = 103) -7.8823 (n = 102)</span></span>
+<span><span class="co">## Received 1 -2.2994 (n = 120)   0.008 (n = 175)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Treatment effects conditional on subgroups:</span></span>
+<span><span class="co">## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] </span></span>
+<span><span class="co">##                          11.8704 (n = 223) </span></span>
+<span><span class="co">## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] </span></span>
+<span><span class="co">##                           7.8903 (n = 277) </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## NOTE: The above average outcomes are biased estimates of</span></span>
+<span><span class="co">##       the expected outcomes conditional on subgroups. </span></span>
+<span><span class="co">##       Use 'validate.subgroup()' to obtain unbiased estimates.</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## ---------------------------------------------------</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Benefit score quantiles (f(X) for 1 vs 0): </span></span>
+<span><span class="co">##       0%      25%      50%      75%     100% </span></span>
+<span><span class="co">## -13.5302  -2.1872   0.6803   3.6881  13.3778 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## ---------------------------------------------------</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Summary of individual treatment effects: </span></span>
+<span><span class="co">## E[Y|T=1, X] - E[Y|T=0, X]</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
+<span><span class="co">## -27.060  -4.374   1.361   1.381   7.376  26.756 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## ---------------------------------------------------</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## 6 out of 10 interactions selected in total by the lasso (cross validation criterion).</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## The first estimate is the treatment main effect, which is always selected. </span></span>
+<span><span class="co">## Any other variables selected represent treatment-covariate interactions.</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##            Trt1      V1     V2      V3      V5      V6    V8</span></span>
+<span><span class="co">## Estimate 0.9222 -0.9353 1.0194 -0.4164 -0.0945 -0.1404 0.118</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="comparing-performance-with-augmentation">Comparing performance with augmentation<a class="anchor" aria-label="anchor" href="#comparing-performance-with-augmentation"></a>
@@ -315,35 +315,35 @@ should generally be higher, such as 10.</p>
 <p>We first run the training/testing procedure to assess the performance
 of the non-augmented estimator:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">valmod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate.subgroup.html">validate.subgroup</a></span><span class="op">(</span><span class="va">subgrp.model</span>, B <span class="op">=</span> <span class="fl">3</span>,
-                            method <span class="op">=</span> <span class="st">"training_test"</span>,
-                            train.fraction <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span>
-<span class="va">valmod</span></code></pre></div>
-<pre><code><span class="co">## family:  gaussian </span>
-<span class="co">## loss:    sq_loss_lasso </span>
-<span class="co">## method:  weighting </span>
-<span class="co">## </span>
-<span class="co">## validation method:  training_test_replication </span>
-<span class="co">## cutpoint:           0 </span>
-<span class="co">## replications:       3 </span>
-<span class="co">## </span>
-<span class="co">## benefit score: f(x), </span>
-<span class="co">## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'</span>
-<span class="co">## </span>
-<span class="co">## Average Test Set Outcomes:</span>
-<span class="co">##                            Recommended 0                       Recommended 1</span>
-<span class="co">## Received 0  7.0026 (SE = 3.0607, n = 31) -13.9625 (SE = 6.6671, n = 15.6667)</span>
-<span class="co">## Received 1 -3.2555 (SE = 0.8747, n = 37)  -0.9539 (SE = 0.5936, n = 41.3333)</span>
-<span class="co">## </span>
-<span class="co">## Treatment effects conditional on subgroups:</span>
-<span class="co">## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] </span>
-<span class="co">##               10.258 (SE = 3.5586, n = 68) </span>
-<span class="co">## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] </span>
-<span class="co">##              13.0086 (SE = 7.1043, n = 57) </span>
-<span class="co">## </span>
-<span class="co">## Est of </span>
-<span class="co">## E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:                     </span>
-<span class="co">## 9.5398 (SE = 2.0051)</span></code></pre>
+<code class="sourceCode R"><span><span class="va">valmod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate.subgroup.html">validate.subgroup</a></span><span class="op">(</span><span class="va">subgrp.model</span>, B <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>                            method <span class="op">=</span> <span class="st">"training_test"</span>,</span>
+<span>                            train.fraction <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span></span>
+<span><span class="va">valmod</span></span></code></pre></div>
+<pre><code><span><span class="co">## family:  gaussian </span></span>
+<span><span class="co">## loss:    sq_loss_lasso </span></span>
+<span><span class="co">## method:  weighting </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## validation method:  training_test_replication </span></span>
+<span><span class="co">## cutpoint:           0 </span></span>
+<span><span class="co">## replications:       3 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## benefit score: f(x), </span></span>
+<span><span class="co">## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Average Test Set Outcomes:</span></span>
+<span><span class="co">##                            Recommended 0                       Recommended 1</span></span>
+<span><span class="co">## Received 0  7.0026 (SE = 3.0607, n = 31) -13.9625 (SE = 6.6671, n = 15.6667)</span></span>
+<span><span class="co">## Received 1 -3.2555 (SE = 0.8747, n = 37)  -0.9539 (SE = 0.5936, n = 41.3333)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Treatment effects conditional on subgroups:</span></span>
+<span><span class="co">## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] </span></span>
+<span><span class="co">##               10.258 (SE = 3.5586, n = 68) </span></span>
+<span><span class="co">## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] </span></span>
+<span><span class="co">##              13.0086 (SE = 7.1043, n = 57) </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Est of </span></span>
+<span><span class="co">## E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:                     </span></span>
+<span><span class="co">## 9.5398 (SE = 2.0051)</span></span></code></pre>
 <p>Then we compare with the augmented estimator. Although this is based
 on just 3 replications, we can see that the augmented estimator is
 better at discriminating between benefitting and non-benefitting
@@ -351,46 +351,44 @@ patients, as evidenced by the large treatment effect among those
 predicted to benefit (and smaller standard error) by the augmented
 estimator versus the smaller conditional treatment effect above.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">valmod.aug</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate.subgroup.html">validate.subgroup</a></span><span class="op">(</span><span class="va">subgrp.model.aug</span>, B <span class="op">=</span> <span class="fl">3</span>,
-                                method <span class="op">=</span> <span class="st">"training_test"</span>,
-                                train.fraction <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span>
-<span class="va">valmod.aug</span></code></pre></div>
-<pre><code><span class="co">## family:  gaussian </span>
-<span class="co">## loss:    sq_loss_lasso </span>
-<span class="co">## method:  weighting </span>
-<span class="co">## </span>
-<span class="co">## validation method:  training_test_replication </span>
-<span class="co">## cutpoint:           0 </span>
-<span class="co">## replications:       3 </span>
-<span class="co">## </span>
-<span class="co">## benefit score: f(x), </span>
-<span class="co">## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'</span>
-<span class="co">## </span>
-<span class="co">## Average Test Set Outcomes:</span>
-<span class="co">##                                 Recommended 0</span>
-<span class="co">## Received 0 10.5794 (SE = 2.6567, n = 23.6667)</span>
-<span class="co">## Received 1      -4.9438 (SE = 4.4187, n = 31)</span>
-<span class="co">##                                  Recommended 1</span>
-<span class="co">## Received 0 -10.6693 (SE = 5.1586, n = 25.6667)</span>
-<span class="co">## Received 1  -1.0748 (SE = 1.9236, n = 44.6667)</span>
-<span class="co">## </span>
-<span class="co">## Treatment effects conditional on subgroups:</span>
-<span class="co">## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] </span>
-<span class="co">##         15.5232 (SE = 1.8056, n = 54.6667) </span>
-<span class="co">## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] </span>
-<span class="co">##          9.5945 (SE = 5.7758, n = 70.3333) </span>
-<span class="co">## </span>
-<span class="co">## Est of </span>
-<span class="co">## E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:                      </span>
-<span class="co">## 11.0473 (SE = 1.7645)</span></code></pre>
+<code class="sourceCode R"><span><span class="va">valmod.aug</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate.subgroup.html">validate.subgroup</a></span><span class="op">(</span><span class="va">subgrp.model.aug</span>, B <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>                                method <span class="op">=</span> <span class="st">"training_test"</span>,</span>
+<span>                                train.fraction <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span></span>
+<span><span class="va">valmod.aug</span></span></code></pre></div>
+<pre><code><span><span class="co">## family:  gaussian </span></span>
+<span><span class="co">## loss:    sq_loss_lasso </span></span>
+<span><span class="co">## method:  weighting </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## validation method:  training_test_replication </span></span>
+<span><span class="co">## cutpoint:           0 </span></span>
+<span><span class="co">## replications:       3 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## benefit score: f(x), </span></span>
+<span><span class="co">## Trt recom = 1*I(f(x)&gt;c)+0*I(f(x)&lt;=c) where c is 'cutpoint'</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Average Test Set Outcomes:</span></span>
+<span><span class="co">##                                 Recommended 0</span></span>
+<span><span class="co">## Received 0 10.5794 (SE = 2.6567, n = 23.6667)</span></span>
+<span><span class="co">## Received 1      -4.9438 (SE = 4.4187, n = 31)</span></span>
+<span><span class="co">##                                  Recommended 1</span></span>
+<span><span class="co">## Received 0 -10.6693 (SE = 5.1586, n = 25.6667)</span></span>
+<span><span class="co">## Received 1  -1.0748 (SE = 1.9236, n = 44.6667)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Treatment effects conditional on subgroups:</span></span>
+<span><span class="co">## Est of E[Y|T=0,Recom=0]-E[Y|T=/=0,Recom=0] </span></span>
+<span><span class="co">##         15.5232 (SE = 1.8056, n = 54.6667) </span></span>
+<span><span class="co">## Est of E[Y|T=1,Recom=1]-E[Y|T=/=1,Recom=1] </span></span>
+<span><span class="co">##          9.5945 (SE = 5.7758, n = 70.3333) </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Est of </span></span>
+<span><span class="co">## E[Y|Trt received = Trt recom] - E[Y|Trt received =/= Trt recom]:                      </span></span>
+<span><span class="co">## 11.0473 (SE = 1.7645)</span></span></code></pre>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 
@@ -403,16 +401,16 @@ estimator versus the smaller conditional treatment effect above.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>
